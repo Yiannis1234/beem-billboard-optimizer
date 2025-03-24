@@ -859,50 +859,80 @@ if analyze_button:
                 # Score breakdown
                 st.markdown("<h4 style='margin-top: 0;'>Score Components:</h4>", unsafe_allow_html=True)
                 
-                # Create a horizontal bar chart for score components
-                components = {
-                    "Pedestrian Density": integrated_data['pedestrian_density'] * 100,
-                    "Traffic Conditions": traffic_score * 100,
-                    "Weather Conditions": weather_score * 100,
-                    "Time Optimization": time_score * 100
-                }
-                
-                fig = go.Figure()
-                
-                colors = ["#FF8C00", "#FF6D00", "#FF9E40", "#FFAE5E"]
-                
-                for i, (key, value) in enumerate(components.items()):
-                    fig.add_trace(go.Bar(
-                        x=[value],
-                        y=[key],
-                        orientation='h',
-                        name=key,
-                        marker=dict(color=colors[i]),
-                        text=[f"{value:.1f}%"],
-                        textposition='auto',
-                        textfont=dict(color="white", size=14)
-                    ))
-                
-                fig.update_layout(
-                    height=200,
-                    margin=dict(l=0, r=0, t=10, b=0),
-                    yaxis=dict(
-                        autorange="reversed", 
-                        tickfont=dict(color="white", size=14)
-                    ),
-                    barmode='group',
-                    showlegend=False,
-                    xaxis=dict(
-                        title="Score (%)", 
-                        range=[0, 100], 
-                        titlefont=dict(color="white"), 
-                        tickfont=dict(color="white")
-                    ),
-                    plot_bgcolor="#222222",
-                    paper_bgcolor="#222222"
-                )
-                
-                st.plotly_chart(fig, use_container_width=True)
+                try:
+                    # Create a horizontal bar chart for score components
+                    components = {
+                        "Pedestrian Density": integrated_data['pedestrian_density'] * 100,
+                        "Traffic Conditions": traffic_score * 100,
+                        "Weather Conditions": weather_score * 100,
+                        "Time Optimization": time_score * 100
+                    }
+                    
+                    components_df = pd.DataFrame({
+                        'Component': list(components.keys()),
+                        'Score': list(components.values())
+                    })
+                    
+                    fig = go.Figure()
+                    
+                    colors = ["#FF8C00", "#FF6D00", "#FF9E40", "#FFAE5E"]
+                    
+                    for i, row in components_df.iterrows():
+                        fig.add_trace(go.Bar(
+                            y=[row['Component']],
+                            x=[row['Score']],
+                            orientation='h',
+                            name=row['Component'],
+                            marker=dict(color=colors[i]),
+                            text=[f"{row['Score']:.1f}%"],
+                            textposition='auto',
+                            textfont=dict(color="white", size=14)
+                        ))
+                    
+                    fig.update_layout(
+                        height=200,
+                        margin=dict(l=0, r=0, t=10, b=0),
+                        yaxis=dict(
+                            autorange="reversed", 
+                            tickfont=dict(color="white", size=14)
+                        ),
+                        xaxis=dict(
+                            title="Score (%)", 
+                            range=[0, 100], 
+                            titlefont=dict(color="white"), 
+                            tickfont=dict(color="white")
+                        ),
+                        barmode='group',
+                        showlegend=False,
+                        plot_bgcolor="#222222",
+                        paper_bgcolor="#222222"
+                    )
+                    
+                    st.plotly_chart(fig, use_container_width=True)
+                    
+                except Exception:
+                    # Fallback display if there's an error with the chart
+                    score_items = [
+                        {"name": "Pedestrian Density", "score": integrated_data['pedestrian_density'] * 100, "color": "#FF8C00"},
+                        {"name": "Traffic Conditions", "score": traffic_score * 100, "color": "#FF6D00"},
+                        {"name": "Weather Conditions", "score": weather_score * 100, "color": "#FF9E40"},
+                        {"name": "Time Optimization", "score": time_score * 100, "color": "#FFAE5E"}
+                    ]
+                    
+                    for item in score_items:
+                        st.markdown(f"""
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div style="width: 150px; font-weight: bold;">{item['name']}:</div>
+                            <div style="flex-grow: 1; background-color: #333333; border-radius: 5px; height: 25px; position: relative;">
+                                <div style="position: absolute; top: 0; left: 0; background-color: {item['color']}; 
+                                     width: {min(100, max(0, item['score']))}%; height: 100%; border-radius: 5px;"></div>
+                                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+                                     display: flex; align-items: center; justify-content: center; color: white;">
+                                    {item['score']:.1f}%
+                                </div>
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
             
             with score_cols[1]:
                 # Enhanced recommendations with more actionable insights
