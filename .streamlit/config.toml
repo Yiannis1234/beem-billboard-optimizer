@@ -1,0 +1,10 @@
+[theme]
+primaryColor = "#3498db"  # Beem blue
+backgroundColor = "#f8f9fa"
+secondaryBackgroundColor = "#e9ecef"
+textColor = "#343a40"
+font = "sans serif"
+
+[server]
+headless = true
+enableCORS = false 
