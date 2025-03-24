@@ -366,7 +366,34 @@ if analyze_button:
         hour_labels = [f"{h}:00" for h in hours]
         best_times_df = pd.DataFrame(best_times, index=days, columns=hour_labels)
         
-        st.dataframe(best_times_df.style.background_gradient(cmap='Greens'), use_container_width=True)
+        # Create a simple styled HTML representation instead of using style.background_gradient
+        html = """
+        <div style="overflow: auto; width: 100%;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <th style="border: 1px solid #ddd; padding: 8px; text-align: left;"></th>
+        """
+        
+        # Add column headers
+        for col in best_times_df.columns:
+            html += f'<th style="border: 1px solid #ddd; padding: 8px; text-align: center;">{col}</th>'
+        html += '</tr>'
+        
+        # Add rows with color-coded cells
+        for idx, row in best_times_df.iterrows():
+            html += f'<tr><td style="border: 1px solid #ddd; padding: 8px; font-weight: bold;">{idx}</td>'
+            for val in row:
+                # Calculate color intensity based on value
+                intensity = int(val * 255)
+                r = max(0, 255 - intensity)
+                g = min(255, 150 + intensity)
+                b = max(0, 255 - intensity)
+                html += f'<td style="border: 1px solid #ddd; padding: 8px; text-align: center; background-color: rgb({r}, {g}, {b});">{val:.1f}</td>'
+            html += '</tr>'
+        
+        html += '</table></div>'
+        
+        st.markdown(html, unsafe_allow_html=True)
         
         # Color scale explanation
         st.markdown("""
