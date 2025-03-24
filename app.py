@@ -33,7 +33,7 @@ st.markdown("""
     .subheader {
         font-size: 1.5rem !important;
         font-weight: 600 !important;
-        color: #FF6D00 !important;
+        color: #FF8C00 !important;
         margin-bottom: 1rem !important;
         padding-top: 1rem !important;
         border-top: 1px solid #444444 !important;
@@ -70,7 +70,7 @@ st.markdown("""
     }
     .data-label {
         font-weight: 600 !important;
-        color: #DDDDDD !important;
+        color: #FFFFFF !important;
     }
     .footer {
         margin-top: 3rem !important;
@@ -78,7 +78,7 @@ st.markdown("""
         padding-bottom: 1.5rem !important;
         border-top: 1px solid #444444 !important;
         font-size: 0.85rem !important;
-        color: #BBBBBB !important;
+        color: #FFFFFF !important;
         text-align: center !important;
         background-color: #222222 !important;
         border-radius: 0.5rem !important;
@@ -96,7 +96,7 @@ st.markdown("""
         font-weight: 600 !important;
         transition: all 0.3s ease;
         background-color: #FF8C00 !important;
-        color: #222222 !important;
+        color: #000000 !important;
     }
     .stButton > button:hover {
         transform: translateY(-2px);
@@ -139,7 +139,7 @@ st.markdown("""
     }
     .stat-label {
         font-size: 0.9rem;
-        color: #BBBBBB;
+        color: #FFFFFF;
         margin-top: 0.5rem;
     }
     .tab-container {
@@ -171,7 +171,7 @@ st.markdown("""
     }
     .stTabs [aria-selected="true"] {
         background-color: #FF8C00 !important;
-        color: #222222 !important;
+        color: #000000 !important;
     }
     div.stMarkdown {color: white;}
     h1, h2, h3, h4, h5, h6 {color: #FF8C00;}
@@ -184,7 +184,7 @@ st.markdown("""
     ul, ol, dl {color: white;}
     div[data-testid="stMetricValue"] {color: #FF8C00; font-weight: bold;}
     div[data-testid="stMetricLabel"] {color: white;}
-    div[data-testid="stMetricDelta"] {color: #FF6D00;}
+    div[data-testid="stMetricDelta"] {color: #FF8C00;}
     div.stTooltipIcon {color: #FF8C00;}
     div.stTooltipIcon:hover {color: #FF6D00;}
 </style>
@@ -431,7 +431,7 @@ def show_analysis_progress():
                 <div style="font-size: 1.5rem; margin-right: 10px; class="animated-metric">{step['icon']}</div>
                 <div>
                     <div style="font-weight: bold; color: #FF8C00;">Step {i+1}/{len(steps)}: {step['name']}</div>
-                    <div style="font-size: 0.9rem; color: #BBBBBB;">{step['description']}</div>
+                    <div style="font-size: 0.9rem; color: #FFFFFF;">{step['description']}</div>
                 </div>
             </div>
             """
@@ -472,7 +472,7 @@ if analyze_button:
             <div style="font-size: 2rem; margin-right: 15px;">📍</div>
             <div>
                 <h2 style="margin: 0; color: #FF8C00;">{selected_area} Analysis</h2>
-                <p style="margin: 5px 0 0 0; color: #BBBBBB;">{selected_zone['description']}</p>
+                <p style="margin: 5px 0 0 0; color: #FFFFFF;">{selected_zone['description']}</p>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -480,7 +480,7 @@ if analyze_button:
         # Area Information in a card
         st.markdown("""
         <div class="card">
-            <h3 style="margin-top: 0; color: #1565C0; display: flex; align-items: center;">
+            <h3 style="margin-top: 0; color: #FF8C00; display: flex; align-items: center;">
                 <span style="margin-right: 10px;">📌</span> Area Information
             </h3>
         """, unsafe_allow_html=True)
@@ -489,11 +489,11 @@ if analyze_button:
         with col1:
             st.markdown(f"""
             <div style="margin-bottom: 10px;">
-                <div style="font-weight: bold; color: #666;">Target Audience:</div>
+                <div style="font-weight: bold; color: #FFFFFF;">Target Audience:</div>
                 <div>{selected_zone['target_audience']}</div>
             </div>
             <div style="margin-bottom: 10px;">
-                <div style="font-weight: bold; color: #666;">Best Times:</div>
+                <div style="font-weight: bold; color: #FFFFFF;">Best Times:</div>
                 <div>{selected_zone['best_times']}</div>
             </div>
             """, unsafe_allow_html=True)
@@ -501,11 +501,11 @@ if analyze_button:
         with col2:
             st.markdown(f"""
             <div style="margin-bottom: 10px;">
-                <div style="font-weight: bold; color: #666;">Foot Traffic:</div>
+                <div style="font-weight: bold; color: #FFFFFF;">Foot Traffic:</div>
                 <div>{selected_zone['avg_foot_traffic']}</div>
             </div>
             <div style="margin-bottom: 10px;">
-                <div style="font-weight: bold; color: #666;">Key Businesses:</div>
+                <div style="font-weight: bold; color: #FFFFFF;">Key Businesses:</div>
                 <div>{selected_zone['businesses']}</div>
             </div>
             """, unsafe_allow_html=True)
@@ -526,7 +526,7 @@ if analyze_button:
         # Weather section with improved visuals
         st.markdown("""
         <div class="card">
-            <h3 style="margin-top: 0; color: #1565C0; display: flex; align-items: center;">
+            <h3 style="margin-top: 0; color: #FF8C00; display: flex; align-items: center;">
                 <span style="margin-right: 10px;">☀️</span> Current Weather Conditions
             </h3>
         """, unsafe_allow_html=True)
@@ -607,11 +607,11 @@ if analyze_button:
             impact_color = "blue"
         
         st.markdown(f"""
-        <div style="margin-top: 20px; background-color: #f8f9fa; border-radius: 8px; padding: 15px;">
+        <div style="margin-top: 20px; background-color: #333333; border-radius: 8px; padding: 15px;">
             <div style="display: flex; align-items: center;">
                 <div style="font-size: 1.5rem; margin-right: 10px;">🔍</div>
                 <div>
-                    <div style="font-weight: bold;">Weather Impact on Billboard Visibility:</div>
+                    <div style="font-weight: bold; color: white;">Weather Impact on Billboard Visibility:</div>
                     <div style="color: {impact_color}; font-weight: bold;">{weather_impact}</div>
                 </div>
             </div>
@@ -677,7 +677,7 @@ if analyze_button:
         # Pedestrian density with more detailed visuals
         st.markdown("""
         <div class="card">
-            <h3 style="margin-top: 0; color: #1565C0; display: flex; align-items: center;">
+            <h3 style="margin-top: 0; color: #FF8C00; display: flex; align-items: center;">
                 <span style="margin-right: 10px;">👥</span> Pedestrian Activity
             </h3>
         """, unsafe_allow_html=True)
@@ -748,28 +748,28 @@ if analyze_button:
         
         with density_cols[1]:
             st.markdown(f"""
-            <div style="background-color: #f8f9fa; border-radius: 8px; padding: 15px; height: 100%;">
-                <h4 style="margin-top: 0; color: #1565C0; display: flex; align-items: center;">
+            <div style="background-color: #333333; border-radius: 8px; padding: 15px; height: 100%;">
+                <h4 style="margin-top: 0; color: #FF8C00; display: flex; align-items: center;">
                     <span style="margin-right: 10px;">{trend_icon}</span> Trend Analysis
                 </h4>
                 
                 <div style="margin-bottom: 15px;">
-                    <div style="font-weight: bold;">Current Time:</div>
+                    <div style="font-weight: bold; color: #FFFFFF;">Current Time:</div>
                     <div>{display_hour} ({display_hour_12})</div>
                 </div>
                 
                 <div style="margin-bottom: 15px;">
-                    <div style="font-weight: bold;">Day Type:</div>
+                    <div style="font-weight: bold; color: #FFFFFF;">Day Type:</div>
                     <div style="text-transform: capitalize;">{day_factor}</div>
                 </div>
                 
                 <div style="margin-bottom: 15px;">
-                    <div style="font-weight: bold;">Expected Trend:</div>
+                    <div style="font-weight: bold; color: #FFFFFF;">Expected Trend:</div>
                     <div style="color: {trend_color}; font-weight: bold;">{expected_trend}</div>
                 </div>
                 
                 <div>
-                    <div style="font-weight: bold;">Recommendation:</div>
+                    <div style="font-weight: bold; color: #FFFFFF;">Recommendation:</div>
                     <div>
                         {
                         "Optimal time for billboard display. High engagement expected." 
@@ -788,7 +788,7 @@ if analyze_button:
         # Enhanced engagement score section
         st.markdown("""
         <div class="card">
-            <h3 style="margin-top: 0; color: #1565C0; display: flex; align-items: center;">
+            <h3 style="margin-top: 0; color: #FF8C00; display: flex; align-items: center;">
                 <span style="margin-right: 10px;">📊</span> Engagement Analysis
             </h3>
         """, unsafe_allow_html=True)
@@ -830,7 +830,7 @@ if analyze_button:
                 number={'suffix': "%", "font": {"size": 30, "color": "white", "family": "Arial"}},
                 title={'text': "Expected Engagement Score", "font": {"size": 16, "color": "white"}},
                 gauge={
-                    'axis': {'range': [0, 100], 'tickwidth': 1, 'tickfont': {'color': 'white'}},
+                    'axis': {'range': [0, 100], 'tickwidth': 1, 'tickfont': {'color': "white"}},
                     'bar': {'color': "#FF8C00"},
                     'steps': [
                         {'range': [0, 40], 'color': "#333333"},
@@ -1014,7 +1014,7 @@ if analyze_button:
     with tabs[1]:
         st.markdown("""
         <div class="card">
-            <h3 style="margin-top: 0; color: #1565C0; display: flex; align-items: center;">
+            <h3 style="margin-top: 0; color: #FF8C00; display: flex; align-items: center;">
                 <span style="margin-right: 10px;">🗺️</span> Interactive Route Map
             </h3>
         """, unsafe_allow_html=True)
@@ -1066,10 +1066,10 @@ if analyze_button:
         # Create a styled table
         st.markdown(
             locations_df.style
-            .set_properties(**{'text-align': 'center'})
+            .set_properties(**{'text-align': 'center', 'color': 'white'})
             .set_table_styles([
-                {'selector': 'th', 'props': [('text-align', 'center'), ('font-weight', 'bold'), ('background-color', '#e3f2fd')]},
-                {'selector': 'tr:hover', 'props': [('background-color', '#f5f5f5')]}
+                {'selector': 'th', 'props': [('text-align', 'center'), ('font-weight', 'bold'), ('background-color', '#333333'), ('color', 'white')]},
+                {'selector': 'tr:hover', 'props': [('background-color', '#444444')]}
             ])
             .format({'name': lambda x: f"<b>{x}</b>"})
             .to_html(), 
@@ -1115,7 +1115,7 @@ if analyze_button:
             """
         
         st.markdown(f"""
-        <div style="background-color: #f8f9fa; border-radius: 8px; padding: 15px;">
+        <div style="background-color: #333333; border-radius: 8px; padding: 15px; color: white;">
             {route_description}
         </div>
         """, unsafe_allow_html=True)
@@ -1150,6 +1150,8 @@ if analyze_button:
             text='Dwell Time (minutes)'
         )
         
+        fig.update_traces(textfont=dict(color="white"))
+        
         fig.update_layout(
             title="Recommended Dwell Time per Location",
             title_font_color="white",
@@ -1172,7 +1174,7 @@ if analyze_button:
     with tabs[2]:
         st.markdown("""
         <div class="card">
-            <h3 style="margin-top: 0; color: #1565C0; display: flex; align-items: center;">
+            <h3 style="margin-top: 0; color: #FF8C00; display: flex; align-items: center;">
                 <span style="margin-right: 10px;">📈</span> Historical Engagement Data
             </h3>
         """, unsafe_allow_html=True)
@@ -1285,6 +1287,8 @@ if analyze_button:
             color_continuous_scale=['#333333', '#444444', '#555555', '#666666', '#777777', '#888888', '#999999', '#FF6D00', '#FF8C00'],
             text='Avg. Engagement'
         )
+        
+        fig.update_traces(textfont=dict(color="white"))
         
         fig.update_layout(
             xaxis_title="Weather Condition",
