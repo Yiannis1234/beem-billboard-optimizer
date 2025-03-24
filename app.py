@@ -884,10 +884,18 @@ if analyze_button:
             fig.update_layout(
                 height=200,
                 margin=dict(l=0, r=0, t=10, b=0),
-                yaxis=dict(autorange="reversed", tickfont=dict(color="white")),
+                yaxis=dict(
+                    autorange="reversed", 
+                    tickfont=dict(color="white")
+                ),
                 barmode='group',
                 showlegend=False,
-                xaxis=dict(title="Score (%)", range=[0, 100], titlefont=dict(color="white"), tickfont=dict(color="white")),
+                xaxis=dict(
+                    title="Score (%)", 
+                    range=[0, 100], 
+                    titlefont=dict(color="white"), 
+                    tickfont=dict(color="white")
+                ),
                 plot_bgcolor="#222222",
                 paper_bgcolor="#222222"
             )
