@@ -4,7 +4,7 @@ import numpy as np
 from datetime import datetime, timedelta, time
 from src.data.data_collector import BeemDataCollector
 import json
-import time
+import time as time_module
 
 # Page configuration
 st.set_page_config(
@@ -177,7 +177,7 @@ def show_analysis_progress():
     for i, step in enumerate(steps):
         progress_bar.progress((i+1)/len(steps))
         status_text.text(f"Step {i+1}/{len(steps)}: {step}...")
-        time.sleep(0.5)
+        time_module.sleep(0.5)
     
     progress_bar.empty()
     status_text.empty()
