@@ -64,7 +64,9 @@ st.markdown("""
 # Title
 st.markdown("""
 <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px">
-    <img src="https://raw.githubusercontent.com/ioannisvamvakas/beem_resources/main/beem_logo.png" width="180" style="margin-bottom: 10px">
+    <div style="background-color: #FF9D45; color: white; font-size: 42px; font-weight: bold; padding: 10px 30px; border-radius: 5px;">
+        beem.
+    </div>
 </div>
 """, unsafe_allow_html=True)
 st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
@@ -75,7 +77,9 @@ with st.sidebar:
     # Add Beem logo
     st.markdown("""
     <div class="logo-container">
-        <img src="https://raw.githubusercontent.com/ioannisvamvakas/beem_resources/main/beem_logo.png" width="180">
+        <div style="background-color: #FF9D45; color: white; font-size: 32px; font-weight: bold; padding: 5px 20px; border-radius: 5px; text-align: center;">
+            beem.
+        </div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -401,7 +405,9 @@ with tabs[0]:
         st.markdown("""
         <div style="display: flex; justify-content: center; align-items: center; height: 300px">
             <div style="text-align: center">
-                <img src="https://raw.githubusercontent.com/ioannisvamvakas/beem_resources/main/beem_logo.png" width="200">
+                <div style="background-color: #FF9D45; color: white; font-size: 42px; font-weight: bold; padding: 10px 30px; border-radius: 5px; margin-bottom: 20px; display: inline-block;">
+                    beem.
+                </div>
                 <p style="color: #FF9D45; margin-top: 20px; font-size: 18px">Select options and analyze to see data</p>
             </div>
         </div>
@@ -567,7 +573,9 @@ st.markdown("---")
 st.markdown("""
 <div class="footer-container">
     <div style="text-align: center">
-        <img src="https://raw.githubusercontent.com/ioannisvamvakas/beem_resources/main/beem_logo.png" width="100">
+        <div style="background-color: #FF9D45; color: white; font-size: 28px; font-weight: bold; padding: 5px 20px; border-radius: 5px; display: inline-block; margin-bottom: 10px;">
+            beem.
+        </div>
         <div style="color: #FF9D45; margin-top: 10px">© 2025 Beem Mobile Billboard Solutions</div>
         <div style="color: #999; font-size: 12px; margin-top: 5px">hello@beembillboards.com | +44 123 456 7890</div>
     </div>
