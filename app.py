@@ -307,21 +307,18 @@ with st.sidebar:
     
     # About section with more information
     with st.expander("ℹ️ About Beem"):
-        st.markdown("""
-        <div style="padding: 10px;">
-            <p><strong>Beem Mobile Billboard Solutions</strong> helps businesses reach their audience through eye-catching mobile billboards carried by cyclists.</p>
-            
-            <p>Our innovative approach is:</p>
-            <ul>
-                <li>🌿 <strong>Eco-friendly</strong> - Zero emissions</li>
-                <li>💰 <strong>Cost-effective</strong> - Lower costs than traditional billboards</li>
-                <li>🌟 <strong>Targeted</strong> - Precise location targeting</li>
-                <li>📱 <strong>Engaging</strong> - High visibility in pedestrian areas</li>
-            </ul>
-            
-            <p>This app uses real-time data to optimize your mobile billboard routes for maximum engagement.</p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.write("**Beem Mobile Billboard Solutions** helps businesses reach their audience through eye-catching mobile billboards carried by cyclists.")
+        
+        st.write("Our innovative approach is:")
+        
+        st.write("""
+        - 🌿 **Eco-friendly** - Zero emissions
+        - 💰 **Cost-effective** - Lower costs than traditional billboards
+        - 🌟 **Targeted** - Precise location targeting
+        - 📱 **Engaging** - High visibility in pedestrian areas
+        """)
+        
+        st.write("This app uses real-time data to optimize your mobile billboard routes for maximum engagement.")
     
     # Additional help section
     with st.expander("🔍 How to use this tool"):
@@ -394,6 +391,42 @@ manchester_zones = {
     }
 }
 
+# Function to get reasons for recommended times
+def get_reason_for_time(day, hour, area):
+    is_weekend = day in ["Saturday", "Sunday"]
+    
+    if area == "Northern Quarter":
+        if is_weekend and hour >= 12:
+            return "Weekend afternoons and evenings have high foot traffic with shoppers and people visiting bars/restaurants."
+        elif not is_weekend and hour >= 17:
+            return "Weekday evenings see increased activity with after-work crowds visiting bars and restaurants."
+        elif hour >= 12 and hour <= 14:
+            return "Lunch hour brings office workers to local eateries and cafes."
+    
+    elif area == "City Centre":
+        if is_weekend and hour >= 11 and hour <= 17:
+            return "Peak shopping hours with high volumes of pedestrian traffic in retail areas."
+        elif not is_weekend and hour >= 12 and hour <= 14:
+            return "Lunch rush brings office workers into public spaces and shopping areas."
+        elif not is_weekend and hour >= 17 and hour <= 19:
+            return "After-work shopping and dining creates high visibility opportunities."
+    
+    elif area == "Ancoats":
+        if is_weekend and hour >= 11 and hour <= 21:
+            return "Weekend crowds visit popular restaurants and leisure spots throughout the day."
+        elif not is_weekend and hour >= 17 and hour <= 21:
+            return "Evening dining brings significant foot traffic to restaurant-heavy areas."
+    
+    else:  # Piccadilly
+        if not is_weekend and (hour >= 7 and hour <= 9):
+            return "Morning commute brings high volumes of pedestrians through transportation hubs."
+        elif not is_weekend and (hour >= 16 and hour <= 19):
+            return "Evening rush hour creates dense foot traffic around transit points."
+        elif is_weekend and hour >= 11 and hour <= 16:
+            return "Tourists and shoppers create steady foot traffic throughout the day."
+    
+    return "Moderate pedestrian activity expected during this time."
+
 # Enhanced progress indicator for analysis with visual animations
 def show_analysis_progress():
     progress_container = st.container()
@@ -408,8 +441,8 @@ def show_analysis_progress():
         </div>
         """, unsafe_allow_html=True)
         
-        progress_bar = st.progress(0)
-        status_text = st.empty()
+    progress_bar = st.progress(0)
+    status_text = st.empty()
         details_text = st.empty()
         
         steps = [
@@ -419,8 +452,8 @@ def show_analysis_progress():
             {"name": "Calculating optimal routes", "icon": "🗺️", "description": "Determining the most effective billboard routes..."},
             {"name": "Generating recommendations", "icon": "📊", "description": "Creating personalized recommendations based on data analysis..."}
         ]
-        
-        for i, step in enumerate(steps):
+    
+    for i, step in enumerate(steps):
             # Update progress
             progress = (i+1)/len(steps)
             progress_bar.progress(progress)
@@ -488,7 +521,7 @@ if analyze_button:
             """, unsafe_allow_html=True)
             
             col1, col2 = st.columns(2)
-            with col1:
+    with col1:
                 st.markdown(f"""
                 <div style="margin-bottom: 10px;">
                     <div style="font-weight: bold; color: #FFFFFF;">Target Audience:</div>
@@ -533,8 +566,8 @@ if analyze_button:
                 </h3>
             """, unsafe_allow_html=True)
             
-            weather_data = integrated_data['weather']
-            
+        weather_data = integrated_data['weather']
+        
             # Weather icon selection based on condition
             weather_condition = weather_data['condition'].lower()
             weather_icon = "☀️"  # default sunny
@@ -554,9 +587,9 @@ if analyze_button:
                 weather_icon = "⛅"
             
             # Create visually appealing weather display
-            weather_cols = st.columns(4)
+        weather_cols = st.columns(4)
             
-            with weather_cols[0]:
+        with weather_cols[0]:
                 st.markdown(f"""
                 <div style="text-align: center;">
                     <div style="font-size: 2.5rem; margin-bottom: 5px;">{weather_icon}</div>
@@ -565,7 +598,7 @@ if analyze_button:
                 </div>
                 """, unsafe_allow_html=True)
                 
-            with weather_cols[1]:
+        with weather_cols[1]:
                 st.markdown(f"""
                 <div style="text-align: center;">
                     <div style="font-size: 2.5rem; margin-bottom: 5px;">🌡️</div>
@@ -574,7 +607,7 @@ if analyze_button:
                 </div>
                 """, unsafe_allow_html=True)
                 
-            with weather_cols[2]:
+        with weather_cols[2]:
                 st.markdown(f"""
                 <div style="text-align: center;">
                     <div style="font-size: 2.5rem; margin-bottom: 5px;">💨</div>
@@ -583,7 +616,7 @@ if analyze_button:
                 </div>
                 """, unsafe_allow_html=True)
                 
-            with weather_cols[3]:
+        with weather_cols[3]:
                 st.markdown(f"""
                 <div style="text-align: center;">
                     <div style="font-size: 2.5rem; margin-bottom: 5px;">💧</div>
@@ -621,21 +654,21 @@ if analyze_button:
             """, unsafe_allow_html=True)
             
             st.markdown("</div>", unsafe_allow_html=True)  # Close the card
-            
-            # Traffic conditions
-            st.markdown('<div class="subheader">🚗 Traffic Conditions</div>', unsafe_allow_html=True)
-            traffic_data = integrated_data['traffic']
-            
-            traffic_cols = st.columns(3)
-            with traffic_cols[0]:
-                st.metric("Flow Speed", f"{traffic_data['flow_speed']:.1f} km/h")
-            with traffic_cols[1]:
-                st.metric("Free Flow Speed", f"{traffic_data['free_flow_speed']:.1f} km/h")
-            with traffic_cols[2]:
-                congestion_level = traffic_data['congestion_level']
-                congestion_status = "High" if congestion_level > 0.7 else "Medium" if congestion_level > 0.4 else "Low"
-                st.metric("Congestion Level", f"{congestion_level:.2f}", delta=congestion_status)
-                
+        
+        # Traffic conditions
+        st.markdown('<div class="subheader">🚗 Traffic Conditions</div>', unsafe_allow_html=True)
+        traffic_data = integrated_data['traffic']
+        
+        traffic_cols = st.columns(3)
+        with traffic_cols[0]:
+            st.metric("Flow Speed", f"{traffic_data['flow_speed']:.1f} km/h")
+        with traffic_cols[1]:
+            st.metric("Free Flow Speed", f"{traffic_data['free_flow_speed']:.1f} km/h")
+        with traffic_cols[2]:
+            congestion_level = traffic_data['congestion_level']
+            congestion_status = "High" if congestion_level > 0.7 else "Medium" if congestion_level > 0.4 else "Low"
+            st.metric("Congestion Level", f"{congestion_level:.2f}", delta=congestion_status)
+        
             # Create a gauge chart for congestion
             congestion_percentage = int(congestion_level * 100)
             fig = go.Figure(go.Indicator(
@@ -713,10 +746,10 @@ if analyze_button:
             # Day of week factor
             is_weekend = timestamp.weekday() >= 5
             day_factor = "weekend" if is_weekend else "weekday"
+        
+        density_cols = st.columns(2)
             
-            density_cols = st.columns(2)
-            
-            with density_cols[0]:
+        with density_cols[0]:
                 # Create a gauge chart for pedestrian density
                 fig = go.Figure(go.Indicator(
                     mode="gauge+number",
@@ -748,42 +781,25 @@ if analyze_button:
                 
                 st.plotly_chart(fig, use_container_width=True)
             
-            with density_cols[1]:
-                st.markdown(f"""
-                <div style="background-color: #333333; border-radius: 8px; padding: 15px; height: 100%;">
-                    <h4 style="margin-top: 0; color: #FF8C00; display: flex; align-items: center;">
-                        <span style="margin-right: 10px;">{trend_icon}</span> Trend Analysis
-                    </h4>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <div style="font-weight: bold; color: #FFFFFF;">Current Time:</div>
-                        <div>{display_hour} ({display_hour_12})</div>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <div style="font-weight: bold; color: #FFFFFF;">Day Type:</div>
-                        <div style="text-transform: capitalize;">{day_factor}</div>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <div style="font-weight: bold; color: #FFFFFF;">Expected Trend:</div>
-                        <div style="color: {trend_color}; font-weight: bold;">{expected_trend}</div>
-                    </div>
-                    
-                    <div>
-                        <div style="font-weight: bold; color: #FFFFFF;">Recommendation:</div>
-                        <div>
-                            {
-                            "Optimal time for billboard display. High engagement expected." 
-                            if density > 0.7 else 
-                            "Good time for billboard display. Moderate engagement expected." 
-                            if density > 0.4 else 
-                            "Consider scheduling for a time with higher foot traffic."
-                            }
-                        </div>
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
+        with density_cols[1]:
+                st.subheader(f"{trend_icon} Trend Analysis")
+                
+                st.write("**Current Time:**")
+                st.write(f"{display_hour} ({display_hour_12})")
+                
+                st.write("**Day Type:**")
+                st.write(f"{day_factor.capitalize()}")
+                
+                st.write("**Expected Trend:**")
+                st.markdown(f"<span style='color: {trend_color}; font-weight: bold;'>{expected_trend}</span>", unsafe_allow_html=True)
+                
+                st.write("**Recommendation:**")
+                if density > 0.7:
+                    st.write("Optimal time for billboard display. High engagement expected.")
+                elif density > 0.4:
+                    st.write("Good time for billboard display. Moderate engagement expected.")
+                else:
+                    st.write("Consider scheduling for a time with higher foot traffic.")
             
             st.markdown("</div>", unsafe_allow_html=True)  # Close the card
 
@@ -812,19 +828,19 @@ if analyze_button:
             
             traffic_score = 1 - traffic_data['congestion_level']
             
-            engagement_score = (
+        engagement_score = (
                 (0.3 * traffic_score) +  # Lower congestion is better
                 (0.4 * integrated_data['pedestrian_density']) +  # Higher pedestrian density is better
                 (0.2 * weather_score) +  # Better weather is better
                 (0.1 * time_score)  # Time factor
-            )
-            
-            engagement_percentage = min(100, max(0, engagement_score * 100))
-            
+        )
+        
+        engagement_percentage = min(100, max(0, engagement_score * 100))
+        
             # Display score with gauge chart
             score_cols = st.columns([2, 3])
             
-            with score_cols[0]:
+        with score_cols[0]:
                 # Create a gauge chart for engagement score
                 fig = go.Figure(go.Indicator(
                     mode="gauge+number",
@@ -881,39 +897,39 @@ if analyze_button:
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
-            
-            with score_cols[1]:
+        
+        with score_cols[1]:
                 # Enhanced recommendations with more actionable insights
                 st.markdown("<h4 style='margin-top: 0;'>Recommendations & Insights</h4>", unsafe_allow_html=True)
                 
-                recommendations = []
-                
+            recommendations = []
+            
                 # Detailed recommendations based on all factors
-                if traffic_data['congestion_level'] > 0.7:
+            if traffic_data['congestion_level'] > 0.7:
                     recommendations.append({
                         "icon": "⚠️",
                         "title": "High Traffic Congestion",
                         "text": "Heavy traffic may slow routes and reduce visibility. Consider side streets or avoid peak hours.",
                         "type": "warning"
                     })
-                
-                if integrated_data['pedestrian_density'] < 0.3:
+            
+            if integrated_data['pedestrian_density'] < 0.3:
                     recommendations.append({
                         "icon": "👥",
                         "title": "Low Pedestrian Activity",
                         "text": f"Current pedestrian density is low. Consider scheduling during peak hours (lunch time or {'' if is_weekend else 'after work'} evenings).",
                         "type": "warning"
                     })
-                
-                if weather_data['precipitation'] > 0.5:
+            
+            if weather_data['precipitation'] > 0.5:
                     recommendations.append({
                         "icon": "🌧️",
                         "title": "Precipitation Detected",
                         "text": "Rain may reduce visibility and pedestrian traffic. Consider rescheduling or use weather-protected billboards.",
                         "type": "warning"
                     })
-                
-                if weather_data['wind_speed'] > 15:
+            
+            if weather_data['wind_speed'] > 15:
                     recommendations.append({
                         "icon": "💨",
                         "title": "High Wind Alert",
@@ -1003,11 +1019,11 @@ if analyze_button:
             st.markdown("<p>The map below shows the optimal route and key locations for billboard display:</p>", unsafe_allow_html=True)
             
             # Add marker for selected zone
-            map_data = pd.DataFrame({
-                'lat': [selected_zone['latitude']],
-                'lon': [selected_zone['longitude']]
-            })
-            
+        map_data = pd.DataFrame({
+            'lat': [selected_zone['latitude']],
+            'lon': [selected_zone['longitude']]
+        })
+        
             # Use an interactive map with more information
             st.map(map_data, zoom=14)
             
@@ -1158,14 +1174,14 @@ if analyze_button:
                     <span style="margin-right: 10px;">📈</span> Historical Engagement Data
                 </h3>
             """, unsafe_allow_html=True)
-            
-            # Generate some sample historical data
-            start_date = timestamp.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=7)
-            end_date = timestamp
-            
+        
+        # Generate some sample historical data
+        start_date = timestamp.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=7)
+        end_date = timestamp
+        
             try:
-                historical_data = data_collector.get_historical_engagement(start_date, end_date)
-                
+        historical_data = data_collector.get_historical_engagement(start_date, end_date)
+        
                 # Create better time series visualizations
                 st.markdown("<h4>Engagement Trends (Last 7 Days):</h4>", unsafe_allow_html=True)
                 
@@ -1327,11 +1343,11 @@ if analyze_button:
             st.markdown("<h4>Optimal Display Times by Day and Hour:</h4>", unsafe_allow_html=True)
             
             # Create a sample dataframe for the heatmap
-            days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
             hours = list(range(7, 23))  # 7 AM to 10 PM
-            
+        
             # Create different patterns based on the selected area
-            if selected_area == "Northern Quarter":
+        if selected_area == "Northern Quarter":
                 # Northern Quarter: Evenings and weekends are best
                 best_times = np.zeros((len(days), len(hours)))
                 for d in range(len(days)):
@@ -1352,7 +1368,7 @@ if analyze_button:
                             else:
                                 best_times[d, h] = 0.4 + np.random.normal(0, 0.1)
             
-            elif selected_area == "City Centre":
+        elif selected_area == "City Centre":
                 # City Centre: Busy during shopping hours, especially weekends
                 best_times = np.zeros((len(days), len(hours)))
                 for d in range(len(days)):
@@ -1377,7 +1393,7 @@ if analyze_button:
                             else:
                                 best_times[d, h] = 0.4 + np.random.normal(0, 0.1)
                             
-            elif selected_area == "Ancoats":
+        elif selected_area == "Ancoats":
                 # Ancoats: Evenings for restaurants, some weekend activity
                 best_times = np.zeros((len(days), len(hours)))
                 for d in range(len(days)):
@@ -1398,7 +1414,7 @@ if analyze_button:
                             else:
                                 best_times[d, h] = 0.4 + np.random.normal(0, 0.1)
             
-            else:  # Piccadilly
+        else:  # Piccadilly
                 # Piccadilly: Rush hours due to transport hub
                 best_times = np.zeros((len(days), len(hours)))
                 for d in range(len(days)):
@@ -1522,7 +1538,7 @@ if analyze_button:
                     """, unsafe_allow_html=True)
             
             # Planning tips
-            st.markdown("""
+        st.markdown("""
             <div style="background-color: #333333; border-radius: 8px; padding: 15px; margin-top: 20px;">
                 <h4 style="margin-top: 0; color: #FF8C00;">📝 Planning Tips</h4>
                 <ul>
@@ -1531,49 +1547,13 @@ if analyze_button:
                     <li><b>Special Events:</b> Check local events calendar to capitalize on high-traffic opportunities</li>
                     <li><b>Team Rotation:</b> For all-day campaigns, rotate cyclists every 3-4 hours for maximum energy</li>
                 </ul>
-            </div>
-            """, unsafe_allow_html=True)
+        </div>
+        """, unsafe_allow_html=True)
             
             st.markdown("</div>", unsafe_allow_html=True)  # Close the card
 
     except Exception as e:
         st.error(f"An error occurred: {e}")
-
-# Function to get reasons for recommended times
-def get_reason_for_time(day, hour, area):
-    is_weekend = day in ["Saturday", "Sunday"]
-    
-    if area == "Northern Quarter":
-        if is_weekend and hour >= 12:
-            return "Weekend afternoons and evenings have high foot traffic with shoppers and people visiting bars/restaurants."
-        elif not is_weekend and hour >= 17:
-            return "Weekday evenings see increased activity with after-work crowds visiting bars and restaurants."
-        elif hour >= 12 and hour <= 14:
-            return "Lunch hour brings office workers to local eateries and cafes."
-    
-    elif area == "City Centre":
-        if is_weekend and hour >= 11 and hour <= 17:
-            return "Peak shopping hours with high volumes of pedestrian traffic in retail areas."
-        elif not is_weekend and hour >= 12 and hour <= 14:
-            return "Lunch rush brings office workers into public spaces and shopping areas."
-        elif not is_weekend and hour >= 17 and hour <= 19:
-            return "After-work shopping and dining creates high visibility opportunities."
-    
-    elif area == "Ancoats":
-        if is_weekend and hour >= 11 and hour <= 21:
-            return "Weekend crowds visit popular restaurants and leisure spots throughout the day."
-        elif not is_weekend and hour >= 17 and hour <= 21:
-            return "Evening dining brings significant foot traffic to restaurant-heavy areas."
-    
-    else:  # Piccadilly
-        if not is_weekend and (hour >= 7 and hour <= 9):
-            return "Morning commute brings high volumes of pedestrians through transportation hubs."
-        elif not is_weekend and (hour >= 16 and hour <= 19):
-            return "Evening rush hour creates dense foot traffic around transit points."
-        elif is_weekend and hour >= 11 and hour <= 16:
-            return "Tourists and shoppers create steady foot traffic throughout the day."
-    
-    return "Moderate pedestrian activity expected during this time."
 
 # Footer with disclaimer
 st.markdown("""
