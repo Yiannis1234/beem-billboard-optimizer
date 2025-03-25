@@ -111,14 +111,6 @@ border: 1px solid #FF9D45; font-size: 14px; z-index: 1000; display: flex; align-
 </div>
 """, unsafe_allow_html=True)
 
-# Add a VERY PROMINENT instruction at the top of the page
-st.markdown("""
-<div style="background-color: #FF7E33; color: white; padding: 15px; margin-bottom: 25px; border-radius: 10px; 
-text-align: center; font-weight: bold; font-size: 18px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-⬅️ <span style="text-decoration: underline; font-size: 20px;">CLICK THE ARROW</span> on the left to ANALYZE ROUTE ⬅️
-</div>
-""", unsafe_allow_html=True)
-
 # Title
 st.markdown("""
 <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px">
@@ -127,6 +119,20 @@ st.markdown("""
     </div>
 </div>
 """, unsafe_allow_html=True)
+
+# HUGE PROMINENT BANNER - Placed before anything else
+st.markdown("""
+<div style="background-color: #FF7E33; color: white; padding: 15px; margin: -10px 0 25px 0; border-radius: 10px; text-align: center; font-size: 24px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border: 2px dashed white;">
+    <div style="display: flex; align-items: center; justify-content: center;">
+        <div style="font-size: 36px; margin-right: 15px;">⬅️</div>
+        <div>
+            <span style="text-decoration: underline;">CLICK THE ARROW</span> on the left side<br>
+            <span style="font-size: 18px;">to open options and ANALYZE ROUTE</span>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
 st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
 st.markdown("Optimize your mobile billboard routes for maximum engagement")
 
