@@ -20,6 +20,9 @@ st.markdown("""
     .stProgress .st-bo {background-color: #FF9D45}
     .stTabs [aria-selected="true"] {background-color: #FFF1E6; color: #FF9D45 !important}
     .highlight {background-color: #FFF1E6; padding: 10px; border-radius: 5px}
+    .time-card {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
+    .time-title {color: #FF9D45; font-weight: bold; margin-bottom: 5px}
+    .time-detail {margin-left: 20px; margin-bottom: 10px}
 </style>
 """, unsafe_allow_html=True)
 
@@ -178,18 +181,40 @@ with tabs[3]:
     
     if analyze:
         st.markdown('<h3 style="color: #FF9D45">Recommended Times:</h3>', unsafe_allow_html=True)
-        st.markdown("""
-        <div style="background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px">
-            <div style="color: #FF9D45; font-weight: bold">1. Friday at 5:00 PM - 7:00 PM</div>
-            <div style="margin-left: 20px">After-work crowds (95/100)</div>
-            
-            <div style="color: #FF9D45; font-weight: bold; margin-top: 10px">2. Saturday at 2:00 PM - 4:00 PM</div>
-            <div style="margin-left: 20px">Shopping hours (92/100)</div>
-            
-            <div style="color: #FF9D45; font-weight: bold; margin-top: 10px">3. Wednesday at 12:00 PM</div>
-            <div style="margin-left: 20px">Lunch break (88/100)</div>
-        </div>
-        """, unsafe_allow_html=True)
+        
+        # Best times displayed correctly with CSS classes
+        st.markdown('<div class="time-card">', unsafe_allow_html=True)
+        
+        # Time 1
+        st.markdown('<div class="time-title">1. Friday at 5:00 PM - 7:00 PM</div>', unsafe_allow_html=True)
+        st.markdown('<div class="time-detail">After-work crowds (95/100)</div>', unsafe_allow_html=True)
+        
+        # Time 2
+        st.markdown('<div class="time-title">2. Saturday at 2:00 PM - 4:00 PM</div>', unsafe_allow_html=True)
+        st.markdown('<div class="time-detail">Shopping hours (92/100)</div>', unsafe_allow_html=True)
+        
+        # Time 3
+        st.markdown('<div class="time-title">3. Wednesday at 12:00 PM</div>', unsafe_allow_html=True)
+        st.markdown('<div class="time-detail">Lunch break (88/100)</div>', unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Add a daily engagement chart
+        st.subheader("Daily Engagement Patterns")
+        hours = list(range(7, 23))  # 7 AM to 10 PM
+        
+        # Different patterns for different days
+        weekday_pattern = [30, 55, 65, 60, 70, 85, 80, 70, 65, 75, 85, 90, 75, 60, 40, 30]
+        weekend_pattern = [20, 30, 45, 60, 75, 85, 90, 92, 88, 80, 70, 65, 55, 45, 35, 25]
+        
+        engagement_data = pd.DataFrame({
+            'Hour': hours,
+            'Weekday': weekday_pattern,
+            'Weekend': weekend_pattern
+        })
+        
+        st.line_chart(engagement_data, x='Hour', y=['Weekday', 'Weekend'])
+        
     else:
         st.info("Select options and click 'Analyze Route' to see recommended times.")
 
