@@ -200,7 +200,7 @@ with tabs[0]:
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.metric(f"Weather {weather_icon}", 
-                          f"{weather_data['temperature']:.1f}°C", 
+                          f"Exactly {weather_data['temperature']:.1f}°C", 
                           f"{weather_data['condition']}")
                 st.markdown(
                     f'<div class="highlight">Wind: {weather_data["wind_speed"]:.1f} km/h<br>Precipitation: {weather_data["precipitation"]:.1f} mm</div>', 
@@ -253,7 +253,7 @@ with tabs[0]:
             with col2:
                 st.markdown('<div class="weather-box">', unsafe_allow_html=True)
                 st.markdown(f"#### {weather_icon} Weather Conditions")
-                st.markdown(f"**Temperature:** {weather_data['temperature']:.1f}°C")
+                st.markdown(f"**Exact Temperature:** {weather_data['temperature']:.1f}°C")
                 st.markdown(f"**Condition:** {weather_data['condition']}")
                 st.markdown(f"**Wind Speed:** {weather_data['wind_speed']:.1f} km/h")
                 st.markdown(f"**Precipitation:** {weather_data['precipitation']:.1f} mm")
