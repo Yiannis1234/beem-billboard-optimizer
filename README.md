@@ -1,4 +1,32 @@
-# Beem Billboard Bike Route Optimizer
+# Beem Billboard Route Optimizer
+
+## How to Run the App
+
+**Important**: Always use the `app_code.py` file to run the application, not `app.py`:
+
+```bash
+# Option 1: Run directly
+streamlit run app_code.py
+
+# Option 2: Use the provided script
+./run_app.sh
+
+# Option 3: If the app gets stuck, use the restart script
+./restart_app.sh
+```
+
+If you encounter any issues with the app not showing the latest changes, make sure you're running the correct file and try using the restart script.
+
+## About
+
+Beem Billboard Route Optimizer helps businesses optimize mobile billboard routes for maximum engagement through eye-catching billboards carried by cyclists.
+
+Our solution is:
+- 🌿 Eco-friendly
+- 💰 Cost-effective
+- 🎯 Highly targeted
+- 📱 Engaging
+- 📊 Data-driven
 
 A web application that helps optimize bike routes for Beem's mobile billboards in Manchester, UK. The application uses real-time weather and traffic data to provide recommendations for the most effective routes and times for billboard display.
 
