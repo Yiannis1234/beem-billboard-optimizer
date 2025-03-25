@@ -65,33 +65,6 @@ st.markdown("""
 st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
 st.markdown("Optimize your mobile billboard routes for maximum engagement")
 
-# Add visual banner with dynamic elements
-if analyze:
-    st.markdown("""
-    <div style="background: linear-gradient(90deg, #FF9D45, #FFB673); border-radius: 10px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center">
-        <div>
-            <h3 style="color: white !important; margin: 0">Beem Billboard Insights</h3>
-            <p style="color: white; margin: 5px 0 0 0">Optimizing engagement across Manchester</p>
-        </div>
-        <div style="background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center">
-            <span style="font-size: 24px">🚲</span>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-else:
-    # Even when not analyzing, show a welcome banner
-    st.markdown("""
-    <div style="background: linear-gradient(90deg, #FF9D45, #FFB673); border-radius: 10px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center">
-        <div>
-            <h3 style="color: white !important; margin: 0">Welcome to Beem</h3>
-            <p style="color: white; margin: 5px 0 0 0">Mobile billboard optimization platform</p>
-        </div>
-        <div style="background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center">
-            <span style="font-size: 24px">🚲</span>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
 # Sidebar
 with st.sidebar:
     # Add Beem logo
@@ -142,6 +115,33 @@ with st.sidebar:
         - 📱 Engaging
         - 📊 Data-driven
         """, unsafe_allow_html=True)
+
+# Add visual banner with dynamic elements - MOVED AFTER analyze is defined
+if analyze:
+    st.markdown("""
+    <div style="background: linear-gradient(90deg, #FF9D45, #FFB673); border-radius: 10px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center">
+        <div>
+            <h3 style="color: white !important; margin: 0">Beem Billboard Insights</h3>
+            <p style="color: white; margin: 5px 0 0 0">Optimizing engagement across Manchester</p>
+        </div>
+        <div style="background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center">
+            <span style="font-size: 24px">🚲</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+else:
+    # Even when not analyzing, show a welcome banner
+    st.markdown("""
+    <div style="background: linear-gradient(90deg, #FF9D45, #FFB673); border-radius: 10px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center">
+        <div>
+            <h3 style="color: white !important; margin: 0">Welcome to Beem</h3>
+            <p style="color: white; margin: 5px 0 0 0">Mobile billboard optimization platform</p>
+        </div>
+        <div style="background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center">
+            <span style="font-size: 24px">🚲</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 # Function to get weather icon based on condition
 def get_weather_icon(condition):
