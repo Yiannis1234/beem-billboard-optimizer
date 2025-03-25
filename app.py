@@ -307,18 +307,21 @@ with st.sidebar:
     
     # About section with more information
     with st.expander("ℹ️ About Beem"):
-        st.write("**Beem Mobile Billboard Solutions** helps businesses reach their audience through eye-catching mobile billboards carried by cyclists.")
-        
-        st.write("Our innovative approach is:")
-        
-        st.write("""
-        - 🌿 **Eco-friendly** - Zero emissions
-        - 💰 **Cost-effective** - Lower costs than traditional billboards
-        - 🌟 **Targeted** - Precise location targeting
-        - 📱 **Engaging** - High visibility in pedestrian areas
-        """)
-        
-        st.write("This app uses real-time data to optimize your mobile billboard routes for maximum engagement.")
+        st.markdown("""
+        <div style="padding: 10px; color: white;">
+            <p style="margin-bottom: 15px;"><strong>Beem Mobile Billboard Solutions</strong> helps businesses reach their audience through eye-catching mobile billboards carried by cyclists.</p>
+            
+            <p style="margin-bottom: 10px;">Our innovative approach is:</p>
+            <ul style="list-style-type: none; padding-left: 10px; margin-bottom: 15px;">
+                <li style="margin-bottom: 8px;">🌿 <strong>Eco-friendly</strong> - Zero emissions</li>
+                <li style="margin-bottom: 8px;">💰 <strong>Cost-effective</strong> - Lower costs than traditional billboards</li>
+                <li style="margin-bottom: 8px;">🌟 <strong>Targeted</strong> - Precise location targeting</li>
+                <li style="margin-bottom: 8px;">📱 <strong>Engaging</strong> - High visibility in pedestrian areas</li>
+            </ul>
+            
+            <p>This app uses real-time data to optimize your mobile billboard routes for maximum engagement.</p>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Additional help section
     with st.expander("🔍 How to use this tool"):
