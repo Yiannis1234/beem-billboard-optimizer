@@ -51,6 +51,13 @@ st.markdown("""
     .time-detail {margin-left: 20px; margin-bottom: 10px}
     .traffic-box {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
     .weather-box {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
+    .logo-container {display: flex; justify-content: center; margin-bottom: 20px}
+    .footer-container {display: flex; justify-content: center; align-items: center; margin-top: 20px}
+    .card {background-color: #FFF1E6; border-radius: 10px; padding: 20px; margin: 10px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1)}
+    .icon-text {display: flex; align-items: center}
+    .icon-text span {margin-left: 10px}
+    .dashboard-metric {background-color: #FFF1E6; border-left: 5px solid #FF9D45; padding: 15px; margin: 10px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05)}
+    .gradient-header {background: linear-gradient(90deg, #FF9D45, #FFB673); color: white !important; padding: 10px; border-radius: 5px; margin-bottom: 20px}
 </style>
 """, unsafe_allow_html=True)
 
@@ -60,6 +67,13 @@ st.markdown("Optimize your mobile billboard routes for maximum engagement")
 
 # Sidebar
 with st.sidebar:
+    # Add Beem logo
+    st.markdown("""
+    <div class="logo-container">
+        <img src="https://raw.githubusercontent.com/ioannisvamvakas/beem_resources/main/beem_logo.png" width="180">
+    </div>
+    """, unsafe_allow_html=True)
+    
     st.markdown('<h2 style="color: #FF9D45">Route Options</h2>', unsafe_allow_html=True)
     
     # Area selection - EXPANDED LIST
@@ -160,9 +174,9 @@ tabs = st.tabs(["Route Analysis", "Map & Visualization", "Historical Data", "Bes
 
 # Tab 1: Route Analysis
 with tabs[0]:
-    st.markdown(f'<h2 style="color: #FF9D45">Analysis for {area}</h2>', unsafe_allow_html=True)
-    
     if analyze:
+        st.markdown(f'<h2 class="gradient-header">Analysis for {area}</h2>', unsafe_allow_html=True)
+        
         with st.spinner("Analyzing route data..."):
             # Run the analysis progress simulation
             analysis_complete = show_analysis_progress()
@@ -196,81 +210,170 @@ with tabs[0]:
             
             st.success("Analysis complete!")
             
-            # Display metrics with real data
+            # Display metrics with real data and enhanced visuals
             col1, col2, col3 = st.columns(3)
             with col1:
-                st.metric(f"Weather", 
-                         f"{weather_data['temperature']:.1f}°C", 
-                         f"{weather_data['condition']}")
-                st.markdown(
-                    f'<div class="highlight"><strong>Exact temperature:</strong> {weather_data["temperature"]:.1f}°C<br>Wind: {weather_data["wind_speed"]:.1f} km/h<br>Precipitation: {weather_data["precipitation"]:.1f} mm</div>', 
-                    unsafe_allow_html=True
-                )
+                st.markdown(f"""
+                <div class="dashboard-metric">
+                    <h4 style="margin-top: 0">{weather_icon} Weather</h4>
+                    <h2 style="color: #333 !important; margin: 5px 0">{weather_data['temperature']:.1f}°C</h2>
+                    <p style="color: #666; margin: 0">{weather_data['condition']}</p>
+                    <hr style="margin: 10px 0; border-color: #ddd">
+                    <p><strong>Exact temperature:</strong> {weather_data["temperature"]:.1f}°C<br>
+                    <strong>Wind:</strong> {weather_data["wind_speed"]:.1f} km/h<br>
+                    <strong>Precipitation:</strong> {weather_data["precipitation"]:.1f} mm</p>
+                </div>
+                """, unsafe_allow_html=True)
                 
             with col2:
-                st.metric(f"Traffic {traffic_icon}", 
-                          traffic_status, 
-                          f"{int(traffic_data['flow_speed'])} km/h current speed")
-                
-                congestion_pct = int(traffic_data['congestion_level'] * 100)
-                st.markdown(
-                    f'<div class="highlight">Congestion: {congestion_pct}%<br>Free flow: {int(traffic_data["free_flow_speed"])} km/h</div>', 
-                    unsafe_allow_html=True
-                )
+                st.markdown(f"""
+                <div class="dashboard-metric">
+                    <h4 style="margin-top: 0">{traffic_icon} Traffic</h4>
+                    <h2 style="color: #333 !important; margin: 5px 0">{traffic_status}</h2>
+                    <p style="color: #666; margin: 0">{int(traffic_data['flow_speed'])} km/h current speed</p>
+                    <hr style="margin: 10px 0; border-color: #ddd">
+                    <p><strong>Congestion:</strong> {int(traffic_data['congestion_level'] * 100)}%<br>
+                    <strong>Free flow:</strong> {int(traffic_data["free_flow_speed"])} km/h</p>
+                </div>
+                """, unsafe_allow_html=True)
                 
             with col3:
                 pedestrian_rating = "High" if pedestrian_density > 0.7 else "Medium" if pedestrian_density > 0.4 else "Low"
-                st.metric("Engagement Score", f"{engagement_score:.0f}/100", f"{pedestrian_rating} foot traffic")
-                st.markdown(
-                    f'<div class="highlight">Pedestrian density: {int(pedestrian_density*100)}%<br>Estimated views: {int(pedestrian_density*1000)}/hr</div>', 
-                    unsafe_allow_html=True
-                )
+                st.markdown(f"""
+                <div class="dashboard-metric">
+                    <h4 style="margin-top: 0">📊 Engagement</h4>
+                    <h2 style="color: #333 !important; margin: 5px 0">{engagement_score:.0f}/100</h2>
+                    <p style="color: #666; margin: 0">{pedestrian_rating} foot traffic</p>
+                    <hr style="margin: 10px 0; border-color: #ddd">
+                    <p><strong>Pedestrian density:</strong> {int(pedestrian_density*100)}%<br>
+                    <strong>Estimated views:</strong> {int(pedestrian_density*1000)}/hr</p>
+                </div>
+                """, unsafe_allow_html=True)
             
-            # Additional insights
+            # Visual representation of optimal times (new)
+            st.markdown("<h3>🎯 Optimal Times Today</h3>", unsafe_allow_html=True)
+            hours_col1, hours_col2, hours_col3 = st.columns(3)
+            
+            with hours_col1:
+                st.markdown("""
+                <div class="card">
+                    <h4 style="margin-top: 0">Morning</h4>
+                    <div class="icon-text">
+                        <div style="font-size: 24px">⭐⭐⭐</div>
+                        <span>8:00 - 9:00 AM</span>
+                    </div>
+                    <p style="color: #666; margin-top: 10px">Morning commuters (75/100)</p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+            with hours_col2:
+                st.markdown("""
+                <div class="card">
+                    <h4 style="margin-top: 0">Afternoon</h4>
+                    <div class="icon-text">
+                        <div style="font-size: 24px">⭐⭐⭐⭐⭐</div>
+                        <span>12:00 - 2:00 PM</span>
+                    </div>
+                    <p style="color: #666; margin-top: 10px">Lunch crowd (90/100)</p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+            with hours_col3:
+                st.markdown("""
+                <div class="card">
+                    <h4 style="margin-top: 0">Evening</h4>
+                    <div class="icon-text">
+                        <div style="font-size: 24px">⭐⭐⭐⭐</div>
+                        <span>5:00 - 7:00 PM</span>
+                    </div>
+                    <p style="color: #666; margin-top: 10px">Evening commuters (85/100)</p>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            # Additional insights with enhanced visuals
             st.subheader("Route Details")
             
             col1, col2 = st.columns(2)
             
             with col1:
-                st.markdown('<div class="traffic-box">', unsafe_allow_html=True)
-                st.markdown("#### 🚦 Traffic Conditions")
-                st.markdown(f"**Current Speed:** {int(traffic_data['flow_speed'])} km/h")
-                st.markdown(f"**Free Flow Speed:** {int(traffic_data['free_flow_speed'])} km/h")
-                st.markdown(f"**Congestion Level:** {int(traffic_data['congestion_level']*100)}%")
+                st.markdown("""
+                <div class="traffic-box">
+                    <h4 style="margin-top: 0">🚦 Traffic Conditions</h4>
+                    <div style="display: flex; justify-content: space-between; margin: 15px 0">
+                        <div style="text-align: center; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 5px; width: 45%">
+                            <div style="font-size: 24px; margin-bottom: 5px">🚗</div>
+                            <div style="font-weight: bold">{0} km/h</div>
+                            <div style="font-size: 12px; color: #666">Current Speed</div>
+                        </div>
+                        <div style="text-align: center; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 5px; width: 45%">
+                            <div style="font-size: 24px; margin-bottom: 5px">⚡</div>
+                            <div style="font-weight: bold">{1} km/h</div>
+                            <div style="font-size: 12px; color: #666">Free Flow</div>
+                        </div>
+                    </div>
+                """.format(int(traffic_data['flow_speed']), int(traffic_data['free_flow_speed'])), unsafe_allow_html=True)
                 
                 # Traffic rating
                 if traffic_data['congestion_level'] < 0.3:
-                    st.markdown("⭐⭐⭐⭐⭐ Excellent - Very light traffic")
+                    st.markdown("<div style='margin-top: 15px'>⭐⭐⭐⭐⭐ Excellent - Very light traffic</div>", unsafe_allow_html=True)
                 elif traffic_data['congestion_level'] < 0.5:
-                    st.markdown("⭐⭐⭐⭐ Good - Manageable traffic")
+                    st.markdown("<div style='margin-top: 15px'>⭐⭐⭐⭐ Good - Manageable traffic</div>", unsafe_allow_html=True)
                 elif traffic_data['congestion_level'] < 0.7:
-                    st.markdown("⭐⭐⭐ Average - Moderate congestion")
+                    st.markdown("<div style='margin-top: 15px'>⭐⭐⭐ Average - Moderate congestion</div>", unsafe_allow_html=True)
                 else:
-                    st.markdown("⭐⭐ Challenging - Heavy traffic")
+                    st.markdown("<div style='margin-top: 15px'>⭐⭐ Challenging - Heavy traffic</div>", unsafe_allow_html=True)
                     
                 st.markdown('</div>', unsafe_allow_html=True)
                 
             with col2:
-                st.markdown('<div class="weather-box">', unsafe_allow_html=True)
-                st.markdown(f"#### {weather_icon} Weather Conditions")
-                st.markdown(f"**Exact Temperature:** {weather_data['temperature']:.1f}°C")
-                st.markdown(f"**Condition:** {weather_data['condition']}")
-                st.markdown(f"**Wind Speed:** {weather_data['wind_speed']:.1f} km/h")
-                st.markdown(f"**Precipitation:** {weather_data['precipitation']:.1f} mm")
+                st.markdown("""
+                <div class="weather-box">
+                    <h4 style="margin-top: 0">{0} Weather Conditions</h4>
+                    <div style="display: flex; justify-content: space-between; margin: 15px 0">
+                        <div style="text-align: center; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 5px; width: 45%">
+                            <div style="font-size: 24px; margin-bottom: 5px">🌡️</div>
+                            <div style="font-weight: bold">{1:.1f}°C</div>
+                            <div style="font-size: 12px; color: #666">Exact Temperature</div>
+                        </div>
+                        <div style="text-align: center; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 5px; width: 45%">
+                            <div style="font-size: 24px; margin-bottom: 5px">💨</div>
+                            <div style="font-weight: bold">{2:.1f} km/h</div>
+                            <div style="font-size: 12px; color: #666">Wind Speed</div>
+                        </div>
+                    </div>
+                """.format(weather_icon, weather_data['temperature'], weather_data['wind_speed']), unsafe_allow_html=True)
+                
+                # Additional weather info
+                st.markdown(f"""
+                <div style="margin-top: 15px">
+                    <strong>Condition:</strong> {weather_data['condition']}<br>
+                    <strong>Precipitation:</strong> {weather_data['precipitation']:.1f} mm
+                </div>
+                """, unsafe_allow_html=True)
                 
                 # Weather rating for billboard
                 if weather_data['precipitation'] < 0.5 and weather_data['wind_speed'] < 20:
-                    st.markdown("⭐⭐⭐⭐⭐ Excellent - Ideal for billboard visibility")
+                    st.markdown("<div style='margin-top: 15px'>⭐⭐⭐⭐⭐ Excellent - Ideal for billboard visibility</div>", unsafe_allow_html=True)
                 elif weather_data['precipitation'] < 2 and weather_data['wind_speed'] < 30:
-                    st.markdown("⭐⭐⭐⭐ Good - Good visibility conditions")
+                    st.markdown("<div style='margin-top: 15px'>⭐⭐⭐⭐ Good - Good visibility conditions</div>", unsafe_allow_html=True)
                 elif weather_data['precipitation'] < 5 and weather_data['wind_speed'] < 40:
-                    st.markdown("⭐⭐⭐ Average - Acceptable conditions")
+                    st.markdown("<div style='margin-top: 15px'>⭐⭐⭐ Average - Acceptable conditions</div>", unsafe_allow_html=True)
                 else:
-                    st.markdown("⭐⭐ Challenging - Poor visibility possible")
+                    st.markdown("<div style='margin-top: 15px'>⭐⭐ Challenging - Poor visibility possible</div>", unsafe_allow_html=True)
                     
                 st.markdown('</div>', unsafe_allow_html=True)
     else:
         st.info("Select options and click 'Analyze Route' to see results.")
+        
+        # Add a visual placeholder when no analysis is running
+        st.markdown("""
+        <div style="display: flex; justify-content: center; align-items: center; height: 300px">
+            <div style="text-align: center">
+                <img src="https://raw.githubusercontent.com/ioannisvamvakas/beem_resources/main/beem_logo.png" width="200">
+                <p style="color: #FF9D45; margin-top: 20px; font-size: 18px">Select options and analyze to see data</p>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
 # Tab 2: Map & Visualization
 with tabs[1]:
@@ -427,6 +530,41 @@ with tabs[4]:
     else:
         st.info("Select options and click 'Analyze Route' to see demographic analysis.")
 
-# Footer
+# Footer with enhanced visual elements
 st.markdown("---")
-st.markdown('<div style="text-align: center; color: #FF9D45">© 2025 Beem Mobile Billboard Solutions | hello@beembillboards.com</div>', unsafe_allow_html=True)
+st.markdown("""
+<div class="footer-container">
+    <div style="text-align: center">
+        <img src="https://raw.githubusercontent.com/ioannisvamvakas/beem_resources/main/beem_logo.png" width="100">
+        <div style="color: #FF9D45; margin-top: 10px">© 2025 Beem Mobile Billboard Solutions</div>
+        <div style="color: #999; font-size: 12px; margin-top: 5px">hello@beembillboards.com | +44 123 456 7890</div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# Add visual banner with dynamic elements
+if analyze:
+    st.markdown("""
+    <div style="background: linear-gradient(90deg, #FF9D45, #FFB673); border-radius: 10px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center">
+        <div>
+            <h3 style="color: white !important; margin: 0">Beem Billboard Insights</h3>
+            <p style="color: white; margin: 5px 0 0 0">Optimizing engagement across Manchester</p>
+        </div>
+        <div style="background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center">
+            <span style="font-size: 24px">🚲</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+else:
+    # Even when not analyzing, show a welcome banner
+    st.markdown("""
+    <div style="background: linear-gradient(90deg, #FF9D45, #FFB673); border-radius: 10px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center">
+        <div>
+            <h3 style="color: white !important; margin: 0">Welcome to Beem</h3>
+            <p style="color: white; margin: 5px 0 0 0">Mobile billboard optimization platform</p>
+        </div>
+        <div style="background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center">
+            <span style="font-size: 24px">🚲</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
