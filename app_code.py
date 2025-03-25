@@ -199,11 +199,11 @@ with tabs[0]:
             # Display metrics with real data
             col1, col2, col3 = st.columns(3)
             with col1:
-                st.metric(f"Weather {weather_icon}", 
-                          f"Exactly {weather_data['temperature']:.1f}°C", 
-                          f"{weather_data['condition']}")
+                st.metric(f"Weather", 
+                         f"{weather_data['temperature']:.1f}°C", 
+                         f"{weather_data['condition']}")
                 st.markdown(
-                    f'<div class="highlight">Wind: {weather_data["wind_speed"]:.1f} km/h<br>Precipitation: {weather_data["precipitation"]:.1f} mm</div>', 
+                    f'<div class="highlight"><strong>Exact temperature:</strong> {weather_data["temperature"]:.1f}°C<br>Wind: {weather_data["wind_speed"]:.1f} km/h<br>Precipitation: {weather_data["precipitation"]:.1f} mm</div>', 
                     unsafe_allow_html=True
                 )
                 
