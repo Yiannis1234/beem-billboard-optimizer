@@ -19,12 +19,20 @@ class BeemDataCollector:
             try:
                 # WeatherAPI.com endpoint
                 url = f"http://api.weatherapi.com/v1/current.json?key={self.weather_api_key}&q={location}&aqi=no"
-                response = requests.get(url)
+                
+                print(f"Fetching weather data from: {url}")
+                response = requests.get(url, timeout=10)
+                
+                if response.status_code != 200:
+                    print(f"Weather API error: {response.status_code} - {response.text}")
+                    raise Exception(f"Weather API returned status code {response.status_code}")
+                
                 data = response.json()
                 
                 # Extract the relevant data
                 if 'current' in data:
                     current = data['current']
+                    print(f"Weather data received: Temp={current.get('temp_c', 0)}°C, Condition={current.get('condition', {}).get('text', 'unknown')}")
                     return {
                         'temperature': current.get('temp_c', 0),
                         'precipitation': current.get('precip_mm', 0),
@@ -32,13 +40,16 @@ class BeemDataCollector:
                         'condition': current.get('condition', {}).get('text', 'unknown'),
                         'forecast': []
                     }
+                else:
+                    print(f"Unexpected API response format: {data}")
             except Exception as e:
                 print(f"Error fetching weather data: {e}")
                 # Fallback to simulated data if API call fails
         
         # Simulated weather data for demo or fallback
+        print("Using simulated weather data (API key missing or API call failed)")
         return {
-            'temperature': 20 + np.random.normal(0, 5),
+            'temperature': 12.0,  # Default to current Manchester temperature
             'precipitation': max(0, np.random.normal(0, 1)),
             'wind_speed': max(0, np.random.normal(10, 5)),
             'condition': 'partly cloudy',
