@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
+import plotly.express as px
+import plotly.graph_objects as go
 
 # Page Configuration
 st.set_page_config(page_title="Beem Billboard Optimizer", page_icon="🚲", layout="wide")
@@ -17,6 +19,7 @@ st.markdown("""
     h1, h2, h3, h4 {color: #FF9D45 !important}
     .stProgress .st-bo {background-color: #FF9D45}
     .stTabs [aria-selected="true"] {background-color: #FFF1E6; color: #FF9D45 !important}
+    .highlight {background-color: #FFF1E6; padding: 10px; border-radius: 5px}
 </style>
 """, unsafe_allow_html=True)
 
@@ -28,10 +31,21 @@ st.markdown("Optimize your mobile billboard routes for maximum engagement")
 with st.sidebar:
     st.markdown('<h2 style="color: #FF9D45">Route Options</h2>', unsafe_allow_html=True)
     
-    # Area selection
+    # Area selection - EXPANDED LIST
+    areas = [
+        "Northern Quarter", 
+        "City Centre", 
+        "Ancoats", 
+        "Piccadilly",
+        "Deansgate",
+        "Media City",
+        "Oxford Road",
+        "Spinningfields"
+    ]
+    
     area = st.selectbox(
         "Select Area",
-        ["Northern Quarter", "City Centre", "Ancoats", "Piccadilly"]
+        areas
     )
     
     # Time selection
@@ -44,6 +58,9 @@ with st.sidebar:
         selected_time = f"{date} at {hour}:00"
     else:
         selected_time = "Current time"
+    
+    # Day type (new)
+    day_type = st.radio("Day type", ["Weekday", "Weekend"])
     
     # Analysis button
     analyze = st.button("Analyze Route", type="primary")
@@ -59,10 +76,12 @@ with st.sidebar:
         - 🌿 Eco-friendly
         - 💰 Cost-effective
         - 🎯 Highly targeted
+        - 📱 Engaging
+        - 📊 Data-driven
         """, unsafe_allow_html=True)
 
-# Main content
-tabs = st.tabs(["Route Analysis", "Map & Visualization", "Historical Data", "Best Times"])
+# Main content with expanded tabs
+tabs = st.tabs(["Route Analysis", "Map & Visualization", "Historical Data", "Best Times", "Demographics"])
 
 # Tab 1: Route Analysis
 with tabs[0]:
@@ -84,10 +103,17 @@ with tabs[0]:
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.metric("Weather", "Sunny", "+2°C")
+                st.markdown('<div class="highlight">Ideal visibility conditions</div>', unsafe_allow_html=True)
             with col2:
                 st.metric("Foot Traffic", "High", "+15%")
+                st.markdown('<div class="highlight">400+ people per hour</div>', unsafe_allow_html=True)
             with col3:
                 st.metric("Engagement Score", "87/100", "+5")
+                st.markdown('<div class="highlight">Top 10% of all routes</div>', unsafe_allow_html=True)
+            
+            # Additional insights
+            st.subheader("Traffic Conditions")
+            st.markdown("⭐⭐⭐⭐ Excellent - Low congestion, average speed: 12 mph")
     else:
         st.info("Select options and click 'Analyze Route' to see results.")
 
@@ -96,11 +122,26 @@ with tabs[1]:
     st.markdown('<h2 style="color: #FF9D45">Map & Visualization</h2>', unsafe_allow_html=True)
     
     if analyze:
-        # Sample map
-        map_data = pd.DataFrame(
-            {'lat': [53.4808], 'lon': [-2.2426]}
-        )
+        # Enhanced map with multiple points
+        map_data = pd.DataFrame({
+            'lat': [53.4808, 53.4831, 53.4751, 53.4772, 53.4795],
+            'lon': [-2.2426, -2.2362, -2.2282, -2.2387, -2.2451],
+            'location': ['Start', 'Stop 1', 'Stop 2', 'Stop 3', 'End']
+        })
+        
         st.map(map_data)
+        
+        # Engagement chart
+        st.subheader("Hourly Engagement Forecast")
+        hours = list(range(9, 21))
+        engagement = [45, 50, 65, 75, 70, 68, 72, 85, 90, 87, 80, 60]
+        
+        chart_data = pd.DataFrame({
+            'Hour': hours,
+            'Engagement': engagement
+        })
+        
+        st.line_chart(chart_data, x='Hour', y='Engagement')
     else:
         st.info("Select options and click 'Analyze Route' to see the map.")
 
@@ -109,12 +150,25 @@ with tabs[2]:
     st.markdown('<h2 style="color: #FF9D45">Historical Engagement Data</h2>', unsafe_allow_html=True)
     
     if analyze:
-        # Sample chart
-        chart_data = pd.DataFrame(
-            np.random.randn(7, 3),
-            columns=['Engagement', 'Foot Traffic', 'Weather Score']
-        )
-        st.line_chart(chart_data)
+        # Enhanced chart with labeled data
+        days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        engagement = [65, 68, 70, 72, 85, 90, 80]
+        foot_traffic = [70, 75, 70, 75, 85, 95, 85]
+        weather = [60, 65, 70, 75, 80, 85, 75]
+        
+        chart_data = pd.DataFrame({
+            'Day': days,
+            'Engagement': engagement,
+            'Foot Traffic': foot_traffic,
+            'Weather Score': weather
+        })
+        
+        st.line_chart(chart_data, x='Day')
+        
+        st.subheader("Top Performing Days")
+        st.markdown("1. Saturday: 90/100")
+        st.markdown("2. Friday: 85/100")
+        st.markdown("3. Sunday: 80/100")
     else:
         st.info("Select options and click 'Analyze Route' to see historical data.")
 
@@ -126,14 +180,65 @@ with tabs[3]:
         st.markdown('<h3 style="color: #FF9D45">Recommended Times:</h3>', unsafe_allow_html=True)
         st.markdown("""
         <div style="background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px">
-            <div style="color: #FF9D45; font-weight: bold">1. Friday at 5:00 PM</div>
-            <div style="color: #FF9D45; font-weight: bold; margin-top: 10px">2. Saturday at 2:00 PM</div>
-            <div style="color: #FF9D45; font-weight: bold; margin-top: 10px">3. Sunday at 12:00 PM</div>
+            <div style="color: #FF9D45; font-weight: bold">1. Friday at 5:00 PM - 7:00 PM</div>
+            <div style="margin-left: 20px">After-work crowds (95/100)</div>
+            
+            <div style="color: #FF9D45; font-weight: bold; margin-top: 10px">2. Saturday at 2:00 PM - 4:00 PM</div>
+            <div style="margin-left: 20px">Shopping hours (92/100)</div>
+            
+            <div style="color: #FF9D45; font-weight: bold; margin-top: 10px">3. Wednesday at 12:00 PM</div>
+            <div style="margin-left: 20px">Lunch break (88/100)</div>
         </div>
         """, unsafe_allow_html=True)
     else:
         st.info("Select options and click 'Analyze Route' to see recommended times.")
 
+# Tab 5: Demographics (New)
+with tabs[4]:
+    st.markdown('<h2 style="color: #FF9D45">Demographics Analysis</h2>', unsafe_allow_html=True)
+    
+    if analyze:
+        st.subheader(f"Demographic Profile for {area}")
+        
+        # Demographics info based on area
+        if area in ["Northern Quarter", "Oxford Road"]:
+            audience = "Young, creative, students"
+            age = "18-34 (65%)"
+            interests = "Arts, Food, Music, Fashion"
+        elif area in ["City Centre", "Deansgate"]:
+            audience = "Mixed, tourists, shoppers"
+            age = "25-45 (55%)"
+            interests = "Shopping, Food, Entertainment"
+        elif area in ["Media City", "Spinningfields"]:
+            audience = "Professionals, business"
+            age = "25-50 (75%)"
+            interests = "Technology, Business, Food"
+        else:
+            audience = "Mixed urban"
+            age = "25-45 (60%)"
+            interests = "Various"
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown('<div class="highlight">', unsafe_allow_html=True)
+            st.markdown("#### Primary Audience")
+            st.markdown(f"**Type:** {audience}")
+            st.markdown(f"**Age Range:** {age}")
+            st.markdown(f"**Key Interests:** {interests}")
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+        with col2:
+            st.markdown('<div class="highlight">', unsafe_allow_html=True)
+            st.markdown("#### Recommended Targeting")
+            st.markdown("- Digital products")
+            st.markdown("- Food and dining")
+            st.markdown("- Entertainment events")
+            st.markdown("- Use QR codes for interaction")
+            st.markdown('</div>', unsafe_allow_html=True)
+    else:
+        st.info("Select options and click 'Analyze Route' to see demographic analysis.")
+
 # Footer
 st.markdown("---")
-st.markdown('<div style="text-align: center; color: #FF9D45">© 2025 Beem Mobile Billboard Solutions</div>', unsafe_allow_html=True)
+st.markdown('<div style="text-align: center; color: #FF9D45">© 2025 Beem Mobile Billboard Solutions | hello@beembillboards.com</div>', unsafe_allow_html=True)
