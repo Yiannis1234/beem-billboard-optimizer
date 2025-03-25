@@ -6,13 +6,27 @@ from datetime import datetime, timedelta
 # Page Configuration
 st.set_page_config(page_title="Beem Billboard Optimizer", page_icon="🚲", layout="wide")
 
+# Custom CSS for orange theme
+st.markdown("""
+<style>
+    .main-header {color: #FF9D45 !important; font-weight: 600}
+    div.stButton > button {background-color: #FF9D45; color: white; border: none}
+    div.stButton > button:hover {background-color: #FFB673}
+    .css-1aumxhk {background-color: #FFF1E6} /* Sidebar background */
+    .css-18e3th9 {padding-top: 2rem; padding-bottom: 10rem; padding-left: 5rem; padding-right: 5rem}
+    h1, h2, h3, h4 {color: #FF9D45 !important}
+    .stProgress .st-bo {background-color: #FF9D45}
+    .stTabs [aria-selected="true"] {background-color: #FFF1E6; color: #FF9D45 !important}
+</style>
+""", unsafe_allow_html=True)
+
 # Title
-st.title("🚲 Beem Billboard Route Optimizer")
+st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
 st.markdown("Optimize your mobile billboard routes for maximum engagement")
 
 # Sidebar
 with st.sidebar:
-    st.header("Route Options")
+    st.markdown('<h2 style="color: #FF9D45">Route Options</h2>', unsafe_allow_html=True)
     
     # Area selection
     area = st.selectbox(
@@ -21,7 +35,7 @@ with st.sidebar:
     )
     
     # Time selection
-    st.subheader("Time Options")
+    st.markdown('<h3 style="color: #FF9D45; margin-top: 20px">Time Options</h3>', unsafe_allow_html=True)
     time_option = st.radio("Select time", ["Current time", "Custom time"])
     
     if time_option == "Custom time":
@@ -37,25 +51,26 @@ with st.sidebar:
     # About section
     with st.expander("About Beem"):
         st.markdown("""
-        Beem Mobile Billboard Solutions helps businesses reach their 
-        audience through eye-catching mobile billboards carried by cyclists.
+        <div style="color: #FF9D45; font-weight: bold; margin-bottom: 10px">Beem Mobile Billboard Solutions</div>
+        
+        We help businesses reach their audience through eye-catching mobile billboards carried by cyclists.
         
         Our approach is:
-        - Eco-friendly
-        - Cost-effective
-        - Highly targeted
-        """)
+        - 🌿 Eco-friendly
+        - 💰 Cost-effective
+        - 🎯 Highly targeted
+        """, unsafe_allow_html=True)
 
 # Main content
 tabs = st.tabs(["Route Analysis", "Map & Visualization", "Historical Data", "Best Times"])
 
 # Tab 1: Route Analysis
 with tabs[0]:
-    st.header(f"Analysis for {area}")
+    st.markdown(f'<h2 style="color: #FF9D45">Analysis for {area}</h2>', unsafe_allow_html=True)
     
     if analyze:
         with st.spinner("Analyzing route data..."):
-            # Simple progress simulation
+            # Simple progress simulation with orange color
             progress = st.progress(0)
             for i in range(100):
                 # Update progress bar
@@ -78,7 +93,7 @@ with tabs[0]:
 
 # Tab 2: Map & Visualization
 with tabs[1]:
-    st.header("Map & Visualization")
+    st.markdown('<h2 style="color: #FF9D45">Map & Visualization</h2>', unsafe_allow_html=True)
     
     if analyze:
         # Sample map
@@ -91,7 +106,7 @@ with tabs[1]:
 
 # Tab 3: Historical Data
 with tabs[2]:
-    st.header("Historical Engagement Data")
+    st.markdown('<h2 style="color: #FF9D45">Historical Engagement Data</h2>', unsafe_allow_html=True)
     
     if analyze:
         # Sample chart
@@ -105,16 +120,20 @@ with tabs[2]:
 
 # Tab 4: Best Times
 with tabs[3]:
-    st.header("Best Times to Display")
+    st.markdown('<h2 style="color: #FF9D45">Best Times to Display</h2>', unsafe_allow_html=True)
     
     if analyze:
-        st.subheader("Recommended Times:")
-        st.write("1. Friday at 5:00 PM")
-        st.write("2. Saturday at 2:00 PM")
-        st.write("3. Sunday at 12:00 PM")
+        st.markdown('<h3 style="color: #FF9D45">Recommended Times:</h3>', unsafe_allow_html=True)
+        st.markdown("""
+        <div style="background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px">
+            <div style="color: #FF9D45; font-weight: bold">1. Friday at 5:00 PM</div>
+            <div style="color: #FF9D45; font-weight: bold; margin-top: 10px">2. Saturday at 2:00 PM</div>
+            <div style="color: #FF9D45; font-weight: bold; margin-top: 10px">3. Sunday at 12:00 PM</div>
+        </div>
+        """, unsafe_allow_html=True)
     else:
         st.info("Select options and click 'Analyze Route' to see recommended times.")
 
 # Footer
 st.markdown("---")
-st.caption("© 2025 Beem Mobile Billboard Solutions")
+st.markdown('<div style="text-align: center; color: #FF9D45">© 2025 Beem Mobile Billboard Solutions</div>', unsafe_allow_html=True)
