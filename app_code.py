@@ -111,6 +111,14 @@ border: 1px solid #FF9D45; font-size: 14px; z-index: 1000; display: flex; align-
 </div>
 """, unsafe_allow_html=True)
 
+# Add a VERY PROMINENT instruction at the top of the page
+st.markdown("""
+<div style="background-color: #FF7E33; color: white; padding: 15px; margin-bottom: 25px; border-radius: 10px; 
+text-align: center; font-weight: bold; font-size: 18px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+⬅️ <span style="text-decoration: underline; font-size: 20px;">CLICK THE ARROW</span> on the left to ANALYZE ROUTE ⬅️
+</div>
+""", unsafe_allow_html=True)
+
 # Title
 st.markdown("""
 <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px">
