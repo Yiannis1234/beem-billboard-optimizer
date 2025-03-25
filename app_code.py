@@ -57,7 +57,48 @@ st.markdown("""
     .icon-text {display: flex; align-items: center}
     .icon-text span {margin-left: 10px}
     .dashboard-metric {background-color: #FFF1E6; border-left: 5px solid #FF9D45; padding: 15px; margin: 10px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05)}
-    .gradient-header {background: linear-gradient(90deg, #FF9D45, #FFB673); color: white !important; padding: 10px; border-radius: 5px; margin-bottom: 20px}
+    .gradient-header {
+        background: linear-gradient(90deg, #FF7E33, #FFB673); 
+        color: white !important; 
+        padding: 12px 20px; 
+        border-radius: 6px; 
+        margin-bottom: 25px;
+        font-weight: 800;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 12px rgba(255, 157, 69, 0.3);
+    }
+    /* Make the main title stand out more */
+    h1.main-header {
+        font-size: 36px !important;
+        background: -webkit-linear-gradient(#FF7E33, #FFB673);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+        text-shadow: none;
+        margin-bottom: 15px;
+    }
+    /* Enhance the tabs appearance */
+    .stTabs [aria-selected="true"] {
+        background-color: #FFF1E6;
+        color: #FF7E33 !important;
+        font-weight: 600;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        box-shadow: 0 -2px 5px rgba(255, 157, 69, 0.1);
+    }
+    /* Make metrics cards pop more */
+    .dashboard-metric {
+        background-color: #FFF1E6;
+        border-left: 5px solid #FF9D45;
+        padding: 18px;
+        margin: 12px 0;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        transition: transform 0.2s ease;
+        border-radius: 5px;
+    }
+    .dashboard-metric:hover {
+        transform: translateY(-2px);
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -128,26 +169,26 @@ with st.sidebar:
 # Add visual banner with dynamic elements - MOVED AFTER analyze is defined
 if analyze:
     st.markdown("""
-    <div style="background: linear-gradient(90deg, #FF9D45, #FFB673); border-radius: 10px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center">
+    <div style="background: linear-gradient(90deg, #FF7E33, #FFB673); border-radius: 10px; padding: 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(255, 157, 69, 0.25);">
         <div>
-            <h3 style="color: white !important; margin: 0; font-size: 28px; font-weight: 800; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Beem Billboard Insights</h3>
-            <p style="color: white !important; margin: 5px 0 0 0; font-weight: 600; font-size: 18px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Optimizing engagement across Manchester</p>
+            <h3 style="color: white !important; margin: 0; font-size: 30px; font-weight: 800; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">Beem Billboard Insights</h3>
+            <p style="color: white !important; margin: 8px 0 0 0; font-weight: 600; font-size: 18px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Optimizing engagement across Manchester</p>
         </div>
-        <div style="background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center">
-            <span style="font-size: 24px">🚲</span>
+        <div style="background: white; border-radius: 50%; width: 55px; height: 55px; display: flex; justify-content: center; align-items: center; box-shadow: 0 3px 8px rgba(0,0,0,0.2);">
+            <span style="font-size: 28px">🚲</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
 else:
     # Even when not analyzing, show a welcome banner
     st.markdown("""
-    <div style="background: linear-gradient(90deg, #FF9D45, #FFB673); border-radius: 10px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center">
+    <div style="background: linear-gradient(90deg, #FF7E33, #FFB673); border-radius: 10px; padding: 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(255, 157, 69, 0.25);">
         <div>
-            <h3 style="color: white !important; margin: 0; font-size: 28px; font-weight: 800; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Welcome to Beem!</h3>
-            <p style="color: white; margin: 5px 0 0 0; font-weight: 600; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Mobile billboard optimization platform</p>
+            <h3 style="color: white !important; margin: 0; font-size: 30px; font-weight: 800; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">Welcome to Beem!</h3>
+            <p style="color: white !important; margin: 8px 0 0 0; font-weight: 600; font-size: 18px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Mobile billboard optimization platform</p>
         </div>
-        <div style="background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center">
-            <span style="font-size: 24px">🚲</span>
+        <div style="background: white; border-radius: 50%; width: 55px; height: 55px; display: flex; justify-content: center; align-items: center; box-shadow: 0 3px 8px rgba(0,0,0,0.2);">
+            <span style="font-size: 28px">🚲</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -424,10 +465,10 @@ with tabs[1]:
     if analyze:
         # Enhanced map with highlighted area and traffic indicators
         st.markdown("""
-        <div style="background-color: #FFE8D6; border-left: 5px solid #FF9D45; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-            <strong>📍 Area:</strong> {0}<br>
-            <strong>🚦 Traffic Status:</strong> <span style="color: {1}; font-weight: bold;">{2}</span><br>
-            <strong>👥 Expected Foot Traffic:</strong> {3}/hour
+        <div style="background-color: #FFE8D6; border-left: 5px solid #FF9D45; padding: 15px; border-radius: 5px; margin-bottom: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+            <strong style="font-size: 18px;">📍 Area:</strong> <span style="font-size: 18px; color: #FF7E33; font-weight: 600;">{0}</span><br>
+            <strong style="font-size: 18px;">🚦 Traffic Status:</strong> <span style="color: {1}; font-weight: bold; font-size: 18px;">{2}</span><br>
+            <strong style="font-size: 18px;">👥 Expected Foot Traffic:</strong> <span style="font-weight: 600; font-size: 18px;">{3}/hour</span>
         </div>
         """.format(
             area,
@@ -442,7 +483,7 @@ with tabs[1]:
         lon = selected_area_data['longitude']
         
         # Base map focused on selected area
-        st.markdown("### 🗺️ Traffic Heatmap")
+        st.markdown("<h3 style='background: linear-gradient(90deg, #FF7E33, #FFB673); color: white; padding: 10px 15px; border-radius: 5px; margin-bottom: 15px; font-weight: 600; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);'>🗺️ Traffic Heatmap</h3>", unsafe_allow_html=True)
         
         # Create a map with the selected area at the center
         # Define neighboring areas for context
@@ -478,22 +519,22 @@ with tabs[1]:
         cols = st.columns(3)
         with cols[0]:
             st.markdown(
-                '<div style="background-color: #4CAF50; color: white; padding: 10px; border-radius: 5px; text-align: center; margin: 5px;">🟢 Light Traffic</div>', 
+                '<div style="background-color: #4CAF50; color: white; padding: 12px; border-radius: 8px; text-align: center; margin: 5px; font-weight: 600; font-size: 16px; box-shadow: 0 3px 6px rgba(0,0,0,0.1);">🟢 Light Traffic</div>', 
                 unsafe_allow_html=True
             )
         with cols[1]:
             st.markdown(
-                '<div style="background-color: #FFC107; color: white; padding: 10px; border-radius: 5px; text-align: center; margin: 5px;">🟡 Moderate Traffic</div>', 
+                '<div style="background-color: #FFC107; color: white; padding: 12px; border-radius: 8px; text-align: center; margin: 5px; font-weight: 600; font-size: 16px; box-shadow: 0 3px 6px rgba(0,0,0,0.1);">🟡 Moderate Traffic</div>', 
                 unsafe_allow_html=True
             )
         with cols[2]:
             st.markdown(
-                '<div style="background-color: #F44336; color: white; padding: 10px; border-radius: 5px; text-align: center; margin: 5px;">🔴 Heavy Traffic</div>', 
+                '<div style="background-color: #F44336; color: white; padding: 12px; border-radius: 8px; text-align: center; margin: 5px; font-weight: 600; font-size: 16px; box-shadow: 0 3px 6px rgba(0,0,0,0.1);">🔴 Heavy Traffic</div>', 
                 unsafe_allow_html=True
             )
         
         # Enhanced visualization - Traffic Flow Chart
-        st.markdown("### 📊 Hourly Traffic Flow")
+        st.markdown("<h3 style='background: linear-gradient(90deg, #FF7E33, #FFB673); color: white; padding: 10px 15px; border-radius: 5px; margin: 25px 0 15px 0; font-weight: 600; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);'>📊 Hourly Traffic Flow</h3>", unsafe_allow_html=True)
         
         # Generate hourly traffic data
         hours = list(range(6, 24))  # 6 AM to 11 PM (18 hours)
@@ -539,7 +580,7 @@ with tabs[1]:
         st.plotly_chart(fig, use_container_width=True)
         
         # Add a heatmap of pedestrian density
-        st.markdown("### 👥 Pedestrian Activity Heatmap")
+        st.markdown("<h3 style='background: linear-gradient(90deg, #FF7E33, #FFB673); color: white; padding: 10px 15px; border-radius: 5px; margin: 25px 0 15px 0; font-weight: 600; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);'>👥 Pedestrian Activity Heatmap</h3>", unsafe_allow_html=True)
         
         # Create data for the heatmap
         pedestrian_hours = list(range(6, 24))  # 18 hours
