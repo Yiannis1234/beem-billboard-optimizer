@@ -446,15 +446,15 @@ def show_analysis_progress():
         
     progress_bar = st.progress(0)
     status_text = st.empty()
-        details_text = st.empty()
+    details_text = st.empty()
         
-        steps = [
-            {"name": "Collecting weather data", "icon": "🌦️", "description": "Retrieving current weather conditions and forecasts..."},
-            {"name": "Analyzing traffic conditions", "icon": "🚗", "description": "Calculating traffic flow and congestion levels..."},
-            {"name": "Estimating pedestrian density", "icon": "👥", "description": "Modeling expected foot traffic based on historical patterns..."},
-            {"name": "Calculating optimal routes", "icon": "🗺️", "description": "Determining the most effective billboard routes..."},
-            {"name": "Generating recommendations", "icon": "📊", "description": "Creating personalized recommendations based on data analysis..."}
-        ]
+    steps = [
+        {"name": "Collecting weather data", "icon": "🌦️", "description": "Retrieving current weather conditions and forecasts..."},
+        {"name": "Analyzing traffic conditions", "icon": "🚗", "description": "Calculating traffic flow and congestion levels..."},
+        {"name": "Estimating pedestrian density", "icon": "👥", "description": "Modeling expected foot traffic based on historical patterns..."},
+        {"name": "Calculating optimal routes", "icon": "🗺️", "description": "Determining the most effective billboard routes..."},
+        {"name": "Generating recommendations", "icon": "📊", "description": "Creating personalized recommendations based on data analysis..."}
+    ]
     
     for i, step in enumerate(steps):
             # Update progress
