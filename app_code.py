@@ -65,6 +65,33 @@ st.markdown("""
 st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
 st.markdown("Optimize your mobile billboard routes for maximum engagement")
 
+# Add visual banner with dynamic elements
+if analyze:
+    st.markdown("""
+    <div style="background: linear-gradient(90deg, #FF9D45, #FFB673); border-radius: 10px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center">
+        <div>
+            <h3 style="color: white !important; margin: 0">Beem Billboard Insights</h3>
+            <p style="color: white; margin: 5px 0 0 0">Optimizing engagement across Manchester</p>
+        </div>
+        <div style="background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center">
+            <span style="font-size: 24px">🚲</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+else:
+    # Even when not analyzing, show a welcome banner
+    st.markdown("""
+    <div style="background: linear-gradient(90deg, #FF9D45, #FFB673); border-radius: 10px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center">
+        <div>
+            <h3 style="color: white !important; margin: 0">Welcome to Beem</h3>
+            <p style="color: white; margin: 5px 0 0 0">Mobile billboard optimization platform</p>
+        </div>
+        <div style="background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center">
+            <span style="font-size: 24px">🚲</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
 # Sidebar
 with st.sidebar:
     # Add Beem logo
@@ -215,11 +242,11 @@ with tabs[0]:
             with col1:
                 st.markdown(f"""
                 <div class="dashboard-metric">
-                    <h4 style="margin-top: 0">{weather_icon} Weather</h4>
-                    <h2 style="color: #333 !important; margin: 5px 0">{weather_data['temperature']:.1f}°C</h2>
-                    <p style="color: #666; margin: 0">{weather_data['condition']}</p>
+                    <h4 style="margin-top: 0">{weather_icon} Temperature</h4>
+                    <h2 style="color: #333 !important; margin: 5px 0; font-size: 28px; font-weight: bold">{weather_data['temperature']:.1f}°C</h2>
+                    <p style="color: #666; margin: 0">Exact measurement</p>
                     <hr style="margin: 10px 0; border-color: #ddd">
-                    <p><strong>Exact temperature:</strong> {weather_data["temperature"]:.1f}°C<br>
+                    <p><strong>Condition:</strong> {weather_data['condition']}<br>
                     <strong>Wind:</strong> {weather_data["wind_speed"]:.1f} km/h<br>
                     <strong>Precipitation:</strong> {weather_data["precipitation"]:.1f} mm</p>
                 </div>
@@ -328,12 +355,12 @@ with tabs[0]:
             with col2:
                 st.markdown("""
                 <div class="weather-box">
-                    <h4 style="margin-top: 0">{0} Weather Conditions</h4>
+                    <h4 style="margin-top: 0">{0} Exact Temperature</h4>
                     <div style="display: flex; justify-content: space-between; margin: 15px 0">
                         <div style="text-align: center; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 5px; width: 45%">
                             <div style="font-size: 24px; margin-bottom: 5px">🌡️</div>
-                            <div style="font-weight: bold">{1:.1f}°C</div>
-                            <div style="font-size: 12px; color: #666">Exact Temperature</div>
+                            <div style="font-weight: bold; font-size: 22px">{1:.1f}°C</div>
+                            <div style="font-size: 12px; color: #666">Current Reading</div>
                         </div>
                         <div style="text-align: center; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 5px; width: 45%">
                             <div style="font-size: 24px; margin-bottom: 5px">💨</div>
@@ -541,30 +568,3 @@ st.markdown("""
     </div>
 </div>
 """, unsafe_allow_html=True)
-
-# Add visual banner with dynamic elements
-if analyze:
-    st.markdown("""
-    <div style="background: linear-gradient(90deg, #FF9D45, #FFB673); border-radius: 10px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center">
-        <div>
-            <h3 style="color: white !important; margin: 0">Beem Billboard Insights</h3>
-            <p style="color: white; margin: 5px 0 0 0">Optimizing engagement across Manchester</p>
-        </div>
-        <div style="background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center">
-            <span style="font-size: 24px">🚲</span>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-else:
-    # Even when not analyzing, show a welcome banner
-    st.markdown("""
-    <div style="background: linear-gradient(90deg, #FF9D45, #FFB673); border-radius: 10px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center">
-        <div>
-            <h3 style="color: white !important; margin: 0">Welcome to Beem</h3>
-            <p style="color: white; margin: 5px 0 0 0">Mobile billboard optimization platform</p>
-        </div>
-        <div style="background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center">
-            <span style="font-size: 24px">🚲</span>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
