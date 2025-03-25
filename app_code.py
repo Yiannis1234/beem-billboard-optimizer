@@ -4,6 +4,32 @@ import numpy as np
 from datetime import datetime, timedelta
 import plotly.express as px
 import plotly.graph_objects as go
+import requests
+import time as time_module
+
+# Import the BeemDataCollector from the src directory
+from src.data.data_collector import BeemDataCollector
+
+# Define config with API keys (you can replace 'demo_key' with actual keys later)
+config = {
+    'weather_api_key': 'demo_key',  # Replace with your WeatherAPI.com key
+    'traffic_api_key': 'demo_key'   # Replace with your TomTom API key
+}
+
+# Initialize the data collector
+data_collector = BeemDataCollector(config)
+
+# Define area coordinates (Manchester areas)
+area_coordinates = {
+    "Northern Quarter": {"latitude": 53.4831, "longitude": -2.2367, "zone_id": "northern_quarter"},
+    "City Centre": {"latitude": 53.4808, "longitude": -2.2426, "zone_id": "city_centre"},
+    "Ancoats": {"latitude": 53.4841, "longitude": -2.2269, "zone_id": "ancoats"},
+    "Piccadilly": {"latitude": 53.4779, "longitude": -2.2399, "zone_id": "piccadilly"},
+    "Deansgate": {"latitude": 53.4772, "longitude": -2.2481, "zone_id": "deansgate"},
+    "Media City": {"latitude": 53.4727, "longitude": -2.2984, "zone_id": "media_city"},
+    "Oxford Road": {"latitude": 53.4710, "longitude": -2.2376, "zone_id": "oxford_road"},
+    "Spinningfields": {"latitude": 53.4802, "longitude": -2.2516, "zone_id": "spinningfields"}
+}
 
 # Page Configuration
 st.set_page_config(page_title="Beem Billboard Optimizer", page_icon="🚲", layout="wide")
@@ -23,6 +49,8 @@ st.markdown("""
     .time-card {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
     .time-title {color: #FF9D45; font-weight: bold; margin-bottom: 5px}
     .time-detail {margin-left: 20px; margin-bottom: 10px}
+    .traffic-box {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
+    .weather-box {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
 </style>
 """, unsafe_allow_html=True)
 
@@ -35,16 +63,7 @@ with st.sidebar:
     st.markdown('<h2 style="color: #FF9D45">Route Options</h2>', unsafe_allow_html=True)
     
     # Area selection - EXPANDED LIST
-    areas = [
-        "Northern Quarter", 
-        "City Centre", 
-        "Ancoats", 
-        "Piccadilly",
-        "Deansgate",
-        "Media City",
-        "Oxford Road",
-        "Spinningfields"
-    ]
+    areas = list(area_coordinates.keys())
     
     area = st.selectbox(
         "Select Area",
@@ -58,9 +77,9 @@ with st.sidebar:
     if time_option == "Custom time":
         date = st.date_input("Date", datetime.now())
         hour = st.slider("Hour", 0, 23, 12)
-        selected_time = f"{date} at {hour}:00"
+        selected_time = datetime.combine(date, datetime.min.time()) + timedelta(hours=hour)
     else:
-        selected_time = "Current time"
+        selected_time = datetime.now()
     
     # Day type (new)
     day_type = st.radio("Day type", ["Weekday", "Weekend"])
@@ -83,6 +102,59 @@ with st.sidebar:
         - 📊 Data-driven
         """, unsafe_allow_html=True)
 
+# Function to get weather icon based on condition
+def get_weather_icon(condition):
+    condition = condition.lower()
+    if 'sunny' in condition or 'clear' in condition:
+        return "☀️"  # Sunny
+    elif 'cloud' in condition or 'overcast' in condition:
+        return "☁️"  # Cloudy
+    elif 'rain' in condition or 'drizzle' in condition:
+        return "🌧️"  # Rainy
+    elif 'snow' in condition:
+        return "❄️"  # Snowy
+    elif 'storm' in condition or 'thunder' in condition:
+        return "⛈️"  # Storm
+    elif 'fog' in condition or 'mist' in condition:
+        return "🌫️"  # Foggy
+    else:
+        return "🌤️"  # Partly cloudy (default)
+
+# Function to get traffic status icon and text
+def get_traffic_status(congestion_level):
+    if congestion_level < 0.3:
+        return "🟢", "Light traffic"
+    elif congestion_level < 0.6:
+        return "🟡", "Moderate traffic"
+    else:
+        return "🔴", "Heavy traffic"
+
+# Function to show analysis progress
+def show_analysis_progress():
+    progress = st.progress(0)
+    # Show a series of steps for feedback
+    steps = [
+        "Collecting weather data...",
+        "Analyzing traffic conditions...",
+        "Calculating pedestrian density...",
+        "Estimating engagement metrics...",
+        "Optimizing route timing...",
+        "Finalizing recommendations..."
+    ]
+    
+    status_text = st.empty()
+    details_text = st.empty()
+    
+    for i, step in enumerate(steps):
+        status_text.text(f"Step {i+1}/{len(steps)}: {step}")
+        details_text.text("Processing...")
+        progress.progress((i+1)/len(steps))
+        time_module.sleep(0.5)
+        
+    status_text.text("Analysis complete!")
+    details_text.empty()
+    return True
+
 # Main content with expanded tabs
 tabs = st.tabs(["Route Analysis", "Map & Visualization", "Historical Data", "Best Times", "Demographics"])
 
@@ -92,31 +164,111 @@ with tabs[0]:
     
     if analyze:
         with st.spinner("Analyzing route data..."):
-            # Simple progress simulation with orange color
-            progress = st.progress(0)
-            for i in range(100):
-                # Update progress bar
-                progress.progress(i + 1)
-                import time
-                time.sleep(0.01)
+            # Run the analysis progress simulation
+            analysis_complete = show_analysis_progress()
+            
+            # Get actual data for the selected area
+            selected_area_data = area_coordinates[area]
+            
+            # Fetch real weather and traffic data using the data collector
+            integrated_data = data_collector.integrate_data(
+                selected_area_data, 
+                selected_time
+            )
+            
+            weather_data = integrated_data['weather']
+            traffic_data = integrated_data['traffic']
+            pedestrian_density = integrated_data['pedestrian_density']
+            
+            # Calculate engagement score (example formula)
+            base_score = 60
+            weather_modifier = max(0, 20 - abs(weather_data['temperature'] - 20))  # Optimal around 20°C
+            traffic_modifier = (1 - traffic_data['congestion_level']) * 15  # Lower congestion is better
+            pedestrian_modifier = pedestrian_density * 25  # Higher density is better
+            
+            engagement_score = min(100, base_score + weather_modifier + traffic_modifier + pedestrian_modifier)
+            
+            # Weather status
+            weather_icon = get_weather_icon(weather_data['condition'])
+            
+            # Traffic status
+            traffic_icon, traffic_status = get_traffic_status(traffic_data['congestion_level'])
             
             st.success("Analysis complete!")
             
-            # Display metrics
+            # Display metrics with real data
             col1, col2, col3 = st.columns(3)
             with col1:
-                st.metric("Weather", "Sunny", "+2°C")
-                st.markdown('<div class="highlight">Ideal visibility conditions</div>', unsafe_allow_html=True)
+                st.metric(f"Weather {weather_icon}", 
+                          f"{weather_data['temperature']:.1f}°C", 
+                          f"{weather_data['condition']}")
+                st.markdown(
+                    f'<div class="highlight">Wind: {weather_data["wind_speed"]:.1f} km/h<br>Precipitation: {weather_data["precipitation"]:.1f} mm</div>', 
+                    unsafe_allow_html=True
+                )
+                
             with col2:
-                st.metric("Foot Traffic", "High", "+15%")
-                st.markdown('<div class="highlight">400+ people per hour</div>', unsafe_allow_html=True)
+                st.metric(f"Traffic {traffic_icon}", 
+                          traffic_status, 
+                          f"{int(traffic_data['flow_speed'])} km/h current speed")
+                
+                congestion_pct = int(traffic_data['congestion_level'] * 100)
+                st.markdown(
+                    f'<div class="highlight">Congestion: {congestion_pct}%<br>Free flow: {int(traffic_data["free_flow_speed"])} km/h</div>', 
+                    unsafe_allow_html=True
+                )
+                
             with col3:
-                st.metric("Engagement Score", "87/100", "+5")
-                st.markdown('<div class="highlight">Top 10% of all routes</div>', unsafe_allow_html=True)
+                pedestrian_rating = "High" if pedestrian_density > 0.7 else "Medium" if pedestrian_density > 0.4 else "Low"
+                st.metric("Engagement Score", f"{engagement_score:.0f}/100", f"{pedestrian_rating} foot traffic")
+                st.markdown(
+                    f'<div class="highlight">Pedestrian density: {int(pedestrian_density*100)}%<br>Estimated views: {int(pedestrian_density*1000)}/hr</div>', 
+                    unsafe_allow_html=True
+                )
             
             # Additional insights
-            st.subheader("Traffic Conditions")
-            st.markdown("⭐⭐⭐⭐ Excellent - Low congestion, average speed: 12 mph")
+            st.subheader("Route Details")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.markdown('<div class="traffic-box">', unsafe_allow_html=True)
+                st.markdown("#### 🚦 Traffic Conditions")
+                st.markdown(f"**Current Speed:** {int(traffic_data['flow_speed'])} km/h")
+                st.markdown(f"**Free Flow Speed:** {int(traffic_data['free_flow_speed'])} km/h")
+                st.markdown(f"**Congestion Level:** {int(traffic_data['congestion_level']*100)}%")
+                
+                # Traffic rating
+                if traffic_data['congestion_level'] < 0.3:
+                    st.markdown("⭐⭐⭐⭐⭐ Excellent - Very light traffic")
+                elif traffic_data['congestion_level'] < 0.5:
+                    st.markdown("⭐⭐⭐⭐ Good - Manageable traffic")
+                elif traffic_data['congestion_level'] < 0.7:
+                    st.markdown("⭐⭐⭐ Average - Moderate congestion")
+                else:
+                    st.markdown("⭐⭐ Challenging - Heavy traffic")
+                    
+                st.markdown('</div>', unsafe_allow_html=True)
+                
+            with col2:
+                st.markdown('<div class="weather-box">', unsafe_allow_html=True)
+                st.markdown(f"#### {weather_icon} Weather Conditions")
+                st.markdown(f"**Temperature:** {weather_data['temperature']:.1f}°C")
+                st.markdown(f"**Condition:** {weather_data['condition']}")
+                st.markdown(f"**Wind Speed:** {weather_data['wind_speed']:.1f} km/h")
+                st.markdown(f"**Precipitation:** {weather_data['precipitation']:.1f} mm")
+                
+                # Weather rating for billboard
+                if weather_data['precipitation'] < 0.5 and weather_data['wind_speed'] < 20:
+                    st.markdown("⭐⭐⭐⭐⭐ Excellent - Ideal for billboard visibility")
+                elif weather_data['precipitation'] < 2 and weather_data['wind_speed'] < 30:
+                    st.markdown("⭐⭐⭐⭐ Good - Good visibility conditions")
+                elif weather_data['precipitation'] < 5 and weather_data['wind_speed'] < 40:
+                    st.markdown("⭐⭐⭐ Average - Acceptable conditions")
+                else:
+                    st.markdown("⭐⭐ Challenging - Poor visibility possible")
+                    
+                st.markdown('</div>', unsafe_allow_html=True)
     else:
         st.info("Select options and click 'Analyze Route' to see results.")
 
@@ -132,7 +284,18 @@ with tabs[1]:
             'location': ['Start', 'Stop 1', 'Stop 2', 'Stop 3', 'End']
         })
         
-        st.map(map_data)
+        # Add the selected area as a highlighted point
+        selected_coords = area_coordinates[area]
+        highlighted_point = pd.DataFrame({
+            'lat': [selected_coords['latitude']],
+            'lon': [selected_coords['longitude']], 
+            'location': [f"Selected: {area}"]
+        })
+        
+        # Combine dataframes
+        all_points = pd.concat([highlighted_point, map_data])
+        
+        st.map(all_points)
         
         # Engagement chart
         st.subheader("Hourly Engagement Forecast")
