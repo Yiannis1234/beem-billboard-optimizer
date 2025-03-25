@@ -419,42 +419,198 @@ with tabs[0]:
 
 # Tab 2: Map & Visualization
 with tabs[1]:
-    st.markdown('<h2 style="color: #FF9D45">Map & Visualization</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="gradient-header">Map & Visualization</h2>', unsafe_allow_html=True)
     
     if analyze:
-        # Enhanced map with multiple points
-        map_data = pd.DataFrame({
-            'lat': [53.4808, 53.4831, 53.4751, 53.4772, 53.4795],
-            'lon': [-2.2426, -2.2362, -2.2282, -2.2387, -2.2451],
-            'location': ['Start', 'Stop 1', 'Stop 2', 'Stop 3', 'End']
+        # Enhanced map with highlighted area and traffic indicators
+        st.markdown("""
+        <div style="background-color: #FFE8D6; border-left: 5px solid #FF9D45; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <strong>📍 Area:</strong> {0}<br>
+            <strong>🚦 Traffic Status:</strong> <span style="color: {1}; font-weight: bold;">{2}</span><br>
+            <strong>👥 Expected Foot Traffic:</strong> {3}/hour
+        </div>
+        """.format(
+            area,
+            "#4CAF50" if traffic_data['congestion_level'] < 0.3 else "#FFC107" if traffic_data['congestion_level'] < 0.6 else "#F44336",
+            "Light 🟢" if traffic_data['congestion_level'] < 0.3 else "Moderate 🟡" if traffic_data['congestion_level'] < 0.6 else "Heavy 🔴",
+            int(pedestrian_density * 1000)
+        ), unsafe_allow_html=True)
+        
+        # Create map for visualization
+        selected_area_data = area_coordinates[area]
+        lat = selected_area_data['latitude']
+        lon = selected_area_data['longitude']
+        
+        # Base map focused on selected area
+        st.markdown("### 🗺️ Traffic Heatmap")
+        
+        # Create a map with the selected area at the center
+        # Define neighboring areas for context
+        map_data = {
+            'latitude': [lat],
+            'longitude': [lon],
+            'size': [1000],  # Size of the point (larger for selected area)
+            'color': [traffic_data['congestion_level'] < 0.3 and 'green' or traffic_data['congestion_level'] < 0.6 and 'orange' or 'red'],
+            'label': [area]
+        }
+        
+        # Add other areas with smaller points for context 
+        for other_area, coords in area_coordinates.items():
+            if other_area != area:
+                # Get traffic data for this area
+                other_area_data = data_collector.integrate_data(coords, selected_time)
+                other_traffic = other_area_data['traffic']
+                
+                # Add to map data with smaller size
+                map_data['latitude'].append(coords['latitude'])
+                map_data['longitude'].append(coords['longitude'])
+                map_data['size'].append(500)  # Smaller for other areas
+                map_data['color'].append(other_traffic['congestion_level'] < 0.3 and 'green' or other_traffic['congestion_level'] < 0.6 and 'orange' or 'red')
+                map_data['label'].append(other_area)
+        
+        # Create the map
+        st.map(pd.DataFrame({
+            'lat': map_data['latitude'],
+            'lon': map_data['longitude']
+        }))
+        
+        # Add color-coded indicators
+        cols = st.columns(3)
+        with cols[0]:
+            st.markdown(
+                '<div style="background-color: #4CAF50; color: white; padding: 10px; border-radius: 5px; text-align: center; margin: 5px;">🟢 Light Traffic</div>', 
+                unsafe_allow_html=True
+            )
+        with cols[1]:
+            st.markdown(
+                '<div style="background-color: #FFC107; color: white; padding: 10px; border-radius: 5px; text-align: center; margin: 5px;">🟡 Moderate Traffic</div>', 
+                unsafe_allow_html=True
+            )
+        with cols[2]:
+            st.markdown(
+                '<div style="background-color: #F44336; color: white; padding: 10px; border-radius: 5px; text-align: center; margin: 5px;">🔴 Heavy Traffic</div>', 
+                unsafe_allow_html=True
+            )
+        
+        # Enhanced visualization - Traffic Flow Chart
+        st.markdown("### 📊 Hourly Traffic Flow")
+        
+        # Generate hourly traffic data
+        hours = list(range(6, 24))  # 6 AM to 11 PM
+        
+        # Create different patterns based on time of day
+        morning_peak = [0.7, 0.9, 0.8, 0.6, 0.5, 0.4, 0.3]  # 6 AM to 12 PM
+        lunch_peak = [0.4, 0.6, 0.7, 0.5]  # 12 PM to 4 PM
+        evening_peak = [0.4, 0.6, 0.8, 0.9, 0.7, 0.5, 0.3, 0.2, 0.1]  # 4 PM to 1 AM
+        
+        congestion_levels = morning_peak + lunch_peak + evening_peak
+        speed_levels = [max(10, 50 * (1 - c)) for c in congestion_levels]
+        
+        # Create dataframe for visualization
+        traffic_df = pd.DataFrame({
+            'Hour': [f"{h}:00" for h in hours],
+            'Congestion': congestion_levels,
+            'Speed (km/h)': speed_levels,
+            'Status': ['Heavy' if c > 0.7 else 'Moderate' if c > 0.3 else 'Light' for c in congestion_levels]
         })
         
-        # Add the selected area as a highlighted point
-        selected_coords = area_coordinates[area]
-        highlighted_point = pd.DataFrame({
-            'lat': [selected_coords['latitude']],
-            'lon': [selected_coords['longitude']], 
-            'location': [f"Selected: {area}"]
-        })
+        # Plot the data
+        fig = px.bar(
+            traffic_df, 
+            x='Hour', 
+            y='Congestion',
+            color='Status',
+            color_discrete_map={
+                'Light': '#4CAF50',
+                'Moderate': '#FFC107',
+                'Heavy': '#F44336'
+            },
+            labels={'Congestion': 'Congestion Level', 'Hour': 'Time of Day'},
+            title=f'Traffic Congestion in {area} throughout the day'
+        )
         
-        # Combine dataframes
-        all_points = pd.concat([highlighted_point, map_data])
+        st.plotly_chart(fig, use_container_width=True)
         
-        st.map(all_points)
+        # Add a heatmap of pedestrian density
+        st.markdown("### 👥 Pedestrian Activity Heatmap")
         
-        # Engagement chart
-        st.subheader("Hourly Engagement Forecast")
-        hours = list(range(9, 21))
-        engagement = [45, 50, 65, 75, 70, 68, 72, 85, 90, 87, 80, 60]
+        # Create data for the heatmap
+        pedestrian_hours = list(range(6, 24))
         
-        chart_data = pd.DataFrame({
-            'Hour': hours,
-            'Engagement': engagement
-        })
+        # Different patterns for pedestrian activity
+        if area in ["Northern Quarter", "City Centre"]:
+            # Busy shopping/entertainment areas
+            pedestrian_pattern = [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.9, 0.8, 0.9, 0.9, 0.8, 0.7, 0.8, 0.9, 0.9, 0.8, 0.6]
+        elif area in ["Media City", "Spinningfields"]:
+            # Business areas - busy during work hours
+            pedestrian_pattern = [0.3, 0.5, 0.7, 0.8, 0.9, 0.8, 0.9, 0.9, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.2, 0.1, 0.1, 0.1]
+        else:
+            # General areas with lunch/evening peaks
+            pedestrian_pattern = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.7, 0.6, 0.5, 0.6, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
         
-        st.line_chart(chart_data, x='Hour', y='Engagement')
+        # Create a dataframe for the heatmap
+        days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        heatmap_data = []
+        
+        for day_idx, day in enumerate(days):
+            for hour_idx, hour in enumerate(pedestrian_hours):
+                # Adjust pattern based on day of week
+                if day in ['Saturday', 'Sunday']:
+                    # Weekends have different patterns
+                    if area in ["Northern Quarter", "City Centre"]:
+                        # Shopping areas busier on weekends
+                        modifier = 1.2
+                    else:
+                        # Business areas quieter on weekends
+                        modifier = 0.6
+                else:
+                    modifier = 1.0
+                
+                # Account for weather conditions
+                if weather_data['condition'].lower() in ['rain', 'shower', 'drizzle', 'thunderstorm']:
+                    weather_modifier = 0.7
+                elif weather_data['condition'].lower() in ['cloudy', 'overcast', 'mist', 'fog']:
+                    weather_modifier = 0.9
+                else:
+                    weather_modifier = 1.0
+                    
+                value = min(1.0, pedestrian_pattern[hour_idx] * modifier * weather_modifier)
+                
+                heatmap_data.append({
+                    'Day': day,
+                    'Hour': f"{hour}:00",
+                    'Density': value
+                })
+        
+        # Create a dataframe and pivot for the heatmap
+        heatmap_df = pd.DataFrame(heatmap_data)
+        heatmap_pivot = heatmap_df.pivot(index='Day', columns='Hour', values='Density')
+        
+        # Plot the heatmap
+        fig2 = px.imshow(
+            heatmap_pivot, 
+            color_continuous_scale=['green', 'yellow', 'red'],
+            labels=dict(x="Hour of Day", y="Day of Week", color="Pedestrian Density"),
+            title=f"Weekly Pedestrian Activity Patterns in {area}"
+        )
+        
+        st.plotly_chart(fig2, use_container_width=True)
+        
     else:
-        st.info("Select options and click 'Analyze Route' to see the map.")
+        st.markdown("""
+        <div style="background-color: #FFE8D6; border-left: 5px solid #FF9D45; padding: 15px; border-radius: 5px; margin-bottom: 20px; color: #333; font-weight: 500; font-size: 16px;">
+            Select options and click <span style="color: #FF9D45; font-weight: 700;">'Analyze Route'</span> to view the map visualization.
+        </div>
+        
+        <div style="display: flex; justify-content: center; align-items: center; height: 300px">
+            <div style="text-align: center">
+                <div style="background-color: #FF9D45; color: white; font-size: 42px; font-weight: bold; padding: 10px 30px; border-radius: 5px; margin-bottom: 20px; display: inline-block;">
+                    beem.
+                </div>
+                <p style="color: #FF9D45; margin-top: 20px; font-size: 18px">Maps and visualizations will appear here</p>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
 # Tab 3: Historical Data
 with tabs[2]:
