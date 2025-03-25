@@ -124,6 +124,17 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
     
+    # Add a prominent help text at the top of sidebar
+    st.markdown("""
+    <div style="background-color: #FFE8D6; color: #333; padding: 10px; margin-bottom: 15px; border-radius: 5px; border-left: 5px solid #FF7E33; display: flex; align-items: center;">
+        <div style="font-size: 24px; margin-right: 10px;">➡️</div>
+        <div>
+            <strong style="font-size: 16px;">Click "Analyze Route"</strong><br>
+            <span style="font-size: 14px;">to see traffic & weather data</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
     st.markdown('<h2 style="color: #FF9D45">Route Options</h2>', unsafe_allow_html=True)
     
     # Area selection - EXPANDED LIST
