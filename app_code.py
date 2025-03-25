@@ -102,6 +102,15 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# Add a floating label for the sidebar toggle
+st.markdown("""
+<div style="position: fixed; top: 75px; left: 66px; background-color: #FFE8D6; color: #FF7E33; 
+padding: 5px 10px; border-radius: 5px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+border: 1px solid #FF9D45; font-size: 14px; z-index: 1000; display: flex; align-items: center;">
+<span style="margin-right: 6px;">Analyze Route</span><span style="font-size: 16px;">➡️</span>
+</div>
+""", unsafe_allow_html=True)
+
 # Title
 st.markdown("""
 <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px">
