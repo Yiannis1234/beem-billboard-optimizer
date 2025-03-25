@@ -148,6 +148,18 @@ with st.sidebar:
     # Day type (new)
     day_type = st.radio("Day type", ["Weekday", "Weekend"])
     
+    # Add instructional text with arrow pointing to the button
+    st.markdown("""
+    <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: center;">
+        <div style="background-color: #FFE8D6; border-left: 5px solid #FF9D45; padding: 10px; border-radius: 5px; margin-top: 10px; margin-bottom: 10px; text-align: center; position: relative;">
+            <span style="font-weight: 600; color: #333;">👇 Click to analyze your route 👇</span>
+            <div style="position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);">
+                <span style="font-size: 24px; color: #FF7E33;">⬇️</span>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
     # Analysis button
     analyze = st.button("Analyze Route", type="primary")
     
