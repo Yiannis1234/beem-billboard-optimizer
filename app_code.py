@@ -130,8 +130,8 @@ if analyze:
     st.markdown("""
     <div style="background: linear-gradient(90deg, #FF9D45, #FFB673); border-radius: 10px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center">
         <div>
-            <h3 style="color: white !important; margin: 0">Beem Billboard Insights</h3>
-            <p style="color: white; margin: 5px 0 0 0">Optimizing engagement across Manchester</p>
+            <h3 style="color: white !important; margin: 0; font-size: 28px; font-weight: 800; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Beem Billboard Insights</h3>
+            <p style="color: white !important; margin: 5px 0 0 0; font-weight: 600; font-size: 18px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">Optimizing engagement across Manchester</p>
         </div>
         <div style="background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center">
             <span style="font-size: 24px">🚲</span>
