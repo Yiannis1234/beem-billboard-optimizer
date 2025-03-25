@@ -102,10 +102,33 @@ class BeemDataCollector:
         # Simulated traffic data for demo or fallback
         print("Using simulated traffic data (API key missing or API call failed)")
         
-        # Create more realistic values for Manchester
-        current_speed = 35 + np.random.normal(0, 5)  # Manchester average speed
-        free_flow_speed = 50
-        congestion = min(0.85, max(0.3, np.random.uniform(0.4, 0.7)))  # Realistic congestion level
+        # Create a better distribution of traffic conditions for visualization
+        # Generate random value that spreads across the 0-1 range more evenly
+        # Use area name hash to create some persistent differences between areas
+        area_hash = hash(zone.get('zone_id', '')) % 100
+        hour_of_day = datetime.now().hour
+        
+        # Use a more varied distribution for better visualization
+        # Morning rush 7-9am, lunch hour 12-1pm, evening rush 5-7pm
+        if hour_of_day in [7, 8, 9, 17, 18, 19]:
+            # Rush hour - higher probability of moderate to heavy traffic
+            base_congestion = np.random.choice([0.2, 0.5, 0.8], p=[0.2, 0.5, 0.3])
+        elif hour_of_day in [12, 13]:
+            # Lunch hour - moderate traffic
+            base_congestion = np.random.choice([0.2, 0.4, 0.6], p=[0.3, 0.5, 0.2])
+        elif hour_of_day < 6 or hour_of_day > 21:
+            # Late night/early morning - light traffic
+            base_congestion = np.random.choice([0.1, 0.2, 0.3], p=[0.6, 0.3, 0.1])
+        else:
+            # Regular daytime - varied traffic
+            base_congestion = np.random.choice([0.2, 0.4, 0.7], p=[0.4, 0.4, 0.2])
+        
+        # Add some area-specific and random variation
+        congestion = min(0.95, max(0.1, base_congestion + (area_hash / 500) + np.random.normal(0, 0.1)))
+        
+        # Calculate realistic speeds based on congestion
+        free_flow_speed = 50 + np.random.normal(0, 3)
+        current_speed = free_flow_speed * (1 - congestion) * (0.9 + np.random.normal(0, 0.05))
         
         return {
             'flow_speed': current_speed,

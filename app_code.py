@@ -450,7 +450,7 @@ with tabs[1]:
             'latitude': [lat],
             'longitude': [lon],
             'size': [1000],  # Size of the point (larger for selected area)
-            'color': [traffic_data['congestion_level'] < 0.3 and 'green' or traffic_data['congestion_level'] < 0.6 and 'orange' or 'red'],
+            'color': ['green' if traffic_data['congestion_level'] < 0.3 else 'orange' if traffic_data['congestion_level'] < 0.6 else 'red'],
             'label': [area]
         }
         
@@ -465,7 +465,7 @@ with tabs[1]:
                 map_data['latitude'].append(coords['latitude'])
                 map_data['longitude'].append(coords['longitude'])
                 map_data['size'].append(500)  # Smaller for other areas
-                map_data['color'].append(other_traffic['congestion_level'] < 0.3 and 'green' or other_traffic['congestion_level'] < 0.6 and 'orange' or 'red')
+                map_data['color'].append('green' if other_traffic['congestion_level'] < 0.3 else 'orange' if other_traffic['congestion_level'] < 0.6 else 'red')
                 map_data['label'].append(other_area)
         
         # Create the map
@@ -496,22 +496,29 @@ with tabs[1]:
         st.markdown("### 📊 Hourly Traffic Flow")
         
         # Generate hourly traffic data
-        hours = list(range(6, 24))  # 6 AM to 11 PM
+        hours = list(range(6, 24))  # 6 AM to 11 PM (18 hours)
         
-        # Create different patterns based on time of day
-        morning_peak = [0.7, 0.9, 0.8, 0.6, 0.5, 0.4, 0.3]  # 6 AM to 12 PM
-        lunch_peak = [0.4, 0.6, 0.7, 0.5]  # 12 PM to 4 PM
-        evening_peak = [0.4, 0.6, 0.8, 0.9, 0.7, 0.5, 0.3, 0.2, 0.1]  # 4 PM to 1 AM
+        # Create different patterns based on time of day (ensure all arrays have 18 elements)
+        morning_peak = [0.7, 0.9, 0.8, 0.6, 0.5, 0.4, 0.3]  # 7 elements (6 AM to 12 PM)
+        lunch_peak = [0.4, 0.6, 0.7, 0.5]  # 4 elements (12 PM to 4 PM)
+        evening_peak = [0.4, 0.6, 0.8, 0.9, 0.7, 0.5, 0.3]  # 7 elements (4 PM to 11 PM)
         
+        # Ensure all arrays have consistent lengths (18 hours total)
         congestion_levels = morning_peak + lunch_peak + evening_peak
+        # Truncate to ensure it matches hours array length
+        congestion_levels = congestion_levels[:len(hours)]
+        # Create speed levels of matching length
         speed_levels = [max(10, 50 * (1 - c)) for c in congestion_levels]
         
-        # Create dataframe for visualization
+        # Create status array with matching length
+        status_array = ['Heavy' if c > 0.7 else 'Moderate' if c > 0.3 else 'Light' for c in congestion_levels]
+        
+        # Create dataframe for visualization with consistent array lengths
         traffic_df = pd.DataFrame({
             'Hour': [f"{h}:00" for h in hours],
             'Congestion': congestion_levels,
             'Speed (km/h)': speed_levels,
-            'Status': ['Heavy' if c > 0.7 else 'Moderate' if c > 0.3 else 'Light' for c in congestion_levels]
+            'Status': status_array
         })
         
         # Plot the data
@@ -535,9 +542,9 @@ with tabs[1]:
         st.markdown("### 👥 Pedestrian Activity Heatmap")
         
         # Create data for the heatmap
-        pedestrian_hours = list(range(6, 24))
+        pedestrian_hours = list(range(6, 24))  # 18 hours
         
-        # Different patterns for pedestrian activity
+        # Different patterns for pedestrian activity - ensure all arrays have exactly 18 elements
         if area in ["Northern Quarter", "City Centre"]:
             # Busy shopping/entertainment areas
             pedestrian_pattern = [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.9, 0.8, 0.9, 0.9, 0.8, 0.7, 0.8, 0.9, 0.9, 0.8, 0.6]
@@ -547,6 +554,13 @@ with tabs[1]:
         else:
             # General areas with lunch/evening peaks
             pedestrian_pattern = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.7, 0.6, 0.5, 0.6, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
+        
+        # Ensure pattern has exact length matching pedestrian_hours
+        if len(pedestrian_pattern) > len(pedestrian_hours):
+            pedestrian_pattern = pedestrian_pattern[:len(pedestrian_hours)]
+        elif len(pedestrian_pattern) < len(pedestrian_hours):
+            # Extend with the last value if shorter
+            pedestrian_pattern.extend([pedestrian_pattern[-1]] * (len(pedestrian_hours) - len(pedestrian_pattern)))
         
         # Create a dataframe for the heatmap
         days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
