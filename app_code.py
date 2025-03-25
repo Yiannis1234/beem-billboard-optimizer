@@ -13,7 +13,7 @@ from src.data.data_collector import BeemDataCollector
 # Define config with API keys (you can replace 'demo_key' with actual keys later)
 config = {
     'weather_api_key': 'f70bd534000447b2a14202431252303',  # New WeatherAPI.com key provided by user
-    'traffic_api_key': 'AJQh9JNGbGnUxrfK7Rh9h7hSe1e6GzRe'   # TomTom API key (previously provided)
+    'traffic_api_key': 'Uc0dPKIMHcqZ91VbGAnbEAINdzwqRzil'   # New TomTom API key provided by user
 }
 
 # Initialize the data collector
