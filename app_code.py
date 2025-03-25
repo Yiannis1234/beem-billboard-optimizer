@@ -62,6 +62,11 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Title
+st.markdown("""
+<div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px">
+    <img src="https://raw.githubusercontent.com/ioannisvamvakas/beem_resources/main/beem_logo.png" width="180" style="margin-bottom: 10px">
+</div>
+""", unsafe_allow_html=True)
 st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
 st.markdown("Optimize your mobile billboard routes for maximum engagement")
 
