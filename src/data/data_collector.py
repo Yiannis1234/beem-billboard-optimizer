@@ -49,10 +49,10 @@ class BeemDataCollector:
         # Simulated weather data for demo or fallback
         print("Using simulated weather data (API key missing or API call failed)")
         return {
-            'temperature': 12.0,  # Default to current Manchester temperature
-            'precipitation': max(0, np.random.normal(0, 1)),
-            'wind_speed': max(0, np.random.normal(10, 5)),
-            'condition': 'partly cloudy',
+            'temperature': 11.5,  # Current Manchester temperature (March average)
+            'precipitation': 0.5,  # Light rain (typical for Manchester)
+            'wind_speed': 12.0,    # Average wind speed
+            'condition': 'Cloudy', # Typical condition
             'forecast': []
         }
 
@@ -68,27 +68,49 @@ class BeemDataCollector:
                 lon = zone['longitude']
                 url = f"https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point={lat},{lon}&key={self.traffic_api_key}"
                 
-                response = requests.get(url)
+                print(f"Fetching traffic data from: {url}")
+                response = requests.get(url, timeout=10)
+                
+                if response.status_code != 200:
+                    print(f"Traffic API error: {response.status_code} - {response.text}")
+                    raise Exception(f"Traffic API returned status code {response.status_code}")
+                
                 data = response.json()
                 
                 # Extract relevant traffic data
                 if 'flowSegmentData' in data:
                     flow_data = data['flowSegmentData']
+                    current_speed = flow_data.get('currentSpeed', 40)
+                    free_flow_speed = flow_data.get('freeFlowSpeed', 50) 
+                    
+                    # Calculate congestion level (0-1 range)
+                    congestion_level = min(1.0, max(0.0, 1 - (current_speed / max(1, free_flow_speed))))
+                    
+                    print(f"Traffic data received: Current speed={current_speed} km/h, Free flow={free_flow_speed} km/h, Congestion={congestion_level:.2f}")
                     
                     return {
-                        'flow_speed': flow_data.get('currentSpeed', 40),
-                        'free_flow_speed': flow_data.get('freeFlowSpeed', 50),
-                        'congestion_level': min(1.0, max(0.0, 1 - (flow_data.get('currentSpeed', 40) / max(1, flow_data.get('freeFlowSpeed', 50)))))
+                        'flow_speed': current_speed,
+                        'free_flow_speed': free_flow_speed,
+                        'congestion_level': congestion_level
                     }
+                else:
+                    print(f"Unexpected Traffic API response format: {data}")
             except Exception as e:
                 print(f"Error fetching traffic data: {e}")
                 # Fallback to simulated data if API call fails
         
         # Simulated traffic data for demo or fallback
+        print("Using simulated traffic data (API key missing or API call failed)")
+        
+        # Create more realistic values for Manchester
+        current_speed = 35 + np.random.normal(0, 5)  # Manchester average speed
+        free_flow_speed = 50
+        congestion = min(0.85, max(0.3, np.random.uniform(0.4, 0.7)))  # Realistic congestion level
+        
         return {
-            'flow_speed': 40 + np.random.normal(0, 10),
-            'free_flow_speed': 50,
-            'congestion_level': np.random.uniform(0.4, 0.8)
+            'flow_speed': current_speed,
+            'free_flow_speed': free_flow_speed,
+            'congestion_level': congestion
         }
 
     def get_historical_engagement(self, start_date, end_date):
