@@ -853,11 +853,17 @@ with st.sidebar:
     
     if st.button("ANALYZE ROUTE", type="primary", use_container_width=True):
         st.session_state.analyze = True
+        st.session_state.sidebar_manually_hidden = True  # Add flag to track if sidebar was manually hidden
         
         # Hide sidebar via JavaScript without causing a rerun
         hide_sidebar_js = """
         <script>
             (function() {
+                // Store reference to hide function globally so it can be removed later
+                window._hideSidebarFn = function() {
+                    setTimeout(hideSidebar, 100);
+                };
+                
                 // Run immediately and repeatedly to ensure it works
                 function hideSidebar() {
                     // Get all sidebar elements
@@ -918,20 +924,17 @@ with st.sidebar:
                 setTimeout(hideSidebar, 100);
                 setTimeout(hideSidebar, 300);
                 setTimeout(hideSidebar, 500);
-                setTimeout(hideSidebar, 1000);
                 
                 // Also add event listener to hide it again if user tries to reopen
-                document.addEventListener('click', function(e) {
-                    setTimeout(hideSidebar, 100);
-                });
+                document.addEventListener('click', window._hideSidebarFn);
                 
                 // Add MutationObserver to detect DOM changes and hide again if needed
-                const observer = new MutationObserver(function(mutations) {
+                window._sidebarObserver = new MutationObserver(function(mutations) {
                     setTimeout(hideSidebar, 100);
                 });
                 
                 // Start observing the document
-                observer.observe(document, { 
+                window._sidebarObserver.observe(document, { 
                     childList: true, 
                     subtree: true 
                 });
@@ -1120,69 +1123,93 @@ if analyze:
     
     # Quick action button to rerun analysis
     if st.button("🔄 ANALYZE AGAIN", type="primary", use_container_width=True, key="analyze_again"):
-        # Restore the sidebar visibility before re-analyzing
-        restore_sidebar_js = """
+        # Reset the observer and event listeners that might be preventing the sidebar from showing
+        reset_js = """
         <script>
             (function() {
-                function showSidebar() {
-                    // Find the expand button and click it
-                    const expandButton = window.parent.document.querySelector('[data-testid="expandedControl"]');
-                    if (expandButton) {
-                        expandButton.click();
-                    }
-                    
-                    // Also restore the sidebar through CSS
+                // Remove any existing observers that might be hiding the sidebar
+                if (window._sidebarObserver) {
+                    window._sidebarObserver.disconnect();
+                    delete window._sidebarObserver;
+                }
+                
+                // Remove event listeners that might be interfering
+                document.removeEventListener('click', window._hideSidebarFn);
+                
+                // Function to fully restore the sidebar
+                function restoreSidebar() {
+                    // Find all sidebar elements
                     const sidebar = window.parent.document.querySelector('[data-testid="stSidebar"]');
+                    const expandButton = window.parent.document.querySelector('[data-testid="expandedControl"]');
+                    
+                    // Remove all hiding CSS
                     if (sidebar) {
-                        sidebar.style.cssText = '';
+                        // Reset all inline styles completely
+                        sidebar.setAttribute('style', '');
                         sidebar.classList.remove('collapsed');
                         sidebar.setAttribute('aria-hidden', 'false');
                         
-                        // Show all children
+                        // Reset all children styles
                         Array.from(sidebar.children).forEach(child => {
-                            child.style.display = '';
-                            child.style.opacity = '';
-                            child.style.visibility = '';
+                            child.setAttribute('style', '');
                         });
+                    }
+                    
+                    // Make sure expand button is visible
+                    if (expandButton) {
+                        expandButton.setAttribute('style', '');
+                    }
+                    
+                    // Force click the expand button
+                    if (expandButton) {
+                        try {
+                            expandButton.click();
+                        } catch(e) {}
                     }
                 }
                 
-                // Execute with delay to ensure rendering is complete
-                setTimeout(showSidebar, 100);
+                // Run multiple times to ensure it works
+                restoreSidebar();
+                setTimeout(restoreSidebar, 100);
+                setTimeout(restoreSidebar, 300);
+                
+                // Reset any CSS that might be hiding the sidebar
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    [data-testid="stSidebar"] {
+                        display: block !important;
+                        width: auto !important;
+                        min-width: 260px !important;
+                        max-width: 300px !important;
+                        padding: inherit !important;
+                        margin: inherit !important;
+                        opacity: 1 !important;
+                        pointer-events: auto !important;
+                        visibility: visible !important;
+                        position: relative !important;
+                        transform: none !important;
+                        z-index: 100 !important;
+                    }
+                    
+                    [data-testid="expandedControl"] {
+                        display: flex !important;
+                        opacity: 1 !important;
+                        visibility: visible !important;
+                        width: 40px !important;
+                        height: 40px !important;
+                        background-color: #FF7E33 !important;
+                        animation: pulse 2s infinite;
+                    }
+                `;
+                document.head.appendChild(style);
             })();
         </script>
         """
-        st.markdown(restore_sidebar_js, unsafe_allow_html=True)
+        st.markdown(reset_js, unsafe_allow_html=True)
         
-        # Also restore sidebar visibility with CSS
-        show_sidebar_css = """
-        <style>
-        [data-testid="stSidebar"] {
-            display: block !important;
-            width: auto !important;
-            min-width: 260px !important;
-            max-width: 300px !important;
-            padding: inherit !important;
-            margin: inherit !important;
-            opacity: 1 !important;
-            pointer-events: auto !important;
-            visibility: visible !important;
-            position: relative !important;
-            transform: none !important;
-            z-index: 100 !important;
-        }
-        
-        [data-testid="expandedControl"] {
-            display: block !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-        }
-        </style>
-        """
-        st.markdown(show_sidebar_css, unsafe_allow_html=True)
-        
-        # Reset the analysis state and rerun
+        # Reset the session state and rerun
         st.session_state.analyze = False
+        st.session_state.sidebar_manually_hidden = False  # Add flag to track if sidebar was manually hidden
         st.rerun()
     
 else:
