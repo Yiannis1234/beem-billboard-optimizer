@@ -190,6 +190,73 @@ st.markdown("""
             padding: 4px 10px !important;
         }
     }
+    
+    /* Make map containers larger on mobile */
+    .stMapboxContainer, .js-plotly-plot, .plotly, .plot-container {
+        height: 100% !important;
+        max-height: 700px !important;
+        min-height: 600px !important;
+    }
+    
+    /* Improve map display on mobile */
+    [data-testid="column"] > div:has(> .stMapboxContainer) {
+        height: 700px !important;
+        min-height: 600px !important;
+        width: 100% !important;
+        padding: 0 !important;
+    }
+    
+    /* Better spacing for mobile */
+    @media (max-width: 768px) {
+        .block-container {
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+        }
+        
+        [data-testid="column"] {
+            width: 100% !important;
+        }
+    }
+    
+    /* Full-screen map container for mobile */
+    .map-container {
+        height: 85vh !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+    
+    /* Make the Plotly map fill the container */
+    .map-container > div > div > div {
+        height: 100% !important;
+    }
+    
+    /* Increase map size */
+    .js-plotly-plot, .plot-container, .mapboxgl-map, .mapboxgl-canvas-container, .mapboxgl-canvas {
+        height: 100% !important;
+        width: 100% !important;
+        min-height: 85vh !important;
+    }
+    
+    /* Override any column constraints */
+    [data-testid="column"] > div:has(> .js-plotly-plot) {
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* Fix for mobile view */
+    @media (max-width: 768px) {
+        .map-container {
+            height: 80vh !important;
+            min-height: 500px !important;
+        }
+        
+        .js-plotly-plot, .plot-container {
+            min-height: 80vh !important;
+        }
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -608,7 +675,7 @@ def generate_route_map(area, data):
         lat=route_lats,
         lon=route_lons,
         mode='lines',
-        line=dict(width=6, color='#FF7E33'),  # Thicker line for better visibility
+        line=dict(width=10, color='#FF7E33'),  # Even thicker line for better visibility on mobile
         name='Route Following Roads'
     ))
     
@@ -617,7 +684,7 @@ def generate_route_map(area, data):
         lat=route_lats,
         lon=route_lons,
         mode='markers',
-        marker=dict(size=8, color='#FF7E33'),
+        marker=dict(size=12, color='#FF7E33'),  # Larger markers for mobile
         name='Road Points',
         showlegend=False
     ))
@@ -638,21 +705,22 @@ def generate_route_map(area, data):
         lat=[route_lats[i] for i in marker_indices],
         lon=[route_lons[i] for i in marker_indices],
         mode='markers+text',
-        marker=dict(size=12, color='#FF7E33', symbol='circle'),
+        marker=dict(size=16, color='#FF7E33', symbol='circle'),  # Larger markers for mobile
         text=[route_points[i] for i in marker_indices],
         textposition="top right",
         name='Key Locations'
     ))
     
     # Update the layout with very high zoom to see streets clearly
+    # Significantly increase height for mobile viewing
     fig.update_layout(
         mapbox=dict(
             style="carto-positron",  # Clean map style showing streets clearly
             center=dict(lat=center_lat, lon=center_lon),
-            zoom=16  # Very high zoom level to clearly see streets
+            zoom=15.5  # Adjusted zoom level for better mobile viewing
         ),
-        margin=dict(l=0, r=0, t=10, b=0),
-        height=500,  # Taller for better visibility
+        margin=dict(l=0, r=0, t=0, b=0),  # Zero margins for maximum map size
+        height=800,  # Much taller for mobile viewing
         autosize=True,
         hovermode='closest'
     )
@@ -984,10 +1052,22 @@ if analyze:
     time_heatmap = generate_time_heatmap(area, day_type)
     st.plotly_chart(time_heatmap, use_container_width=True, config={'responsive': True})
     
-    # Optimal route
+    # Optimal route - use a full-width container for the map
     st.markdown("### Recommended Route")
+    
+    # Add a container div with the map-container class
+    st.markdown('<div class="map-container">', unsafe_allow_html=True)
+    
+    # Generate and display the route map
     route_map = generate_route_map(area, data)
-    st.plotly_chart(route_map, use_container_width=True, config={'responsive': True})
+    st.plotly_chart(route_map, use_container_width=True, config={
+        'responsive': True,
+        'displayModeBar': False,  # Hide the mode bar for cleaner mobile view
+        'scrollZoom': True  # Enable scroll to zoom
+    })
+    
+    # Close the container
+    st.markdown('</div>', unsafe_allow_html=True)
     
     # Route metrics - stack vertically for mobile
     st.markdown("### Route Metrics")
