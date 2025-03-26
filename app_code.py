@@ -29,6 +29,37 @@ st.markdown("""
         background-color: #FFF1E6;
     }
     
+    /* Make the sidebar toggle button larger and more visible */
+    [data-testid="expandedControl"], [data-testid="collapsedControl"] {
+        width: 40px !important;
+        height: 40px !important;
+        background-color: #FF7E33 !important;
+        color: white !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 100 !important;
+    }
+    
+    [data-testid="expandedControl"] svg, [data-testid="collapsedControl"] svg {
+        width: 25px !important;
+        height: 25px !important;
+        color: white !important;
+    }
+    
+    /* Add a pulsing animation to the button */
+    @keyframes pulse {
+        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 126, 51, 0.4); }
+        70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 126, 51, 0); }
+        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 126, 51, 0); }
+    }
+    
+    [data-testid="expandedControl"] {
+        animation: pulse 2s infinite;
+    }
+    
     /* Headers */
     h1, h2, h3, h4, h5, h6 {
         color: #FF7E33 !important;
@@ -1101,10 +1132,30 @@ else:
         <div style="background-color:#FFF1E6; padding:10px; border-radius:20px; 
              text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.1); 
              border:2px dashed #FF7E33; margin-top:15px;">
-            <h4 style="margin:5px; color:#FF7E33;">⬆️ PRESS TOP LEFT</h4>
-            <h4 style="margin:5px; color:#FF7E33;">ARROW TO ANALYZE</h4>
+            <h4 style="margin:5px; color:#FF7E33;">OPEN MENU TO START</h4>
+            <h4 style="margin:5px; color:#FF7E33;">👇 PRESS BUTTON BELOW</h4>
         </div>
         """, unsafe_allow_html=True)
+    
+    # Add a large, obvious help button to open the sidebar
+    st.markdown("""
+    <div style="margin: 20px auto; max-width: 350px;">
+        <button onclick="openSidebar()" style="width:100%; background-color:#FF7E33; color:white; 
+               padding:15px; border:none; border-radius:10px; font-size:18px; font-weight:bold;
+               display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 4px 10px rgba(255,126,51,0.3);">
+            <span style="margin-right:10px;">☰</span> CLICK TO OPEN MENU
+        </button>
+    </div>
+    
+    <script>
+    function openSidebar() {
+        const expandButton = window.parent.document.querySelector('[data-testid="expandedControl"]');
+        if (expandButton) {
+            expandButton.click();
+        }
+    }
+    </script>
+    """, unsafe_allow_html=True)
     
     # Features section
     st.subheader("📢 Optimize your advertising impact")
