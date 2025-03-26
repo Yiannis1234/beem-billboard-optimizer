@@ -1119,7 +1119,71 @@ if analyze:
         """, unsafe_allow_html=True)
     
     # Quick action button to rerun analysis
-    st.button("🔄 ANALYZE AGAIN", type="primary")
+    if st.button("🔄 ANALYZE AGAIN", type="primary", use_container_width=True, key="analyze_again"):
+        # Restore the sidebar visibility before re-analyzing
+        restore_sidebar_js = """
+        <script>
+            (function() {
+                function showSidebar() {
+                    // Find the expand button and click it
+                    const expandButton = window.parent.document.querySelector('[data-testid="expandedControl"]');
+                    if (expandButton) {
+                        expandButton.click();
+                    }
+                    
+                    // Also restore the sidebar through CSS
+                    const sidebar = window.parent.document.querySelector('[data-testid="stSidebar"]');
+                    if (sidebar) {
+                        sidebar.style.cssText = '';
+                        sidebar.classList.remove('collapsed');
+                        sidebar.setAttribute('aria-hidden', 'false');
+                        
+                        // Show all children
+                        Array.from(sidebar.children).forEach(child => {
+                            child.style.display = '';
+                            child.style.opacity = '';
+                            child.style.visibility = '';
+                        });
+                    }
+                }
+                
+                // Execute with delay to ensure rendering is complete
+                setTimeout(showSidebar, 100);
+            })();
+        </script>
+        """
+        st.markdown(restore_sidebar_js, unsafe_allow_html=True)
+        
+        # Also restore sidebar visibility with CSS
+        show_sidebar_css = """
+        <style>
+        [data-testid="stSidebar"] {
+            display: block !important;
+            width: auto !important;
+            min-width: 260px !important;
+            max-width: 300px !important;
+            padding: inherit !important;
+            margin: inherit !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            visibility: visible !important;
+            position: relative !important;
+            transform: none !important;
+            z-index: 100 !important;
+        }
+        
+        [data-testid="expandedControl"] {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        </style>
+        """
+        st.markdown(show_sidebar_css, unsafe_allow_html=True)
+        
+        # Reset the analysis state and rerun
+        st.session_state.analyze = False
+        st.rerun()
     
 else:
     # Add beem logo and cloud text side by side
