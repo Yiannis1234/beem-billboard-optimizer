@@ -567,14 +567,14 @@ else:
     st.title("beem.", anchor=False)
     
     # Banner with instructions
-    st.error("## 👆 PRESS TOP LEFT MENU FIRST")
+    st.error("## ⬅️ PRESS TOP LEFT ARROW FIRST")
     
     st.header("🚲 Billboard Route Optimizer")
     
     # Help box - made more concise for mobile
     st.info("""
     **HOW TO USE:**
-    1. Tap top left ≡ icon to open menu
+    1. Tap top left ⬅️ icon to open menu
     2. Select your area and day type
     3. Tap "ANALYZE ROUTE" button
     """)
