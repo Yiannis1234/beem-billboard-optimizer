@@ -83,19 +83,21 @@ st.markdown("""
         margin-bottom: 30px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         border: 1px solid rgba(255,126,51,0.2);
+        text-align: center;
     }
     
     .hero-title {
-        font-size: 40px !important;
+        font-size: 72px !important;
         font-weight: 800 !important;
         background: linear-gradient(90deg, #FF7E33 0%, #FF9D45 100%);
         -webkit-background-clip: text !important;
         -webkit-text-fill-color: transparent !important;
         margin-bottom: 20px !important;
+        line-height: 1.1 !important;
     }
     
     .hero-subtitle {
-        font-size: 20px !important;
+        font-size: 24px !important;
         line-height: 1.5 !important;
         color: #555 !important;
     }
@@ -152,7 +154,7 @@ st.markdown("""
         }
         
         .hero-title {
-            font-size: 32px !important;
+            font-size: 52px !important;
         }
         
         .hero-subtitle {
@@ -633,6 +635,7 @@ if analyze:
 else:
     # Enhanced welcome page
     st.markdown('<div class="hero-container">', unsafe_allow_html=True)
+    st.markdown('<p style="color:#FF7E33; font-weight:600; margin-bottom:5px; font-size:16px;">OPTIMAL ADVERTISING</p>', unsafe_allow_html=True)
     st.markdown('<h1 class="hero-title">beem.</h1>', unsafe_allow_html=True)
     st.markdown('<p class="hero-subtitle">Smart Billboard Optimization for Maximum Engagement</p>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
