@@ -9,7 +9,7 @@ from datetime import datetime
 # Page Configuration
 st.set_page_config(
     page_title="Beem Billboard Optimizer", 
-    page_icon="🚲", 
+    page_icon="📢", 
     layout="wide", 
     initial_sidebar_state="collapsed"  # Start with collapsed sidebar on mobile
 )
@@ -567,14 +567,14 @@ else:
     st.title("beem.", anchor=False)
     
     # Banner with instructions
-    st.error("## ⬅️ PRESS TOP LEFT ARROW FIRST")
+    st.error("## ⬆️ PRESS TOP LEFT ARROW FIRST")
     
-    st.header("🚲 Billboard Route Optimizer")
+    st.header("📢 Billboard Route Optimizer")
     
     # Help box - made more concise for mobile
     st.info("""
     **HOW TO USE:**
-    1. Tap top left ⬅️ icon to open menu
+    1. Tap top left ⬆️ icon to open menu
     2. Select your area and day type
     3. Tap "ANALYZE ROUTE" button
     """)
