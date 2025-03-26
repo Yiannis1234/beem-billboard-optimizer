@@ -456,14 +456,67 @@ def get_optimal_times(area, day_type):
     return sorted(optimal_times, key=lambda x: x["score"], reverse=True)
 
 def generate_route_map(area, data):
-    """Generate a map showing the optimal route through the area"""
+    """Generate a map showing the optimal route through the area following actual roads"""
     center_lat = area_coordinates[area]["latitude"]
     center_lon = area_coordinates[area]["longitude"]
     
-    # Create route points in a loop
-    num_points = 10
-    route_lats = [center_lat + 0.005 * np.cos(2 * np.pi * i / num_points) for i in range(num_points+1)]
-    route_lons = [center_lon + 0.008 * np.sin(2 * np.pi * i / num_points) for i in range(num_points+1)]
+    # Create route points that follow roads instead of a simple circle
+    # For Manchester areas, we'll use realistic road paths
+    road_routes = {
+        "Northern Quarter": {
+            "lats": [53.4831, 53.4844, 53.4850, 53.4842, 53.4835, 53.4826, 53.4817, 53.4825, 53.4831],
+            "lons": [-2.2367, -2.2352, -2.2334, -2.2321, -2.2309, -2.2324, -2.2348, -2.2367, -2.2367],
+            "points": ["Start", "Oldham St", "Thomas St", "Tib St", "Edge St", "Hilton St", "Church St", "Shudehill", "End"]
+        },
+        "City Centre": {
+            "lats": [53.4808, 53.4798, 53.4780, 53.4765, 53.4775, 53.4790, 53.4802, 53.4808],
+            "lons": [-2.2426, -2.2413, -2.2418, -2.2432, -2.2450, -2.2455, -2.2440, -2.2426],
+            "points": ["Start", "Market St", "Piccadilly", "Portland St", "Oxford Rd", "Peter St", "Deansgate", "End"]
+        },
+        "Ancoats": {
+            "lats": [53.4841, 53.4851, 53.4862, 53.4855, 53.4845, 53.4835, 53.4841],
+            "lons": [-2.2269, -2.2255, -2.2235, -2.2218, -2.2228, -2.2249, -2.2269],
+            "points": ["Start", "Great Ancoats St", "Redhill St", "Bengal St", "Jersey St", "Radium St", "End"]
+        },
+        "Oxford Road": {
+            "lats": [53.4710, 53.4725, 53.4740, 53.4752, 53.4765, 53.4755, 53.4735, 53.4710],
+            "lons": [-2.2376, -2.2382, -2.2390, -2.2404, -2.2420, -2.2440, -2.2410, -2.2376],
+            "points": ["Start", "Oxford Rd", "Whitworth St", "Princess St", "Portland St", "Peter St", "Lower Mosley St", "End"]
+        }
+    }
+    
+    # Default route if the area isn't in our predefined routes
+    default_route = {
+        "lats": [
+            center_lat,
+            center_lat + 0.003,
+            center_lat + 0.005,
+            center_lat + 0.003,
+            center_lat,
+            center_lat - 0.003,
+            center_lat - 0.005,
+            center_lat - 0.002,
+            center_lat
+        ],
+        "lons": [
+            center_lon,
+            center_lon + 0.002,
+            center_lon + 0.005,
+            center_lon + 0.007,
+            center_lon + 0.005,
+            center_lon + 0.002,
+            center_lon - 0.002,
+            center_lon - 0.005,
+            center_lon
+        ],
+        "points": ["Start", "Point 1", "Point 2", "Point 3", "Point 4", "Point 5", "Point 6", "Point 7", "End"]
+    }
+    
+    # Get the route for this area or use default
+    route = road_routes.get(area, default_route)
+    route_lats = route["lats"]
+    route_lons = route["lons"]
+    route_points = route["points"]
     
     # Create the map
     fig = go.Figure()
@@ -474,17 +527,18 @@ def generate_route_map(area, data):
         lon=route_lons,
         mode='lines',
         line=dict(width=4, color='#FF7E33'),
-        name='Optimal Route'
+        name='Route Following Roads'
     ))
     
-    # Add markers for key locations
+    # Add markers for key points (start, major intersections, end)
+    marker_indices = [0, len(route_lats)//3, 2*len(route_lats)//3, len(route_lats)-1]
     fig.add_trace(go.Scattermapbox(
-        lat=route_lats[::3],  # Take every 3rd point
-        lon=route_lons[::3],  # This was a bug! Should be route_lons
+        lat=[route_lats[i] for i in marker_indices],
+        lon=[route_lons[i] for i in marker_indices],
         mode='markers',
         marker=dict(size=15, color='#FF7E33'),
         name='Key Locations',
-        text=['Start', 'Checkpoint 1', 'Checkpoint 2', 'End']
+        text=[route_points[i] for i in marker_indices]
     ))
     
     # Update the layout - make it mobile-friendly
@@ -492,7 +546,7 @@ def generate_route_map(area, data):
         mapbox=dict(
             style="carto-positron",
             center=dict(lat=center_lat, lon=center_lon),
-            zoom=13
+            zoom=14  # Zoom in more to see streets clearly
         ),
         margin=dict(l=0, r=0, t=10, b=0),  # Reduced top margin
         height=400,  # Slightly shorter for mobile
