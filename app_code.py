@@ -679,14 +679,6 @@ else:
         </div>
         """, unsafe_allow_html=True)
     
-    # Help box with improved styling
-    st.info("""
-    **HOW TO USE:**
-    1. Tap top left ⬆️ icon to open menu
-    2. Select your area and day type
-    3. Tap "ANALYZE ROUTE" button
-    """)
-    
     # Direct analyze button - with enhanced styling
     st.markdown("""
     <div style="padding:20px 0; text-align:center;">
