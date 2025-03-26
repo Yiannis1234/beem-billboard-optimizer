@@ -399,11 +399,11 @@ if 'selected_day_type' not in st.session_state:
     st.session_state.selected_day_type = "Weekday"
 
 # Home button in top right corner
-st.markdown("""
-<div class="home-button">
-    <button onclick="window.location.href='?'">🏠</button>
-</div>
-""", unsafe_allow_html=True)
+home_col = st.columns([6, 1])[1]  # Create a right-aligned column
+with home_col:
+    if st.button("🏠", key="home_button"):
+        st.session_state.analyze = False
+        st.rerun()
 
 # SIDEBAR
 with st.sidebar:
