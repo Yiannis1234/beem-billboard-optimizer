@@ -118,6 +118,30 @@ st.markdown("""
 st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
 st.markdown("Optimize your mobile billboard routes for maximum engagement")
 
+# Initialize analyze variable at the top
+analyze = False
+
+# SUPER PROMINENT BUTTON ROW BEFORE TABS - This will be visible regardless of sidebar state
+st.markdown("""
+<div style="background-color: #FFE8D6; border: 2px solid #FF7E33; border-radius: 10px; padding: 15px; margin: 25px 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center;">
+    <h2 style="color: #FF7E33; font-weight: bold; margin-bottom: 10px; font-size: 24px;">ROUTE ANALYSIS CONTROLS</h2>
+    <p style="font-size: 16px; margin-bottom: 15px;">⬅️ Use the controls in the sidebar to select your options</p>
+</div>
+""", unsafe_allow_html=True)
+
+# Add a direct analyze button in the main content area - HUGE and unmissable
+st.markdown("""
+<div style="text-align: center; margin: 20px 0 30px 0;">
+    <h3 style="color: #FF7E33; font-weight: bold; margin-bottom: 10px;">Click this button to see results:</h3>
+</div>
+""", unsafe_allow_html=True)
+
+analyze_col1, analyze_col2, analyze_col3 = st.columns([1, 2, 1])
+with analyze_col2:
+    main_analyze = st.button("🚀 ANALYZE ROUTE NOW 🚀", type="primary", use_container_width=True)
+    if main_analyze:
+        analyze = True
+
 # Sidebar
 with st.sidebar:
     # Add Beem logo
@@ -178,7 +202,9 @@ with st.sidebar:
     # Analysis button - Make it much more prominent
     col1, col2, col3 = st.columns([1, 6, 1])
     with col2:
-        analyze = st.button("ANALYZE ROUTE", type="primary", use_container_width=True)
+        sidebar_analyze = st.button("ANALYZE ROUTE", type="primary", use_container_width=True)
+        if sidebar_analyze:
+            analyze = True
     
     # About section
     with st.expander("About Beem"):
