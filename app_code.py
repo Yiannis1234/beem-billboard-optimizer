@@ -14,6 +14,48 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Custom CSS for light orange and white theme
+st.markdown("""
+<style>
+    /* Main background */
+    .stApp {
+        background-color: #ffffff;
+    }
+    
+    /* Sidebar */
+    section[data-testid="stSidebar"] {
+        background-color: #FFF1E6;
+    }
+    
+    /* Headers */
+    h1, h2, h3, h4, h5, h6 {
+        color: #FF7E33 !important;
+    }
+    
+    /* Buttons */
+    .stButton button[data-testid="baseButton-primary"] {
+        background-color: #FF7E33 !important;
+        border: none !important;
+        color: white !important;
+    }
+    
+    /* Info boxes */
+    .stAlert {
+        border-color: #FF9D45 !important;
+    }
+    
+    /* Metrics */
+    .stMetric {
+        background-color: #FFF8F0;
+    }
+    
+    /* Expander */
+    .streamlit-expanderHeader {
+        color: #FF7E33 !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # Define area coordinates (Manchester areas)
 area_coordinates = {
     "Northern Quarter": {"latitude": 53.4831, "longitude": -2.2367, "zone_id": "northern_quarter"},
@@ -174,49 +216,6 @@ def get_optimal_times(area, day_type):
     # Sort by score (highest first)
     return sorted(optimal_times, key=lambda x: x["score"], reverse=True)
 
-def generate_density_heatmap(area, day_type):
-    """Generate a heatmap of business density for the selected area"""
-    center_lat = area_coordinates[area]["latitude"]
-    center_lon = area_coordinates[area]["longitude"]
-    
-    # Create a grid of points
-    grid_size = 10
-    lat_range = np.linspace(center_lat - 0.02, center_lat + 0.02, grid_size)
-    lon_range = np.linspace(center_lon - 0.02, center_lon + 0.02, grid_size)
-    
-    # Generate random density values with higher values near the center
-    densities = []
-    lats = []
-    lons = []
-    for lat in lat_range:
-        for lon in lon_range:
-            distance = ((lat - center_lat)**2 + (lon - center_lon)**2)**0.5
-            # Higher density closer to center, with some randomness
-            density = max(0, 1 - (distance * 25)) + random.uniform(0, 0.3)
-            lats.append(lat)
-            lons.append(lon)
-            densities.append(min(1.0, density))
-    
-    # Create the heatmap
-    fig = px.density_mapbox(
-        data_frame=pd.DataFrame({
-            'lat': lats,
-            'lon': lons,
-            'density': densities
-        }),
-        lat='lat',
-        lon='lon',
-        z='density',
-        radius=15,
-        center=dict(lat=center_lat, lon=center_lon),
-        zoom=13,
-        mapbox_style="carto-positron",
-        title=f"Business Density in {area}",
-        color_continuous_scale=["green", "yellow", "orange", "red"]
-    )
-    
-    return fig
-
 def generate_route_map(area, data):
     """Generate a map showing the optimal route through the area"""
     center_lat = area_coordinates[area]["latitude"]
@@ -262,30 +261,6 @@ def generate_route_map(area, data):
     
     return fig
 
-def generate_engagement_forecast():
-    """Generate forecast data for engagement over time"""
-    # Generate some sample data for hours of the day
-    hours = list(range(6, 22))  # 6 AM to 9 PM
-    
-    # Create different patterns for engagement based on time of day
-    engagement = []
-    for hour in hours:
-        if hour in [8, 9, 17, 18, 19]:  # Rush hours
-            base = random.uniform(0.7, 0.9)
-        elif hour in [12, 13, 14]:  # Lunch hours
-            base = random.uniform(0.6, 0.8)
-        else:
-            base = random.uniform(0.3, 0.5)
-        engagement.append(base)
-    
-    # Create a dataframe for the chart
-    df = pd.DataFrame({
-        'Hour': [f"{h}:00" for h in hours],
-        'Engagement': engagement
-    })
-    
-    return df.set_index('Hour')
-
 def generate_time_heatmap(area, day_type):
     """Generate a heatmap of optimal times"""
     days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -315,10 +290,10 @@ def generate_time_heatmap(area, day_type):
     df = pd.DataFrame(data)
     pivot_df = df.pivot(index='Day', columns='Hour', values='Score')
     
-    # Create the heatmap
+    # Create the heatmap with orange color scheme
     fig = px.imshow(
         pivot_df,
-        color_continuous_scale=['green', 'yellow', 'orange', 'red'],
+        color_continuous_scale=['#FFFFFF', '#FFF1E6', '#FFCC99', '#FF9D45', '#FF7E33'],
         labels=dict(x="Hour of Day", y="Day of Week", color="Engagement Score"),
         title="Optimal Times for Maximum Engagement"
     )
@@ -397,8 +372,8 @@ if analyze:
     
     with cond1:
         st.markdown(f"""
-        <div style="background-color:#f0f8ff; padding:10px; border-radius:5px; border-left:5px solid #1e88e5;">
-            <h4 style="margin:0; color:#1e88e5;">🌤️ Weather</h4>
+        <div style="background-color:#FFF8F0; padding:10px; border-radius:5px; border-left:5px solid #FF9D45;">
+            <h4 style="margin:0; color:#FF7E33;">🌤️ Weather</h4>
             <p style="margin:5px 0;">{weather['condition']}, {weather['temperature']}°C</p>
             <p style="margin:5px 0;">Precipitation: {weather['precipitation_chance']}%</p>
             <p style="margin:5px 0;">Wind: {weather['wind_speed']} km/h</p>
@@ -406,20 +381,20 @@ if analyze:
         """, unsafe_allow_html=True)
     
     with cond2:
-        ped_color = "#2e7d32" if ped_density > 70 else "#ff9800" if ped_density > 50 else "#e53935"
+        ped_color = "#FF7E33"
         st.markdown(f"""
-        <div style="background-color:#f1f8e9; padding:10px; border-radius:5px; border-left:5px solid {ped_color};">
-            <h4 style="margin:0; color:{ped_color};">👥 Pedestrian Density</h4>
+        <div style="background-color:#FFF8F0; padding:10px; border-radius:5px; border-left:5px solid #FF9D45;">
+            <h4 style="margin:0; color:#FF7E33;">👥 Pedestrian Density</h4>
             <p style="margin:5px 0; font-size:24px; font-weight:bold;">{ped_density}%</p>
             <p style="margin:5px 0;">{"High" if ped_density > 70 else "Medium" if ped_density > 50 else "Low"} foot traffic</p>
         </div>
         """, unsafe_allow_html=True)
     
     with cond3:
-        traffic_color = "#e53935" if traffic_density > 70 else "#ff9800" if traffic_density > 50 else "#2e7d32"
+        traffic_color = "#FF7E33"
         st.markdown(f"""
-        <div style="background-color:#fff8e1; padding:10px; border-radius:5px; border-left:5px solid {traffic_color};">
-            <h4 style="margin:0; color:{traffic_color};">🚗 Traffic Density</h4>
+        <div style="background-color:#FFF8F0; padding:10px; border-radius:5px; border-left:5px solid #FF9D45;">
+            <h4 style="margin:0; color:#FF7E33;">🚗 Traffic Density</h4>
             <p style="margin:5px 0; font-size:24px; font-weight:bold;">{traffic_density}%</p>
             <p style="margin:5px 0;">{"High" if traffic_density > 70 else "Medium" if traffic_density > 50 else "Low"} congestion</p>
         </div>
@@ -429,8 +404,8 @@ if analyze:
         current_score = (ped_density * 0.7 + min(70, traffic_density) * 0.3) / 100
         optimal_now = current_score > 0.7
         st.markdown(f"""
-        <div style="background-color:#fce4ec; padding:10px; border-radius:5px; border-left:5px solid #c2185b;">
-            <h4 style="margin:0; color:#c2185b;">📊 Current Rating</h4>
+        <div style="background-color:#FFF8F0; padding:10px; border-radius:5px; border-left:5px solid #FF9D45;">
+            <h4 style="margin:0; color:#FF7E33;">📊 Current Rating</h4>
             <p style="margin:5px 0; font-size:24px; font-weight:bold;">{"Optimal" if optimal_now else "Not Optimal"}</p>
             <p style="margin:5px 0;">{"Great time to advertise!" if optimal_now else "Better times available"}</p>
         </div>
@@ -446,10 +421,10 @@ if analyze:
     
     with rec1:
         st.markdown(f"""
-        <div style="background-color:#e8f5e9; padding:15px; border-radius:5px; text-align:center; border:1px solid #81c784;">
-            <h3 style="margin:0;">🥇 Best Time</h3>
-            <p style="font-size:28px; font-weight:bold; margin:10px 0;">{top_times[0]['hour']}</p>
-            <p style="margin:5px 0;">Rating: <span style="color:#2e7d32; font-weight:bold;">{top_times[0]['category']}</span></p>
+        <div style="background-color:#FFF1E6; padding:15px; border-radius:5px; text-align:center; border:1px solid #FF9D45;">
+            <h3 style="margin:0; color:#FF7E33;">🥇 Best Time</h3>
+            <p style="font-size:28px; font-weight:bold; margin:10px 0; color:#333;">{top_times[0]['hour']}</p>
+            <p style="margin:5px 0;">Rating: <span style="color:#FF7E33; font-weight:bold;">{top_times[0]['category']}</span></p>
             <p style="margin:5px 0;">👥 Pedestrians: {top_times[0]['pedestrian_density']}%</p>
             <p style="margin:5px 0;">🚗 Traffic: {top_times[0]['traffic_density']}%</p>
         </div>
@@ -457,10 +432,10 @@ if analyze:
     
     with rec2:
         st.markdown(f"""
-        <div style="background-color:#f9fbe7; padding:15px; border-radius:5px; text-align:center; border:1px solid #dce775;">
-            <h3 style="margin:0;">🥈 Second Best</h3>
-            <p style="font-size:28px; font-weight:bold; margin:10px 0;">{top_times[1]['hour']}</p>
-            <p style="margin:5px 0;">Rating: <span style="color:#558b2f; font-weight:bold;">{top_times[1]['category']}</span></p>
+        <div style="background-color:#FFF5EB; padding:15px; border-radius:5px; text-align:center; border:1px solid #FFCC99;">
+            <h3 style="margin:0; color:#FF7E33;">🥈 Second Best</h3>
+            <p style="font-size:28px; font-weight:bold; margin:10px 0; color:#333;">{top_times[1]['hour']}</p>
+            <p style="margin:5px 0;">Rating: <span style="color:#FF9D45; font-weight:bold;">{top_times[1]['category']}</span></p>
             <p style="margin:5px 0;">👥 Pedestrians: {top_times[1]['pedestrian_density']}%</p>
             <p style="margin:5px 0;">🚗 Traffic: {top_times[1]['traffic_density']}%</p>
         </div>
@@ -468,10 +443,10 @@ if analyze:
     
     with rec3:
         st.markdown(f"""
-        <div style="background-color:#fffde7; padding:15px; border-radius:5px; text-align:center; border:1px solid #fff59d;">
-            <h3 style="margin:0;">🥉 Third Best</h3>
-            <p style="font-size:28px; font-weight:bold; margin:10px 0;">{top_times[2]['hour']}</p>
-            <p style="margin:5px 0;">Rating: <span style="color:#f9a825; font-weight:bold;">{top_times[2]['category']}</span></p>
+        <div style="background-color:#FFF8F0; padding:15px; border-radius:5px; text-align:center; border:1px solid #FFE0CC;">
+            <h3 style="margin:0; color:#FF7E33;">🥉 Third Best</h3>
+            <p style="font-size:28px; font-weight:bold; margin:10px 0; color:#333;">{top_times[2]['hour']}</p>
+            <p style="margin:5px 0;">Rating: <span style="color:#FFAA70; font-weight:bold;">{top_times[2]['category']}</span></p>
             <p style="margin:5px 0;">👥 Pedestrians: {top_times[2]['pedestrian_density']}%</p>
             <p style="margin:5px 0;">🚗 Traffic: {top_times[2]['traffic_density']}%</p>
         </div>
@@ -481,11 +456,6 @@ if analyze:
     st.markdown("### Weekly Optimal Times")
     time_heatmap = generate_time_heatmap(area, day_type)
     st.plotly_chart(time_heatmap, use_container_width=True)
-    
-    # Business density heatmap
-    st.markdown("### Business Density Heatmap")
-    density_heatmap = generate_density_heatmap(area, day_type)
-    st.plotly_chart(density_heatmap, use_container_width=True)
     
     # Optimal route
     st.markdown("### Recommended Route")
