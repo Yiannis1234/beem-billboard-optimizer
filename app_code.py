@@ -207,7 +207,7 @@ area_coordinates = {
 
 # Add API key handling
 weather_api_key = "f70bd534000447b2a14202431252303"  # Weather API key - DO NOT CHANGE
-tomtom_api_key = "BaCG0bGtgAqsnW7IjGqCnPkO9JGXnWdR"  # TomTom API key
+tomtom_api_key = "Uc0dPKIMHcqZ91VbGAnbEAINdzwqRzil"  # Manchester Traffic API key - DO NOT CHANGE
 
 def generate_route_data(area):
     """Generate sample route data for the given area"""
