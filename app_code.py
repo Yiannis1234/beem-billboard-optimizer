@@ -1134,10 +1134,36 @@ else:
     # Create direct buttons with no styling interference
     st.markdown("<h3>Choose an option:</h3>", unsafe_allow_html=True)
     
-    # First button - OPEN MENU
-    open_menu = st.button("☰ OPEN MENU", type="primary", key="open_sidebar_button_direct", use_container_width=True)
-    if open_menu:
+    # First button - OPEN MENU - with direct sidebar control that works the same as the arrow
+    open_menu_clicked = st.button("☰ OPEN MENU", type="primary", key="open_sidebar_button_direct", use_container_width=True)
+    if open_menu_clicked:
+        # This is critical: set sidebar_visible to True to force sidebar to show
         st.session_state.sidebar_visible = True
+        
+        # Apply CSS to FORCE sidebar visibility
+        st.markdown("""
+        <style>
+        /* Force show sidebar */
+        [data-testid="stSidebar"] {
+            display: flex !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: none !important;
+            width: auto !important;
+            min-width: 300px !important;
+            z-index: 1000 !important;
+        }
+        
+        /* Make sure it's fully visible */
+        section[data-testid="stSidebar"] > div {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        # Force rerun to apply changes
         st.rerun()
     
     # Add some space
