@@ -33,7 +33,7 @@ area_coordinates = {
 }
 
 # Page Configuration
-st.set_page_config(page_title="Beem Billboard Optimizer", page_icon="🚲", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Beem Billboard Optimizer", page_icon="🚲", layout="wide", initial_sidebar_state="collapsed")
 
 # Custom CSS for orange theme and to fix sidebar visibility
 st.markdown("""
@@ -44,21 +44,16 @@ st.markdown("""
         background-color: rgba(255, 157, 69, 0.05);
     }
     
-    /* Force sidebar to be expanded */
-    .css-1d391kg {
+    /* Remove the forced sidebar expansion */
+    /* .css-1d391kg {
         width: 250px !important;
-    }
+    } */
     
-    /* Make sure sidebar is visible */
+    /* Make sure sidebar is visible when expanded, but don't force it open */
     section[data-testid="stSidebar"] {
-        width: 250px !important;
-        min-width: 250px !important;
-        max-width: 250px !important;
-        display: flex !important;
-        flex-direction: column !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        transform: none !important;
+        width: 250px;
+        min-width: 250px;
+        max-width: 250px;
     }
     
     /* Sidebar background */
@@ -285,8 +280,8 @@ else:
     # Only show the intro content if we're not analyzing
     st.title("beem.", anchor=False)
     
-    # Banner with instructions - using Streamlit native components
-    st.warning("👉 **CLICK THE ARROW TOP LEFT** TO ANALYZE YOUR ROUTE 👈")
+    # Banner with instructions - using Streamlit native components - MAKE THIS MUCH MORE PROMINENT
+    st.error("## 👉 CLICK THE GRAY ARROW (>) IN THE TOP LEFT CORNER FIRST! 👈")
     
     st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
     
@@ -294,8 +289,10 @@ else:
     col1, col2 = st.columns([3, 1])
     with col1:
         st.info("""
-        **HOW TO USE:** Click the gray ">" button in the top left to open the sidebar menu, 
-        select your options, then click "ANALYZE ROUTE"
+        **HOW TO USE:**
+        1. Click the gray ">" button in the top left to open the sidebar
+        2. Select your area and time options
+        3. Click "ANALYZE ROUTE" to see results
         """)
     
     # App description using Streamlit native
@@ -308,7 +305,7 @@ else:
     st.success("### ROUTE ANALYSIS CONTROLS\n⬅️ Use the controls in the sidebar to select your options")
     
     # Add a direct analyze button in the main content area - HUGE and unmissable
-    st.markdown("### Click this button to see results:")
+    st.markdown("### Click the arrow first, then use this button to see results:")
     
     analyze_col1, analyze_col2, analyze_col3 = st.columns([1, 2, 1])
     with analyze_col2:
@@ -319,16 +316,6 @@ else:
             st.session_state.just_clicked = True
             # Force a rerun to update the UI
             st.experimental_rerun()
-
-    # Welcome banner - extremely simplified to avoid HTML issues
-    st.header("Welcome to Beem!", anchor=False)
-    st.subheader("Mobile billboard optimization platform", anchor=False)
-    
-    col1, col2 = st.columns([3, 1])
-    with col1:
-        st.info("📣 Find the best times and locations for your advertising campaigns")
-    with col2:
-        st.markdown("### 🚲")
 
 # Sidebar
 with st.sidebar:
