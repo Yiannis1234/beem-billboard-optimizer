@@ -1,7 +1,12 @@
 #!/bin/bash
-# Kill ALL Streamlit processes
-killall -9 streamlit
-killall -9 python3
 
-# Start app_code.py with Streamlit
+echo "Killing ALL Streamlit processes..."
+pkill -9 -f "streamlit"
+pkill -9 -f "app_code.py"
+
+# Wait for processes to terminate
+sleep 2
+
+echo "Starting Streamlit app..."
+echo "If changes are not showing, refresh your browser at http://130.88.226.18:8501"
 streamlit run app_code.py 

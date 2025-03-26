@@ -6,5 +6,16 @@ textColor = "#343a40"
 font = "sans serif"
 
 [server]
-headless = true
-enableCORS = false 
+runOnSave = true
+maxUploadSize = 50
+maxMessageSize = 50
+enableCORS = true
+enableXsrfProtection = false
+
+[browser]
+gatherUsageStats = false
+serverAddress = "localhost"
+
+[runner]
+magicEnabled = true
+fastReruns = true 

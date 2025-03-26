@@ -133,7 +133,7 @@ st.markdown("""
 
 <div style="background-color: #FF7E33; color: white; text-align: center; padding: 15px; margin: 0 0 25px 0; 
 border-radius: 10px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-size: 18px;">
-    <span style="font-size: 24px;">👉 CLICK THE ARROW TO ANALYZE YOUR ROUTE 👈</span>
+    <span style="font-size: 24px;">👉 CLIC THE ARROW TO ANALYZE YOUR ROUTE 👈</span>
 </div>
 """, unsafe_allow_html=True)
 
