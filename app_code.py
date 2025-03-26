@@ -243,23 +243,16 @@ def get_weather_data(area, day_type):
                     'wind_speed': current.get('wind_kph', 0)
                 }
         else:
-            st.error(f"Weather API error: Status code {response.status_code}")
+            # Display error and stop execution
+            st.error(f"❌ Weather API error: Status code {response.status_code}")
+            st.stop()
     except Exception as e:
-        st.error(f"Weather API error: {str(e)}")
+        # Display error and stop execution
+        st.error(f"❌ Weather API error: {str(e)}")
+        st.stop()
     
-    # If API fails, show cache data instead of errors
-    cached_weather = {
-        "Northern Quarter": {"temperature": 12.5, "condition": "Partly cloudy", "precipitation_chance": 30, "wind_speed": 14.3},
-        "City Centre": {"temperature": 12.8, "condition": "Cloudy", "precipitation_chance": 35, "wind_speed": 15.1},
-        "Ancoats": {"temperature": 12.3, "condition": "Partly cloudy", "precipitation_chance": 28, "wind_speed": 13.8},
-        "Piccadilly": {"temperature": 12.9, "condition": "Cloudy", "precipitation_chance": 40, "wind_speed": 15.6},
-        "Deansgate": {"temperature": 12.7, "condition": "Partly cloudy", "precipitation_chance": 32, "wind_speed": 14.9},
-        "Media City": {"temperature": 12.1, "condition": "Cloudy", "precipitation_chance": 45, "wind_speed": 16.2},
-        "Oxford Road": {"temperature": 12.6, "condition": "Partly cloudy", "precipitation_chance": 25, "wind_speed": 13.7},
-        "Spinningfields": {"temperature": 12.4, "condition": "Partly cloudy", "precipitation_chance": 30, "wind_speed": 14.5}
-    }
-    
-    return cached_weather.get(area, {"temperature": 12.5, "condition": "Partly cloudy", "precipitation_chance": 30, "wind_speed": 14.3})
+    # This code should never be reached due to st.stop()
+    return None
 
 def get_pedestrian_density(area, day_type, hour=None):
     """Generate simulated pedestrian density data"""
@@ -333,91 +326,16 @@ def get_traffic_density(area, day_type, hour=None):
                 # Convert to density percentage
                 return round(congestion * 100)
         else:
-            st.error(f"Traffic API error: Status code {response.status_code}")
+            # Display error and stop execution
+            st.error(f"❌ Traffic API error: Status code {response.status_code}")
+            st.stop()
     except Exception as e:
-        st.error(f"Traffic API error: {str(e)}")
+        # Display error and stop execution
+        st.error(f"❌ Traffic API error: {str(e)}")
+        st.stop()
     
-    # If API fails, use cached realistic traffic data
-    # Time-based traffic patterns from real-world data
-    cached_traffic = {
-        "Northern Quarter": {
-            "morning_rush": 75,  # 7-9 AM
-            "midday": 50,        # 10 AM - 3 PM
-            "evening_rush": 85,  # 4-7 PM
-            "evening": 40,       # 8-11 PM
-            "night": 15          # 12-6 AM
-        },
-        "City Centre": {
-            "morning_rush": 85,
-            "midday": 65,
-            "evening_rush": 90,
-            "evening": 45,
-            "night": 20
-        },
-        "Ancoats": {
-            "morning_rush": 70,
-            "midday": 45,
-            "evening_rush": 75,
-            "evening": 35,
-            "night": 10
-        },
-        "Piccadilly": {
-            "morning_rush": 80,
-            "midday": 60,
-            "evening_rush": 85,
-            "evening": 50,
-            "night": 25
-        },
-        "Deansgate": {
-            "morning_rush": 75,
-            "midday": 55,
-            "evening_rush": 80,
-            "evening": 45,
-            "night": 20
-        },
-        "Media City": {
-            "morning_rush": 65,
-            "midday": 40,
-            "evening_rush": 70,
-            "evening": 30,
-            "night": 10
-        },
-        "Oxford Road": {
-            "morning_rush": 80,
-            "midday": 65,
-            "evening_rush": 85,
-            "evening": 50,
-            "night": 20
-        },
-        "Spinningfields": {
-            "morning_rush": 75,
-            "midday": 55,
-            "evening_rush": 80,
-            "evening": 40,
-            "night": 15
-        }
-    }
-    
-    # Determine time of day
-    if 7 <= hour <= 9:
-        time_key = "morning_rush"
-    elif 10 <= hour <= 15:
-        time_key = "midday"
-    elif 16 <= hour <= 19:
-        time_key = "evening_rush"
-    elif 20 <= hour <= 23:
-        time_key = "evening"
-    else:
-        time_key = "night"
-    
-    # Adjust for weekday/weekend
-    multiplier = 1.0 if day_type == "Weekday" else 0.7
-    
-    if area in cached_traffic:
-        return round(cached_traffic[area][time_key] * multiplier)
-    
-    # Default fallback
-    return 50
+    # This code should never be reached due to st.stop()
+    return None
 
 def get_optimal_times(area, day_type):
     """Determine optimal advertising times based on pedestrian and traffic data"""
