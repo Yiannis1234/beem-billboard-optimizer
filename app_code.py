@@ -1291,111 +1291,35 @@ else:
     with col_logo:
         st.markdown('<h1 class="hero-title">beem.</h1>', unsafe_allow_html=True)
     
-    with col_text:
-        st.markdown("""
-        <div style="background-color:#FFF1E6; padding:10px; border-radius:20px; 
-             text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.1); 
-             border:2px dashed #FF7E33; margin-top:15px;">
-            <h4 style="margin:5px; color:#FF7E33;">OPEN MENU TO START</h4>
-            <h4 style="margin:5px; color:#FF7E33;">👇 PRESS BUTTON BELOW</h4>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    # Add a large, obvious help button to open the sidebar
-    st.markdown("""
-    <div style="margin: 20px auto; max-width: 350px;">
-        <a href="#" id="open-sidebar-button" onclick="tryOpenSidebar(); return false;"
-           style="display:block; width:100%; background-color:#FF7E33; color:white; 
-                  padding:15px; border:none; border-radius:10px; font-size:18px; font-weight:bold;
-                  text-align:center; text-decoration:none; cursor:pointer; box-shadow:0 4px 10px rgba(255,126,51,0.3);">
-            <span style="margin-right:10px;">☰</span> CLICK TO OPEN MENU
-        </a>
-    </div>
-
-    <script>
-    function tryOpenSidebar() {
-        // Try all possible approaches to open the sidebar
-        
-        // 1. Try clicking the collapsed control
-        const collapsedControl = window.parent.document.querySelector('[data-testid="collapsedControl"]');
-        if (collapsedControl) {
-            try {
-                collapsedControl.click();
-                console.log("Clicked collapsed control");
-                return true;
-            } catch(e) {
-                console.error("Error clicking collapsed control:", e);
-            }
-        }
-        
-        // 2. Try clicking the expanded control
-        const expandButton = window.parent.document.querySelector('[data-testid="expandedControl"]');
-        if (expandButton) {
-            try {
-                expandButton.click();
-                console.log("Clicked expand button");
-                return true;
-            } catch(e) {
-                console.error("Error clicking expand button:", e);
-            }
-        }
-        
-        // 3. Most aggressive approach - force show the sidebar with direct CSS
-        const sidebar = window.parent.document.querySelector('[data-testid="stSidebar"]');
-        if (sidebar) {
-            try {
-                sidebar.style.cssText = `
-                    display: block !important;
-                    width: 300px !important;
-                    min-width: 300px !important;
-                    max-width: 300px !important;
-                    opacity: 1 !important;
-                    visibility: visible !important;
-                    transform: none !important;
-                    position: relative !important;
-                    z-index: 100 !important;
-                    padding: 1rem !important;
-                    margin: 0 !important;
-                    background-color: #FFF1E6 !important;
-                `;
-                sidebar.classList.remove('collapsed');
-                sidebar.setAttribute('aria-hidden', 'false');
-                
-                // Show all children 
-                Array.from(sidebar.children).forEach(child => {
-                    child.style.display = 'block';
-                    child.style.opacity = '1';
-                    child.style.visibility = 'visible';
-                });
-                
-                console.log("Forced sidebar display with CSS");
-                return true;
-            } catch(e) {
-                console.error("Error forcing sidebar:", e);
-            }
-        }
-        
-        // 4. If all else fails, click the native Streamlit button
-        document.getElementById('streamlit-open-sidebar-button').click();
-        return false;
-    }
-
-    // Execute after page loads
-    window.addEventListener('load', function() {
-        setTimeout(tryOpenSidebar, 500);
-    });
-    </script>
-    """, unsafe_allow_html=True)
-    
-    # Native Streamlit solution that's guaranteed to work
+    # Native Streamlit solution that's guaranteed to work - make buttons orange with custom style
     col1, col2 = st.columns(2)
     with col1:
+        st.markdown("""
+        <style>
+        div[data-testid="stHorizontalBlock"] > div:nth-child(1) button {
+            background-color: #FF7E33 !important;
+            border: none !important;
+            color: white !important;
+            width: 100% !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
         if st.button("☰ OPEN SIDEBAR MENU", type="primary", key="streamlit-open-sidebar-button"):
             # Set session state and rerun to force sidebar to appear
             st.session_state.sidebar_visible = True
             st.rerun()
 
     with col2:
+        st.markdown("""
+        <style>
+        div[data-testid="stHorizontalBlock"] > div:nth-child(2) button {
+            background-color: #FF7E33 !important;
+            border: none !important;
+            color: white !important;
+            width: 100% !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
         if st.button("🚀 START ANALYSIS", type="primary"):
             # Set session state and rerun to force sidebar to appear
             st.session_state.sidebar_visible = True
@@ -1447,10 +1371,6 @@ else:
         <p style="font-weight:bold; margin-bottom:15px; font-size:18px;">✨ START EXPLORING NOW ✨</p>
     </div>
     """, unsafe_allow_html=True)
-    
-    if st.button("🚀 ANALYZE NOW 🚀", type="primary", use_container_width=True):
-        st.session_state.analyze = True
-        st.rerun()
 
 # Footer
 st.markdown("---")
