@@ -742,18 +742,21 @@ def generate_route_map(area, data):
         name='Key Locations'
     ))
     
-    # Update the layout with very high zoom to see streets clearly
-    # Significantly increase height for mobile viewing
+    # Update the layout - fixed height, non-interactive
     fig.update_layout(
         mapbox=dict(
             style="carto-positron",  # Clean map style showing streets clearly
             center=dict(lat=center_lat, lon=center_lon),
-            zoom=15.5  # Adjusted zoom level for better mobile viewing
+            zoom=15.0,  # Reduced zoom level for better overview
+            dragmode=False  # Disable map dragging
         ),
         margin=dict(l=0, r=0, t=0, b=0),  # Zero margins for maximum map size
-        height=800,  # Much taller for mobile viewing
+        height=450,  # Reduced fixed height to prevent scroll issues
         autosize=True,
-        hovermode='closest'
+        hovermode=False,  # Disable hover interactions
+        dragmode=False,   # Disable all dragging
+        clickmode=False,  # Disable clicking
+        showlegend=False  # Hide legend for cleaner display
     )
     
     return fig
@@ -1162,6 +1165,43 @@ if analyze:
     # Optimal route - use a full-width container for the map
     st.markdown("### Recommended Route")
     
+    # Add custom CSS to make map completely static and prevent scrolling issues
+    st.markdown("""
+    <style>
+    /* Make the map container position fixed with clear boundaries */
+    .map-container {
+        position: relative !important;
+        height: 500px !important; 
+        width: 100% !important;
+        overflow: hidden !important;
+        pointer-events: none !important; /* Prevent all interaction */
+        touch-action: none !important; /* Disable touch actions */
+        user-select: none !important; /* Prevent selection */
+    }
+    
+    /* Ensure the plotly map doesn't interfere with page scrolling */
+    .js-plotly-plot, .plot-container {
+        pointer-events: none !important;
+        touch-action: none !important;
+        user-select: none !important;
+        max-height: 500px !important;
+        overflow: hidden !important;
+    }
+    
+    /* Disable all map controls and interactions */
+    .mapboxgl-map, .mapboxgl-canvas-container, .mapboxgl-canvas {
+        pointer-events: none !important;
+        touch-action: none !important;
+        user-select: none !important;
+    }
+    
+    /* Hide any controls that might appear */
+    .mapboxgl-control-container, .mapboxgl-ctrl {
+        display: none !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     # Add a container div with the map-container class
     st.markdown('<div class="map-container">', unsafe_allow_html=True)
     
@@ -1170,7 +1210,13 @@ if analyze:
     st.plotly_chart(route_map, use_container_width=True, config={
         'responsive': True,
         'displayModeBar': False,  # Hide the mode bar for cleaner mobile view
-        'scrollZoom': True  # Enable scroll to zoom
+        'scrollZoom': False,      # Disable scroll to zoom
+        'staticPlot': True,       # Make the plot completely static
+        'dragmode': False,        # Disable dragging
+        'showTips': False,        # Disable tooltips
+        'doubleClick': False,     # Disable double-click actions
+        'showAxisDragHandles': False, # Disable axis drag
+        'showAxisRangeEntryBoxes': False # Disable range entry boxes
     })
     
     # Close the container
