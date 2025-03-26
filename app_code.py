@@ -877,9 +877,23 @@ def sidebar_toggle():
     toggle_col1, toggle_col2 = st.columns([1, 19])
     
     with toggle_col1:
-        # Custom styled button
+        # Custom styled button with orange color
+        st.markdown("""
+        <style>
+        /* Custom orange style for sidebar toggle button */
+        [data-testid="baseButton-secondary"]:has(> div:contains("☰")) {
+            background: linear-gradient(135deg, #FF7E33, #FF9945) !important;
+            border: none !important;
+            color: white !important;
+            border-radius: 10px !important;
+            box-shadow: 0 3px 8px rgba(255,126,51,0.3) !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        # Use secondary button type but style it with custom CSS
         if st.button("☰", key="custom_sidebar_toggle", 
-                    help="Toggle sidebar menu"):
+                    help="Toggle sidebar menu", type="secondary"):
             # Toggle sidebar visibility in session state
             st.session_state.sidebar_visible = not st.session_state.sidebar_visible
             # Force a rerun to apply the change
@@ -915,29 +929,8 @@ if 'day_type' not in st.session_state:
 if 'sidebar_visible' not in st.session_state:
     st.session_state.sidebar_visible = False
 
-# Main app content
-def main():
-    """Main application logic"""
-    # Call our custom sidebar toggle function first
-    sidebar_toggle()
-    
-    # Sidebar setup
-    with st.sidebar:
-        st.title("beem.")
-        st.markdown("### ROUTE ANALYSIS CONTROLS")
-        
-        st.markdown('## Route Options')
-        areas = list(area_coordinates.keys())
-        selected_area = st.selectbox("Select your Area", areas, key="selected_area")
-        
-        st.markdown('### Time Options')
-        day_type = st.radio("Day type", ["Weekday", "Weekend"], key="day_type")
-        
-        st.info("**Click the button below to analyze!** ⬇️")
-        
-        if st.button("ANALYZE ROUTE", type="primary", use_container_width=True):
-            st.session_state.analyze = True
-            st.rerun()
+# Call the sidebar toggle function at the top level
+sidebar_toggle()
 
 # Home button in top right corner
 home_col = st.columns([6, 1])[1]  # Create a right-aligned column
@@ -950,6 +943,24 @@ with home_col:
 area = st.session_state.selected_area
 day_type = st.session_state.day_type
 analyze = st.session_state.analyze
+
+# Sidebar setup
+with st.sidebar:
+    st.title("beem.")
+    st.markdown("### ROUTE ANALYSIS CONTROLS")
+    
+    st.markdown('## Route Options')
+    areas = list(area_coordinates.keys())
+    selected_area = st.selectbox("Select your Area", areas, key="selected_area")
+    
+    st.markdown('### Time Options')
+    day_type = st.radio("Day type", ["Weekday", "Weekend"], key="day_type")
+    
+    st.info("**Click the button below to analyze!** ⬇️")
+    
+    if st.button("ANALYZE ROUTE", type="primary", use_container_width=True):
+        st.session_state.analyze = True
+        st.rerun()
 
 # MAIN CONTENT
 if analyze:
@@ -1123,31 +1134,8 @@ else:
         st.markdown('<h1 class="hero-title">beem.</h1>', unsafe_allow_html=True)
     
     # Single button to open sidebar and dropdown menu
-    st.markdown("""
-    <style>
-    .main-action-button {
-        background: linear-gradient(135deg, #FF7E33, #FF9945) !important;
-        border: none !important;
-        color: white !important;
-        width: 100% !important;
-        border-radius: 8px !important;
-        font-size: 18px !important;
-        padding: 12px 20px !important;
-        font-weight: bold !important;
-        box-shadow: 0 4px 8px rgba(255,126,51,0.3) !important;
-        transition: all 0.2s ease !important;
-        margin-bottom: 20px !important;
-    }
-    
-    .main-action-button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 12px rgba(255,126,51,0.4) !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
     if st.button("☰ OPEN MENU & START", type="primary", key="main_action_button", use_container_width=True):
-        # Set session state and rerun to force sidebar to appear
+        # Directly set sidebar_visible to True
         st.session_state.sidebar_visible = True
         st.rerun()
     
@@ -1210,7 +1198,3 @@ st.markdown("""
     </div>
 </div>
 """, unsafe_allow_html=True)
-
-# Call the main function to run the app
-if __name__ == '__main__':
-    main()
