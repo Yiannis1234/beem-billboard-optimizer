@@ -172,12 +172,22 @@ def generate_time_heatmap():
     # Create the heatmap
     fig = px.imshow(
         pivot_df,
-        color_continuous_scale=['green', 'yellow', 'orange', 'red'],
+        color_continuous_scale=['#0f2f2f', '#45c25a', '#ffe119', '#ff7e33'],
         labels=dict(x="Hour of Day", y="Day of Week", color="Engagement Score"),
         title="Optimal Times for Maximum Engagement"
     )
     
-    fig.update_layout(height=500)
+    fig.update_layout(
+        height=500,
+        font=dict(size=12),
+        coloraxis_colorbar=dict(
+            title="Engagement",
+            thicknessmode="pixels", thickness=20,
+            lenmode="pixels", len=300,
+            tickfont=dict(size=12),
+            titlefont=dict(size=14)
+        )
+    )
     
     return fig
 
@@ -397,13 +407,13 @@ if analyze:
         st.subheader("Weather Impact on Engagement")
         weather_cols = st.columns(4)
         with weather_cols[0]:
-            st.metric("Sunny ☀️", f"+{random.randint(10, 25)}%")
+            st.metric("Sunny ☀️", f"+{random.randint(10, 25)}%", delta_color="normal")
         with weather_cols[1]:
-            st.metric("Cloudy ☁️", f"+{random.randint(5, 15)}%")
+            st.metric("Cloudy ☁️", f"+{random.randint(5, 15)}%", delta_color="normal")
         with weather_cols[2]:
-            st.metric("Rainy 🌧️", f"-{random.randint(10, 30)}%")
+            st.metric("Rainy 🌧️", f"-{random.randint(10, 30)}%", delta_color="inverse")
         with weather_cols[3]:
-            st.metric("Cold ❄️", f"-{random.randint(15, 35)}%")
+            st.metric("Cold ❄️", f"-{random.randint(15, 35)}%", delta_color="inverse")
     
     # Tab 2: Demographics
     with tabs[1]:
@@ -432,9 +442,8 @@ else:
     with col1:
         st.info("""
         **HOW TO USE:**
-        1. Click the gray ">" button in the top left to open the sidebar
-        2. Select your area and time options
-        3. Click "ANALYZE ROUTE" to see results
+        1. Press the top left options to select your area and time
+        2. Click "ANALYZE ROUTE" to see results
         """)
     
     # App description
