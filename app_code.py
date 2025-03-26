@@ -22,30 +22,38 @@ st.markdown("""
     /* Main background */
     .stApp {
         background-color: #ffffff;
+        background-image: linear-gradient(to bottom, #ffffff, #fff9f2);
     }
     
     /* Sidebar */
     section[data-testid="stSidebar"] {
         background-color: #FFF1E6;
+        box-shadow: 2px 0 10px rgba(255, 126, 51, 0.1);
     }
     
     /* Make the sidebar toggle button larger and more visible */
     [data-testid="expandedControl"], [data-testid="collapsedControl"] {
-        width: 40px !important;
-        height: 40px !important;
+        width: 42px !important;
+        height: 42px !important;
         background-color: #FF7E33 !important;
         color: white !important;
-        border-radius: 8px !important;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important;
+        border-radius: 10px !important;
+        box-shadow: 0 3px 8px rgba(255,126,51,0.3) !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         z-index: 100 !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    [data-testid="expandedControl"]:hover, [data-testid="collapsedControl"]:hover {
+        transform: scale(1.05) !important;
+        box-shadow: 0 4px 10px rgba(255,126,51,0.4) !important;
     }
     
     [data-testid="expandedControl"] svg, [data-testid="collapsedControl"] svg {
-        width: 25px !important;
-        height: 25px !important;
+        width: 28px !important;
+        height: 28px !important;
         color: white !important;
     }
     
@@ -63,31 +71,45 @@ st.markdown("""
     /* Headers */
     h1, h2, h3, h4, h5, h6 {
         color: #FF7E33 !important;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
     
     /* Buttons */
     .stButton button[data-testid="baseButton-primary"] {
-        background-color: #FF7E33 !important;
+        background: linear-gradient(135deg, #FF7E33, #FF9945) !important;
         border: none !important;
         color: white !important;
         font-size: 18px !important;
         padding: 12px 20px !important;
         width: 100% !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 8px rgba(255,126,51,0.25) !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    .stButton button[data-testid="baseButton-primary"]:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 12px rgba(255,126,51,0.3) !important;
     }
     
     /* Info boxes */
     .stAlert {
         border-color: #FF9D45 !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
     }
     
     /* Metrics */
     .stMetric {
         background-color: #FFF8F0;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        padding: 10px !important;
     }
     
     /* Expander */
     .streamlit-expanderHeader {
         color: #FF7E33 !important;
+        font-weight: 600 !important;
     }
     
     /* Home button */
@@ -99,22 +121,28 @@ st.markdown("""
     }
     
     .home-button button {
-        background-color: #FF7E33 !important;
+        background: linear-gradient(135deg, #FF7E33, #FF9945) !important;
         color: white !important;
         border: none !important;
         border-radius: 20px !important;
         padding: 5px 15px !important;
         font-size: 14px !important;
         box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    .home-button button:hover {
+        transform: translateY(-1px) !important;
+        box-shadow: 0 3px 7px rgba(0,0,0,0.15) !important;
     }
     
     /* Enhanced homepage styling */
     .hero-container {
         background: linear-gradient(135deg, #FFF1E6 0%, #FFEDDE 100%);
-        border-radius: 10px;
-        padding: 30px;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        border-radius: 12px;
+        padding: 35px;
+        margin-bottom: 35px;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.08);
         border: 1px solid rgba(255,126,51,0.2);
         text-align: center;
     }
@@ -127,47 +155,40 @@ st.markdown("""
         -webkit-text-fill-color: transparent !important;
         margin-bottom: 20px !important;
         line-height: 1.1 !important;
+        text-shadow: 0 2px 10px rgba(255,126,51,0.2) !important;
     }
     
     .hero-subtitle {
         font-size: 24px !important;
         line-height: 1.5 !important;
-        color: #555 !important;
+        color: #444 !important;
     }
     
     .feature-card {
         background-color: white;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        border-radius: 10px;
+        padding: 24px;
+        margin-bottom: 22px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
         border-left: 4px solid #FF7E33;
+        transition: all 0.3s ease !important;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
     }
     
     .feature-icon {
-        font-size: 28px;
-        margin-bottom: 10px;
+        font-size: 32px;
+        margin-bottom: 12px;
     }
     
     .feature-title {
         font-weight: 600;
         color: #FF7E33 !important;
-        margin-bottom: 10px !important;
-    }
-    
-    .cta-button {
-        background: linear-gradient(90deg, #FF7E33 0%, #FF9D45 100%) !important;
-        color: white !important;
-        font-weight: 600 !important;
-        padding: 15px 25px !important;
-        border-radius: 30px !important;
-        box-shadow: 0 4px 10px rgba(255,126,51,0.3) !important;
-        transition: all 0.3s ease !important;
-    }
-    
-    .cta-button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 12px rgba(255,126,51,0.4) !important;
+        margin-bottom: 12px !important;
+        font-size: 20px !important;
     }
     
     /* Mobile optimizations */
@@ -956,9 +977,9 @@ if analyze:
     
     with cond1:
         st.markdown(f"""
-        <div style="background-color:#FFF8F0; padding:10px; border-radius:5px; border-left:5px solid #FF9D45; height:100%;">
-            <h4 style="margin:0; color:#FF7E33;">🌤️ Weather</h4>
-            <p style="margin:5px 0;">{weather['condition']}, {weather['temperature']}°C</p>
+        <div style="background-color:#FFF8F0; padding:12px; border-radius:8px; border-left:5px solid #FF9D45; height:100%; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+            <h4 style="margin:0; color:#FF7E33; font-weight:600;">🌤️ Weather</h4>
+            <p style="margin:6px 0; font-weight:500;">{weather['condition']}, {weather['temperature']}°C</p>
             <p style="margin:5px 0;">Precipitation: {weather['precipitation_chance']}%</p>
             <p style="margin:5px 0;">Wind: {weather['wind_speed']} km/h</p>
         </div>
@@ -967,9 +988,9 @@ if analyze:
     with cond2:
         ped_color = "#FF7E33"
         st.markdown(f"""
-        <div style="background-color:#FFF8F0; padding:10px; border-radius:5px; border-left:5px solid #FF9D45; height:100%;">
-            <h4 style="margin:0; color:#FF7E33;">👥 Pedestrian Density</h4>
-            <p style="margin:5px 0; font-size:24px; font-weight:bold;">{ped_density}%</p>
+        <div style="background-color:#FFF8F0; padding:12px; border-radius:8px; border-left:5px solid #FF9D45; height:100%; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+            <h4 style="margin:0; color:#FF7E33; font-weight:600;">👥 Pedestrian Density</h4>
+            <p style="margin:6px 0; font-size:26px; font-weight:bold; background: linear-gradient(90deg, #FF7E33, #FF9945); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{ped_density}%</p>
             <p style="margin:5px 0;">{"High" if ped_density > 70 else "Medium" if ped_density > 50 else "Low"} foot traffic</p>
         </div>
         """, unsafe_allow_html=True)
@@ -980,9 +1001,9 @@ if analyze:
     with cond3:
         traffic_color = "#FF7E33"
         st.markdown(f"""
-        <div style="background-color:#FFF8F0; padding:10px; border-radius:5px; border-left:5px solid #FF9D45; height:100%;">
-            <h4 style="margin:0; color:#FF7E33;">🚗 Traffic Density</h4>
-            <p style="margin:5px 0; font-size:24px; font-weight:bold;">{traffic_density}%</p>
+        <div style="background-color:#FFF8F0; padding:12px; border-radius:8px; border-left:5px solid #FF9D45; height:100%; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+            <h4 style="margin:0; color:#FF7E33; font-weight:600;">🚗 Traffic Density</h4>
+            <p style="margin:6px 0; font-size:26px; font-weight:bold; background: linear-gradient(90deg, #FF7E33, #FF9945); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{traffic_density}%</p>
             <p style="margin:5px 0;">{"High" if traffic_density > 70 else "Medium" if traffic_density > 50 else "Low"} congestion</p>
         </div>
         """, unsafe_allow_html=True)
@@ -991,9 +1012,9 @@ if analyze:
         current_score = (ped_density * 0.7 + min(70, traffic_density) * 0.3) / 100
         optimal_now = current_score > 0.7
         st.markdown(f"""
-        <div style="background-color:#FFF8F0; padding:10px; border-radius:5px; border-left:5px solid #FF9D45; height:100%;">
-            <h4 style="margin:0; color:#FF7E33;">📊 Current Rating</h4>
-            <p style="margin:5px 0; font-size:24px; font-weight:bold;">{"Optimal" if optimal_now else "Not Optimal"}</p>
+        <div style="background-color:#FFF8F0; padding:12px; border-radius:8px; border-left:5px solid #FF9D45; height:100%; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+            <h4 style="margin:0; color:#FF7E33; font-weight:600;">📊 Current Rating</h4>
+            <p style="margin:6px 0; font-size:26px; font-weight:bold; background: linear-gradient(90deg, #FF7E33, #FF9945); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{"Optimal" if optimal_now else "Not Optimal"}</p>
             <p style="margin:5px 0;">{"Great time to advertise!" if optimal_now else "Better times available"}</p>
         </div>
         """, unsafe_allow_html=True)
@@ -1014,12 +1035,22 @@ if analyze:
         color_text = "#FF7E33" if i == 0 else "#FF9D45" if i == 1 else "#FFAA70"
         
         st.markdown(f"""
-        <div style="background-color:{color_bg}; padding:15px; border-radius:5px; text-align:center; border:1px solid {color_border}; margin-bottom:10px;">
-            <h3 style="margin:0; color:#FF7E33;">{medal} {rank} Time</h3>
-            <p style="font-size:28px; font-weight:bold; margin:10px 0; color:#333;">{time_data['hour']}</p>
-            <p style="margin:5px 0;">Rating: <span style="color:{color_text}; font-weight:bold;">{time_data['category']}</span></p>
-            <p style="margin:5px 0;">👥 Pedestrians: {time_data['pedestrian_density']}%</p>
-            <p style="margin:5px 0;">🚗 Traffic: {time_data['traffic_density']}%</p>
+        <div style="background: linear-gradient(135deg, {color_bg} 0%, white 100%); padding:18px; border-radius:10px; text-align:center; border:1px solid {color_border}; margin-bottom:12px; box-shadow: 0 4px 15px rgba(255,126,51,0.1);">
+            <h3 style="margin:0; background: linear-gradient(90deg, #FF7E33, #FF9945); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight:700;">{medal} {rank} Time</h3>
+            <p style="font-size:32px; font-weight:700; margin:15px 0; color:#333; text-shadow: 0 1px 1px rgba(0,0,0,0.05);">{time_data['hour']}</p>
+            <div style="display:inline-block; background:linear-gradient(90deg, {color_text}, {color_border}); color:white; font-weight:600; padding:5px 15px; border-radius:20px; margin:10px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                {time_data['category']}
+            </div>
+            <div style="display:flex; justify-content:space-around; margin-top:10px;">
+                <div style="text-align:center;">
+                    <p style="margin:5px 0; font-size:14px; color:#666;">👥 Pedestrians</p>
+                    <p style="margin:0; font-size:18px; font-weight:bold; color:{color_text};">{time_data['pedestrian_density']}%</p>
+                </div>
+                <div style="text-align:center;">
+                    <p style="margin:5px 0; font-size:14px; color:#666;">🚗 Traffic</p>
+                    <p style="margin:0; font-size:18px; font-weight:bold; color:{color_text};">{time_data['traffic_density']}%</p>
+                </div>
+            </div>
         </div>
         """, unsafe_allow_html=True)
     
@@ -1071,16 +1102,17 @@ if analyze:
     
     # Create metrics container with custom styling
     metrics_data = [
-        {"label": "Estimated Impressions", "value": f"{random.randint(12000, 18000):,}"},
-        {"label": "Route Length", "value": f"{random.randint(8, 15)} km"},
-        {"label": "Estimated Time", "value": f"{random.randint(45, 90)} mins"}
+        {"label": "Estimated Impressions", "value": f"{random.randint(12000, 18000):,}", "icon": "👁️"},
+        {"label": "Route Length", "value": f"{random.randint(8, 15)} km", "icon": "🛣️"},
+        {"label": "Estimated Time", "value": f"{random.randint(45, 90)} mins", "icon": "⏱️"}
     ]
     
     for metric in metrics_data:
         st.markdown(f"""
-        <div style="background-color:#FFF8F0; padding:15px; border-radius:5px; margin-bottom:10px; text-align:center;">
-            <p style="margin:0; color:#666; font-size:14px;">{metric['label']}</p>
-            <p style="margin:0; font-size:24px; font-weight:bold; color:#FF7E33;">{metric['value']}</p>
+        <div style="background: linear-gradient(135deg, #FFF8F0, #FFFFFF); padding:18px; border-radius:10px; margin-bottom:15px; text-align:center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid rgba(255,126,51,0.1);">
+            <div style="font-size:24px; margin-bottom:5px;">{metric['icon']}</div>
+            <p style="margin:0; color:#666; font-size:15px; font-weight:500;">{metric['label']}</p>
+            <p style="margin:8px 0; font-size:28px; font-weight:700; background: linear-gradient(90deg, #FF7E33, #FF9945); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{metric['value']}</p>
         </div>
         """, unsafe_allow_html=True)
     
@@ -1180,7 +1212,12 @@ else:
 # Footer
 st.markdown("---")
 st.markdown("""
-<div style="text-align:center; padding:10px; background-color:#FFF8F0; border-radius:5px; margin-top:30px;">
-    <p style="margin:0; color:#666;">beem. © 2025 Beem Mobile Billboard Solutions</p>
+<div style="text-align:center; padding:15px; background: linear-gradient(135deg, #FFF8F0, #FFEDDE); border-radius:10px; margin-top:40px; box-shadow: 0 -2px 10px rgba(0,0,0,0.03);">
+    <p style="margin:0; color:#666; font-weight:500;">beem. © 2025 Beem Mobile Billboard Solutions</p>
+    <div style="margin-top:10px; display:flex; justify-content:center; gap:15px;">
+        <span style="color:#FF7E33; font-size:18px;">📱</span>
+        <span style="color:#FF7E33; font-size:18px;">📊</span>
+        <span style="color:#FF7E33; font-size:18px;">🌍</span>
+    </div>
 </div>
 """, unsafe_allow_html=True)
