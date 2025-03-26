@@ -10,10 +10,10 @@ import os
 
 # Page Configuration
 st.set_page_config(
-    page_title="Beem Billboard Optimizer", 
-    page_icon="📢", 
-    layout="wide", 
-    initial_sidebar_state="collapsed"  # Start with collapsed sidebar on mobile
+    page_title="beem",
+    page_icon="🚲",
+    layout="wide",
+    initial_sidebar_state="collapsed"  # Start with sidebar collapsed
 )
 
 # Custom CSS for light orange and white theme with mobile improvements
@@ -44,6 +44,10 @@ st.markdown("""
         justify-content: center !important;
         z-index: 100 !important;
         transition: all 0.2s ease !important;
+        pointer-events: auto !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
     }
     
     [data-testid="expandedControl"]:hover, [data-testid="collapsedControl"]:hover {
@@ -57,15 +61,15 @@ st.markdown("""
         color: white !important;
     }
     
-    /* Add a pulsing animation to the button */
+    /* Custom pulsing animation for sidebar toggle */
     @keyframes pulse {
-        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 126, 51, 0.4); }
-        70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 126, 51, 0); }
-        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 126, 51, 0); }
+        0% { transform: scale(1); box-shadow: 0 3px 8px rgba(255,126,51,0.3); }
+        70% { transform: scale(1.05); box-shadow: 0 4px 12px rgba(255,126,51,0.5); }
+        100% { transform: scale(1); box-shadow: 0 3px 8px rgba(255,126,51,0.3); }
     }
     
-    [data-testid="expandedControl"] {
-        animation: pulse 2s infinite;
+    [data-testid="expandedControl"], [data-testid="collapsedControl"] {
+        animation: pulse 2s infinite !important;
     }
     
     /* Headers */
@@ -310,6 +314,41 @@ st.markdown("""
         }
     }
 </style>
+
+<script>
+    // Simple vanilla JS solution to ensure the sidebar toggle is always clickable
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to ensure toggle buttons are clickable
+        function fixToggleButtons() {
+            const toggles = document.querySelectorAll('[data-testid="expandedControl"], [data-testid="collapsedControl"]');
+            toggles.forEach(function(toggle) {
+                // Remove any attributes that might interfere with clicking
+                toggle.style.pointerEvents = 'auto';
+                toggle.style.opacity = '1';
+                toggle.style.visibility = 'visible';
+                toggle.style.zIndex = '1000';
+                
+                // Ensure the parent elements don't block clicking
+                let parent = toggle.parentElement;
+                while (parent && parent !== document.body) {
+                    parent.style.pointerEvents = 'auto';
+                    parent = parent.parentElement;
+                }
+            });
+        }
+        
+        // Run multiple times to ensure it catches the button
+        setTimeout(fixToggleButtons, 500);
+        setTimeout(fixToggleButtons, 1000);
+        setTimeout(fixToggleButtons, 2000);
+        setTimeout(fixToggleButtons, 3000);
+        
+        // Also run when user interacts with the page
+        document.body.addEventListener('click', function() {
+            setTimeout(fixToggleButtons, 100);
+        });
+    });
+</script>
 """, unsafe_allow_html=True)
 
 # Define area coordinates (Manchester areas)
@@ -828,88 +867,77 @@ def generate_time_heatmap(area, day_type):
     
     return fig
 
-# Initialize session state
+def sidebar_toggle():
+    """Custom sidebar toggle button that always works"""
+    # Initialize session state for sidebar visibility if not exists
+    if 'sidebar_visible' not in st.session_state:
+        st.session_state.sidebar_visible = False
+        
+    # Create a container at the top of the page to hold our custom toggle
+    toggle_col1, toggle_col2 = st.columns([1, 19])
+    
+    with toggle_col1:
+        # Custom styled button
+        if st.button("☰", key="custom_sidebar_toggle", 
+                    help="Toggle sidebar menu"):
+            # Toggle sidebar visibility in session state
+            st.session_state.sidebar_visible = not st.session_state.sidebar_visible
+            # Force a rerun to apply the change
+            st.rerun()
+            
+    # Apply CSS to control sidebar visibility
+    if not st.session_state.sidebar_visible:
+        st.markdown("""
+        <style>
+        [data-testid="stSidebar"] {
+            display: none !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown("""
+        <style>
+        [data-testid="stSidebar"] {
+            display: flex !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+# Initialize ALL session state variables in one place at the top
 if 'analyze' not in st.session_state:
     st.session_state.analyze = False
-
 if 'selected_area' not in st.session_state:
-    st.session_state.selected_area = list(area_coordinates.keys())[0]
-
-if 'selected_day_type' not in st.session_state:
-    st.session_state.selected_day_type = "Weekday"
-
+    st.session_state.selected_area = "Northern Quarter"
+if 'day_type' not in st.session_state:
+    st.session_state.day_type = "Weekday"
 if 'sidebar_visible' not in st.session_state:
     st.session_state.sidebar_visible = False
 
-# If sidebar visibility was requested via session state, inject Javascript to show it
-if st.session_state.sidebar_visible:
-    # Show sidebar via JavaScript
-    show_sidebar_js = """
-    <script>
-        (function() {
-            function showSidebar() {
-                // Try to click the collapsed control
-                const collapsedControl = window.parent.document.querySelector('[data-testid="collapsedControl"]');
-                if (collapsedControl) {
-                    try {
-                        collapsedControl.click();
-                    } catch(e) {}
-                }
-                
-                // Force show sidebar with CSS
-                const sidebar = window.parent.document.querySelector('[data-testid="stSidebar"]');
-                if (sidebar) {
-                    sidebar.style.cssText = `
-                        display: block !important;
-                        width: 300px !important;
-                        min-width: 300px !important;
-                        max-width: 300px !important;
-                        opacity: 1 !important;
-                        visibility: visible !important;
-                        transform: none !important;
-                        position: relative !important;
-                        z-index: 100 !important;
-                        padding: 1rem !important;
-                        margin: 0 !important;
-                        background-color: #FFF1E6 !important;
-                    `;
-                    sidebar.classList.remove('collapsed');
-                    sidebar.setAttribute('aria-hidden', 'false');
-                    
-                    // Show all children 
-                    Array.from(sidebar.children).forEach(child => {
-                        child.style.display = 'block';
-                        child.style.opacity = '1';
-                        child.style.visibility = 'visible';
-                    });
-                }
-            }
-            
-            // Run multiple times to ensure it works
-            showSidebar();
-            setTimeout(showSidebar, 100);
-            setTimeout(showSidebar, 300);
-            setTimeout(showSidebar, 500);
-        })();
-    </script>
-    """
-    st.markdown(show_sidebar_js, unsafe_allow_html=True)
+# Main app content
+def main():
+    """Main application logic"""
+    # Call our custom sidebar toggle function first
+    sidebar_toggle()
     
-    # Add CSS to override any hiding
-    st.markdown("""
-    <style>
-    [data-testid="stSidebar"] {
-        display: block !important;
-        width: auto !important;
-        min-width: 260px !important;
-        max-width: 300px !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        position: relative !important;
-        transform: none !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+    # Sidebar setup
+    with st.sidebar:
+        st.title("beem.")
+        st.markdown("### ROUTE ANALYSIS CONTROLS")
+        
+        st.markdown('## Route Options')
+        areas = list(area_coordinates.keys())
+        selected_area = st.selectbox("Select your Area", areas, key="selected_area")
+        
+        st.markdown('### Time Options')
+        day_type = st.radio("Day type", ["Weekday", "Weekend"], key="day_type")
+        
+        st.info("**Click the button below to analyze!** ⬇️")
+        
+        if st.button("ANALYZE ROUTE", type="primary", use_container_width=True):
+            st.session_state.analyze = True
+            st.rerun()
 
 # Home button in top right corner
 home_col = st.columns([6, 1])[1]  # Create a right-aligned column
@@ -918,43 +946,9 @@ with home_col:
         st.session_state.analyze = False
         st.rerun()
 
-# SIDEBAR
-with st.sidebar:
-    st.title("beem.")
-    st.markdown("### ROUTE ANALYSIS CONTROLS")
-    
-    st.markdown('## Route Options')
-    areas = list(area_coordinates.keys())
-    selected_area = st.selectbox("Select your Area", areas)
-    st.session_state.selected_area = selected_area
-    
-    st.markdown('### Time Options')
-    selected_day_type = st.radio("Day type", ["Weekday", "Weekend"])
-    st.session_state.selected_day_type = selected_day_type
-    
-    st.info("**Click the button below to analyze!** ⬇️")
-    
-    if st.button("ANALYZE ROUTE", type="primary", use_container_width=True):
-        st.session_state.analyze = True
-        st.rerun()
-
-    with st.expander("About Beem"):
-        st.markdown("""
-        **Beem Mobile Billboard Solutions**
-        
-        We help businesses reach their audience through eye-catching mobile billboards carried by cyclists.
-        
-        Our approach is:
-        - 🌿 Eco-friendly
-        - 💰 Cost-effective
-        - 🎯 Highly targeted
-        - 📱 Engaging
-        - 📊 Data-driven
-        """)
-
 # Get values from session state
 area = st.session_state.selected_area
-day_type = st.session_state.selected_day_type
+day_type = st.session_state.day_type
 analyze = st.session_state.analyze
 
 # MAIN CONTENT
@@ -1221,3 +1215,7 @@ st.markdown("""
     </div>
 </div>
 """, unsafe_allow_html=True)
+
+# Call the main function to run the app
+if __name__ == '__main__':
+    main()
