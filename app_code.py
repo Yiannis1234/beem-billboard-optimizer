@@ -401,9 +401,7 @@ if 'selected_day_type' not in st.session_state:
 # Home button in top right corner
 st.markdown("""
 <div class="home-button">
-    <form action="" method="get">
-        <button type="submit">🏠</button>
-    </form>
+    <button onclick="window.location.href='?'">🏠</button>
 </div>
 """, unsafe_allow_html=True)
 
