@@ -1128,39 +1128,29 @@ if analyze:
         st.rerun()
     
 else:
-    # Add beem logo and cloud text side by side
-    col_logo, col_text = st.columns([3, 2])
-    with col_logo:
-        st.markdown('<h1 class="hero-title">beem.</h1>', unsafe_allow_html=True)
+    # Add beem logo
+    st.markdown('<h1 class="hero-title">beem.</h1>', unsafe_allow_html=True)
     
-    # Create a highly visible orange button that reliably opens the sidebar
-    st.markdown("""
-    <style>
-    /* Target ALL primary buttons to ensure orange color */
-    .stButton > button[kind="primary"] {
-        background-color: #FF7E33 !important;
-        border: none !important;
-        color: white !important;
-        font-size: 18px !important;
-        font-weight: bold !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+    # Create direct buttons with no styling interference
+    st.markdown("<h3>Choose an option:</h3>", unsafe_allow_html=True)
     
-    col1, col2 = st.columns([1, 1])
-    with col1:
-        # First button to directly open the sidebar
-        if st.button("☰ OPEN MENU", type="primary", key="open_sidebar_button", use_container_width=True):
-            st.session_state.sidebar_visible = True
-            st.rerun()
+    # First button - OPEN MENU
+    open_menu = st.button("☰ OPEN MENU", type="primary", key="open_sidebar_button_direct", use_container_width=True)
+    if open_menu:
+        st.session_state.sidebar_visible = True
+        st.rerun()
     
-    with col2:
-        # Second button to start analysis
-        if st.button("START ANALYSIS 🚀", type="primary", key="start_analysis_button", use_container_width=True):
-            st.session_state.analyze = True
-            st.rerun()
+    # Add some space
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Second button - START ANALYSIS
+    start_analysis = st.button("START ANALYSIS 🚀", type="primary", key="start_analysis_button_direct", use_container_width=True)
+    if start_analysis:
+        st.session_state.analyze = True
+        st.rerun()
     
     # Features section
+    st.markdown("<br>", unsafe_allow_html=True)
     st.subheader("📢 Optimize your advertising impact")
     
     # Feature cards in columns
