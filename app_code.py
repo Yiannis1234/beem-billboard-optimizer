@@ -228,7 +228,7 @@ with st.sidebar:
             st.session_state.current_tab = 0
             st.session_state.just_clicked = True
             # Force a rerun to update the UI
-            st.experimental_rerun()
+            st.rerun()
     
     # About section
     with st.expander("About Beem"):
@@ -251,7 +251,7 @@ with st.sidebar:
         st.markdown("---")
         if st.button("Return to Top ⬆️"):
             st.session_state.just_clicked = True
-            st.experimental_rerun()
+            st.rerun()
 
 # Check if we need to auto-scroll (after button click)
 if 'just_clicked' in st.session_state and st.session_state.just_clicked:
@@ -399,7 +399,7 @@ else:
             st.session_state.current_tab = 0
             st.session_state.just_clicked = True
             # Force a rerun to update the UI
-            st.experimental_rerun()
+            st.rerun()
 
 # Footer with enhanced visual elements - Simplified
 st.markdown("---")
