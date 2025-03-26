@@ -86,7 +86,7 @@ st.markdown("""
     }
     /* Make the main title stand out more */
     h1.main-header {
-        font-size: 36px !important;
+        font-size: 38px !important;
         background: -webkit-linear-gradient(#FF7E33, #FFB673);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -133,7 +133,7 @@ st.markdown("""
 
 <div style="background-color: #FF7E33; color: white; text-align: center; padding: 15px; margin: 0 0 25px 0; 
 border-radius: 10px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-size: 18px;">
-    <span style="font-size: 24px;">👉 CAN'T SEE CONTROLS? CLICK THE ">" BUTTON IN TOP-LEFT CORNER 👈</span>
+    <span style="font-size: 24px;">👉 PRESS TOP LEFT TO ANALYZE YOUR ROUTE 👈</span>
 </div>
 """, unsafe_allow_html=True)
 
@@ -204,7 +204,7 @@ with st.sidebar:
     areas = list(area_coordinates.keys())
     
     area = st.selectbox(
-        "Select Area",
+        "Select your Area",
         areas
     )
     
