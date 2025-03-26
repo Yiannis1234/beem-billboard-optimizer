@@ -75,6 +75,66 @@ st.markdown("""
         box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
     }
     
+    /* Enhanced homepage styling */
+    .hero-container {
+        background: linear-gradient(135deg, #FFF1E6 0%, #FFEDDE 100%);
+        border-radius: 10px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        border: 1px solid rgba(255,126,51,0.2);
+    }
+    
+    .hero-title {
+        font-size: 40px !important;
+        font-weight: 800 !important;
+        background: linear-gradient(90deg, #FF7E33 0%, #FF9D45 100%);
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 20px !important;
+        line-height: 1.5 !important;
+        color: #555 !important;
+    }
+    
+    .feature-card {
+        background-color: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        border-left: 4px solid #FF7E33;
+    }
+    
+    .feature-icon {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+    
+    .feature-title {
+        font-weight: 600;
+        color: #FF7E33 !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .cta-button {
+        background: linear-gradient(90deg, #FF7E33 0%, #FF9D45 100%) !important;
+        color: white !important;
+        font-weight: 600 !important;
+        padding: 15px 25px !important;
+        border-radius: 30px !important;
+        box-shadow: 0 4px 10px rgba(255,126,51,0.3) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .cta-button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 12px rgba(255,126,51,0.4) !important;
+    }
+    
     /* Mobile optimizations */
     /* Increase font size for better readability on small screens */
     @media (max-width: 768px) {
@@ -89,6 +149,14 @@ st.markdown("""
         }
         h3 {
             font-size: 20px !important;
+        }
+        
+        .hero-title {
+            font-size: 32px !important;
+        }
+        
+        .hero-subtitle {
+            font-size: 18px !important;
         }
         
         /* Add more space between elements for easier touch targets */
@@ -563,15 +631,56 @@ if analyze:
     st.button("🔄 ANALYZE AGAIN", type="primary")
     
 else:
-    # Welcome page - optimized for mobile
-    st.title("beem.", anchor=False)
+    # Enhanced welcome page
+    st.markdown('<div class="hero-container">', unsafe_allow_html=True)
+    st.markdown('<h1 class="hero-title">beem.</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="hero-subtitle">Smart Billboard Optimization for Maximum Engagement</p>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
     
     # Banner with instructions
     st.error("## ⬆️ PRESS TOP LEFT ARROW FIRST")
     
-    st.header("📢 Billboard Route Optimizer")
+    # Features section
+    st.subheader("📢 Optimize your advertising impact")
     
-    # Help box - made more concise for mobile
+    # Feature cards in columns
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("""
+        <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3 class="feature-title">Target High-Traffic Areas</h3>
+            <p>Find the busiest locations with the highest potential visibility for your mobile billboards.</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="feature-card">
+            <div class="feature-icon">⏱️</div>
+            <h3 class="feature-title">Optimal Timing</h3>
+            <p>Discover the best times of day and week to display your advertisements for maximum engagement.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3 class="feature-title">Data-Driven Routes</h3>
+            <p>Get route recommendations based on real pedestrian and traffic data in your selected area.</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="feature-card">
+            <div class="feature-icon">🚀</div>
+            <h3 class="feature-title">Boost Engagement</h3>
+            <p>Increase your ad impressions by up to 40% with our strategically optimized billboard routes.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Help box with improved styling
     st.info("""
     **HOW TO USE:**
     1. Tap top left ⬆️ icon to open menu
@@ -579,16 +688,10 @@ else:
     3. Tap "ANALYZE ROUTE" button
     """)
     
-    # App description - shortened
+    # Direct analyze button - with enhanced styling
     st.markdown("""
-    ### Optimize your mobile billboard routes
-    Find the best times and locations for maximum engagement 📍
-    """)
-    
-    # Direct analyze button - bigger for mobile
-    st.markdown("""
-    <div style="padding:20px 0;">
-        <p style="text-align:center; font-weight:bold; margin-bottom:10px;">👇 OR START DIRECTLY 👇</p>
+    <div style="padding:20px 0; text-align:center;">
+        <p style="font-weight:bold; margin-bottom:15px; font-size:18px;">✨ START EXPLORING NOW ✨</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -599,7 +702,7 @@ else:
 # Footer
 st.markdown("---")
 st.markdown("""
-<div style="text-align:center; padding:5px;">
+<div style="text-align:center; padding:10px; background-color:#FFF8F0; border-radius:5px; margin-top:30px;">
     <p style="margin:0; color:#666;">beem. © 2025 Beem Mobile Billboard Solutions</p>
 </div>
 """, unsafe_allow_html=True)
