@@ -57,6 +57,24 @@ st.markdown("""
         color: #FF7E33 !important;
     }
     
+    /* Home button */
+    .home-button {
+        position: absolute;
+        top: 0.5rem;
+        right: 1rem;
+        z-index: 100;
+    }
+    
+    .home-button button {
+        background-color: #FF7E33 !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 20px !important;
+        padding: 5px 15px !important;
+        font-size: 14px !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+    }
+    
     /* Mobile optimizations */
     /* Increase font size for better readability on small screens */
     @media (max-width: 768px) {
@@ -87,6 +105,17 @@ st.markdown("""
         .js-plotly-plot {
             max-width: 100% !important;
             overflow-x: hidden !important;
+        }
+        
+        /* Home button mobile adjustments */
+        .home-button {
+            top: 0.3rem;
+            right: 0.5rem;
+        }
+        
+        .home-button button {
+            font-size: 12px !important;
+            padding: 4px 10px !important;
         }
     }
 </style>
@@ -368,6 +397,20 @@ if 'selected_area' not in st.session_state:
 
 if 'selected_day_type' not in st.session_state:
     st.session_state.selected_day_type = "Weekday"
+
+# Home button in top right corner
+st.markdown("""
+<div class="home-button">
+    <form action="" method="get">
+        <button type="submit">🏠 HOME</button>
+    </form>
+</div>
+""", unsafe_allow_html=True)
+
+# Handle home button click
+if st.button("🏠", key="home_button_invisible", help="Go to home page"):
+    st.session_state.analyze = False
+    st.rerun()
 
 # SIDEBAR
 with st.sidebar:
