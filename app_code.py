@@ -34,49 +34,44 @@ area_coordinates = {
 # Page Configuration
 st.set_page_config(page_title="Beem Billboard Optimizer", page_icon="🚲", layout="wide", initial_sidebar_state="expanded")
 
-# Force expand sidebar with custom JavaScript
-st.markdown("""
-<script>
-// Force sidebar to be expanded on page load
-document.addEventListener('DOMContentLoaded', function() {
-    // Small delay to ensure Streamlit has loaded
-    setTimeout(function() {
-        // Try to find the sidebar toggle button and click it if the sidebar is collapsed
-        const sidebarToggle = document.querySelector('[data-testid="baseButton-headerNoPadding"]');
-        if (sidebarToggle) {
-            sidebarToggle.click();
-        }
-    }, 500);
-});
-</script>
-""", unsafe_allow_html=True)
-
-# Custom CSS for orange theme
+# Custom CSS for orange theme and to fix sidebar visibility
 st.markdown("""
 <style>
     /* Base styling improvements */
     .stApp {
         background-color: #F9F9F9;
-        background-image: none;
         background-color: rgba(255, 157, 69, 0.05);
     }
-    /* Banner styling */
-    .notification-banner {
-        padding: 12px 20px; 
-        border-radius: 6px; 
-        margin-bottom: 25px;
-        font-weight: 800;
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-        box-shadow: 0 4px 12px rgba(255, 157, 69, 0.3);
+    
+    /* Force sidebar to be expanded */
+    .css-1d391kg {
+        width: 250px !important;
     }
-    /* Make the main title stand out more */
+    
+    /* Make sure sidebar is visible */
+    section[data-testid="stSidebar"] {
+        width: 250px !important;
+        min-width: 250px !important;
+        max-width: 250px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+    }
+    
+    /* Sidebar background */
+    .css-6qob1r {
+        background-color: #FFF1E6 !important;
+    }
+    
+    /* Main header and banner styling */
     h1.main-header {
         font-size: 38px !important;
         background: -webkit-linear-gradient(#FF7E33, #FFB673);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: 800;
-        text-shadow: none;
         margin-bottom: 15px;
         position: relative;
     }
@@ -88,15 +83,7 @@ st.markdown("""
         background: linear-gradient(90deg, #FF7E33, transparent);
         margin-top: 10px;
     }
-    /* Enhance the tabs appearance */
-    .stTabs [aria-selected="true"] {
-        background-color: #FFF1E6;
-        color: #FF7E33 !important;
-        font-weight: 600;
-        border-top-left-radius: 6px;
-        border-top-right-radius: 6px;
-        box-shadow: 0 -2px 5px rgba(255, 157, 69, 0.1);
-    }
+    
     /* Make metrics cards pop more */
     .dashboard-metric {
         background-color: #FFF1E6;
@@ -110,35 +97,28 @@ st.markdown("""
     .dashboard-metric:hover {
         transform: translateY(-2px);
     }
-    /* Hide hamburger menu and emphasize sidebar */
-    .css-1rs6os {visibility: hidden;} /* Hide hamburger menu */
-    .css-1osj8n8 {opacity: 1 !important;} /* Show the expanded sidebar */
-    .css-79elbk {position: relative;} /* Keep sidebar visible */
     
-    /* Billboard-like button styles */
+    /* Enhanced button styling */
     .stButton button {
         position: relative;
         overflow: hidden;
         transition: all 0.3s ease;
     }
     .stButton button[data-testid="baseButton-primary"] {
-        border: 2px solid #FF7E33;
-        box-shadow: 0 4px 8px rgba(255, 126, 51, 0.3);
+        background: linear-gradient(to bottom, #FF7E33, #FF9D45) !important;
+        color: white !important;
+        border: none !important;
+        font-weight: bold !important;
+        padding: 12px 24px !important;
+        font-size: 18px !important;
+        box-shadow: 0 4px 8px rgba(255, 126, 51, 0.3) !important;
     }
     .stButton button[data-testid="baseButton-primary"]:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(255, 126, 51, 0.4);
+        box-shadow: 0 6px 12px rgba(255, 126, 51, 0.4) !important;
     }
     
     /* Map-themed containers */
-    div[data-testid="stExpander"] {
-        border-radius: 8px;
-        border: 1px solid #e0e0e0;
-        background-color: white;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-    
-    /* Card with map pattern for info boxes */
     .map-card {
         background-color: white;
         background: linear-gradient(145deg, #ffffff, #fff8f2);
@@ -148,22 +128,46 @@ st.markdown("""
         box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         border: 1px solid #eaeaea;
     }
+    
+    /* Additional utility classes */
+    .time-card {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
+    .time-title {color: #FF9D45; font-weight: bold; margin-bottom: 5px}
+    .time-detail {margin-left: 20px; margin-bottom: 10px}
+    .traffic-box {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
+    .weather-box {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
+    .highlight {background-color: #FFF1E6; padding: 10px; border-radius: 5px}
+    .logo-container {display: flex; justify-content: center; margin-bottom: 20px}
+    .footer-container {display: flex; justify-content: center; align-items: center; margin-top: 20px}
+    .card {background-color: #FFF1E6; border-radius: 10px; padding: 20px; margin: 10px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1)}
+    .icon-text {display: flex; align-items: center}
+    .icon-text span {margin-left: 10px}
+    
+    /* Tab styling */
+    .stTabs [aria-selected="true"] {
+        background-color: #FFF1E6 !important;
+        color: #FF7E33 !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Ensure all headers are orange */
+    h1, h2, h3, h4 {color: #FF9D45 !important}
+    
+    /* Progress bar color */
+    .stProgress .st-bo {background-color: #FF9D45 !important}
 </style>
 """, unsafe_allow_html=True)
 
 # Title with prominent instruction about the arrow
 st.markdown("""
-<div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px">
-    <div style="background-color: #FF9D45; color: white; font-size: 42px; font-weight: bold; padding: 10px 30px; border-radius: 5px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); position: relative; overflow: hidden;">
-        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.05)); opacity: 0.2;"></div>
-        <span style="position: relative; z-index: 2;">beem.</span>
+<div style="text-align: center; margin-bottom: 20px">
+    <div style="background-color: #FF9D45; color: white; font-size: 42px; font-weight: bold; padding: 10px 30px; border-radius: 5px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); display: inline-block;">
+        beem.
     </div>
 </div>
 
 <div style="background-color: #FF7E33; color: white; text-align: center; padding: 15px; margin: 0 0 25px 0; 
-border-radius: 10px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-size: 18px; position: relative; overflow: hidden;">
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.05)); opacity: 0.2;"></div>
-    <span style="font-size: 24px; position: relative; z-index: 2;">👉 <strong>CLICK THE ARROW TOP LEFT</strong> TO ANALYZE YOUR ROUTE 👈</span>
+border-radius: 10px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-size: 18px;">
+    <span style="font-size: 24px;">👉 <strong>CLICK THE ARROW TOP LEFT</strong> TO ANALYZE YOUR ROUTE 👈</span>
 </div>
 """, unsafe_allow_html=True)
 
@@ -201,10 +205,9 @@ analyze = False
 
 # SUPER PROMINENT BUTTON ROW BEFORE TABS - This will be visible regardless of sidebar state
 st.markdown("""
-<div style="background-color: #FFE8D6; border: 2px solid #FF7E33; border-radius: 10px; padding: 15px; margin: 25px 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; position: relative; overflow: hidden;">
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 157, 69, 0.1)); opacity: 0.5;"></div>
-    <h2 style="color: #FF7E33; font-weight: bold; margin-bottom: 10px; font-size: 24px; position: relative;">ROUTE ANALYSIS CONTROLS</h2>
-    <p style="font-size: 16px; margin-bottom: 15px; position: relative;">⬅️ Use the controls in the sidebar to select your options</p>
+<div style="background-color: #FFE8D6; border: 2px solid #FF7E33; border-radius: 10px; padding: 15px; margin: 25px 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center;">
+    <h2 style="color: #FF7E33; font-weight: bold; margin-bottom: 10px; font-size: 24px;">ROUTE ANALYSIS CONTROLS</h2>
+    <p style="font-size: 16px; margin-bottom: 15px;">⬅️ Use the controls in the sidebar to select your options</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -344,12 +347,9 @@ if analyze:
 else:
     # Enhanced welcome banner with billboard and map elements
     st.markdown("""
-    <div style="background: linear-gradient(90deg, #FF7E33, #FFB673); border-radius: 10px; padding: 25px; margin-bottom: 25px; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(255, 157, 69, 0.25);">
-        <!-- Map background pattern -->
-        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0.05)); opacity: 0.3;"></div>
-        
-        <div style="display: flex; justify-content: space-between; position: relative; z-index: 2;">
-            <div style="max-width: 70%;">
+    <div style="background: linear-gradient(90deg, #FF7E33, #FFB673); border-radius: 10px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(255, 157, 69, 0.25);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
                 <h3 style="color: white !important; margin: 0; font-size: 30px; font-weight: 800; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">Welcome to Beem!</h3>
                 <p style="color: white !important; margin: 10px 0 15px 0; font-weight: 600; font-size: 18px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Mobile billboard optimization platform</p>
                 
@@ -364,7 +364,7 @@ else:
                 </div>
             </div>
             
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="display: flex; flex-direction: column; align-items: center;">
                 <div style="background: white; border-radius: 50%; width: 65px; height: 65px; display: flex; justify-content: center; align-items: center; box-shadow: 0 3px 8px rgba(0,0,0,0.2); position: relative;">
                     <span style="font-size: 32px">🚲</span>
                     <!-- Route indicator dots -->
@@ -378,10 +378,12 @@ else:
         </div>
         
         <!-- Map route indicator line -->
-        <div style="position: absolute; bottom: 15px; right: 15px; display: flex; align-items: center; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 15px;">
-            <div style="width: 8px; height: 8px; background: #F44336; border-radius: 50%; margin-right: 2px;"></div>
-            <div style="height: 2px; width: 40px; background: linear-gradient(90deg, #F44336, #4CAF50); margin-right: 2px;"></div>
-            <div style="width: 8px; height: 8px; background: #4CAF50; border-radius: 50%;"></div>
+        <div style="margin-top: 15px; display: flex; align-items: center; justify-content: flex-end;">
+            <div style="background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 15px; display: flex; align-items: center;">
+                <div style="width: 8px; height: 8px; background: #F44336; border-radius: 50%; margin-right: 2px;"></div>
+                <div style="height: 2px; width: 40px; background: linear-gradient(90deg, #F44336, #4CAF50); margin-right: 2px;"></div>
+                <div style="width: 8px; height: 8px; background: #4CAF50; border-radius: 50%;"></div>
+            </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
