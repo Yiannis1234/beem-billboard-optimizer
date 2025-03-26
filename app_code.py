@@ -402,15 +402,10 @@ if 'selected_day_type' not in st.session_state:
 st.markdown("""
 <div class="home-button">
     <form action="" method="get">
-        <button type="submit">🏠 HOME</button>
+        <button type="submit">🏠</button>
     </form>
 </div>
 """, unsafe_allow_html=True)
-
-# Handle home button click
-if st.button("🏠", key="home_button_invisible", help="Go to home page"):
-    st.session_state.analyze = False
-    st.rerun()
 
 # SIDEBAR
 with st.sidebar:
@@ -450,14 +445,6 @@ with st.sidebar:
 area = st.session_state.selected_area
 day_type = st.session_state.selected_day_type
 analyze = st.session_state.analyze
-
-# Mobile-friendly notice 
-st.markdown("""
-<div style="background-color:#FFF1E6; padding:10px; border-radius:5px; margin-bottom:20px; text-align:center;">
-    <h4 style="margin:0; color:#FF7E33;">📱 Optimized for mobile devices</h4>
-    <p style="margin:5px 0;">Tap the top-left button to access settings</p>
-</div>
-""", unsafe_allow_html=True)
 
 # MAIN CONTENT
 if analyze:
