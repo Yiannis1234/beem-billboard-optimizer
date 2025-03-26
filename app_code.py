@@ -1134,29 +1134,7 @@ else:
     # Create direct buttons with no styling interference
     st.markdown("<h3>Choose an option:</h3>", unsafe_allow_html=True)
     
-    # NEW APPROACH: Use st.markdown to directly create the sidebar toggle button
-    if st.button("☰ SHOW SIDEBAR MENU", key="direct_sidebar_toggle", type="primary", use_container_width=True):
-        # Force sidebar to open by clicking the collapsedControl element
-        js = """
-        <script>
-            function openSidebar() {
-                const sidebarToggle = parent.document.querySelector('[data-testid="collapsedControl"]');
-                if (sidebarToggle) {
-                    sidebarToggle.click();
-                }
-            }
-            // Run multiple times to ensure it works
-            openSidebar();
-            setTimeout(openSidebar, 100);
-            setTimeout(openSidebar, 500);
-        </script>
-        """
-        st.components.v1.html(js, height=0, width=0)
-    
-    # Add some space
-    st.markdown("<br>", unsafe_allow_html=True)
-    
-    # Second button - START ANALYSIS
+    # START ANALYSIS button
     if st.button("START ANALYSIS 🚀", type="primary", key="direct_analysis_button", use_container_width=True):
         st.session_state.analyze = True
         st.rerun()
