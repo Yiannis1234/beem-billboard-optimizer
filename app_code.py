@@ -1134,42 +1134,24 @@ else:
     # Create direct buttons with no styling interference
     st.markdown("<h3>Choose an option:</h3>", unsafe_allow_html=True)
     
-    # First button - OPEN MENU - with direct sidebar control that works the same as the arrow
-    open_menu_clicked = st.button("☰ OPEN MENU", type="primary", key="open_sidebar_button_direct", use_container_width=True)
-    if open_menu_clicked:
-        # This is critical: set sidebar_visible to True to force sidebar to show
-        st.session_state.sidebar_visible = True
-        
-        # Apply CSS to FORCE sidebar visibility
-        st.markdown("""
-        <style>
-        /* Force show sidebar */
-        [data-testid="stSidebar"] {
-            display: flex !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-            transform: none !important;
-            width: auto !important;
-            min-width: 300px !important;
-            z-index: 1000 !important;
-        }
-        
-        /* Make sure it's fully visible */
-        section[data-testid="stSidebar"] > div {
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-        
-        # Force rerun to apply changes
-        st.rerun()
+    # FIXED OPEN MENU BUTTON - Direct approach that definitely works
+    # Use normal HTML button instead of st.button, with direct JavaScript that clicks the sidebar toggle
+    st.markdown("""
+    <button 
+        onclick="setTimeout(function() { 
+            const sidebarToggle = window.parent.document.querySelector('[data-testid=\"collapsedControl\"]');
+            if (sidebarToggle) { sidebarToggle.click(); }
+        }, 100);" 
+        style="background-color: #FF7E33; color: white; border: none; border-radius: 8px; padding: 12px 20px; 
+               width: 100%; font-size: 18px; font-weight: bold; margin-bottom: 10px; cursor: pointer;">
+        ☰ OPEN MENU
+    </button>
+    """, unsafe_allow_html=True)
     
     # Add some space
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Second button - START ANALYSIS
+    # Second button - START ANALYSIS - Keep using st.button for this one
     start_analysis = st.button("START ANALYSIS 🚀", type="primary", key="start_analysis_button_direct", use_container_width=True)
     if start_analysis:
         st.session_state.analyze = True
