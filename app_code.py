@@ -206,8 +206,8 @@ area_coordinates = {
 }
 
 # Add API key handling
-weather_api_key = "28a5e79aa58b41f687f45343232311"  # Your Weather API key
-tomtom_api_key = "BaCG0bGtgAqsnW7IjGqCnPkO9JGXnWdR"  # Your TomTom API key
+weather_api_key = "f70bd534000447b2a14202431252303"  # Weather API key - DO NOT CHANGE
+tomtom_api_key = "BaCG0bGtgAqsnW7IjGqCnPkO9JGXnWdR"  # TomTom API key
 
 def generate_route_data(area):
     """Generate sample route data for the given area"""
