@@ -1122,39 +1122,34 @@ else:
     with col_logo:
         st.markdown('<h1 class="hero-title">beem.</h1>', unsafe_allow_html=True)
     
-    # Native Streamlit solution that's guaranteed to work - make buttons orange with custom style
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("""
-        <style>
-        div[data-testid="stHorizontalBlock"] > div:nth-child(1) button {
-            background-color: #FF7E33 !important;
-            border: none !important;
-            color: white !important;
-            width: 100% !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-        if st.button("☰ OPEN SIDEBAR MENU", type="primary", key="streamlit-open-sidebar-button"):
-            # Set session state and rerun to force sidebar to appear
-            st.session_state.sidebar_visible = True
-            st.rerun()
-
-    with col2:
-        st.markdown("""
-        <style>
-        div[data-testid="stHorizontalBlock"] > div:nth-child(2) button {
-            background-color: #FF7E33 !important;
-            border: none !important;
-            color: white !important;
-            width: 100% !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-        if st.button("🚀 START ANALYSIS", type="primary"):
-            # Set session state and rerun to force sidebar to appear
-            st.session_state.sidebar_visible = True
-            st.rerun()
+    # Single button to open sidebar and dropdown menu
+    st.markdown("""
+    <style>
+    .main-action-button {
+        background: linear-gradient(135deg, #FF7E33, #FF9945) !important;
+        border: none !important;
+        color: white !important;
+        width: 100% !important;
+        border-radius: 8px !important;
+        font-size: 18px !important;
+        padding: 12px 20px !important;
+        font-weight: bold !important;
+        box-shadow: 0 4px 8px rgba(255,126,51,0.3) !important;
+        transition: all 0.2s ease !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .main-action-button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 12px rgba(255,126,51,0.4) !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    if st.button("☰ OPEN MENU & START", type="primary", key="main_action_button", use_container_width=True):
+        # Set session state and rerun to force sidebar to appear
+        st.session_state.sidebar_visible = True
+        st.rerun()
     
     # Features section
     st.subheader("📢 Optimize your advertising impact")
