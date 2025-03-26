@@ -32,14 +32,14 @@ area_coordinates = {
 }
 
 # Page Configuration
-st.set_page_config(page_title="Beem Billboard Optimizer", page_icon="🚲", layout="wide")
+st.set_page_config(page_title="Beem Billboard Optimizer", page_icon="🚲", layout="wide", initial_sidebar_state="expanded")
 
 # Custom CSS for orange theme
 st.markdown("""
 <style>
     .main-header {color: #FF9D45 !important; font-weight: 600}
-    div.stButton > button {background-color: #FF9D45; color: white; border: none}
-    div.stButton > button:hover {background-color: #FFB673}
+    div.stButton > button {background-color: #FF9D45; color: white; border: none; font-size: 18px; font-weight: bold; padding: 10px 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
+    div.stButton > button:hover {background-color: #FFB673; transform: translateY(-2px); box-shadow: 0 6px 8px rgba(0,0,0,0.15);}
     .css-1aumxhk {background-color: #FFF1E6} /* Sidebar background */
     .css-18e3th9 {padding-top: 2rem; padding-bottom: 10rem; padding-left: 5rem; padding-right: 5rem}
     h1, h2, h3, h4 {color: #FF9D45 !important}
@@ -99,16 +99,11 @@ st.markdown("""
     .dashboard-metric:hover {
         transform: translateY(-2px);
     }
+    /* Hide hamburger menu and emphasize sidebar */
+    .css-1rs6os {visibility: hidden;} /* Hide hamburger menu */
+    .css-1osj8n8 {opacity: 1 !important;} /* Show the expanded sidebar */
+    .css-79elbk {position: relative;} /* Keep sidebar visible */
 </style>
-""", unsafe_allow_html=True)
-
-# Add a floating label for the sidebar toggle
-st.markdown("""
-<div style="position: fixed; top: 75px; left: 66px; background-color: #FFE8D6; color: #FF7E33; 
-padding: 5px 10px; border-radius: 5px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-border: 1px solid #FF9D45; font-size: 14px; z-index: 1000; display: flex; align-items: center;">
-<span style="margin-right: 6px;">Analyze Route</span><span style="font-size: 16px;">➡️</span>
-</div>
 """, unsafe_allow_html=True)
 
 # Title
@@ -116,19 +111,6 @@ st.markdown("""
 <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px">
     <div style="background-color: #FF9D45; color: white; font-size: 42px; font-weight: bold; padding: 10px 30px; border-radius: 5px;">
         beem.
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-# HUGE PROMINENT BANNER - Placed before anything else
-st.markdown("""
-<div style="background-color: #FF7E33; color: white; padding: 15px; margin: -10px 0 25px 0; border-radius: 10px; text-align: center; font-size: 24px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border: 2px dashed white;">
-    <div style="display: flex; align-items: center; justify-content: center;">
-        <div style="font-size: 36px; margin-right: 15px;">⬅️</div>
-        <div>
-            <span style="text-decoration: underline;">CLICK THE ARROW</span> on the left side<br>
-            <span style="font-size: 18px;">to open options and ANALYZE ROUTE</span>
-        </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -147,14 +129,10 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
     
-    # Add a prominent help text at the top of sidebar
+    # Add a prominent header for the sidebar
     st.markdown("""
-    <div style="background-color: #FFE8D6; color: #333; padding: 10px; margin-bottom: 15px; border-radius: 5px; border-left: 5px solid #FF7E33; display: flex; align-items: center;">
-        <div style="font-size: 24px; margin-right: 10px;">➡️</div>
-        <div>
-            <strong style="font-size: 16px;">Click "Analyze Route"</strong><br>
-            <span style="font-size: 14px;">to see traffic & weather data</span>
-        </div>
+    <div style="background-color: #FF7E33; color: white; padding: 15px; margin-bottom: 20px; border-radius: 10px; text-align: center; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+        <span style="font-size: 20px;">ROUTE ANALYSIS CONTROLS</span>
     </div>
     """, unsafe_allow_html=True)
     
@@ -184,18 +162,23 @@ with st.sidebar:
     
     # Add instructional text with arrow pointing to the button
     st.markdown("""
-    <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: center;">
-        <div style="background-color: #FFE8D6; border-left: 5px solid #FF9D45; padding: 10px; border-radius: 5px; margin-top: 10px; margin-bottom: 10px; text-align: center; position: relative;">
-            <span style="font-weight: 600; color: #333;">👇 Click to analyze your route 👇</span>
-            <div style="position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);">
-                <span style="font-size: 24px; color: #FF7E33;">⬇️</span>
+    <div style="margin: 20px 0; display: flex; align-items: center; justify-content: center;">
+        <div style="background-color: #FFE8D6; border: 2px solid #FF9D45; padding: 15px; border-radius: 10px; text-align: center; position: relative; width: 100%;">
+            <span style="font-weight: bold; color: #FF7E33; font-size: 16px;">Click the button below to analyze!</span>
+            <div style="position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%);">
+                <span style="font-size: 28px; color: #FF7E33;">⬇️</span>
             </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
     
-    # Analysis button
-    analyze = st.button("Analyze Route", type="primary")
+    # Add spacing
+    st.markdown("<div style='height: 30px'></div>", unsafe_allow_html=True)
+    
+    # Analysis button - Make it much more prominent
+    col1, col2, col3 = st.columns([1, 6, 1])
+    with col2:
+        analyze = st.button("ANALYZE ROUTE", type="primary", use_container_width=True)
     
     # About section
     with st.expander("About Beem"):
