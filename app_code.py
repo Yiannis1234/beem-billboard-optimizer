@@ -202,7 +202,15 @@ area_coordinates = {
     "Deansgate": {"latitude": 53.4772, "longitude": -2.2481, "zone_id": "deansgate"},
     "Media City": {"latitude": 53.4727, "longitude": -2.2984, "zone_id": "media_city"},
     "Oxford Road": {"latitude": 53.4710, "longitude": -2.2376, "zone_id": "oxford_road"},
-    "Spinningfields": {"latitude": 53.4802, "longitude": -2.2516, "zone_id": "spinningfields"}
+    "Spinningfields": {"latitude": 53.4802, "longitude": -2.2516, "zone_id": "spinningfields"},
+    "Chorlton": {"latitude": 53.4428, "longitude": -2.2724, "zone_id": "chorlton"},
+    "Didsbury": {"latitude": 53.4183, "longitude": -2.2310, "zone_id": "didsbury"},
+    "Fallowfield": {"latitude": 53.4420, "longitude": -2.2248, "zone_id": "fallowfield"},
+    "Levenshulme": {"latitude": 53.4369, "longitude": -2.1944, "zone_id": "levenshulme"},
+    "Rusholme": {"latitude": 53.4502, "longitude": -2.2200, "zone_id": "rusholme"},
+    "Salford Quays": {"latitude": 53.4705, "longitude": -2.2850, "zone_id": "salford_quays"},
+    "Hulme": {"latitude": 53.4638, "longitude": -2.2500, "zone_id": "hulme"},
+    "Trafford Centre": {"latitude": 53.4670, "longitude": -2.3500, "zone_id": "trafford_centre"}
 }
 
 # Add API key handling
@@ -354,6 +362,10 @@ def get_traffic_density(area, day_type, hour=None):
     # Oxford Road always shows high congestion during weekdays (specific real-world knowledge)
     if area == "Oxford Road" and day_type == "Weekday" and (8 <= hour <= 10 or 16 <= hour <= 19):
         return 85
+    
+    # Trafford Centre has high weekend traffic
+    if area == "Trafford Centre" and day_type == "Weekend" and (11 <= hour <= 18):
+        return 80
 
     # For demonstration and quick response, use realistic precalculated values
     traffic_by_area = {
@@ -364,7 +376,15 @@ def get_traffic_density(area, day_type, hour=None):
         "Deansgate": {"weekday": 68, "weekend": 48},
         "Media City": {"weekday": 58, "weekend": 38},
         "Oxford Road": {"weekday": 75, "weekend": 45},  # University area, busy on weekdays
-        "Spinningfields": {"weekday": 70, "weekend": 42}
+        "Spinningfields": {"weekday": 70, "weekend": 42},
+        "Chorlton": {"weekday": 50, "weekend": 45},  # Residential with popular shops
+        "Didsbury": {"weekday": 55, "weekend": 52},  # Busy suburb with restaurants
+        "Fallowfield": {"weekday": 60, "weekend": 48},  # Student area
+        "Levenshulme": {"weekday": 45, "weekend": 40},
+        "Rusholme": {"weekday": 65, "weekend": 60},  # Curry Mile area
+        "Salford Quays": {"weekday": 58, "weekend": 50},
+        "Hulme": {"weekday": 52, "weekend": 38},
+        "Trafford Centre": {"weekday": 60, "weekend": 75}  # Shopping center, busy on weekends
     }
     
     # Time of day adjustments
