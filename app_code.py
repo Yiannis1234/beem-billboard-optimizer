@@ -34,6 +34,23 @@ area_coordinates = {
 # Page Configuration
 st.set_page_config(page_title="Beem Billboard Optimizer", page_icon="🚲", layout="wide", initial_sidebar_state="expanded")
 
+# Force expand sidebar with custom JavaScript
+st.markdown("""
+<script>
+// Force sidebar to be expanded on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Small delay to ensure Streamlit has loaded
+    setTimeout(function() {
+        // Try to find the sidebar toggle button and click it if the sidebar is collapsed
+        const sidebarToggle = document.querySelector('[data-testid="baseButton-headerNoPadding"]');
+        if (sidebarToggle) {
+            sidebarToggle.click();
+        }
+    }, 500);
+});
+</script>
+""", unsafe_allow_html=True)
+
 # Custom CSS for orange theme
 st.markdown("""
 <style>
@@ -106,65 +123,34 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Add floating callout for the sidebar toggle button
-st.markdown("""
-<div style="position: fixed; top: 7px; left: 79px; background-color: #FF7E33; color: white; 
-padding: 10px 15px; border-radius: 5px; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.3); 
-border: 2px dashed white; font-size: 16px; z-index: 9999; animation: pulse 2s infinite;">
-⬅️ CLICK HERE TO<br>OPEN CONTROLS!
-</div>
-
-<style>
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-</style>
-""", unsafe_allow_html=True)
-
-# Title
+# Title with prominent instruction about the arrow
 st.markdown("""
 <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px">
     <div style="background-color: #FF9D45; color: white; font-size: 42px; font-weight: bold; padding: 10px 30px; border-radius: 5px;">
         beem.
     </div>
 </div>
+
+<div style="background-color: #FF7E33; color: white; text-align: center; padding: 15px; margin: 0 0 25px 0; 
+border-radius: 10px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-size: 18px;">
+    <span style="font-size: 24px;">👉 CAN'T SEE CONTROLS? CLICK THE ">" BUTTON IN TOP-LEFT CORNER 👈</span>
+</div>
 """, unsafe_allow_html=True)
 
 st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
 
-# Add a GIANT, UNMISSABLE banner with arrow pointing to top-left and clear instructions
+# Just ONE clean notification that explains exactly what to do
 st.markdown("""
-<div style="background-color: #FF7E33; color: white; text-align: center; padding: 20px; 
-margin: 0 0 30px 0; border-radius: 10px; border: 3px dashed white; font-weight: bold; 
-box-shadow: 0 0 20px rgba(255,125,51,0.5);">
-    <div style="display: flex; align-items: center; justify-content: center;">
-        <div style="font-size: 60px; margin-right: 20px;">⬅️</div>
-        <div>
-            <div style="font-size: 28px; margin-bottom: 10px; text-decoration: underline;">FIRST: CLICK THE TOP LEFT MENU BUTTON</div>
-            <div style="font-size: 18px;">Look at the <strong>VERY TOP LEFT</strong> of your screen for the <strong>≡</strong> button</div>
-        </div>
+<div style="background-color: #FFE8D6; padding: 15px; border-radius: 10px; margin: 0 0 25px 0; border: 2px solid #FF9D45;">
+    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+        <span style="font-size: 28px; margin-right: 10px;">ℹ️</span>
+        <span style="font-size: 18px; font-weight: bold; color: #FF7E33;">HOW TO USE THIS APP:</span>
     </div>
-</div>
-""", unsafe_allow_html=True)
-
-# Add a visual representation showing exactly where to click
-st.markdown("""
-<div style="background-color: #FFE8D6; padding: 15px; border-radius: 10px; margin-bottom: 30px; text-align: center;">
-    <p style="font-weight: bold; color: #FF7E33; font-size: 18px; margin-bottom: 15px;">Here's where to find the menu button:</p>
-    <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
-        <div style="border: 3px solid #FF7E33; border-radius: 50%; width: 40px; height: 40px; 
-        display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; 
-        background-color: white; color: #333; position: relative; margin-right: 15px;">
-            ≡
-            <div style="position: absolute; top: -10px; right: -10px; background-color: #FF7E33; 
-            color: white; border-radius: 50%; width: 25px; height: 25px; display: flex; 
-            align-items: center; justify-content: center; font-size: 14px; font-weight: bold;">1</div>
-        </div>
-        <div style="font-weight: bold; font-size: 16px; color: #333;">Click this menu button ≡ at the top left corner</div>
-    </div>
-    <p style="font-weight: bold; color: #FF7E33; font-size: 18px; margin-top: 20px;">Then select your options and click "ANALYZE ROUTE"</p>
+    <ol style="margin-left: 15px; font-size: 16px; line-height: 1.6;">
+        <li><b>Click the gray ">" button</b> in the top left corner to open the sidebar menu</li>
+        <li>Select your area and time options in the sidebar</li>
+        <li>Click the "ANALYZE ROUTE" button to see results</li>
+    </ol>
 </div>
 """, unsafe_allow_html=True)
 
@@ -547,29 +533,7 @@ with tabs[0]:
                     
                 st.markdown('</div>', unsafe_allow_html=True)
     else:
-        # ULTRA PROMINENT NOTICE - Cannot be missed by anyone
-        st.markdown("""
-        <div style="background-color: #FF7E33; color: white; font-size: 24px; padding: 20px; margin: 20px 0; 
-        border-radius: 10px; text-align: center; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
-        border: 3px dashed white; animation: pulse 2s infinite;">
-            ⬅️ CLICK THE ARROW ON THE LEFT SIDE ⬅️<br>
-            <span style="font-size: 18px; margin-top: 10px; display: block;">TO SELECT AREA AND ANALYZE ROUTE</span>
-        </div>
-        
-        <style>
-        @keyframes pulse {
-          0% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-          50% { transform: scale(1.03); box-shadow: 0 5px 25px rgba(255,126,51,0.5); }
-          100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        }
-        </style>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div style="background-color: #FFE8D6; border-left: 5px solid #FF9D45; padding: 15px; border-radius: 5px; margin-bottom: 20px; color: #333; font-weight: 500; font-size: 16px;">
-            Select options and click <span style="color: #FF9D45; font-weight: 700;">'Analyze Route'</span> to see results.
-        </div>
-        """, unsafe_allow_html=True)
+        st.info("Select area and time options in the sidebar, then click 'Analyze Route' to see results.")
         
         # Add a visual placeholder when no analysis is running
         st.markdown("""
@@ -777,15 +741,7 @@ with tabs[1]:
         st.plotly_chart(fig2, use_container_width=True)
         
     else:
-        # ULTRA PROMINENT NOTICE - Cannot be missed by anyone
-        st.markdown("""
-        <div style="background-color: #FF7E33; color: white; font-size: 24px; padding: 20px; margin: 20px 0; 
-        border-radius: 10px; text-align: center; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
-        border: 3px dashed white; animation: pulse 2s infinite;">
-            ⬅️ CLICK THE ARROW ON THE LEFT SIDE ⬅️<br>
-            <span style="font-size: 18px; margin-top: 10px; display: block;">TO SELECT AREA AND ANALYZE ROUTE</span>
-        </div>
-        """, unsafe_allow_html=True)
+        st.info("Select area and time options in the sidebar, then click 'Analyze Route' to view the map visualization.")
 
 # Tab 3: Historical Data
 with tabs[2]:
@@ -812,16 +768,7 @@ with tabs[2]:
         st.markdown("2. Friday: 85/100")
         st.markdown("3. Sunday: 80/100")
     else:
-        # ULTRA PROMINENT NOTICE - Cannot be missed by anyone
-        st.markdown("""
-        <div style="background-color: #FF7E33; color: white; font-size: 24px; padding: 20px; margin: 20px 0; 
-        border-radius: 10px; text-align: center; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
-        border: 3px dashed white; animation: pulse 2s infinite;">
-            ⬅️ CLICK THE ARROW ON THE LEFT SIDE ⬅️<br>
-            <span style="font-size: 18px; margin-top: 10px; display: block;">TO SELECT AREA AND ANALYZE ROUTE</span>
-        </div>
-        """, unsafe_allow_html=True)
-        st.info("Select options and click 'Analyze Route' to see historical data.")
+        st.info("Select area and time options in the sidebar, then click 'Analyze Route' to see historical data.")
 
 # Tab 4: Best Times
 with tabs[3]:
@@ -864,16 +811,7 @@ with tabs[3]:
         st.line_chart(engagement_data, x='Hour', y=['Weekday', 'Weekend'])
         
     else:
-        # ULTRA PROMINENT NOTICE - Cannot be missed by anyone
-        st.markdown("""
-        <div style="background-color: #FF7E33; color: white; font-size: 24px; padding: 20px; margin: 20px 0; 
-        border-radius: 10px; text-align: center; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
-        border: 3px dashed white; animation: pulse 2s infinite;">
-            ⬅️ CLICK THE ARROW ON THE LEFT SIDE ⬅️<br>
-            <span style="font-size: 18px; margin-top: 10px; display: block;">TO SELECT AREA AND ANALYZE ROUTE</span>
-        </div>
-        """, unsafe_allow_html=True)
-        st.info("Select options and click 'Analyze Route' to see recommended times.")
+        st.info("Select area and time options in the sidebar, then click 'Analyze Route' to see recommended times.")
 
 # Tab 5: Demographics (New)
 with tabs[4]:
@@ -919,16 +857,7 @@ with tabs[4]:
             st.markdown("- Use QR codes for interaction")
             st.markdown('</div>', unsafe_allow_html=True)
     else:
-        # ULTRA PROMINENT NOTICE - Cannot be missed by anyone
-        st.markdown("""
-        <div style="background-color: #FF7E33; color: white; font-size: 24px; padding: 20px; margin: 20px 0; 
-        border-radius: 10px; text-align: center; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
-        border: 3px dashed white; animation: pulse 2s infinite;">
-            ⬅️ CLICK THE ARROW ON THE LEFT SIDE ⬅️<br>
-            <span style="font-size: 18px; margin-top: 10px; display: block;">TO SELECT AREA AND ANALYZE ROUTE</span>
-        </div>
-        """, unsafe_allow_html=True)
-        st.info("Select options and click 'Analyze Route' to see demographic analysis.")
+        st.info("Select area and time options in the sidebar, then click 'Analyze Route' to see demographic analysis.")
 
 # Footer with enhanced visual elements
 st.markdown("---")
