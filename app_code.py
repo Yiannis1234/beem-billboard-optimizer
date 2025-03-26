@@ -133,6 +133,41 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
+
+# Add a GIANT, UNMISSABLE banner with arrow pointing to top-left and clear instructions
+st.markdown("""
+<div style="background-color: #FF7E33; color: white; text-align: center; padding: 20px; 
+margin: 0 0 30px 0; border-radius: 10px; border: 3px dashed white; font-weight: bold; 
+box-shadow: 0 0 20px rgba(255,125,51,0.5);">
+    <div style="display: flex; align-items: center; justify-content: center;">
+        <div style="font-size: 60px; margin-right: 20px;">⬅️</div>
+        <div>
+            <div style="font-size: 28px; margin-bottom: 10px; text-decoration: underline;">FIRST: CLICK THE TOP LEFT MENU BUTTON</div>
+            <div style="font-size: 18px;">Look at the <strong>VERY TOP LEFT</strong> of your screen for the <strong>≡</strong> button</div>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# Add a visual representation showing exactly where to click
+st.markdown("""
+<div style="background-color: #FFE8D6; padding: 15px; border-radius: 10px; margin-bottom: 30px; text-align: center;">
+    <p style="font-weight: bold; color: #FF7E33; font-size: 18px; margin-bottom: 15px;">Here's where to find the menu button:</p>
+    <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+        <div style="border: 3px solid #FF7E33; border-radius: 50%; width: 40px; height: 40px; 
+        display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; 
+        background-color: white; color: #333; position: relative; margin-right: 15px;">
+            ≡
+            <div style="position: absolute; top: -10px; right: -10px; background-color: #FF7E33; 
+            color: white; border-radius: 50%; width: 25px; height: 25px; display: flex; 
+            align-items: center; justify-content: center; font-size: 14px; font-weight: bold;">1</div>
+        </div>
+        <div style="font-weight: bold; font-size: 16px; color: #333;">Click this menu button ≡ at the top left corner</div>
+    </div>
+    <p style="font-weight: bold; color: #FF7E33; font-size: 18px; margin-top: 20px;">Then select your options and click "ANALYZE ROUTE"</p>
+</div>
+""", unsafe_allow_html=True)
+
 st.markdown("Optimize your mobile billboard routes for maximum engagement")
 
 # Initialize analyze variable at the top
