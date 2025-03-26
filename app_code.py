@@ -639,9 +639,6 @@ else:
     st.markdown('<p class="hero-subtitle">Smart Billboard Optimization for Maximum Engagement</p>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
     
-    # Banner with instructions only
-    st.error("## ⬆️ PRESS TOP LEFT ARROW FIRST")
-    
     # Features section
     st.subheader("📢 Optimize your advertising impact")
     
