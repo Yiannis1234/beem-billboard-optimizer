@@ -1,0 +1,491 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    padding: 30px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px 30px;
+    text-align: center;
+}
+
+header h1 {
+    margin-bottom: 10px;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+header p {
+    opacity: 0.9;
+    font-size: 16px;
+}
+
+.input-section {
+    padding: 30px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.input-section h2 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 22px;
+}
+
+textarea {
+    width: 100%;
+    height: 180px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    resize: none;
+    font-family: inherit;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+button {
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.primary-btn {
+    background-color: #667eea;
+    color: white;
+    border: none;
+    flex: 1;
+}
+
+.primary-btn:hover {
+    background-color: #5a72e0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.secondary-btn {
+    background-color: #fff;
+    color: #667eea;
+    border: 2px solid #667eea;
+    flex: 1;
+}
+
+.secondary-btn:hover {
+    background-color: #f8f9ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+.results-section {
+    padding: 30px;
+}
+
+.results-section h2 {
+    margin-bottom: 25px;
+    color: #333;
+    font-size: 22px;
+    text-align: center;
+}
+
+.score-container {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #f8f9ff;
+    border-radius: 10px;
+}
+
+.score-container h3 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 20px;
+}
+
+.score {
+    display: inline-block;
+    font-size: 42px;
+    font-weight: 700;
+    padding: 10px 25px;
+    border-radius: 50px;
+    margin-bottom: 10px;
+}
+
+.score.low {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.score.medium {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.score.high {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.score-explanation {
+    font-size: 14px;
+    color: #666;
+}
+
+.analysis-details {
+    margin-bottom: 30px;
+}
+
+.analysis-details h3 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 20px;
+    text-align: center;
+}
+
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.metric {
+    background-color: #f8f9ff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.metric h4 {
+    margin-bottom: 10px;
+    color: #555;
+    font-size: 16px;
+}
+
+.metric div {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.suggestions {
+    background-color: #f8f9ff;
+    padding: 25px;
+    border-radius: 10px;
+}
+
+.suggestions h3 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 20px;
+    text-align: center;
+}
+
+.suggestions ul {
+    list-style-position: inside;
+    padding-left: 10px;
+}
+
+.suggestions li {
+    margin-bottom: 8px;
+    color: #555;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    .metrics {
+        grid-template-columns: 1fr;
+    }
+}
+
+.app-container {
+    width: 100%;
+    max-width: 1200px;
+    height: 80vh;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.screen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Chat Screen Styles */
+.chat-container {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 20px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.message {
+    margin: 10px 0;
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 80%;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.dog-message {
+    background: #e3f2fd;
+    margin-right: auto;
+}
+
+.user-message {
+    background: #e8f5e9;
+    margin-left: auto;
+}
+
+.input-container {
+    display: flex;
+    gap: 10px;
+}
+
+input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 20px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: #8B4513;
+}
+
+button {
+    padding: 10px 20px;
+    background: #8B4513;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    background: #6b3410;
+}
+
+/* Virtual Walk Screen Styles */
+.walk-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.environment {
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 1s ease-in-out;
+}
+
+.dog-walk {
+    position: absolute;
+    bottom: 20%;
+    left: 20%;
+    transform: translateX(0);
+    z-index: 10;
+}
+
+.dog {
+    width: 100px;
+    height: 100px;
+    position: relative;
+}
+
+.dog-head {
+    width: 100%;
+    height: 100%;
+    background: #8B4513;
+    border-radius: 50%;
+    position: relative;
+}
+
+.dog-ears {
+    position: absolute;
+    top: 20%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.ear {
+    width: 20px;
+    height: 30px;
+    background: #8B4513;
+    border-radius: 10px;
+}
+
+.ear.left {
+    transform: rotate(-30deg);
+}
+
+.ear.right {
+    transform: rotate(30deg);
+}
+
+.dog-face {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+}
+
+.dog-eyes {
+    position: absolute;
+    top: 40%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.eye {
+    width: 10px;
+    height: 10px;
+    background: #000;
+    border-radius: 50%;
+}
+
+.dog-nose {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15px;
+    height: 10px;
+    background: #000;
+    border-radius: 7px;
+}
+
+.dog-mouth {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 10px;
+    border-bottom: 2px solid #000;
+    border-radius: 0 0 10px 10px;
+}
+
+.controls {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.walking {
+    animation: walk 0.5s infinite;
+}
+
+@keyframes walk {
+    0% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-5px) rotate(5deg); }
+    50% { transform: translateY(0) rotate(0deg); }
+    75% { transform: translateY(-5px) rotate(-5deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Environment Elements */
+.environment-elements {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.tree {
+    position: absolute;
+    width: 40px;
+    height: 60px;
+    background: #2e7d32;
+    border-radius: 20px;
+}
+
+.cloud {
+    position: absolute;
+    width: 60px;
+    height: 20px;
+    background: white;
+    border-radius: 10px;
+    animation: float 20s linear infinite;
+}
+
+@keyframes float {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(calc(100vw + 100%)); }
+} 

@@ -1,21 +1,74 @@
 # Beem Billboard Route Optimizer
 
-## How to Run the App
+This application helps optimize bicycle routes for Beem's mobile billboards in Manchester. Get real-time weather, traffic, and pedestrian data to maximize engagement and plan your routes efficiently.
 
-**Important**: Always use the `app_code.py` file to run the application, not `app.py`:
+## Setup and Installation
 
-```bash
-# Option 1: Run directly
-streamlit run app_code.py
+### Prerequisites
+- Python 3.9 or higher
+- pip or conda package manager
 
-# Option 2: Use the provided script
+### Installation
+
+1. Clone this repository:
+   ```
+   git clone https://github.com/Yiannis1234/beem-billboard-optimizer.git
+   cd beem-billboard-optimizer
+   ```
+
+2. Install dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+
+### Running the application
+
+**Option 1: Using the run script (recommended)**
+```
 ./run_app.sh
-
-# Option 3: If the app gets stuck, use the restart script
-./restart_app.sh
 ```
 
-If you encounter any issues with the app not showing the latest changes, make sure you're running the correct file and try using the restart script.
+**Option 2: Running directly with Streamlit**
+```
+streamlit run app_code.py
+```
+
+## Troubleshooting
+
+If you encounter issues running the app:
+
+1. **Missing modules error**: Make sure you've installed all dependencies
+   ```
+   pip install -r requirements.txt
+   ```
+
+2. **Port already in use**: Kill any existing Streamlit processes
+   ```
+   pkill -f "streamlit run"
+   ```
+
+3. **Streamlit command not found**: Make sure Streamlit is properly installed and your environment is activated
+   ```
+   pip install streamlit
+   ```
+
+## Using the Application
+
+1. **Open the sidebar**: Click the ">" button in the top-left corner
+2. **Select area**: Choose an area from the dropdown in the sidebar
+3. **Set time options**: Choose current time or custom time
+4. **Analyze**: Click the "ANALYZE ROUTE" button to see results
+5. **View data**: Navigate through tabs to see different analyses
+
+## API Keys
+
+The application uses the following APIs:
+- Weather data from [WeatherAPI.com](https://www.weatherapi.com/)
+- Traffic data from [TomTom](https://developer.tomtom.com/)
+
+## Deployment
+
+The app is deployed on Streamlit Cloud at: [beem-billboard-optimizer](https://beem-billboard-optimizer-lvvnqjcpqucrxzvnhg3vc6.streamlit.app/)
 
 ## About
 
