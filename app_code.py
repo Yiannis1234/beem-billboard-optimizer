@@ -633,8 +633,20 @@ if analyze:
     st.button("🔄 ANALYZE AGAIN", type="primary")
     
 else:
-    # Add just the beem logo title without the container
-    st.markdown('<h1 class="hero-title">beem.</h1>', unsafe_allow_html=True)
+    # Add beem logo and cloud text side by side
+    col_logo, col_text = st.columns([3, 2])
+    with col_logo:
+        st.markdown('<h1 class="hero-title">beem.</h1>', unsafe_allow_html=True)
+    
+    with col_text:
+        st.markdown("""
+        <div style="background-color:#FFF1E6; padding:10px; border-radius:20px; 
+             text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.1); 
+             border:2px dashed #FF7E33; margin-top:15px;">
+            <h4 style="margin:5px; color:#FF7E33;">⬆️ PRESS TOP LEFT</h4>
+            <h4 style="margin:5px; color:#FF7E33;">ARROW TO ANALYZE</h4>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Features section
     st.subheader("📢 Optimize your advertising impact")
