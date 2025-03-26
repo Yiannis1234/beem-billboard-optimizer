@@ -754,26 +754,89 @@ with st.sidebar:
     
     if st.button("ANALYZE ROUTE", type="primary", use_container_width=True):
         st.session_state.analyze = True
-        # Auto-collapse the sidebar when the analyze button is clicked
-        st.session_state.sidebar_collapsed = True
+        st.session_state.sidebar_state = "collapsed" # Store for next reload
+        
+        # More aggressive approach to hide the sidebar
         js = '''
         <script>
-            function hideLeftSidebar() {
-                const leftSidebar = window.parent.document.querySelector('[data-testid="stSidebar"]');
-                const closeButton = window.parent.document.querySelector('[data-testid="collapsedControl"]');
-                if (leftSidebar && !leftSidebar.classList.contains('collapsed')) {
-                    if (closeButton) {
-                        closeButton.click();
+            function closeSidebar() {
+                // Target the specific sidebar
+                const sidebar = window.parent.document.querySelector('[data-testid="stSidebar"]');
+                
+                // Target the collapse button specifically
+                const collapseButton = window.parent.document.querySelector('[data-testid="collapsedControl"]');
+                
+                // Force click the collapse button multiple times to ensure it works
+                if (collapseButton) {
+                    try {
+                        collapseButton.click();
+                        // Create and dispatch a click event as backup
+                        const clickEvent = new MouseEvent('click', {
+                            bubbles: true,
+                            cancelable: true,
+                            view: window
+                        });
+                        collapseButton.dispatchEvent(clickEvent);
+                    } catch (e) {
+                        console.error("Error clicking collapse button:", e);
+                    }
+                }
+                
+                // As an alternative method, add collapsed class directly
+                if (sidebar && !sidebar.classList.contains('collapsed')) {
+                    try {
+                        sidebar.classList.add('collapsed');
+                        // Also try setting width to collapse it
+                        sidebar.style.width = '0px';
+                        sidebar.style.minWidth = '0px';
+                        sidebar.style.maxWidth = '0px';
+                        sidebar.style.opacity = '0';
+                        sidebar.style.visibility = 'hidden';
+                        sidebar.style.transition = 'width 0.5s, opacity 0.5s, visibility 0.5s';
+                        
+                        // Try to force expanded to false and collapsed to true in data attributes
+                        sidebar.setAttribute('data-expanded', 'false');
+                        sidebar.setAttribute('data-collapsed', 'true');
+                    } catch (e) {
+                        console.error("Error collapsing sidebar:", e);
+                    }
+                }
+                
+                // Also hide the collapsed control
+                const expandButton = window.parent.document.querySelector('[data-testid="expandedControl"]');
+                if (expandButton) {
+                    try {
+                        expandButton.style.display = 'none';
+                    } catch (e) {
+                        console.error("Error hiding expand button:", e);
                     }
                 }
             }
-            // Execute immediately
-            hideLeftSidebar();
-            // Also execute after a small delay to ensure DOM is ready
-            setTimeout(hideLeftSidebar, 100);
+            
+            // Execute multiple times with delays to ensure it works
+            closeSidebar();
+            setTimeout(closeSidebar, 100);
+            setTimeout(closeSidebar, 300);
+            setTimeout(closeSidebar, 500);
         </script>
         '''
         st.markdown(js, unsafe_allow_html=True)
+        
+        # Can't set page_config twice, so we'll use CSS to force hide it
+        hide_sidebar_css = """
+        <style>
+        [data-testid="stSidebar"] {
+            display: none !important;
+            width: 0px !important;
+            min-width: 0px !important;
+            max-width: 0px !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+        </style>
+        """
+        st.markdown(hide_sidebar_css, unsafe_allow_html=True)
+        
         st.rerun()
     
     with st.expander("About Beem"):
