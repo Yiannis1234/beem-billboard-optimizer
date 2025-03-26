@@ -243,16 +243,66 @@ def get_weather_data(area, day_type):
                     'wind_speed': current.get('wind_kph', 0)
                 }
         else:
-            # Display error and stop execution
+            # Display error but continue with fallback data
             st.error(f"❌ Weather API error: Status code {response.status_code}")
-            st.stop()
     except Exception as e:
-        # Display error and stop execution
+        # Display error but continue with fallback data
         st.error(f"❌ Weather API error: {str(e)}")
-        st.stop()
     
-    # This code should never be reached due to st.stop()
-    return None
+    # Fallback weather data based on season and area
+    current_month = datetime.now().month
+    
+    # Determine season-appropriate temperatures for Manchester
+    if 3 <= current_month <= 5:  # Spring
+        base_temp = 13.5
+        condition_options = ["Partly cloudy", "Cloudy", "Light rain", "Overcast"]
+        precip_chance = 40
+        wind_speed = 14.5
+    elif 6 <= current_month <= 8:  # Summer
+        base_temp = 18.5
+        condition_options = ["Sunny", "Partly cloudy", "Light rain", "Cloudy"]
+        precip_chance = 30
+        wind_speed = 12.0
+    elif 9 <= current_month <= 11:  # Autumn
+        base_temp = 14.0
+        condition_options = ["Cloudy", "Light rain", "Partly cloudy", "Overcast"]
+        precip_chance = 45
+        wind_speed = 15.5
+    else:  # Winter
+        base_temp = 6.5
+        condition_options = ["Cloudy", "Light rain", "Overcast", "Mist"]
+        precip_chance = 50
+        wind_speed = 17.0
+    
+    # Area-specific temperature adjustment
+    area_temp_factors = {
+        "Northern Quarter": 0.0,
+        "City Centre": +0.3,
+        "Ancoats": -0.2,
+        "Piccadilly": +0.1,
+        "Deansgate": +0.2,
+        "Media City": -0.3,
+        "Oxford Road": +0.1,
+        "Spinningfields": +0.0
+    }
+    
+    # Apply area adjustment
+    adjusted_temp = base_temp + area_temp_factors.get(area, 0.0)
+    
+    # Add some randomness for realism
+    final_temp = round(adjusted_temp + random.uniform(-0.5, 0.5), 1)
+    condition = random.choice(condition_options)
+    final_precip = round(precip_chance + random.uniform(-5, 5))
+    final_wind = round(wind_speed + random.uniform(-2, 2), 1)
+    
+    st.info("⚠️ Using fallback weather data due to API issues")
+    
+    return {
+        'temperature': final_temp,
+        'condition': condition,
+        'precipitation_chance': final_precip,
+        'wind_speed': final_wind
+    }
 
 def get_pedestrian_density(area, day_type, hour=None):
     """Generate simulated pedestrian density data"""
@@ -304,10 +354,10 @@ def get_traffic_density(area, day_type, hour=None):
     lat = area_coordinates[area]["latitude"]
     lon = area_coordinates[area]["longitude"]
     
-    # Use the TomTom API
+    # Use the TomTom API - with robust error handling
     try:
-        # TomTom Traffic Flow API
-        url = f"https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point={lat},{lon}&key={tomtom_api_key}"
+        # Use a more reliable TomTom Traffic API endpoint for Manchester
+        url = f"https://api.tomtom.com/traffic/services/4/flowSegmentData/relative/10/json?point={lat},{lon}&unit=MPH&openLr=false&key={tomtom_api_key}"
         
         response = requests.get(url, timeout=10)
         
@@ -317,25 +367,83 @@ def get_traffic_density(area, day_type, hour=None):
             # Extract relevant traffic data
             if 'flowSegmentData' in data:
                 flow_data = data['flowSegmentData']
+                
+                # Get congestion data
+                congestion_percentage = flow_data.get('congestionLevel', 0)
+                
+                # If congestion level is directly available, use it
+                if congestion_percentage > 0:
+                    return congestion_percentage
+                
+                # Otherwise calculate from speeds
                 current_speed = flow_data.get('currentSpeed', 40)
-                free_flow_speed = flow_data.get('freeFlowSpeed', 50) 
+                free_flow_speed = flow_data.get('freeFlowSpeed', 50)
                 
-                # Calculate congestion level (0-1 range)
-                congestion = min(1.0, max(0.0, 1 - (current_speed / max(1, free_flow_speed))))
-                
-                # Convert to density percentage
-                return round(congestion * 100)
+                # Avoid division by zero
+                if free_flow_speed > 0:
+                    # Calculate congestion level (0-1 range)
+                    congestion = min(1.0, max(0.0, 1 - (current_speed / free_flow_speed)))
+                    
+                    # Convert to density percentage
+                    return round(congestion * 100)
+                else:
+                    # If no speed data, use jam factor
+                    jam_factor = flow_data.get('jamFactor', 0)
+                    return round(jam_factor * 20)  # Scale to percentage
+            else:
+                st.warning(f"⚠️ Unable to find traffic segment data for {area}")
         else:
-            # Display error and stop execution
             st.error(f"❌ Traffic API error: Status code {response.status_code}")
-            st.stop()
+            # Don't stop execution, use fallback data instead
     except Exception as e:
-        # Display error and stop execution
         st.error(f"❌ Traffic API error: {str(e)}")
-        st.stop()
+        # Don't stop execution, use fallback data instead
     
-    # This code should never be reached due to st.stop()
-    return None
+    # Fallback to realistic traffic data based on time and area
+    # This only runs if the API fails
+    time_based_congestion = {
+        "morning_rush": {"weekday": 65, "weekend": 35},
+        "midday": {"weekday": 40, "weekend": 50},
+        "evening_rush": {"weekday": 75, "weekend": 45},
+        "evening": {"weekday": 35, "weekend": 30},
+        "night": {"weekday": 15, "weekend": 10}
+    }
+    
+    # Determine time period
+    if 7 <= hour <= 9:
+        time_period = "morning_rush"
+    elif 10 <= hour <= 15:
+        time_period = "midday"
+    elif 16 <= hour <= 19:
+        time_period = "evening_rush"
+    elif 20 <= hour <= 23:
+        time_period = "evening"
+    else:
+        time_period = "night"
+    
+    # Get base congestion for time period and day type
+    day_key = "weekday" if day_type == "Weekday" else "weekend"
+    base_congestion = time_based_congestion[time_period][day_key]
+    
+    # Area-specific adjustment
+    area_factors = {
+        "Northern Quarter": 0.9,
+        "City Centre": 1.2,
+        "Ancoats": 0.8,
+        "Piccadilly": 1.1,
+        "Deansgate": 1.0,
+        "Media City": 0.7,
+        "Oxford Road": 1.1,
+        "Spinningfields": 0.9
+    }
+    
+    area_factor = area_factors.get(area, 1.0)
+    
+    # Calculate final congestion with some randomness
+    congestion = int(base_congestion * area_factor * random.uniform(0.9, 1.1))
+    
+    # Ensure the value is within reasonable bounds
+    return max(5, min(95, congestion))
 
 def get_optimal_times(area, day_type):
     """Determine optimal advertising times based on pedestrian and traffic data"""
