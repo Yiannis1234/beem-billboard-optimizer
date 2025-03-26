@@ -754,91 +754,125 @@ with st.sidebar:
     
     if st.button("ANALYZE ROUTE", type="primary", use_container_width=True):
         st.session_state.analyze = True
-        st.session_state.sidebar_state = "collapsed" # Store for next reload
         
-        # More aggressive approach to hide the sidebar
-        js = '''
+        # Hide sidebar via JavaScript without causing a rerun
+        hide_sidebar_js = """
         <script>
-            function closeSidebar() {
-                // Target the specific sidebar
-                const sidebar = window.parent.document.querySelector('[data-testid="stSidebar"]');
-                
-                // Target the collapse button specifically
-                const collapseButton = window.parent.document.querySelector('[data-testid="collapsedControl"]');
-                
-                // Force click the collapse button multiple times to ensure it works
-                if (collapseButton) {
+            (function() {
+                // Run immediately and repeatedly to ensure it works
+                function hideSidebar() {
+                    // Get all sidebar elements
+                    const sidebar = window.parent.document.querySelector('[data-testid="stSidebar"]');
+                    const expandButton = window.parent.document.querySelector('[data-testid="expandedControl"]');
+                    const collapseButton = window.parent.document.querySelector('[data-testid="collapsedControl"]');
+                    
                     try {
-                        collapseButton.click();
-                        // Create and dispatch a click event as backup
-                        const clickEvent = new MouseEvent('click', {
-                            bubbles: true,
-                            cancelable: true,
-                            view: window
-                        });
-                        collapseButton.dispatchEvent(clickEvent);
-                    } catch (e) {
-                        console.error("Error clicking collapse button:", e);
-                    }
-                }
-                
-                // As an alternative method, add collapsed class directly
-                if (sidebar && !sidebar.classList.contains('collapsed')) {
-                    try {
-                        sidebar.classList.add('collapsed');
-                        // Also try setting width to collapse it
-                        sidebar.style.width = '0px';
-                        sidebar.style.minWidth = '0px';
-                        sidebar.style.maxWidth = '0px';
-                        sidebar.style.opacity = '0';
-                        sidebar.style.visibility = 'hidden';
-                        sidebar.style.transition = 'width 0.5s, opacity 0.5s, visibility 0.5s';
+                        // Add direct CSS modifications to force hide
+                        if (sidebar) {
+                            sidebar.style.cssText = `
+                                width: 0 !important;
+                                min-width: 0 !important;
+                                max-width: 0 !important;
+                                padding: 0 !important;
+                                margin: 0 !important;
+                                opacity: 0 !important;
+                                pointer-events: none !important;
+                                visibility: hidden !important;
+                                position: absolute !important;
+                                transform: translateX(-100%) !important;
+                                transition: none !important;
+                            `;
+                            
+                            // Also try to set all attributes
+                            sidebar.setAttribute('aria-hidden', 'true');
+                            sidebar.classList.add('collapsed');
+                            
+                            // Hide all children too
+                            Array.from(sidebar.children).forEach(child => {
+                                child.style.display = 'none';
+                                child.style.opacity = '0';
+                                child.style.visibility = 'hidden';
+                            });
+                        }
                         
-                        // Try to force expanded to false and collapsed to true in data attributes
-                        sidebar.setAttribute('data-expanded', 'false');
-                        sidebar.setAttribute('data-collapsed', 'true');
-                    } catch (e) {
-                        console.error("Error collapsing sidebar:", e);
+                        // Try to trigger the collapse button
+                        if (collapseButton) {
+                            collapseButton.click();
+                        }
+                        
+                        // Hide expand button too
+                        if (expandButton) {
+                            expandButton.style.cssText = `
+                                display: none !important;
+                                opacity: 0 !important;
+                                visibility: hidden !important;
+                            `;
+                        }
+                    } catch(e) {
+                        console.error("Error hiding sidebar:", e);
                     }
                 }
                 
-                // Also hide the collapsed control
-                const expandButton = window.parent.document.querySelector('[data-testid="expandedControl"]');
-                if (expandButton) {
-                    try {
-                        expandButton.style.display = 'none';
-                    } catch (e) {
-                        console.error("Error hiding expand button:", e);
-                    }
-                }
-            }
-            
-            // Execute multiple times with delays to ensure it works
-            closeSidebar();
-            setTimeout(closeSidebar, 100);
-            setTimeout(closeSidebar, 300);
-            setTimeout(closeSidebar, 500);
+                // Run repeatedly to ensure it works
+                hideSidebar();
+                setTimeout(hideSidebar, 50);
+                setTimeout(hideSidebar, 100);
+                setTimeout(hideSidebar, 300);
+                setTimeout(hideSidebar, 500);
+                setTimeout(hideSidebar, 1000);
+                
+                // Also add event listener to hide it again if user tries to reopen
+                document.addEventListener('click', function(e) {
+                    setTimeout(hideSidebar, 100);
+                });
+                
+                // Add MutationObserver to detect DOM changes and hide again if needed
+                const observer = new MutationObserver(function(mutations) {
+                    setTimeout(hideSidebar, 100);
+                });
+                
+                // Start observing the document
+                observer.observe(document, { 
+                    childList: true, 
+                    subtree: true 
+                });
+            })();
         </script>
-        '''
-        st.markdown(js, unsafe_allow_html=True)
+        """
         
-        # Can't set page_config twice, so we'll use CSS to force hide it
+        # Force hide with CSS as well
         hide_sidebar_css = """
         <style>
         [data-testid="stSidebar"] {
             display: none !important;
-            width: 0px !important;
-            min-width: 0px !important;
-            max-width: 0px !important;
+            width: 0 !important;
+            min-width: 0 !important;
+            max-width: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            visibility: hidden !important;
+            position: absolute !important;
+            transform: translateX(-100%) !important;
+            z-index: -999 !important;
+        }
+        
+        [data-testid="expandedControl"] {
+            display: none !important;
             opacity: 0 !important;
             visibility: hidden !important;
         }
         </style>
         """
+        
+        # Insert both JS and CSS
+        st.markdown(hide_sidebar_js, unsafe_allow_html=True)
         st.markdown(hide_sidebar_css, unsafe_allow_html=True)
         
-        st.rerun()
-    
+        # Don't rerun - which is causing the sidebar to reappear
+        # Just continue with the current page load
+
     with st.expander("About Beem"):
         st.markdown("""
         **Beem Mobile Billboard Solutions**
