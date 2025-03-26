@@ -175,6 +175,161 @@ if 'active_tab' in st.session_state:
 # Set analyze from session state
 analyze = st.session_state.analyze
 
+# Check if we need to auto-scroll (after button click)
+if 'just_clicked' in st.session_state and st.session_state.just_clicked:
+    # Auto-scroll JavaScript - this will execute immediately
+    st.markdown("""
+    <script>
+        // Immediate scroll to top of page
+        window.scrollTo(0, 0);
+    </script>
+    """, unsafe_allow_html=True)
+    # Reset flag
+    st.session_state.just_clicked = False
+
+# If analyzing, just show the analysis content
+if analyze:
+    # Analysis banner - keep simple to avoid HTML showing
+    st.markdown("""
+    <div style="background: linear-gradient(90deg, #FF7E33, #FFB673); border-radius: 10px; padding: 10px; margin-bottom: 15px;" id="scroll-target">
+        <h3 style="color: white !important; margin: 0; font-size: 22px; font-weight: 800;">Beem Billboard Insights: {0}</h3>
+    </div>
+    """.format(area), unsafe_allow_html=True)
+    
+    # IMMEDIATELY SHOW THE ANALYSIS - Don't wait for tabs
+    st.markdown(f'<h2 class="gradient-header">Analysis for {area}</h2>', unsafe_allow_html=True)
+    
+    # Generate placeholder data
+    placeholder_data = generate_route_data(area, selected_time)
+    
+    # Business density heatmap
+    st.subheader("Business Density Heatmap")
+    st.plotly_chart(generate_density_heatmap(area, selected_time, day_type), use_container_width=True)
+    
+    # Optimal route
+    st.subheader("Optimal Route")
+    st.plotly_chart(generate_route_map(area, placeholder_data), use_container_width=True)
+    
+    # Route metrics
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Estimated Impressions", f"{random.randint(12000, 18000):,}")
+    with col2:
+        st.metric("Route Length", f"{random.randint(8, 15)} km")
+    with col3:
+        st.metric("Estimated Time", f"{random.randint(45, 90)} mins")
+        
+    # Detailed metrics
+    st.subheader("Engagement Forecast")
+    st.bar_chart(generate_engagement_forecast())
+    
+    # Only AFTER showing the main analysis, show the tabs for additional views
+    st.markdown("### Additional Analysis Views")
+    tab_names = ["Map & Visualization", "Historical Data", "Best Times", "Demographics"]
+    tabs = st.tabs(tab_names)
+    
+    # Tab 1: Map & Visualization
+    with tabs[0]:
+        st.subheader("Interactive Area Map")
+        # Display map of the selected area with key metrics
+        st.plotly_chart(generate_interactive_map(area), use_container_width=True)
+        
+        # Key area insights
+        st.subheader("Key Area Insights")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("Foot Traffic Density", f"{random.randint(75, 98)}%")
+            st.metric("Business Concentration", f"{random.randint(65, 90)}%")
+        with col2:
+            st.metric("Average Dwell Time", f"{random.randint(12, 35)} min")
+            st.metric("Area Popularity", f"{random.randint(7, 10)}/10")
+    
+    # Tab 2: Historical Data
+    with tabs[1]:
+        st.subheader("Historical Performance")
+        # Display comparison charts
+        st.line_chart(generate_historical_data())
+        
+        # Insights
+        st.subheader("Trend Analysis")
+        st.write("Based on historical data, we predict a 23% increase in engagement compared to last month in this area.")
+    
+    # Tab 3: Best Times
+    with tabs[2]:
+        st.subheader("Optimal Times")
+        # Heat calendar for best times
+        st.plotly_chart(generate_time_heatmap(), use_container_width=True)
+        
+        # Recommended time slots
+        st.subheader("Recommended Time Slots")
+        for i in range(3):
+            day = random.choice(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])
+            time = random.choice(["8:00 AM - 10:00 AM", "11:30 AM - 1:30 PM", "4:00 PM - 6:00 PM"])
+            st.success(f"**{day}**: {time} - High business activity and foot traffic")
+    
+    # Tab 4: Demographics
+    with tabs[3]:
+        st.subheader("Demographic Insights")
+        # Age distribution
+        st.subheader("Age Distribution")
+        st.bar_chart(generate_age_distribution())
+        
+        # Income levels
+        st.subheader("Income Levels")
+        st.bar_chart(generate_income_distribution())
+        
+        # Interest categories
+        st.subheader("Interest Categories")
+        st.plotly_chart(generate_interest_chart(), use_container_width=True)
+else:
+    # Only show the intro content if we're not analyzing
+    st.title("beem.", anchor=False)
+    
+    # Banner with instructions - using Streamlit native components
+    st.warning("👉 **CLICK THE ARROW TOP LEFT** TO ANALYZE YOUR ROUTE 👈")
+    
+    st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
+    
+    # Help box using Streamlit native components - make this smaller
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        st.info("""
+        **HOW TO USE:** Click the gray ">" button in the top left to open the sidebar menu, 
+        select your options, then click "ANALYZE ROUTE"
+        """)
+    
+    # App description using Streamlit native
+    st.markdown("""
+    ### Optimize your mobile billboard routes for maximum engagement
+    Find the best times and locations for your advertising campaigns 📍
+    """)
+    
+    # ROUTE ANALYSIS CONTROLS using Streamlit native components instead of HTML
+    st.success("### ROUTE ANALYSIS CONTROLS\n⬅️ Use the controls in the sidebar to select your options")
+    
+    # Add a direct analyze button in the main content area - HUGE and unmissable
+    st.markdown("### Click this button to see results:")
+    
+    analyze_col1, analyze_col2, analyze_col3 = st.columns([1, 2, 1])
+    with analyze_col2:
+        main_analyze = st.button("🚀 ANALYZE ROUTE NOW 🚀", type="primary", use_container_width=True)
+        if main_analyze:
+            st.session_state.analyze = True
+            st.session_state.current_tab = 0
+            st.session_state.just_clicked = True
+            # Force a rerun to update the UI
+            st.experimental_rerun()
+
+    # Welcome banner - extremely simplified to avoid HTML issues
+    st.header("Welcome to Beem!", anchor=False)
+    st.subheader("Mobile billboard optimization platform", anchor=False)
+    
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        st.info("📣 Find the best times and locations for your advertising campaigns")
+    with col2:
+        st.markdown("### 🚲")
+
 # Sidebar
 with st.sidebar:
     # Add Beem logo
@@ -220,8 +375,8 @@ with st.sidebar:
         if sidebar_analyze:
             st.session_state.analyze = True
             st.session_state.current_tab = 0
+            st.session_state.just_clicked = True
             # Force a rerun to update the UI
-            st.session_state.auto_scroll = True
             st.experimental_rerun()
     
     # About section
@@ -238,6 +393,28 @@ with st.sidebar:
         - 📱 Engaging
         - 📊 Data-driven
         """)
+
+# Footer with enhanced visual elements
+st.markdown("---")
+st.markdown("""
+<div class="footer-container">
+    <div style="text-align: center">
+        <div style="background-color: #FF9D45; color: white; font-size: 28px; font-weight: bold; padding: 5px 20px; border-radius: 5px; display: inline-block; margin-bottom: 10px;">
+            beem.
+        </div>
+        <div style="color: #FF9D45; margin-top: 10px">© 2025 Beem Mobile Billboard Solutions</div>
+        <div style="color: #999; font-size: 12px; margin-top: 5px">hello@beembillboards.com | +44 123 456 7890</div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# Add button to return to the top
+if analyze:
+    # Add a button to jump to top
+    st.sidebar.markdown("---")
+    if st.sidebar.button("Return to Top ⬆️"):
+        st.session_state.just_clicked = True
+        st.experimental_rerun()
 
 # Add helper functions to generate data for each tab
 def generate_route_data(area, time):
@@ -579,284 +756,3 @@ def generate_interest_chart():
     )
     
     return fig
-
-# Create a container at the top for the analysis content with an anchor
-if analyze:
-    st.markdown('<div id="analysis-content"></div>', unsafe_allow_html=True)
-    # Use JavaScript to scroll to the analysis content when analyze button is clicked
-    st.markdown("""
-    <script>
-        // Function to scroll to the analysis content
-        function scrollToAnalysis() {
-            var element = document.getElementById('analysis-content');
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-        
-        // Call the function after the page loads
-        window.addEventListener('load', function() {
-            setTimeout(scrollToAnalysis, 500);
-        });
-    </script>
-    """, unsafe_allow_html=True)
-
-# Title with prominent instruction about the arrow - only display when not analyzing
-if not analyze:
-    # Only show the intro content if we're not analyzing
-    st.title("beem.", anchor=False)
-    
-    # Banner with instructions - using Streamlit native components
-    st.warning("👉 **CLICK THE ARROW TOP LEFT** TO ANALYZE YOUR ROUTE 👈")
-    
-    st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
-    
-    # Help box using Streamlit native components - make this smaller
-    col1, col2 = st.columns([3, 1])
-    with col1:
-        st.info("""
-        **HOW TO USE:** Click the gray ">" button in the top left to open the sidebar menu, 
-        select your options, then click "ANALYZE ROUTE"
-        """)
-    
-    # App description using Streamlit native
-    st.markdown("""
-    ### Optimize your mobile billboard routes for maximum engagement
-    Find the best times and locations for your advertising campaigns 📍
-    """)
-    
-    # ROUTE ANALYSIS CONTROLS using Streamlit native components instead of HTML
-    st.success("### ROUTE ANALYSIS CONTROLS\n⬅️ Use the controls in the sidebar to select your options")
-    
-    # Add a direct analyze button in the main content area - HUGE and unmissable
-    st.markdown("### Click this button to see results:")
-    
-    analyze_col1, analyze_col2, analyze_col3 = st.columns([1, 2, 1])
-    with analyze_col2:
-        main_analyze = st.button("🚀 ANALYZE ROUTE NOW 🚀", type="primary", use_container_width=True)
-        if main_analyze:
-            st.session_state.analyze = True
-            st.session_state.current_tab = 0
-            # Force a rerun to update the UI
-            st.session_state.auto_scroll = True
-            st.experimental_rerun()
-
-    # Welcome banner - extremely simplified to avoid HTML issues
-    st.header("Welcome to Beem!", anchor=False)
-    st.subheader("Mobile billboard optimization platform", anchor=False)
-    
-    col1, col2 = st.columns([3, 1])
-    with col1:
-        st.info("📣 Find the best times and locations for your advertising campaigns")
-    with col2:
-        st.markdown("### 🚲")
-
-# Welcome or Analysis banner based on state - simplified for analysis
-if analyze:
-    # Analysis banner - keep simple to avoid HTML showing
-    st.markdown("""
-    <div style="background: linear-gradient(90deg, #FF7E33, #FFB673); border-radius: 10px; padding: 10px; margin-bottom: 15px;" id="scroll-target">
-        <h3 style="color: white !important; margin: 0; font-size: 22px; font-weight: 800;">Beem Billboard Insights: {0}</h3>
-    </div>
-    """.format(area), unsafe_allow_html=True)
-
-# Function to get weather icon based on condition
-def get_weather_icon(condition):
-    condition = condition.lower()
-    if 'sunny' in condition or 'clear' in condition:
-        return "☀️"  # Sunny
-    elif 'cloud' in condition or 'overcast' in condition:
-        return "☁️"  # Cloudy
-    elif 'rain' in condition or 'drizzle' in condition:
-        return "🌧️"  # Rainy
-    elif 'snow' in condition:
-        return "❄️"  # Snowy
-    elif 'storm' in condition or 'thunder' in condition:
-        return "⛈️"  # Storm
-    elif 'fog' in condition or 'mist' in condition:
-        return "🌫️"  # Foggy
-    else:
-        return "🌤️"  # Partly cloudy (default)
-
-# Function to get traffic status icon and text
-def get_traffic_status(congestion_level):
-    if congestion_level < 0.3:
-        return "🟢", "Light traffic"
-    elif congestion_level < 0.6:
-        return "🟡", "Moderate traffic"
-    else:
-        return "🔴", "Heavy traffic"
-
-# Function to show analysis progress
-def show_analysis_progress():
-    progress = st.progress(0)
-    # Show a series of steps for feedback
-    steps = [
-        "Collecting weather data...",
-        "Analyzing traffic conditions...",
-        "Calculating pedestrian density...",
-        "Estimating engagement metrics...",
-        "Optimizing route timing...",
-        "Finalizing recommendations..."
-    ]
-    
-    status_text = st.empty()
-    details_text = st.empty()
-    
-    for i, step in enumerate(steps):
-        status_text.text(f"Step {i+1}/{len(steps)}: {step}")
-        details_text.text("Processing...")
-        progress.progress((i+1)/len(steps))
-        time_module.sleep(0.5)
-        
-    status_text.text("Analysis complete!")
-    details_text.empty()
-    return True
-
-# Create tabs based on the current tab in session state
-tab_names = ["Route Analysis", "Map & Visualization", "Historical Data", "Best Times", "Demographics"]
-
-# Create the tabs
-tabs = st.tabs(tab_names)
-
-# Display content in the currently selected tab
-with tabs[st.session_state.current_tab]:
-    # Tab 1: Route Analysis
-    if st.session_state.current_tab == 0:
-        if analyze:
-            st.markdown(f'<h2 class="gradient-header">Analysis for {area}</h2>', unsafe_allow_html=True)
-            
-            # Simulate loading time for now (remove this in production)
-            # Generate placeholder data
-            placeholder_data = generate_route_data(area, selected_time)
-            
-            # Business density heatmap
-            st.subheader("Business Density Heatmap")
-            st.plotly_chart(generate_density_heatmap(area, selected_time, day_type), use_container_width=True)
-            
-            # Optimal route
-            st.subheader("Optimal Route")
-            st.plotly_chart(generate_route_map(area, placeholder_data), use_container_width=True)
-            
-            # Route metrics
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.metric("Estimated Impressions", f"{random.randint(12000, 18000):,}")
-            with col2:
-                st.metric("Route Length", f"{random.randint(8, 15)} km")
-            with col3:
-                st.metric("Estimated Time", f"{random.randint(45, 90)} mins")
-                
-            # Detailed metrics
-            st.subheader("Engagement Forecast")
-            st.bar_chart(generate_engagement_forecast())
-        else:
-            st.info("Click the ANALYZE ROUTE button to see results")
-    
-    # Tab 2: Map & Visualization
-    elif st.session_state.current_tab == 1:
-        st.subheader("Interactive Area Map")
-        if analyze:
-            # Display map of the selected area with key metrics
-            st.plotly_chart(generate_interactive_map(area), use_container_width=True)
-            
-            # Key area insights
-            st.subheader("Key Area Insights")
-            col1, col2 = st.columns(2)
-            with col1:
-                st.metric("Foot Traffic Density", f"{random.randint(75, 98)}%")
-                st.metric("Business Concentration", f"{random.randint(65, 90)}%")
-            with col2:
-                st.metric("Average Dwell Time", f"{random.randint(12, 35)} min")
-                st.metric("Area Popularity", f"{random.randint(7, 10)}/10")
-        else:
-            st.info("Run the analysis first to see visualizations")
-    
-    # Tab 3: Historical Data
-    elif st.session_state.current_tab == 2:
-        st.subheader("Historical Performance")
-        if analyze:
-            # Display comparison charts
-            st.line_chart(generate_historical_data())
-            
-            # Insights
-            st.subheader("Trend Analysis")
-            st.write("Based on historical data, we predict a 23% increase in engagement compared to last month in this area.")
-        else:
-            st.info("Run the analysis first to see historical data")
-    
-    # Tab 4: Best Times
-    elif st.session_state.current_tab == 3:
-        st.subheader("Optimal Times")
-        if analyze:
-            # Heat calendar for best times
-            st.plotly_chart(generate_time_heatmap(), use_container_width=True)
-            
-            # Recommended time slots
-            st.subheader("Recommended Time Slots")
-            for i in range(3):
-                day = random.choice(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])
-                time = random.choice(["8:00 AM - 10:00 AM", "11:30 AM - 1:30 PM", "4:00 PM - 6:00 PM"])
-                st.success(f"**{day}**: {time} - High business activity and foot traffic")
-        else:
-            st.info("Run the analysis first to see optimal times")
-    
-    # Tab 5: Demographics
-    elif st.session_state.current_tab == 4:
-        st.subheader("Demographic Insights")
-        if analyze:
-            # Age distribution
-            st.subheader("Age Distribution")
-            st.bar_chart(generate_age_distribution())
-            
-            # Income levels
-            st.subheader("Income Levels")
-            st.bar_chart(generate_income_distribution())
-            
-            # Interest categories
-            st.subheader("Interest Categories")
-            st.plotly_chart(generate_interest_chart(), use_container_width=True)
-        else:
-            st.info("Run the analysis first to see demographic insights")
-
-# Footer with enhanced visual elements
-st.markdown("---")
-st.markdown("""
-<div class="footer-container">
-    <div style="text-align: center">
-        <div style="background-color: #FF9D45; color: white; font-size: 28px; font-weight: bold; padding: 5px 20px; border-radius: 5px; display: inline-block; margin-bottom: 10px;">
-            beem.
-        </div>
-        <div style="color: #FF9D45; margin-top: 10px">© 2025 Beem Mobile Billboard Solutions</div>
-        <div style="color: #999; font-size: 12px; margin-top: 5px">hello@beembillboards.com | +44 123 456 7890</div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-# Add button to return to the top if scrolled down
-if analyze:
-    # Initialize auto scroll if needed
-    if 'auto_scroll' not in st.session_state:
-        st.session_state.auto_scroll = False
-        
-    # Auto-scroll implementation
-    if st.session_state.auto_scroll:
-        # Scroll to the top of the analysis section - higher priority than anchor
-        js = f"""
-        <script>
-            function scrollToTop() {{
-                window.scrollTo(0, 0);
-            }}
-            // Execute with a small delay to ensure page is rendered
-            setTimeout(scrollToTop, 100);
-        </script>
-        """
-        st.markdown(js, unsafe_allow_html=True)
-        # Reset flag to avoid continuous scrolling
-        st.session_state.auto_scroll = False
-    
-    # Add a button to jump to top
-    st.sidebar.markdown("---")
-    if st.sidebar.button("Return to Top ⬆️"):
-        st.session_state.auto_scroll = True
-        st.experimental_rerun()
