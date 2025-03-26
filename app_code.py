@@ -11,10 +11,10 @@ st.set_page_config(
     page_title="Beem Billboard Optimizer", 
     page_icon="🚲", 
     layout="wide", 
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"  # Start with collapsed sidebar on mobile
 )
 
-# Custom CSS for light orange and white theme
+# Custom CSS for light orange and white theme with mobile improvements
 st.markdown("""
 <style>
     /* Main background */
@@ -37,6 +37,9 @@ st.markdown("""
         background-color: #FF7E33 !important;
         border: none !important;
         color: white !important;
+        font-size: 18px !important;
+        padding: 12px 20px !important;
+        width: 100% !important;
     }
     
     /* Info boxes */
@@ -52,6 +55,39 @@ st.markdown("""
     /* Expander */
     .streamlit-expanderHeader {
         color: #FF7E33 !important;
+    }
+    
+    /* Mobile optimizations */
+    /* Increase font size for better readability on small screens */
+    @media (max-width: 768px) {
+        p, li, div {
+            font-size: 16px !important;
+        }
+        h1 {
+            font-size: 28px !important;
+        }
+        h2 {
+            font-size: 24px !important;
+        }
+        h3 {
+            font-size: 20px !important;
+        }
+        
+        /* Add more space between elements for easier touch targets */
+        .element-container {
+            margin-bottom: 20px !important;
+        }
+        
+        /* Make sure buttons are large enough to tap easily */
+        button {
+            min-height: 50px !important;
+        }
+        
+        /* Ensure graphs don't overflow */
+        .js-plotly-plot {
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -248,15 +284,17 @@ def generate_route_map(area, data):
         text=['Start', 'Checkpoint 1', 'Checkpoint 2', 'End']
     ))
     
-    # Update the layout
+    # Update the layout - make it mobile-friendly
     fig.update_layout(
         mapbox=dict(
             style="carto-positron",
             center=dict(lat=center_lat, lon=center_lon),
             zoom=13
         ),
-        margin=dict(l=0, r=0, t=0, b=0),
-        height=500
+        margin=dict(l=0, r=0, t=10, b=0),  # Reduced top margin
+        height=400,  # Slightly shorter for mobile
+        autosize=True,
+        hovermode='closest'
     )
     
     return fig
@@ -290,15 +328,34 @@ def generate_time_heatmap(area, day_type):
     df = pd.DataFrame(data)
     pivot_df = df.pivot(index='Day', columns='Hour', values='Score')
     
-    # Create the heatmap with orange color scheme
+    # Create the heatmap with orange color scheme - optimized for mobile
     fig = px.imshow(
         pivot_df,
         color_continuous_scale=['#FFFFFF', '#FFF1E6', '#FFCC99', '#FF9D45', '#FF7E33'],
-        labels=dict(x="Hour of Day", y="Day of Week", color="Engagement Score"),
+        labels=dict(x="Hour", y="Day", color="Score"),  # Shorter labels for mobile
         title="Optimal Times for Maximum Engagement"
     )
     
-    fig.update_layout(height=400)
+    # Optimize heatmap layout for mobile
+    fig.update_layout(
+        height=350,
+        margin=dict(l=5, r=5, t=40, b=5),
+        autosize=True,
+        xaxis=dict(
+            tickangle=45,  # Angled labels to prevent overlap
+            tickfont=dict(size=10),  # Smaller font size
+            title_font=dict(size=12)  # Smaller title font
+        ),
+        yaxis=dict(
+            tickfont=dict(size=10),  # Smaller font size
+            title_font=dict(size=12)  # Smaller title font
+        ),
+        coloraxis_colorbar=dict(
+            title="Score",
+            title_font=dict(size=12),
+            tickfont=dict(size=10)
+        )
+    )
     
     return fig
 
@@ -351,10 +408,17 @@ area = st.session_state.selected_area
 day_type = st.session_state.selected_day_type
 analyze = st.session_state.analyze
 
+# Mobile-friendly notice 
+st.markdown("""
+<div style="background-color:#FFF1E6; padding:10px; border-radius:5px; margin-bottom:20px; text-align:center;">
+    <h4 style="margin:0; color:#FF7E33;">📱 Optimized for mobile devices</h4>
+    <p style="margin:5px 0;">Tap the top-left button to access settings</p>
+</div>
+""", unsafe_allow_html=True)
+
 # MAIN CONTENT
 if analyze:
     st.title(f"Beem Billboard Insights: {area}")
-    st.subheader(f"Analysis for {area}")
     
     # Generate data 
     data = generate_route_data(area)
@@ -367,12 +431,12 @@ if analyze:
     
     st.markdown("### Current Conditions")
     
-    # Use columns for the current conditions
-    cond1, cond2, cond3, cond4 = st.columns(4)
+    # Use a 2x2 grid instead of 4 columns for better mobile display
+    cond1, cond2 = st.columns(2)
     
     with cond1:
         st.markdown(f"""
-        <div style="background-color:#FFF8F0; padding:10px; border-radius:5px; border-left:5px solid #FF9D45;">
+        <div style="background-color:#FFF8F0; padding:10px; border-radius:5px; border-left:5px solid #FF9D45; height:100%;">
             <h4 style="margin:0; color:#FF7E33;">🌤️ Weather</h4>
             <p style="margin:5px 0;">{weather['condition']}, {weather['temperature']}°C</p>
             <p style="margin:5px 0;">Precipitation: {weather['precipitation_chance']}%</p>
@@ -383,17 +447,20 @@ if analyze:
     with cond2:
         ped_color = "#FF7E33"
         st.markdown(f"""
-        <div style="background-color:#FFF8F0; padding:10px; border-radius:5px; border-left:5px solid #FF9D45;">
+        <div style="background-color:#FFF8F0; padding:10px; border-radius:5px; border-left:5px solid #FF9D45; height:100%;">
             <h4 style="margin:0; color:#FF7E33;">👥 Pedestrian Density</h4>
             <p style="margin:5px 0; font-size:24px; font-weight:bold;">{ped_density}%</p>
             <p style="margin:5px 0;">{"High" if ped_density > 70 else "Medium" if ped_density > 50 else "Low"} foot traffic</p>
         </div>
         """, unsafe_allow_html=True)
     
+    # Second row of conditions
+    cond3, cond4 = st.columns(2)
+    
     with cond3:
         traffic_color = "#FF7E33"
         st.markdown(f"""
-        <div style="background-color:#FFF8F0; padding:10px; border-radius:5px; border-left:5px solid #FF9D45;">
+        <div style="background-color:#FFF8F0; padding:10px; border-radius:5px; border-left:5px solid #FF9D45; height:100%;">
             <h4 style="margin:0; color:#FF7E33;">🚗 Traffic Density</h4>
             <p style="margin:5px 0; font-size:24px; font-weight:bold;">{traffic_density}%</p>
             <p style="margin:5px 0;">{"High" if traffic_density > 70 else "Medium" if traffic_density > 50 else "Low"} congestion</p>
@@ -404,106 +471,107 @@ if analyze:
         current_score = (ped_density * 0.7 + min(70, traffic_density) * 0.3) / 100
         optimal_now = current_score > 0.7
         st.markdown(f"""
-        <div style="background-color:#FFF8F0; padding:10px; border-radius:5px; border-left:5px solid #FF9D45;">
+        <div style="background-color:#FFF8F0; padding:10px; border-radius:5px; border-left:5px solid #FF9D45; height:100%;">
             <h4 style="margin:0; color:#FF7E33;">📊 Current Rating</h4>
             <p style="margin:5px 0; font-size:24px; font-weight:bold;">{"Optimal" if optimal_now else "Not Optimal"}</p>
             <p style="margin:5px 0;">{"Great time to advertise!" if optimal_now else "Better times available"}</p>
         </div>
         """, unsafe_allow_html=True)
     
-    # Recommended times
-    st.markdown("### Recommended Advertising Times")
+    # Recommended times - stack vertically on mobile
+    st.markdown("### Best Advertising Times")
     optimal_times = get_optimal_times(area, day_type)
     
     # Display the top 3 recommended times
     top_times = optimal_times[:3]
-    rec1, rec2, rec3 = st.columns(3)
     
-    with rec1:
+    # Stack times vertically for easier mobile viewing
+    for i, time_data in enumerate(top_times):
+        medal = "🥇" if i == 0 else "🥈" if i == 1 else "🥉"
+        rank = "Best" if i == 0 else "Second Best" if i == 1 else "Third Best"
+        color_bg = "#FFF1E6" if i == 0 else "#FFF5EB" if i == 1 else "#FFF8F0"
+        color_border = "#FF9D45" if i == 0 else "#FFCC99" if i == 1 else "#FFE0CC"
+        color_text = "#FF7E33" if i == 0 else "#FF9D45" if i == 1 else "#FFAA70"
+        
         st.markdown(f"""
-        <div style="background-color:#FFF1E6; padding:15px; border-radius:5px; text-align:center; border:1px solid #FF9D45;">
-            <h3 style="margin:0; color:#FF7E33;">🥇 Best Time</h3>
-            <p style="font-size:28px; font-weight:bold; margin:10px 0; color:#333;">{top_times[0]['hour']}</p>
-            <p style="margin:5px 0;">Rating: <span style="color:#FF7E33; font-weight:bold;">{top_times[0]['category']}</span></p>
-            <p style="margin:5px 0;">👥 Pedestrians: {top_times[0]['pedestrian_density']}%</p>
-            <p style="margin:5px 0;">🚗 Traffic: {top_times[0]['traffic_density']}%</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with rec2:
-        st.markdown(f"""
-        <div style="background-color:#FFF5EB; padding:15px; border-radius:5px; text-align:center; border:1px solid #FFCC99;">
-            <h3 style="margin:0; color:#FF7E33;">🥈 Second Best</h3>
-            <p style="font-size:28px; font-weight:bold; margin:10px 0; color:#333;">{top_times[1]['hour']}</p>
-            <p style="margin:5px 0;">Rating: <span style="color:#FF9D45; font-weight:bold;">{top_times[1]['category']}</span></p>
-            <p style="margin:5px 0;">👥 Pedestrians: {top_times[1]['pedestrian_density']}%</p>
-            <p style="margin:5px 0;">🚗 Traffic: {top_times[1]['traffic_density']}%</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with rec3:
-        st.markdown(f"""
-        <div style="background-color:#FFF8F0; padding:15px; border-radius:5px; text-align:center; border:1px solid #FFE0CC;">
-            <h3 style="margin:0; color:#FF7E33;">🥉 Third Best</h3>
-            <p style="font-size:28px; font-weight:bold; margin:10px 0; color:#333;">{top_times[2]['hour']}</p>
-            <p style="margin:5px 0;">Rating: <span style="color:#FFAA70; font-weight:bold;">{top_times[2]['category']}</span></p>
-            <p style="margin:5px 0;">👥 Pedestrians: {top_times[2]['pedestrian_density']}%</p>
-            <p style="margin:5px 0;">🚗 Traffic: {top_times[2]['traffic_density']}%</p>
+        <div style="background-color:{color_bg}; padding:15px; border-radius:5px; text-align:center; border:1px solid {color_border}; margin-bottom:10px;">
+            <h3 style="margin:0; color:#FF7E33;">{medal} {rank} Time</h3>
+            <p style="font-size:28px; font-weight:bold; margin:10px 0; color:#333;">{time_data['hour']}</p>
+            <p style="margin:5px 0;">Rating: <span style="color:{color_text}; font-weight:bold;">{time_data['category']}</span></p>
+            <p style="margin:5px 0;">👥 Pedestrians: {time_data['pedestrian_density']}%</p>
+            <p style="margin:5px 0;">🚗 Traffic: {time_data['traffic_density']}%</p>
         </div>
         """, unsafe_allow_html=True)
     
     # Time heatmap for optimal times
     st.markdown("### Weekly Optimal Times")
     time_heatmap = generate_time_heatmap(area, day_type)
-    st.plotly_chart(time_heatmap, use_container_width=True)
+    st.plotly_chart(time_heatmap, use_container_width=True, config={'responsive': True})
     
     # Optimal route
     st.markdown("### Recommended Route")
     route_map = generate_route_map(area, data)
-    st.plotly_chart(route_map, use_container_width=True)
+    st.plotly_chart(route_map, use_container_width=True, config={'responsive': True})
     
-    # Route metrics
+    # Route metrics - stack vertically for mobile
     st.markdown("### Route Metrics")
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.metric("Estimated Impressions", f"{random.randint(12000, 18000):,}")
-    with col2:
-        st.metric("Route Length", f"{random.randint(8, 15)} km")
-    with col3:
-        st.metric("Estimated Time", f"{random.randint(45, 90)} mins")
+    
+    # Create metrics container with custom styling
+    metrics_data = [
+        {"label": "Estimated Impressions", "value": f"{random.randint(12000, 18000):,}"},
+        {"label": "Route Length", "value": f"{random.randint(8, 15)} km"},
+        {"label": "Estimated Time", "value": f"{random.randint(45, 90)} mins"}
+    ]
+    
+    for metric in metrics_data:
+        st.markdown(f"""
+        <div style="background-color:#FFF8F0; padding:15px; border-radius:5px; margin-bottom:10px; text-align:center;">
+            <p style="margin:0; color:#666; font-size:14px;">{metric['label']}</p>
+            <p style="margin:0; font-size:24px; font-weight:bold; color:#FF7E33;">{metric['value']}</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Quick action button to rerun analysis
+    st.button("🔄 ANALYZE AGAIN", type="primary")
+    
 else:
-    # Welcome page
+    # Welcome page - optimized for mobile
     st.title("beem.", anchor=False)
     
     # Banner with instructions
-    st.error("## 👉 PRESS TOP LEFT TO ANALYZE YOUR ROUTE 👈")
+    st.error("## 👆 PRESS TOP LEFT MENU FIRST")
     
-    st.header("🚲 Beem Billboard Route Optimizer")
+    st.header("🚲 Billboard Route Optimizer")
     
-    # Help box
-    col1, col2 = st.columns([3, 1])
-    with col1:
-        st.info("""
-        **HOW TO USE:**
-        1. Press the top left options to select your area and time
-        2. Click "ANALYZE ROUTE" to see results
-        """)
-    
-    # App description
-    st.markdown("""
-    ### Optimize your mobile billboard routes for maximum engagement
-    Find the best times and locations for your advertising campaigns 📍
+    # Help box - made more concise for mobile
+    st.info("""
+    **HOW TO USE:**
+    1. Tap top left ≡ icon to open menu
+    2. Select your area and day type
+    3. Tap "ANALYZE ROUTE" button
     """)
     
-    # Direct analyze button
-    st.markdown("### Click the button below to see results:")
+    # App description - shortened
+    st.markdown("""
+    ### Optimize your mobile billboard routes
+    Find the best times and locations for maximum engagement 📍
+    """)
     
-    analyze_col1, analyze_col2, analyze_col3 = st.columns([1, 2, 1])
-    with analyze_col2:
-        if st.button("🚀 ANALYZE ROUTE NOW 🚀", type="primary", use_container_width=True):
-            st.session_state.analyze = True
-            st.rerun()
+    # Direct analyze button - bigger for mobile
+    st.markdown("""
+    <div style="padding:20px 0;">
+        <p style="text-align:center; font-weight:bold; margin-bottom:10px;">👇 OR START DIRECTLY 👇</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("🚀 ANALYZE NOW 🚀", type="primary", use_container_width=True):
+        st.session_state.analyze = True
+        st.rerun()
 
 # Footer
 st.markdown("---")
-st.markdown("### beem. © 2025 Beem Mobile Billboard Solutions")
+st.markdown("""
+<div style="text-align:center; padding:5px;">
+    <p style="margin:0; color:#666;">beem. © 2025 Beem Mobile Billboard Solutions</p>
+</div>
+""", unsafe_allow_html=True)
