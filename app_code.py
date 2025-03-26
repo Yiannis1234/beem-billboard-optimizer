@@ -255,13 +255,8 @@ with st.sidebar:
 
 # Check if we need to auto-scroll (after button click)
 if 'just_clicked' in st.session_state and st.session_state.just_clicked:
-    # Auto-scroll JavaScript - this will execute immediately
-    st.markdown("""
-    <script>
-        // Immediate scroll to top of page
-        window.scrollTo(0, 0);
-    </script>
-    """, unsafe_allow_html=True)
+    # Remove JavaScript that might be causing issues
+    st.write("Loading your analysis...")
     # Reset flag
     st.session_state.just_clicked = False
 
