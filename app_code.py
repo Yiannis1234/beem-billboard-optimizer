@@ -1134,9 +1134,25 @@ else:
         st.markdown('<h1 class="hero-title">beem.</h1>', unsafe_allow_html=True)
     
     # Single button to open sidebar and dropdown menu
+    st.markdown("""
+    <style>
+    /* Force the main action button to be orange */
+    button[data-testid="baseButton-primary"] {
+        background-color: #FF7E33 !important;
+        background-image: linear-gradient(135deg, #FF7E33, #FF9945) !important;
+        color: white !important;
+        border: none !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Create the button with primary type (orange)
     if st.button("☰ OPEN MENU & START", type="primary", key="main_action_button", use_container_width=True):
-        # Directly set sidebar_visible to True
+        # Force sidebar to be visible
         st.session_state.sidebar_visible = True
+        # Reset analyze flag
+        st.session_state.analyze = False
+        # Force a rerun to apply the changes
         st.rerun()
     
     # Features section
