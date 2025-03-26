@@ -54,29 +54,17 @@ document.addEventListener('DOMContentLoaded', function() {
 # Custom CSS for orange theme
 st.markdown("""
 <style>
-    .main-header {color: #FF9D45 !important; font-weight: 600}
-    div.stButton > button {background-color: #FF9D45; color: white; border: none; font-size: 18px; font-weight: bold; padding: 10px 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
-    div.stButton > button:hover {background-color: #FFB673; transform: translateY(-2px); box-shadow: 0 6px 8px rgba(0,0,0,0.15);}
-    .css-1aumxhk {background-color: #FFF1E6} /* Sidebar background */
-    .css-18e3th9 {padding-top: 2rem; padding-bottom: 10rem; padding-left: 5rem; padding-right: 5rem}
-    h1, h2, h3, h4 {color: #FF9D45 !important}
-    .stProgress .st-bo {background-color: #FF9D45}
-    .stTabs [aria-selected="true"] {background-color: #FFF1E6; color: #FF9D45 !important}
-    .highlight {background-color: #FFF1E6; padding: 10px; border-radius: 5px}
-    .time-card {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
-    .time-title {color: #FF9D45; font-weight: bold; margin-bottom: 5px}
-    .time-detail {margin-left: 20px; margin-bottom: 10px}
-    .traffic-box {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
-    .weather-box {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
-    .logo-container {display: flex; justify-content: center; margin-bottom: 20px}
-    .footer-container {display: flex; justify-content: center; align-items: center; margin-top: 20px}
-    .card {background-color: #FFF1E6; border-radius: 10px; padding: 20px; margin: 10px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1)}
-    .icon-text {display: flex; align-items: center}
-    .icon-text span {margin-left: 10px}
-    .dashboard-metric {background-color: #FFF1E6; border-left: 5px solid #FF9D45; padding: 15px; margin: 10px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05)}
-    .gradient-header {
-        background: linear-gradient(90deg, #FF7E33, #FFB673); 
-        color: white !important; 
+    /* Base styling improvements */
+    .stApp {
+        background-color: #F9F9F9;
+        background-image: url('https://i.imgur.com/CGWBWWL.png');
+        background-size: 400px;
+        background-repeat: repeat;
+        background-blend-mode: overlay;
+        background-opacity: 0.1;
+    }
+    /* Banner styling */
+    .notification-banner {
         padding: 12px 20px; 
         border-radius: 6px; 
         margin-bottom: 25px;
@@ -93,6 +81,15 @@ st.markdown("""
         font-weight: 800;
         text-shadow: none;
         margin-bottom: 15px;
+        position: relative;
+    }
+    h1.main-header:after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, #FF7E33, transparent);
+        margin-top: 10px;
     }
     /* Enhance the tabs appearance */
     .stTabs [aria-selected="true"] {
@@ -120,28 +117,67 @@ st.markdown("""
     .css-1rs6os {visibility: hidden;} /* Hide hamburger menu */
     .css-1osj8n8 {opacity: 1 !important;} /* Show the expanded sidebar */
     .css-79elbk {position: relative;} /* Keep sidebar visible */
+    
+    /* Billboard-like button styles */
+    .stButton button {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+    .stButton button[data-testid="baseButton-primary"] {
+        border: 2px solid #FF7E33;
+        box-shadow: 0 4px 8px rgba(255, 126, 51, 0.3);
+    }
+    .stButton button[data-testid="baseButton-primary"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(255, 126, 51, 0.4);
+    }
+    
+    /* Map-themed containers */
+    div[data-testid="stExpander"] {
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    /* Card with map pattern for info boxes */
+    .map-card {
+        background-color: white;
+        background-image: url('https://i.imgur.com/k9Xb5NS.png');
+        background-size: cover;
+        background-blend-mode: overlay;
+        background-opacity: 0.1;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 15px 0;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        border: 1px solid #eaeaea;
+    }
 </style>
 """, unsafe_allow_html=True)
 
 # Title with prominent instruction about the arrow
 st.markdown("""
 <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px">
-    <div style="background-color: #FF9D45; color: white; font-size: 42px; font-weight: bold; padding: 10px 30px; border-radius: 5px;">
-        beem.
+    <div style="background-color: #FF9D45; color: white; font-size: 42px; font-weight: bold; padding: 10px 30px; border-radius: 5px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); position: relative; overflow: hidden;">
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://i.imgur.com/jgwkQXm.png'); background-size: cover; opacity: 0.2;"></div>
+        <span style="position: relative; z-index: 2;">beem.</span>
     </div>
 </div>
 
 <div style="background-color: #FF7E33; color: white; text-align: center; padding: 15px; margin: 0 0 25px 0; 
-border-radius: 10px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-size: 18px;">
-    <span style="font-size: 24px;">👉 <strong>CLICK THE ARROW TOP LEFT</strong> TO ANALYZE YOUR ROUTE 👈</span>
+border-radius: 10px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-size: 18px; position: relative; overflow: hidden;">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://i.imgur.com/k9Xb5NS.png'); background-size: cover; opacity: 0.1;"></div>
+    <span style="font-size: 24px; position: relative; z-index: 2;">👉 <strong>CLICK THE ARROW TOP LEFT</strong> TO ANALYZE YOUR ROUTE 👈</span>
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
 
-# Just ONE clean notification that explains exactly what to do
+# Just ONE clean notification that explains exactly what to do - now with map styling
 st.markdown("""
-<div style="background-color: #FFE8D6; padding: 15px; border-radius: 10px; margin: 0 0 25px 0; border: 2px solid #FF9D45;">
+<div class="map-card">
     <div style="display: flex; align-items: center; margin-bottom: 10px;">
         <span style="font-size: 28px; margin-right: 10px;">ℹ️</span>
         <span style="font-size: 18px; font-weight: bold; color: #FF7E33;">HOW TO USE THIS APP:</span>
@@ -154,28 +190,67 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown("Optimize your mobile billboard routes for maximum engagement")
+st.markdown("""
+<div style="display: flex; align-items: center; margin-bottom: 20px;">
+    <div style="flex-grow: 1;">
+        <h3 style="margin: 0; color: #FF7E33;">Optimize your mobile billboard routes for maximum engagement</h3>
+        <p style="margin-top: 5px; color: #555;">Find the best times and locations for your advertising campaigns</p>
+    </div>
+    <div style="margin-left: 15px; background: #FFF1E6; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <span style="font-size: 24px;">📍</span>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 # Initialize analyze variable at the top
 analyze = False
 
 # SUPER PROMINENT BUTTON ROW BEFORE TABS - This will be visible regardless of sidebar state
 st.markdown("""
-<div style="background-color: #FFE8D6; border: 2px solid #FF7E33; border-radius: 10px; padding: 15px; margin: 25px 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center;">
-    <h2 style="color: #FF7E33; font-weight: bold; margin-bottom: 10px; font-size: 24px;">ROUTE ANALYSIS CONTROLS</h2>
-    <p style="font-size: 16px; margin-bottom: 15px;">⬅️ Use the controls in the sidebar to select your options</p>
+<div style="background-color: #FFE8D6; border: 2px solid #FF7E33; border-radius: 10px; padding: 15px; margin: 25px 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; position: relative; overflow: hidden;">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://i.imgur.com/CGWBWWL.png'); background-size: 200px; background-repeat: repeat; opacity: 0.05;"></div>
+    <h2 style="color: #FF7E33; font-weight: bold; margin-bottom: 10px; font-size: 24px; position: relative;">ROUTE ANALYSIS CONTROLS</h2>
+    <p style="font-size: 16px; margin-bottom: 15px; position: relative;">⬅️ Use the controls in the sidebar to select your options</p>
 </div>
 """, unsafe_allow_html=True)
 
 # Add a direct analyze button in the main content area - HUGE and unmissable
 st.markdown("""
 <div style="text-align: center; margin: 20px 0 30px 0;">
-    <h3 style="color: #FF7E33; font-weight: bold; margin-bottom: 10px;">Click this button to see results:</h3>
+    <h3 style="color: #FF7E33; font-weight: bold; margin-bottom: 15px;">Click this button to see results:</h3>
 </div>
 """, unsafe_allow_html=True)
 
 analyze_col1, analyze_col2, analyze_col3 = st.columns([1, 2, 1])
 with analyze_col2:
+    # Add custom styling for the billboard-like button before creating it
+    st.markdown("""
+    <style>
+        /* Billboard-style button for the main analyze button */
+        div[data-testid="stButton"] > button:first-child {
+            position: relative;
+            background: linear-gradient(to bottom, #FF7E33, #FF9D45);
+            color: white;
+            font-weight: bold;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(255, 126, 51, 0.4), 0 0 0 2px rgba(255, 255, 255, 0.2) inset;
+            transition: all 0.3s ease;
+        }
+        div[data-testid="stButton"] > button:first-child:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 16px rgba(255, 126, 51, 0.5), 0 0 0 2px rgba(255, 255, 255, 0.3) inset;
+            background: linear-gradient(to bottom, #FF9D45, #FF7E33);
+        }
+        div[data-testid="stButton"] > button:first-child:active {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(255, 126, 51, 0.4);
+        }
+    </style>
+    """, unsafe_allow_html=True)
+    
     main_analyze = st.button("🚀 ANALYZE ROUTE NOW 🚀", type="primary", use_container_width=True)
     if main_analyze:
         analyze = True
@@ -273,15 +348,46 @@ if analyze:
     </div>
     """, unsafe_allow_html=True)
 else:
-    # Even when not analyzing, show a welcome banner
+    # Enhanced welcome banner with billboard and map elements
     st.markdown("""
-    <div style="background: linear-gradient(90deg, #FF7E33, #FFB673); border-radius: 10px; padding: 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(255, 157, 69, 0.25);">
-        <div>
-            <h3 style="color: white !important; margin: 0; font-size: 30px; font-weight: 800; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">Welcome to Beem!</h3>
-            <p style="color: white !important; margin: 8px 0 0 0; font-weight: 600; font-size: 18px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Mobile billboard optimization platform</p>
+    <div style="background: linear-gradient(90deg, #FF7E33, #FFB673); border-radius: 10px; padding: 25px; margin-bottom: 25px; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(255, 157, 69, 0.25);">
+        <!-- Map background pattern -->
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://i.imgur.com/k9Xb5NS.png'); background-size: cover; opacity: 0.1;"></div>
+        
+        <div style="display: flex; justify-content: space-between; position: relative; z-index: 2;">
+            <div style="max-width: 70%;">
+                <h3 style="color: white !important; margin: 0; font-size: 30px; font-weight: 800; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">Welcome to Beem!</h3>
+                <p style="color: white !important; margin: 10px 0 15px 0; font-weight: 600; font-size: 18px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Mobile billboard optimization platform</p>
+                
+                <!-- Billboard illustration -->
+                <div style="display: flex; background: white; border-radius: 8px; padding: 10px; width: fit-content; box-shadow: 0 3px 6px rgba(0,0,0,0.2); margin-top: 5px;">
+                    <div style="background: #FF9D45; color: white; padding: 5px 10px; border-radius: 4px; font-weight: bold; font-size: 14px; display: flex; align-items: center;">
+                        <span style="margin-right: 5px;">📣</span> BILLBOARD
+                    </div>
+                    <div style="margin-left: 10px; display: flex; align-items: center; font-size: 14px;">
+                        <span style="color: #555;">Find optimal routes</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div style="background: white; border-radius: 50%; width: 65px; height: 65px; display: flex; justify-content: center; align-items: center; box-shadow: 0 3px 8px rgba(0,0,0,0.2); position: relative;">
+                    <span style="font-size: 32px">🚲</span>
+                    <!-- Route indicator dots -->
+                    <div style="position: absolute; bottom: -5px; right: -5px; background: #4CAF50; border-radius: 50%; width: 20px; height: 20px; border: 2px solid white;"></div>
+                    <div style="position: absolute; top: -5px; left: -5px; background: #F44336; border-radius: 50%; width: 20px; height: 20px; border: 2px solid white;"></div>
+                </div>
+                <div style="margin-top: 8px; background: rgba(255,255,255,0.3); padding: 3px 8px; border-radius: 10px;">
+                    <span style="color: white; font-size: 12px; font-weight: bold;">ROUTE PLANNER</span>
+                </div>
+            </div>
         </div>
-        <div style="background: white; border-radius: 50%; width: 55px; height: 55px; display: flex; justify-content: center; align-items: center; box-shadow: 0 3px 8px rgba(0,0,0,0.2);">
-            <span style="font-size: 28px">🚲</span>
+        
+        <!-- Map route indicator line -->
+        <div style="position: absolute; bottom: 15px; right: 15px; display: flex; align-items: center; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 15px;">
+            <div style="width: 8px; height: 8px; background: #F44336; border-radius: 50%; margin-right: 2px;"></div>
+            <div style="height: 2px; width: 40px; background: linear-gradient(90deg, #F44336, #4CAF50); margin-right: 2px;"></div>
+            <div style="width: 8px; height: 8px; background: #4CAF50; border-radius: 50%;"></div>
         </div>
     </div>
     """, unsafe_allow_html=True)
