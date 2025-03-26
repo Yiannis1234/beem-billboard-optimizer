@@ -633,12 +633,6 @@ if analyze:
     st.button("🔄 ANALYZE AGAIN", type="primary")
     
 else:
-    # Enhanced welcome page
-    st.markdown('<div class="hero-container">', unsafe_allow_html=True)
-    st.markdown('<h1 class="hero-title">beem.</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="hero-subtitle">Smart Billboard Optimization for Maximum Engagement</p>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-    
     # Features section
     st.subheader("📢 Optimize your advertising impact")
     
