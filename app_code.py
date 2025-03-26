@@ -1134,20 +1134,25 @@ else:
     # Create direct buttons with no styling interference
     st.markdown("<h3>Choose an option:</h3>", unsafe_allow_html=True)
     
-    # FIXED OPEN MENU BUTTON - Using a simple HTML button with proper escaping
-    st.markdown("""
-    <a href="#" onclick="setTimeout(function() { 
-        const sidebarButton = window.parent.document.querySelector('[data-testid=\\"collapsedControl\\"]'); 
-        if (sidebarButton) { sidebarButton.click(); } 
-        return false;
-      }, 100);" 
-      style="display: block; background-color: #FF7E33; color: white; text-align: center; 
-            border: none; border-radius: 8px; padding: 12px 20px; width: 100%; 
-            font-size: 18px; font-weight: bold; margin-bottom: 10px; 
-            text-decoration: none; cursor: pointer;">
-      ☰ OPEN MENU
-    </a>
-    """, unsafe_allow_html=True)
+    # SIMPLER APPROACH - Use regular Streamlit button and handle sidebar explicitly in code
+    open_menu = st.button("☰ OPEN MENU", key="simple_open_sidebar", type="primary", use_container_width=True)
+    if open_menu:
+        # Set session state
+        st.session_state.sidebar_visible = True
+        # Directly insert strong CSS to force sidebar to appear
+        st.markdown("""
+        <style>
+        [data-testid="stSidebar"] {
+            display: flex !important;
+            visibility: visible !important;
+            width: 300px !important;
+            min-width: 300px !important;
+            max-width: 300px !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        # Force rerun to apply changes
+        st.rerun()
     
     # Add some space
     st.markdown("<br>", unsafe_allow_html=True)
