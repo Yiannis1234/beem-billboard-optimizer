@@ -5,6 +5,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import random
 from datetime import datetime
+import requests
+import os
 
 # Page Configuration
 st.set_page_config(
@@ -203,6 +205,10 @@ area_coordinates = {
     "Spinningfields": {"latitude": 53.4802, "longitude": -2.2516, "zone_id": "spinningfields"}
 }
 
+# Add API key handling
+weather_api_key = os.environ.get('WEATHER_API_KEY', 'demo_key')
+tomtom_api_key = os.environ.get('TOMTOM_API_KEY', 'demo_key')
+
 def generate_route_data(area):
     """Generate sample route data for the given area"""
     return {
@@ -212,8 +218,33 @@ def generate_route_data(area):
     }
 
 def get_weather_data(area, day_type):
-    """Generate simulated weather data for the area"""
-    # More variation based on day type
+    """Get weather data using real Weather API when possible, fallback to simulation"""
+    location = f"{area_coordinates[area]['latitude']},{area_coordinates[area]['longitude']}"
+    
+    # Try to use the real Weather API
+    if weather_api_key and weather_api_key != 'demo_key':
+        try:
+            # WeatherAPI.com endpoint
+            url = f"http://api.weatherapi.com/v1/current.json?key={weather_api_key}&q={location}&aqi=no"
+            
+            response = requests.get(url, timeout=10)
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                # Extract the relevant data
+                if 'current' in data:
+                    current = data['current']
+                    return {
+                        'temperature': current.get('temp_c', 0),
+                        'condition': current.get('condition', {}).get('text', 'Cloudy'),
+                        'precipitation_chance': current.get('precip_mm', 0) * 20,  # Convert to percentage
+                        'wind_speed': current.get('wind_kph', 0)
+                    }
+        except Exception as e:
+            st.error(f"Weather API error: {e}")
+    
+    # Fallback to simulated data
     if day_type == "Weekend":
         temp = round(random.uniform(8, 18), 1)  # Slightly warmer on weekends for visualization
     else:
@@ -272,10 +303,39 @@ def get_pedestrian_density(area, day_type, hour=None):
     return round(density * 100)
 
 def get_traffic_density(area, day_type, hour=None):
-    """Generate simulated traffic density data"""
+    """Get traffic data using TomTom API when possible, fallback to simulation"""
     if hour is None:
         hour = datetime.now().hour
     
+    lat = area_coordinates[area]["latitude"]
+    lon = area_coordinates[area]["longitude"]
+    
+    # Try to use the real TomTom API
+    if tomtom_api_key and tomtom_api_key != 'demo_key':
+        try:
+            # TomTom Traffic Flow API
+            url = f"https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point={lat},{lon}&key={tomtom_api_key}"
+            
+            response = requests.get(url, timeout=10)
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                # Extract relevant traffic data
+                if 'flowSegmentData' in data:
+                    flow_data = data['flowSegmentData']
+                    current_speed = flow_data.get('currentSpeed', 40)
+                    free_flow_speed = flow_data.get('freeFlowSpeed', 50) 
+                    
+                    # Calculate congestion level (0-1 range)
+                    congestion = min(1.0, max(0.0, 1 - (current_speed / max(1, free_flow_speed))))
+                    
+                    # Convert to density percentage
+                    return round(congestion * 100)
+        except Exception as e:
+            st.error(f"Traffic API error: {e}")
+    
+    # Fallback to simulated data
     # Base traffic varies by area
     area_factor = {
         "Northern Quarter": 0.8,
