@@ -512,6 +512,24 @@ with tabs[0]:
                     
                 st.markdown('</div>', unsafe_allow_html=True)
     else:
+        # ULTRA PROMINENT NOTICE - Cannot be missed by anyone
+        st.markdown("""
+        <div style="background-color: #FF7E33; color: white; font-size: 24px; padding: 20px; margin: 20px 0; 
+        border-radius: 10px; text-align: center; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+        border: 3px dashed white; animation: pulse 2s infinite;">
+            ⬅️ CLICK THE ARROW ON THE LEFT SIDE ⬅️<br>
+            <span style="font-size: 18px; margin-top: 10px; display: block;">TO SELECT AREA AND ANALYZE ROUTE</span>
+        </div>
+        
+        <style>
+        @keyframes pulse {
+          0% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+          50% { transform: scale(1.03); box-shadow: 0 5px 25px rgba(255,126,51,0.5); }
+          100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
         st.markdown("""
         <div style="background-color: #FFE8D6; border-left: 5px solid #FF9D45; padding: 15px; border-radius: 5px; margin-bottom: 20px; color: #333; font-weight: 500; font-size: 16px;">
             Select options and click <span style="color: #FF9D45; font-weight: 700;">'Analyze Route'</span> to see results.
@@ -724,18 +742,13 @@ with tabs[1]:
         st.plotly_chart(fig2, use_container_width=True)
         
     else:
+        # ULTRA PROMINENT NOTICE - Cannot be missed by anyone
         st.markdown("""
-        <div style="background-color: #FFE8D6; border-left: 5px solid #FF9D45; padding: 15px; border-radius: 5px; margin-bottom: 20px; color: #333; font-weight: 500; font-size: 16px;">
-            Select options and click <span style="color: #FF9D45; font-weight: 700;">'Analyze Route'</span> to view the map visualization.
-        </div>
-        
-        <div style="display: flex; justify-content: center; align-items: center; height: 300px">
-            <div style="text-align: center">
-                <div style="background-color: #FF9D45; color: white; font-size: 42px; font-weight: bold; padding: 10px 30px; border-radius: 5px; margin-bottom: 20px; display: inline-block;">
-                    beem.
-                </div>
-                <p style="color: #FF9D45; margin-top: 20px; font-size: 18px">Maps and visualizations will appear here</p>
-            </div>
+        <div style="background-color: #FF7E33; color: white; font-size: 24px; padding: 20px; margin: 20px 0; 
+        border-radius: 10px; text-align: center; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+        border: 3px dashed white; animation: pulse 2s infinite;">
+            ⬅️ CLICK THE ARROW ON THE LEFT SIDE ⬅️<br>
+            <span style="font-size: 18px; margin-top: 10px; display: block;">TO SELECT AREA AND ANALYZE ROUTE</span>
         </div>
         """, unsafe_allow_html=True)
 
@@ -764,6 +777,15 @@ with tabs[2]:
         st.markdown("2. Friday: 85/100")
         st.markdown("3. Sunday: 80/100")
     else:
+        # ULTRA PROMINENT NOTICE - Cannot be missed by anyone
+        st.markdown("""
+        <div style="background-color: #FF7E33; color: white; font-size: 24px; padding: 20px; margin: 20px 0; 
+        border-radius: 10px; text-align: center; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+        border: 3px dashed white; animation: pulse 2s infinite;">
+            ⬅️ CLICK THE ARROW ON THE LEFT SIDE ⬅️<br>
+            <span style="font-size: 18px; margin-top: 10px; display: block;">TO SELECT AREA AND ANALYZE ROUTE</span>
+        </div>
+        """, unsafe_allow_html=True)
         st.info("Select options and click 'Analyze Route' to see historical data.")
 
 # Tab 4: Best Times
@@ -807,6 +829,15 @@ with tabs[3]:
         st.line_chart(engagement_data, x='Hour', y=['Weekday', 'Weekend'])
         
     else:
+        # ULTRA PROMINENT NOTICE - Cannot be missed by anyone
+        st.markdown("""
+        <div style="background-color: #FF7E33; color: white; font-size: 24px; padding: 20px; margin: 20px 0; 
+        border-radius: 10px; text-align: center; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+        border: 3px dashed white; animation: pulse 2s infinite;">
+            ⬅️ CLICK THE ARROW ON THE LEFT SIDE ⬅️<br>
+            <span style="font-size: 18px; margin-top: 10px; display: block;">TO SELECT AREA AND ANALYZE ROUTE</span>
+        </div>
+        """, unsafe_allow_html=True)
         st.info("Select options and click 'Analyze Route' to see recommended times.")
 
 # Tab 5: Demographics (New)
@@ -853,6 +884,15 @@ with tabs[4]:
             st.markdown("- Use QR codes for interaction")
             st.markdown('</div>', unsafe_allow_html=True)
     else:
+        # ULTRA PROMINENT NOTICE - Cannot be missed by anyone
+        st.markdown("""
+        <div style="background-color: #FF7E33; color: white; font-size: 24px; padding: 20px; margin: 20px 0; 
+        border-radius: 10px; text-align: center; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+        border: 3px dashed white; animation: pulse 2s infinite;">
+            ⬅️ CLICK THE ARROW ON THE LEFT SIDE ⬅️<br>
+            <span style="font-size: 18px; margin-top: 10px; display: block;">TO SELECT AREA AND ANALYZE ROUTE</span>
+        </div>
+        """, unsafe_allow_html=True)
         st.info("Select options and click 'Analyze Route' to see demographic analysis.")
 
 # Footer with enhanced visual elements
