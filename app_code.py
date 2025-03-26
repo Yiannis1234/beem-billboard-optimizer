@@ -635,7 +635,6 @@ if analyze:
 else:
     # Enhanced welcome page
     st.markdown('<div class="hero-container">', unsafe_allow_html=True)
-    st.markdown('<p style="color:#FF7E33; font-weight:600; margin-bottom:5px; font-size:20px;">🚀 OPTIMAL ADVERTISING</p>', unsafe_allow_html=True)
     st.markdown('<h1 class="hero-title">beem.</h1>', unsafe_allow_html=True)
     st.markdown('<p class="hero-subtitle">Smart Billboard Optimization for Maximum Engagement</p>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
