@@ -1134,18 +1134,19 @@ else:
     # Create direct buttons with no styling interference
     st.markdown("<h3>Choose an option:</h3>", unsafe_allow_html=True)
     
-    # FIXED OPEN MENU BUTTON - Direct approach that definitely works
-    # Use normal HTML button instead of st.button, with direct JavaScript that clicks the sidebar toggle
+    # FIXED OPEN MENU BUTTON - Using a simple HTML button with proper escaping
     st.markdown("""
-    <button 
-        onclick="setTimeout(function() { 
-            const sidebarToggle = window.parent.document.querySelector('[data-testid=\"collapsedControl\"]');
-            if (sidebarToggle) { sidebarToggle.click(); }
-        }, 100);" 
-        style="background-color: #FF7E33; color: white; border: none; border-radius: 8px; padding: 12px 20px; 
-               width: 100%; font-size: 18px; font-weight: bold; margin-bottom: 10px; cursor: pointer;">
-        ☰ OPEN MENU
-    </button>
+    <a href="#" onclick="setTimeout(function() { 
+        const sidebarButton = window.parent.document.querySelector('[data-testid=\\"collapsedControl\\"]'); 
+        if (sidebarButton) { sidebarButton.click(); } 
+        return false;
+      }, 100);" 
+      style="display: block; background-color: #FF7E33; color: white; text-align: center; 
+            border: none; border-radius: 8px; padding: 12px 20px; width: 100%; 
+            font-size: 18px; font-weight: bold; margin-bottom: 10px; 
+            text-decoration: none; cursor: pointer;">
+      ☰ OPEN MENU
+    </a>
     """, unsafe_allow_html=True)
     
     # Add some space
