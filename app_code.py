@@ -791,6 +791,32 @@ else:
     # HOME PAGE
     st.markdown('<h1 class="hero-title">beem.</h1>', unsafe_allow_html=True)
     
+    # Add a button to explicitly open the sidebar
+    if st.button("☰ OPEN MENU", type="primary", key="open_sidebar_button", use_container_width=True):
+        # Use JavaScript to programmatically open the sidebar
+        st.markdown("""
+        <script>
+            // Function to click the sidebar open button
+            function openSidebar() {
+                // Get the sidebar toggle button
+                const sidebarToggle = parent.document.querySelector('[data-testid="collapsedControl"]');
+                // Click it if it exists (meaning sidebar is currently closed)
+                if (sidebarToggle) {
+                    sidebarToggle.click();
+                }
+            }
+            
+            // Call immediately and with a small delay to ensure it works
+            openSidebar();
+            setTimeout(openSidebar, 100);
+            setTimeout(openSidebar, 500);
+        </script>
+        """, unsafe_allow_html=True)
+        st.rerun()
+    
+    # Add some space between buttons
+    st.markdown("<br>", unsafe_allow_html=True)
+    
     # Start analysis button (no sidebar toggle button)
     if st.button("START ANALYSIS 🚀", type="primary", key="direct_analysis_button", use_container_width=True):
         st.session_state.analyze = True
