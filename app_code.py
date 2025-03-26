@@ -57,11 +57,8 @@ st.markdown("""
     /* Base styling improvements */
     .stApp {
         background-color: #F9F9F9;
-        background-image: url('https://i.imgur.com/CGWBWWL.png');
-        background-size: 400px;
-        background-repeat: repeat;
-        background-blend-mode: overlay;
-        background-opacity: 0.1;
+        background-image: none;
+        background-color: rgba(255, 157, 69, 0.05);
     }
     /* Banner styling */
     .notification-banner {
@@ -144,10 +141,7 @@ st.markdown("""
     /* Card with map pattern for info boxes */
     .map-card {
         background-color: white;
-        background-image: url('https://i.imgur.com/k9Xb5NS.png');
-        background-size: cover;
-        background-blend-mode: overlay;
-        background-opacity: 0.1;
+        background: linear-gradient(145deg, #ffffff, #fff8f2);
         border-radius: 8px;
         padding: 20px;
         margin: 15px 0;
@@ -161,14 +155,14 @@ st.markdown("""
 st.markdown("""
 <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px">
     <div style="background-color: #FF9D45; color: white; font-size: 42px; font-weight: bold; padding: 10px 30px; border-radius: 5px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); position: relative; overflow: hidden;">
-        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://i.imgur.com/jgwkQXm.png'); background-size: cover; opacity: 0.2;"></div>
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.05)); opacity: 0.2;"></div>
         <span style="position: relative; z-index: 2;">beem.</span>
     </div>
 </div>
 
 <div style="background-color: #FF7E33; color: white; text-align: center; padding: 15px; margin: 0 0 25px 0; 
 border-radius: 10px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-size: 18px; position: relative; overflow: hidden;">
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://i.imgur.com/k9Xb5NS.png'); background-size: cover; opacity: 0.1;"></div>
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.05)); opacity: 0.2;"></div>
     <span style="font-size: 24px; position: relative; z-index: 2;">👉 <strong>CLICK THE ARROW TOP LEFT</strong> TO ANALYZE YOUR ROUTE 👈</span>
 </div>
 """, unsafe_allow_html=True)
@@ -208,7 +202,7 @@ analyze = False
 # SUPER PROMINENT BUTTON ROW BEFORE TABS - This will be visible regardless of sidebar state
 st.markdown("""
 <div style="background-color: #FFE8D6; border: 2px solid #FF7E33; border-radius: 10px; padding: 15px; margin: 25px 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; position: relative; overflow: hidden;">
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://i.imgur.com/CGWBWWL.png'); background-size: 200px; background-repeat: repeat; opacity: 0.05;"></div>
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 157, 69, 0.1)); opacity: 0.5;"></div>
     <h2 style="color: #FF7E33; font-weight: bold; margin-bottom: 10px; font-size: 24px; position: relative;">ROUTE ANALYSIS CONTROLS</h2>
     <p style="font-size: 16px; margin-bottom: 15px; position: relative;">⬅️ Use the controls in the sidebar to select your options</p>
 </div>
@@ -352,7 +346,7 @@ else:
     st.markdown("""
     <div style="background: linear-gradient(90deg, #FF7E33, #FFB673); border-radius: 10px; padding: 25px; margin-bottom: 25px; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(255, 157, 69, 0.25);">
         <!-- Map background pattern -->
-        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://i.imgur.com/k9Xb5NS.png'); background-size: cover; opacity: 0.1;"></div>
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0.05)); opacity: 0.3;"></div>
         
         <div style="display: flex; justify-content: space-between; position: relative; z-index: 2;">
             <div style="max-width: 70%;">
