@@ -13,7 +13,7 @@ st.set_page_config(
     page_title="beem",
     page_icon="🚲",
     layout="wide",
-    initial_sidebar_state="expanded"  # Start with sidebar expanded by default
+    initial_sidebar_state="collapsed"  # Start with sidebar collapsed
 )
 
 # Custom CSS for light orange and white theme with mobile improvements
@@ -29,6 +29,47 @@ st.markdown("""
     section[data-testid="stSidebar"] {
         background-color: #FFF1E6;
         box-shadow: 2px 0 10px rgba(255, 126, 51, 0.1);
+    }
+    
+    /* Make the sidebar toggle button larger and more visible */
+    [data-testid="expandedControl"], [data-testid="collapsedControl"] {
+        width: 42px !important;
+        height: 42px !important;
+        background-color: #FF7E33 !important;
+        color: white !important;
+        border-radius: 10px !important;
+        box-shadow: 0 3px 8px rgba(255,126,51,0.3) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 100 !important;
+        transition: all 0.2s ease !important;
+        pointer-events: auto !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+    }
+    
+    [data-testid="expandedControl"]:hover, [data-testid="collapsedControl"]:hover {
+        transform: scale(1.05) !important;
+        box-shadow: 0 4px 10px rgba(255,126,51,0.4) !important;
+    }
+    
+    [data-testid="expandedControl"] svg, [data-testid="collapsedControl"] svg {
+        width: 28px !important;
+        height: 28px !important;
+        color: white !important;
+    }
+    
+    /* Custom pulsing animation for sidebar toggle */
+    @keyframes pulse {
+        0% { transform: scale(1); box-shadow: 0 3px 8px rgba(255,126,51,0.3); }
+        70% { transform: scale(1.05); box-shadow: 0 4px 12px rgba(255,126,51,0.5); }
+        100% { transform: scale(1); box-shadow: 0 3px 8px rgba(255,126,51,0.3); }
+    }
+    
+    [data-testid="expandedControl"], [data-testid="collapsedControl"] {
+        animation: pulse 2s infinite !important;
     }
     
     /* Headers */
@@ -205,7 +246,109 @@ st.markdown("""
             padding: 4px 10px !important;
         }
     }
+    
+    /* Make map containers larger on mobile */
+    .stMapboxContainer, .js-plotly-plot, .plotly, .plot-container {
+        height: 100% !important;
+        max-height: 700px !important;
+        min-height: 600px !important;
+    }
+    
+    /* Improve map display on mobile */
+    [data-testid="column"] > div:has(> .stMapboxContainer) {
+        height: 700px !important;
+        min-height: 600px !important;
+        width: 100% !important;
+        padding: 0 !important;
+    }
+    
+    /* Better spacing for mobile */
+    @media (max-width: 768px) {
+        .block-container {
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+        }
+        
+        [data-testid="column"] {
+            width: 100% !important;
+        }
+    }
+    
+    /* Full-screen map container for mobile */
+    .map-container {
+        height: 85vh !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+    
+    /* Make the Plotly map fill the container */
+    .map-container > div > div > div {
+        height: 100% !important;
+    }
+    
+    /* Increase map size */
+    .js-plotly-plot, .plot-container, .mapboxgl-map, .mapboxgl-canvas-container, .mapboxgl-canvas {
+        height: 100% !important;
+        width: 100% !important;
+        min-height: 85vh !important;
+    }
+    
+    /* Override any column constraints */
+    [data-testid="column"] > div:has(> .js-plotly-plot) {
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* Fix for mobile view */
+    @media (max-width: 768px) {
+        .map-container {
+            height: 80vh !important;
+            min-height: 500px !important;
+        }
+        
+        .js-plotly-plot, .plot-container {
+            min-height: 80vh !important;
+        }
+    }
 </style>
+
+<script>
+    // Simple vanilla JS solution to ensure the sidebar toggle is always clickable
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to ensure toggle buttons are clickable
+        function fixToggleButtons() {
+            const toggles = document.querySelectorAll('[data-testid="expandedControl"], [data-testid="collapsedControl"]');
+            toggles.forEach(function(toggle) {
+                // Remove any attributes that might interfere with clicking
+                toggle.style.pointerEvents = 'auto';
+                toggle.style.opacity = '1';
+                toggle.style.visibility = 'visible';
+                toggle.style.zIndex = '1000';
+                
+                // Ensure the parent elements don't block clicking
+                let parent = toggle.parentElement;
+                while (parent && parent !== document.body) {
+                    parent.style.pointerEvents = 'auto';
+                    parent = parent.parentElement;
+                }
+            });
+        }
+        
+        // Run multiple times to ensure it catches the button
+        setTimeout(fixToggleButtons, 500);
+        setTimeout(fixToggleButtons, 1000);
+        setTimeout(fixToggleButtons, 2000);
+        setTimeout(fixToggleButtons, 3000);
+        
+        // Also run when user interacts with the page
+        document.body.addEventListener('click', function() {
+            setTimeout(fixToggleButtons, 100);
+        });
+    });
+</script>
 """, unsafe_allow_html=True)
 
 # Define area coordinates (Manchester areas)
@@ -724,6 +867,58 @@ def generate_time_heatmap(area, day_type):
     
     return fig
 
+def sidebar_toggle():
+    """Custom sidebar toggle button that always works"""
+    # Initialize session state for sidebar visibility if not exists
+    if 'sidebar_visible' not in st.session_state:
+        st.session_state.sidebar_visible = False
+        
+    # Create a container at the top of the page to hold our custom toggle
+    toggle_col1, toggle_col2 = st.columns([1, 19])
+    
+    with toggle_col1:
+        # Custom styled button with orange color
+        st.markdown("""
+        <style>
+        /* Custom orange style for sidebar toggle button */
+        [data-testid="baseButton-secondary"]:has(> div:contains("☰")) {
+            background: linear-gradient(135deg, #FF7E33, #FF9945) !important;
+            border: none !important;
+            color: white !important;
+            border-radius: 10px !important;
+            box-shadow: 0 3px 8px rgba(255,126,51,0.3) !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        # Use secondary button type but style it with custom CSS
+        if st.button("☰", key="custom_sidebar_toggle", 
+                    help="Toggle sidebar menu", type="secondary"):
+            # Toggle sidebar visibility in session state
+            st.session_state.sidebar_visible = not st.session_state.sidebar_visible
+            # Force a rerun to apply the change
+            st.rerun()
+            
+    # Apply CSS to control sidebar visibility
+    if not st.session_state.sidebar_visible:
+        st.markdown("""
+        <style>
+        [data-testid="stSidebar"] {
+            display: none !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown("""
+        <style>
+        [data-testid="stSidebar"] {
+            display: flex !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
 # Initialize ALL session state variables in one place at the top
 if 'analyze' not in st.session_state:
     st.session_state.analyze = False
@@ -731,6 +926,11 @@ if 'selected_area' not in st.session_state:
     st.session_state.selected_area = "Northern Quarter"
 if 'day_type' not in st.session_state:
     st.session_state.day_type = "Weekday"
+if 'sidebar_visible' not in st.session_state:
+    st.session_state.sidebar_visible = False
+
+# Call the sidebar toggle function at the top level
+sidebar_toggle()
 
 # Home button in top right corner
 home_col = st.columns([6, 1])[1]  # Create a right-aligned column
@@ -738,6 +938,11 @@ with home_col:
     if st.button("🏠", key="home_button"):
         st.session_state.analyze = False
         st.rerun()
+
+# Get values from session state
+area = st.session_state.selected_area
+day_type = st.session_state.day_type
+analyze = st.session_state.analyze
 
 # Sidebar setup
 with st.sidebar:
@@ -757,67 +962,201 @@ with st.sidebar:
         st.session_state.analyze = True
         st.rerun()
 
-# Get values from session state
-area = st.session_state.selected_area
-day_type = st.session_state.day_type
-analyze = st.session_state.analyze
-
-# Now show the main content - either analysis or intro
+# MAIN CONTENT
 if analyze:
-    # ANALYSIS PAGE
-    st.title(f"Route Analysis for {area}")
-    st.subheader(f"Analysis for {day_type}")
+    st.title(f"Beem Billboard Insights: {area}")
     
-    # Placeholder for route analysis
-    st.write("Route analysis loaded successfully!")
+    # Generate data 
+    data = generate_route_data(area)
+    weather = get_weather_data(area, day_type)
     
-    # Create map placeholder
-    map_container = st.container()
-    with map_container:
-        st.subheader("Route Map")
-        # Placeholder for map
-        st.info("Map visualization would appear here in the full application.")
+    # Current time & conditions section
+    current_hour = datetime.now().hour
+    ped_density = get_pedestrian_density(area, day_type, current_hour)
+    traffic_density = get_traffic_density(area, day_type, current_hour)
     
-    # Create metrics row for key stats
-    col1, col2 = st.columns(2)
-    with col1:
-        st.subheader("Audience Reach")
-        st.metric("Estimated Impressions", "4,250", "+15%")
-    with col2:
-        st.subheader("Optimal Times")
-        st.metric("Best Hours", "12-2 PM, 5-7 PM")
+    st.markdown("### Current Conditions")
+    
+    # Use a 2x2 grid instead of 4 columns for better mobile display
+    cond1, cond2 = st.columns(2)
+    
+    with cond1:
+        st.markdown(f"""
+        <div style="background-color:#FFF8F0; padding:12px; border-radius:8px; border-left:5px solid #FF9D45; height:100%; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+            <h4 style="margin:0; color:#FF7E33; font-weight:600;">🌤️ Weather</h4>
+            <p style="margin:6px 0; font-weight:500;">{weather['condition']}, {weather['temperature']}°C</p>
+            <p style="margin:5px 0;">Precipitation: {weather['precipitation_chance']}%</p>
+            <p style="margin:5px 0;">Wind: {weather['wind_speed']} km/h</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with cond2:
+        ped_color = "#FF7E33"
+        st.markdown(f"""
+        <div style="background-color:#FFF8F0; padding:12px; border-radius:8px; border-left:5px solid #FF9D45; height:100%; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+            <h4 style="margin:0; color:#FF7E33; font-weight:600;">👥 Pedestrian Density</h4>
+            <p style="margin:6px 0; font-size:26px; font-weight:bold; background: linear-gradient(90deg, #FF7E33, #FF9945); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{ped_density}%</p>
+            <p style="margin:5px 0;">{"High" if ped_density > 70 else "Medium" if ped_density > 50 else "Low"} foot traffic</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Second row of conditions
+    cond3, cond4 = st.columns(2)
+    
+    with cond3:
+        traffic_color = "#FF7E33"
+        st.markdown(f"""
+        <div style="background-color:#FFF8F0; padding:12px; border-radius:8px; border-left:5px solid #FF9D45; height:100%; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+            <h4 style="margin:0; color:#FF7E33; font-weight:600;">🚗 Traffic Density</h4>
+            <p style="margin:6px 0; font-size:26px; font-weight:bold; background: linear-gradient(90deg, #FF7E33, #FF9945); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{traffic_density}%</p>
+            <p style="margin:5px 0;">{"High" if traffic_density > 70 else "Medium" if traffic_density > 50 else "Low"} congestion</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with cond4:
+        current_score = (ped_density * 0.7 + min(70, traffic_density) * 0.3) / 100
+        optimal_now = current_score > 0.7
+        st.markdown(f"""
+        <div style="background-color:#FFF8F0; padding:12px; border-radius:8px; border-left:5px solid #FF9D45; height:100%; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
+            <h4 style="margin:0; color:#FF7E33; font-weight:600;">📊 Current Rating</h4>
+            <p style="margin:6px 0; font-size:26px; font-weight:bold; background: linear-gradient(90deg, #FF7E33, #FF9945); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{"Optimal" if optimal_now else "Not Optimal"}</p>
+            <p style="margin:5px 0;">{"Great time to advertise!" if optimal_now else "Better times available"}</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Recommended times - stack vertically on mobile
+    st.markdown("### Best Advertising Times")
+    optimal_times = get_optimal_times(area, day_type)
+    
+    # Display the top 3 recommended times
+    top_times = optimal_times[:3]
+    
+    # Stack times vertically for easier mobile viewing
+    for i, time_data in enumerate(top_times):
+        medal = "🥇" if i == 0 else "🥈" if i == 1 else "🥉"
+        rank = "Best" if i == 0 else "Second Best" if i == 1 else "Third Best"
+        color_bg = "#FFF1E6" if i == 0 else "#FFF5EB" if i == 1 else "#FFF8F0"
+        color_border = "#FF9D45" if i == 0 else "#FFCC99" if i == 1 else "#FFE0CC"
+        color_text = "#FF7E33" if i == 0 else "#FF9D45" if i == 1 else "#FFAA70"
+        
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, {color_bg} 0%, white 100%); padding:18px; border-radius:10px; text-align:center; border:1px solid {color_border}; margin-bottom:12px; box-shadow: 0 4px 15px rgba(255,126,51,0.1);">
+            <h3 style="margin:0; background: linear-gradient(90deg, #FF7E33, #FF9945); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight:700;">{medal} {rank} Time</h3>
+            <p style="font-size:32px; font-weight:700; margin:15px 0; color:#333; text-shadow: 0 1px 1px rgba(0,0,0,0.05);">{time_data['hour']}</p>
+            <div style="display:inline-block; background:linear-gradient(90deg, {color_text}, {color_border}); color:white; font-weight:600; padding:5px 15px; border-radius:20px; margin:10px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                {time_data['category']}
+            </div>
+            <div style="display:flex; justify-content:space-around; margin-top:10px;">
+                <div style="text-align:center;">
+                    <p style="margin:5px 0; font-size:14px; color:#666;">👥 Pedestrians</p>
+                    <p style="margin:0; font-size:18px; font-weight:bold; color:{color_text};">{time_data['pedestrian_density']}%</p>
+                </div>
+                <div style="text-align:center;">
+                    <p style="margin:5px 0; font-size:14px; color:#666;">🚗 Traffic</p>
+                    <p style="margin:0; font-size:18px; font-weight:bold; color:{color_text};">{time_data['traffic_density']}%</p>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Time heatmap for optimal times
+    st.markdown("### Weekly Optimal Times")
+    time_heatmap = generate_time_heatmap(area, day_type)
+    st.plotly_chart(time_heatmap, use_container_width=True, config={'responsive': True})
+    
+    # Optimal route - use a full-width container for the map
+    st.markdown("### Recommended Route")
+    
+    # Add custom CSS to make map completely static and prevent scrolling issues
+    st.markdown("""
+    <style>
+    /* Make the map container position fixed with clear boundaries */
+    .map-container {
+        position: relative !important;
+        height: 450px !important; 
+        width: 100% !important;
+        overflow: hidden !important;
+    }
+    
+    /* Ensure the plotly map is sized correctly */
+    .js-plotly-plot, .plot-container {
+        max-height: 450px !important;
+        height: 100% !important;
+        width: 100% !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Add a container div with the map-container class
+    st.markdown('<div class="map-container">', unsafe_allow_html=True)
+    
+    # Generate and display the route map
+    route_map = generate_route_map(area, data)
+    st.plotly_chart(route_map, use_container_width=True, config={
+        'displayModeBar': False,  # Hide the mode bar for cleaner mobile view
+        'scrollZoom': False,      # Disable scroll to zoom
+        'staticPlot': False,      # Allow basic interactivity
+        'doubleClick': False      # Disable double-click actions
+    })
+    
+    # Close the container
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Route metrics - stack vertically for mobile
+    st.markdown("### Route Metrics")
+    
+    # Create metrics container with custom styling
+    metrics_data = [
+        {"label": "Estimated Impressions", "value": f"{random.randint(12000, 18000):,}", "icon": "👁️"},
+        {"label": "Route Length", "value": f"{random.randint(8, 15)} km", "icon": "🛣️"},
+        {"label": "Estimated Time", "value": f"{random.randint(45, 90)} mins", "icon": "⏱️"}
+    ]
+    
+    for metric in metrics_data:
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, #FFF8F0, #FFFFFF); padding:18px; border-radius:10px; margin-bottom:15px; text-align:center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid rgba(255,126,51,0.1);">
+            <div style="font-size:24px; margin-bottom:5px;">{metric['icon']}</div>
+            <p style="margin:0; color:#666; font-size:15px; font-weight:500;">{metric['label']}</p>
+            <p style="margin:8px 0; font-size:28px; font-weight:700; background: linear-gradient(90deg, #FF7E33, #FF9945); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{metric['value']}</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Quick action button to rerun analysis
+    if st.button("🔄 ANALYZE AGAIN", type="primary", use_container_width=True, key="analyze_again"):
+        # Reset the session state and rerun
+        st.session_state.analyze = False
+        st.rerun()
     
 else:
-    # HOME PAGE
+    # Add beem logo
     st.markdown('<h1 class="hero-title">beem.</h1>', unsafe_allow_html=True)
     
-    # Add a button to explicitly open the sidebar
-    if st.button("☰ OPEN MENU", type="primary", key="open_sidebar_button", use_container_width=True):
-        # Use JavaScript to programmatically open the sidebar
-        st.markdown("""
+    # Create direct buttons with no styling interference
+    st.markdown("<h3>Choose an option:</h3>", unsafe_allow_html=True)
+    
+    # NEW APPROACH: Use st.markdown to directly create the sidebar toggle button
+    if st.button("☰ SHOW SIDEBAR MENU", key="direct_sidebar_toggle", type="primary", use_container_width=True):
+        # Force sidebar to open by clicking the collapsedControl element
+        js = """
         <script>
-            // Function to click the sidebar open button
             function openSidebar() {
-                // Get the sidebar toggle button
                 const sidebarToggle = parent.document.querySelector('[data-testid="collapsedControl"]');
-                // Click it if it exists (meaning sidebar is currently closed)
                 if (sidebarToggle) {
                     sidebarToggle.click();
                 }
             }
-            
-            // Call immediately and with a small delay to ensure it works
+            // Run multiple times to ensure it works
             openSidebar();
             setTimeout(openSidebar, 100);
             setTimeout(openSidebar, 500);
         </script>
-        """, unsafe_allow_html=True)
-        st.rerun()
+        """
+        st.components.v1.html(js, height=0, width=0)
     
-    # Add some space between buttons
+    # Add some space
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Start analysis button (no sidebar toggle button)
+    # Second button - START ANALYSIS
     if st.button("START ANALYSIS 🚀", type="primary", key="direct_analysis_button", use_container_width=True):
         st.session_state.analyze = True
         st.rerun()
@@ -831,15 +1170,44 @@ else:
     
     with col1:
         st.markdown("""
-        ### 📍 Targeted Routes
-        Identify the most effective cycling routes for maximum visibility based on pedestrian traffic.
-        """)
+        <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3 class="feature-title">Target High-Traffic Areas</h3>
+            <p>Find the busiest locations with the highest potential visibility for your mobile billboards.</p>
+        </div>
+        """, unsafe_allow_html=True)
         
+        st.markdown("""
+        <div class="feature-card">
+            <div class="feature-icon">⏱️</div>
+            <h3 class="feature-title">Optimal Timing</h3>
+            <p>Discover the best times of day and week to display your advertisements for maximum engagement.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
     with col2:
         st.markdown("""
-        ### ⏱️ Optimal Timing
-        Determine the best times to deploy your mobile billboards for the highest impact.
-        """)
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3 class="feature-title">Data-Driven Routes</h3>
+            <p>Get route recommendations based on real pedestrian and traffic data in your selected area.</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="feature-card">
+            <div class="feature-icon">🚀</div>
+            <h3 class="feature-title">Boost Engagement</h3>
+            <p>Increase your ad impressions by up to 40% with our strategically optimized billboard routes.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Direct analyze button - with enhanced styling
+    st.markdown("""
+    <div style="padding:20px 0; text-align:center;">
+        <p style="font-weight:bold; margin-bottom:15px; font-size:18px;">✨ START EXPLORING NOW ✨</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # Footer
 st.markdown("---")
