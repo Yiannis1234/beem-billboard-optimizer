@@ -1134,32 +1134,30 @@ else:
     # Create direct buttons with no styling interference
     st.markdown("<h3>Choose an option:</h3>", unsafe_allow_html=True)
     
-    # SIMPLER APPROACH - Use regular Streamlit button and handle sidebar explicitly in code
-    open_menu = st.button("☰ OPEN MENU", key="simple_open_sidebar", type="primary", use_container_width=True)
-    if open_menu:
-        # Set session state
-        st.session_state.sidebar_visible = True
-        # Directly insert strong CSS to force sidebar to appear
-        st.markdown("""
-        <style>
-        [data-testid="stSidebar"] {
-            display: flex !important;
-            visibility: visible !important;
-            width: 300px !important;
-            min-width: 300px !important;
-            max-width: 300px !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-        # Force rerun to apply changes
-        st.rerun()
+    # NEW APPROACH: Use st.markdown to directly create the sidebar toggle button
+    if st.button("☰ SHOW SIDEBAR MENU", key="direct_sidebar_toggle", type="primary", use_container_width=True):
+        # Force sidebar to open by clicking the collapsedControl element
+        js = """
+        <script>
+            function openSidebar() {
+                const sidebarToggle = parent.document.querySelector('[data-testid="collapsedControl"]');
+                if (sidebarToggle) {
+                    sidebarToggle.click();
+                }
+            }
+            // Run multiple times to ensure it works
+            openSidebar();
+            setTimeout(openSidebar, 100);
+            setTimeout(openSidebar, 500);
+        </script>
+        """
+        st.components.v1.html(js, height=0, width=0)
     
     # Add some space
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Second button - START ANALYSIS - Keep using st.button for this one
-    start_analysis = st.button("START ANALYSIS 🚀", type="primary", key="start_analysis_button_direct", use_container_width=True)
-    if start_analysis:
+    # Second button - START ANALYSIS
+    if st.button("START ANALYSIS 🚀", type="primary", key="direct_analysis_button", use_container_width=True):
         st.session_state.analyze = True
         st.rerun()
     
