@@ -170,6 +170,89 @@ if 'active_tab' in st.session_state:
 # Set analyze from session state
 analyze = st.session_state.analyze
 
+# Define default values for area and other variables
+if 'selected_area' not in st.session_state:
+    st.session_state.selected_area = list(area_coordinates.keys())[0]  # Default to first area
+if 'selected_time' not in st.session_state:
+    st.session_state.selected_time = datetime.now()
+if 'selected_day_type' not in st.session_state:
+    st.session_state.selected_day_type = "Weekday"
+
+# Sidebar - Always define the sidebar first
+with st.sidebar:
+    # Add Beem logo
+    st.title("beem.")
+    
+    # Add a prominent header for the sidebar
+    st.markdown("### ROUTE ANALYSIS CONTROLS")
+    
+    st.markdown('## Route Options')
+    
+    # Area selection - EXPANDED LIST
+    areas = list(area_coordinates.keys())
+    
+    selected_area = st.selectbox(
+        "Select your Area",
+        areas
+    )
+    st.session_state.selected_area = selected_area
+    
+    # Time selection
+    st.markdown('### Time Options')
+    time_option = st.radio("Select time", ["Current time", "Custom time"])
+    
+    if time_option == "Custom time":
+        date = st.date_input("Date", datetime.now())
+        hour = st.slider("Hour", 0, 23, 12)
+        selected_time = datetime.combine(date, datetime.min.time()) + timedelta(hours=hour)
+    else:
+        selected_time = datetime.now()
+    st.session_state.selected_time = selected_time
+    
+    # Day type (new)
+    selected_day_type = st.radio("Day type", ["Weekday", "Weekend"])
+    st.session_state.selected_day_type = selected_day_type
+    
+    # Add instructional text with arrow pointing to the button
+    st.info("**Click the button below to analyze!** ⬇️")
+    
+    # Add spacing
+    st.markdown("")
+    
+    # Analysis button - Make it much more prominent
+    col1, col2, col3 = st.columns([1, 6, 1])
+    with col2:
+        sidebar_analyze = st.button("ANALYZE ROUTE", type="primary", use_container_width=True)
+        if sidebar_analyze:
+            st.session_state.analyze = True
+            st.session_state.current_tab = 0
+            st.session_state.just_clicked = True
+            # Force a rerun to update the UI
+            st.experimental_rerun()
+    
+    # About section
+    with st.expander("About Beem"):
+        st.markdown("""
+        **Beem Mobile Billboard Solutions**
+        
+        We help businesses reach their audience through eye-catching mobile billboards carried by cyclists.
+        
+        Our approach is:
+        - 🌿 Eco-friendly
+        - 💰 Cost-effective
+        - 🎯 Highly targeted
+        - 📱 Engaging
+        - 📊 Data-driven
+        """)
+    
+    # Add button to return to the top
+    if analyze:
+        # Add a button to jump to top
+        st.markdown("---")
+        if st.button("Return to Top ⬆️"):
+            st.session_state.just_clicked = True
+            st.experimental_rerun()
+
 # Check if we need to auto-scroll (after button click)
 if 'just_clicked' in st.session_state and st.session_state.just_clicked:
     # Auto-scroll JavaScript - this will execute immediately
@@ -182,17 +265,18 @@ if 'just_clicked' in st.session_state and st.session_state.just_clicked:
     # Reset flag
     st.session_state.just_clicked = False
 
-# If analyzing, just show the analysis content
+# Get the current values from session state after the sidebar interaction
+area = st.session_state.selected_area
+selected_time = st.session_state.selected_time
+day_type = st.session_state.selected_day_type
+
+# Now show the main content - either analysis or intro
 if analyze:
-    # Analysis banner - keep simple to avoid HTML showing
-    st.markdown(f"""
-    <div style="background: linear-gradient(90deg, #FF7E33, #FFB673); border-radius: 10px; padding: 10px; margin-bottom: 15px;" id="scroll-target">
-        <h3 style="color: white !important; margin: 0; font-size: 22px; font-weight: 800;">Beem Billboard Insights: {area}</h3>
-    </div>
-    """, unsafe_allow_html=True)
+    # Analysis banner - simple version without HTML formatting
+    st.title(f"Beem Billboard Insights: {area}")
     
     # IMMEDIATELY SHOW THE ANALYSIS - Don't wait for tabs
-    st.markdown(f'<h2 class="gradient-header">Analysis for {area}</h2>', unsafe_allow_html=True)
+    st.subheader(f"Analysis for {area}")
     
     # Generate placeholder data
     placeholder_data = generate_route_data(area, selected_time)
@@ -283,7 +367,7 @@ else:
     # Banner with instructions - using Streamlit native components - MAKE THIS MUCH MORE PROMINENT
     st.error("## 👉 CLICK THE GRAY ARROW (>) IN THE TOP LEFT CORNER FIRST! 👈")
     
-    st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
+    st.header("🚲 Beem Billboard Route Optimizer")
     
     # Help box using Streamlit native components - make this smaller
     col1, col2 = st.columns([3, 1])
@@ -317,69 +401,12 @@ else:
             # Force a rerun to update the UI
             st.experimental_rerun()
 
-# Sidebar - MOVED UP to define variables before we use them elsewhere
-with st.sidebar:
-    # Add Beem logo
-    st.title("beem.")
-    
-    # Add a prominent header for the sidebar
-    st.markdown("### ROUTE ANALYSIS CONTROLS")
-    
-    st.markdown('## Route Options')
-    
-    # Area selection - EXPANDED LIST
-    areas = list(area_coordinates.keys())
-    
-    area = st.selectbox(
-        "Select your Area",
-        areas
-    )
-    
-    # Time selection
-    st.markdown('### Time Options')
-    time_option = st.radio("Select time", ["Current time", "Custom time"])
-    
-    if time_option == "Custom time":
-        date = st.date_input("Date", datetime.now())
-        hour = st.slider("Hour", 0, 23, 12)
-        selected_time = datetime.combine(date, datetime.min.time()) + timedelta(hours=hour)
-    else:
-        selected_time = datetime.now()
-    
-    # Day type (new)
-    day_type = st.radio("Day type", ["Weekday", "Weekend"])
-    
-    # Add instructional text with arrow pointing to the button
-    st.info("**Click the button below to analyze!** ⬇️")
-    
-    # Add spacing
-    st.markdown("")
-    
-    # Analysis button - Make it much more prominent
-    col1, col2, col3 = st.columns([1, 6, 1])
-    with col2:
-        sidebar_analyze = st.button("ANALYZE ROUTE", type="primary", use_container_width=True)
-        if sidebar_analyze:
-            st.session_state.analyze = True
-            st.session_state.current_tab = 0
-            st.session_state.just_clicked = True
-            # Force a rerun to update the UI
-            st.experimental_rerun()
-    
-    # About section
-    with st.expander("About Beem"):
-        st.markdown("""
-        **Beem Mobile Billboard Solutions**
-        
-        We help businesses reach their audience through eye-catching mobile billboards carried by cyclists.
-        
-        Our approach is:
-        - 🌿 Eco-friendly
-        - 💰 Cost-effective
-        - 🎯 Highly targeted
-        - 📱 Engaging
-        - 📊 Data-driven
-        """)
+# Footer with enhanced visual elements - Simplified
+st.markdown("---")
+st.markdown("""
+### beem.
+© 2025 Beem Mobile Billboard Solutions
+""")
 
 # Add helper functions to generate data for each tab
 def generate_route_data(area, time):
@@ -721,25 +748,3 @@ def generate_interest_chart():
     )
     
     return fig
-
-# Add button to return to the top
-if analyze:
-    # Add a button to jump to top
-    st.sidebar.markdown("---")
-    if st.sidebar.button("Return to Top ⬆️"):
-        st.session_state.just_clicked = True
-        st.experimental_rerun()
-
-# Footer with enhanced visual elements
-st.markdown("---")
-st.markdown("""
-<div class="footer-container">
-    <div style="text-align: center">
-        <div style="background-color: #FF9D45; color: white; font-size: 28px; font-weight: bold; padding: 5px 20px; border-radius: 5px; display: inline-block; margin-bottom: 10px;">
-            beem.
-        </div>
-        <div style="color: #FF9D45; margin-top: 10px">© 2025 Beem Mobile Billboard Solutions</div>
-        <div style="color: #999; font-size: 12px; margin-top: 5px">hello@beembillboards.com | +44 123 456 7890</div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
