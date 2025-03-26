@@ -482,41 +482,124 @@ def generate_route_map(area, data):
             "lats": [53.4710, 53.4725, 53.4740, 53.4752, 53.4765, 53.4755, 53.4735, 53.4710],
             "lons": [-2.2376, -2.2382, -2.2390, -2.2404, -2.2420, -2.2440, -2.2410, -2.2376],
             "points": ["Start", "Oxford Rd", "Whitworth St", "Princess St", "Portland St", "Peter St", "Lower Mosley St", "End"]
+        },
+        "Piccadilly": {
+            "lats": [53.4779, 53.4790, 53.4798, 53.4788, 53.4775, 53.4766, 53.4776, 53.4779],
+            "lons": [-2.2399, -2.2386, -2.2363, -2.2346, -2.2361, -2.2385, -2.2405, -2.2399],
+            "points": ["Start", "Piccadilly", "Newton St", "Lever St", "Ducie St", "Portland St", "Mosley St", "End"]
+        },
+        "Deansgate": {
+            "lats": [53.4772, 53.4785, 53.4797, 53.4800, 53.4786, 53.4772, 53.4762, 53.4772],
+            "lons": [-2.2481, -2.2496, -2.2502, -2.2485, -2.2470, -2.2455, -2.2469, -2.2481],
+            "points": ["Start", "Deansgate", "Liverpool Rd", "Quay St", "Peter St", "Oxford St", "Whitworth St", "End"]
+        },
+        "Media City": {
+            "lats": [53.4727, 53.4716, 53.4700, 53.4710, 53.4725, 53.4735, 53.4727],
+            "lons": [-2.2984, -2.2998, -2.2980, -2.2965, -2.2955, -2.2969, -2.2984],
+            "points": ["Start", "Broadway", "The Quays", "MediaCityUK", "Trafford Wharf Rd", "Broadway", "End"]
+        },
+        "Spinningfields": {
+            "lats": [53.4802, 53.4815, 53.4825, 53.4820, 53.4805, 53.4795, 53.4802],
+            "lons": [-2.2516, -2.2530, -2.2516, -2.2498, -2.2485, -2.2500, -2.2516],
+            "points": ["Start", "Bridge St", "St Mary's Gate", "Deansgate", "Hardman St", "Quay St", "End"]
+        },
+        "Chorlton": {
+            "lats": [53.4428, 53.4420, 53.4403, 53.4428, 53.4438, 53.4428],
+            "lons": [-2.2724, -2.2745, -2.2732, -2.2705, -2.2715, -2.2724],
+            "points": ["Start", "Barlow Moor Rd", "Wilbraham Rd", "Manchester Rd", "Beech Rd", "End"]
+        },
+        "Didsbury": {
+            "lats": [53.4183, 53.4170, 53.4163, 53.4180, 53.4193, 53.4183],
+            "lons": [-2.2310, -2.2330, -2.2310, -2.2295, -2.2305, -2.2310],
+            "points": ["Start", "Wilmslow Rd", "School Ln", "Barlow Moor Rd", "Didsbury Park", "End"]
+        },
+        "Fallowfield": {
+            "lats": [53.4420, 53.4410, 53.4395, 53.4420, 53.4435, 53.4420],
+            "lons": [-2.2248, -2.2268, -2.2248, -2.2225, -2.2235, -2.2248],
+            "points": ["Start", "Wilmslow Rd", "Platt Ln", "Yew Tree Rd", "Ladybarn Ln", "End"]
+        },
+        "Levenshulme": {
+            "lats": [53.4369, 53.4380, 53.4390, 53.4375, 53.4360, 53.4369],
+            "lons": [-2.1944, -2.1965, -2.1944, -2.1925, -2.1930, -2.1944],
+            "points": ["Start", "Stockport Rd", "Broom Ln", "Cromwell Grove", "Moseley Rd", "End"]
+        },
+        "Rusholme": {
+            "lats": [53.4502, 53.4515, 53.4525, 53.4510, 53.4495, 53.4502],
+            "lons": [-2.2200, -2.2220, -2.2200, -2.2180, -2.2190, -2.2200],
+            "points": ["Start", "Wilmslow Rd", "Curry Mile", "Dickenson Rd", "Platt Ln", "End"]
+        },
+        "Salford Quays": {
+            "lats": [53.4705, 53.4690, 53.4675, 53.4690, 53.4710, 53.4725, 53.4705],
+            "lons": [-2.2850, -2.2870, -2.2850, -2.2830, -2.2820, -2.2840, -2.2850],
+            "points": ["Start", "Trafford Rd", "The Quays", "Huron Basin", "Erie Basin", "Detroit Bridge", "End"]
+        },
+        "Hulme": {
+            "lats": [53.4638, 53.4650, 53.4660, 53.4640, 53.4625, 53.4638],
+            "lons": [-2.2500, -2.2520, -2.2500, -2.2480, -2.2490, -2.2500],
+            "points": ["Start", "Princess Rd", "Hulme Park", "Stretford Rd", "Boundary Ln", "End"]
+        },
+        "Trafford Centre": {
+            "lats": [53.4670, 53.4655, 53.4640, 53.4655, 53.4675, 53.4690, 53.4670],
+            "lons": [-2.3500, -2.3520, -2.3500, -2.3480, -2.3475, -2.3490, -2.3500],
+            "points": ["Start", "Trafford Blvd", "Parkway", "Barton Dock Rd", "Trafford Ct", "Mercury Way", "End"]
         }
     }
     
-    # Default route if the area isn't in our predefined routes
-    default_route = {
-        "lats": [
+    # For areas without specific road routes, create a more realistic road-like pattern 
+    # instead of a simple geometric shape that might cross buildings
+    if area not in road_routes:
+        # Create a zigzag route that mimics road patterns with right-angle turns
+        # Rather than a smooth curve or direct line that would cross buildings
+        route_lats = [
             center_lat,
-            center_lat + 0.003,
-            center_lat + 0.005,
-            center_lat + 0.003,
-            center_lat,
-            center_lat - 0.003,
-            center_lat - 0.005,
-            center_lat - 0.002,
-            center_lat
-        ],
-        "lons": [
+            center_lat + 0.002,                     # Go north
+            center_lat + 0.002,                     # Continue east on same latitude
+            center_lat + 0.004,                     # Go north again
+            center_lat + 0.004,                     # Continue east
+            center_lat + 0.001,                     # Go south
+            center_lat + 0.001,                     # Continue west
+            center_lat - 0.002,                     # Go south again
+            center_lat - 0.002,                     # Continue west
+            center_lat - 0.004,                     # Go south once more
+            center_lat - 0.004,                     # Continue back towards start
+            center_lat                              # Return to start point
+        ]
+        
+        route_lons = [
             center_lon,
-            center_lon + 0.002,
-            center_lon + 0.005,
-            center_lon + 0.007,
-            center_lon + 0.005,
-            center_lon + 0.002,
-            center_lon - 0.002,
-            center_lon - 0.005,
-            center_lon
-        ],
-        "points": ["Start", "Point 1", "Point 2", "Point 3", "Point 4", "Point 5", "Point 6", "Point 7", "End"]
-    }
-    
-    # Get the route for this area or use default
-    route = road_routes.get(area, default_route)
-    route_lats = route["lats"]
-    route_lons = route["lons"]
-    route_points = route["points"]
+            center_lon,                             # Go north on same longitude
+            center_lon + 0.003,                     # Turn right (east)
+            center_lon + 0.003,                     # Go north on same longitude
+            center_lon + 0.001,                     # Turn left (west)
+            center_lon + 0.001,                     # Go south on same longitude
+            center_lon - 0.003,                     # Turn left (west)
+            center_lon - 0.003,                     # Go south on same longitude
+            center_lon - 0.001,                     # Turn right (east)
+            center_lon - 0.001,                     # Go south on same longitude
+            center_lon,                             # Turn right (east)
+            center_lon                              # Return to start point
+        ]
+        
+        route_points = [
+            "Start",
+            "North St",
+            "1st Avenue", 
+            "North St",
+            "Highland Rd",
+            "Center St",
+            "West Rd",
+            "South St",
+            "Main St",
+            "South St", 
+            "Return Rd",
+            "End"
+        ]
+    else:
+        # Use the predefined route for this area
+        route = road_routes[area]
+        route_lats = route["lats"]
+        route_lons = route["lons"]
+        route_points = route["points"]
     
     # Create the map
     fig = go.Figure()
@@ -530,26 +613,38 @@ def generate_route_map(area, data):
         name='Route Following Roads'
     ))
     
-    # Add markers for key points (start, major intersections, end)
-    marker_indices = [0, len(route_lats)//3, 2*len(route_lats)//3, len(route_lats)-1]
+    # Add markers for key points (start, important intersections, end)
+    # Add more markers for better visibility of the route's path
+    num_points = len(route_lats)
+    marker_indices = [0]
+    
+    # Add intermediate markers approximately every 3 points
+    if num_points > 6:
+        marker_indices += list(range(2, num_points-2, 2))
+    
+    # Always add the end point
+    if num_points-1 not in marker_indices:
+        marker_indices.append(num_points-1)
+    
     fig.add_trace(go.Scattermapbox(
         lat=[route_lats[i] for i in marker_indices],
         lon=[route_lons[i] for i in marker_indices],
-        mode='markers',
-        marker=dict(size=15, color='#FF7E33'),
-        name='Key Locations',
-        text=[route_points[i] for i in marker_indices]
+        mode='markers+text',
+        marker=dict(size=10, color='#FF7E33'),
+        text=[route_points[i] for i in marker_indices],
+        textposition="top right",
+        name='Key Locations'
     ))
     
-    # Update the layout - make it mobile-friendly
+    # Update the layout with higher zoom to see streets clearly
     fig.update_layout(
         mapbox=dict(
-            style="carto-positron",
+            style="carto-positron",  # Clean map style showing streets clearly
             center=dict(lat=center_lat, lon=center_lon),
-            zoom=14  # Zoom in more to see streets clearly
+            zoom=15  # Higher zoom level to see street details
         ),
-        margin=dict(l=0, r=0, t=10, b=0),  # Reduced top margin
-        height=400,  # Slightly shorter for mobile
+        margin=dict(l=0, r=0, t=10, b=0),
+        height=450,  # Slightly taller for better visibility
         autosize=True,
         hovermode='closest'
     )
