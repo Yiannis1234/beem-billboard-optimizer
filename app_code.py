@@ -633,6 +633,9 @@ if analyze:
     st.button("🔄 ANALYZE AGAIN", type="primary")
     
 else:
+    # Add just the beem logo title without the container
+    st.markdown('<h1 class="hero-title">beem.</h1>', unsafe_allow_html=True)
+    
     # Features section
     st.subheader("📢 Optimize your advertising impact")
     
