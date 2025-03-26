@@ -157,66 +157,37 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Title with prominent instruction about the arrow
-st.markdown("""
-<div style="text-align: center; margin-bottom: 20px">
-    <div style="background-color: #FF9D45; color: white; font-size: 42px; font-weight: bold; padding: 10px 30px; border-radius: 5px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); display: inline-block;">
-        beem.
-    </div>
-</div>
+# Title with prominent instruction about the arrow - using Streamlit native instead of HTML
+st.title("beem.", anchor=False)
 
-<div style="background-color: #FF7E33; color: white; text-align: center; padding: 15px; margin: 0 0 25px 0; 
-border-radius: 10px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-size: 18px;">
-    <span style="font-size: 24px;">👉 <strong>CLICK THE ARROW TOP LEFT</strong> TO ANALYZE YOUR ROUTE 👈</span>
-</div>
-""", unsafe_allow_html=True)
+# Banner with instructions - using Streamlit native components
+st.warning("👉 **CLICK THE ARROW TOP LEFT** TO ANALYZE YOUR ROUTE 👈")
 
 st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
 
-# Just ONE clean notification that explains exactly what to do - now with map styling
-st.markdown("""
-<div class="map-card">
-    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-        <span style="font-size: 28px; margin-right: 10px;">ℹ️</span>
-        <span style="font-size: 18px; font-weight: bold; color: #FF7E33;">HOW TO USE THIS APP:</span>
-    </div>
-    <ol style="margin-left: 15px; font-size: 16px; line-height: 1.6;">
-        <li><b>Click the gray ">" button</b> in the top left corner to open the sidebar menu</li>
-        <li>Select your area and time options in the sidebar</li>
-        <li>Click the "ANALYZE ROUTE" button to see results</li>
-    </ol>
-</div>
-""", unsafe_allow_html=True)
+# Help box using Streamlit native components
+st.info("""
+### HOW TO USE THIS APP:
 
+1. **Click the gray ">" button** in the top left corner to open the sidebar menu
+2. Select your area and time options in the sidebar
+3. Click the "ANALYZE ROUTE" button to see results
+""")
+
+# App description using Streamlit native
 st.markdown("""
-<div style="display: flex; align-items: center; margin-bottom: 20px;">
-    <div style="flex-grow: 1;">
-        <h3 style="margin: 0; color: #FF7E33;">Optimize your mobile billboard routes for maximum engagement</h3>
-        <p style="margin-top: 5px; color: #555;">Find the best times and locations for your advertising campaigns</p>
-    </div>
-    <div style="margin-left: 15px; background: #FFF1E6; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        <span style="font-size: 24px;">📍</span>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+### Optimize your mobile billboard routes for maximum engagement
+Find the best times and locations for your advertising campaigns 📍
+""")
 
 # Initialize analyze variable at the top
 analyze = False
 
-# SUPER PROMINENT BUTTON ROW BEFORE TABS - This will be visible regardless of sidebar state
-st.markdown("""
-<div style="background-color: #FFE8D6; border: 2px solid #FF7E33; border-radius: 10px; padding: 15px; margin: 25px 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center;">
-    <h2 style="color: #FF7E33; font-weight: bold; margin-bottom: 10px; font-size: 24px;">ROUTE ANALYSIS CONTROLS</h2>
-    <p style="font-size: 16px; margin-bottom: 15px;">⬅️ Use the controls in the sidebar to select your options</p>
-</div>
-""", unsafe_allow_html=True)
+# ROUTE ANALYSIS CONTROLS using Streamlit native components instead of HTML
+st.success("### ROUTE ANALYSIS CONTROLS\n⬅️ Use the controls in the sidebar to select your options")
 
 # Add a direct analyze button in the main content area - HUGE and unmissable
-st.markdown("""
-<div style="text-align: center; margin: 20px 0 30px 0;">
-    <h3 style="color: #FF7E33; font-weight: bold; margin-bottom: 15px;">Click this button to see results:</h3>
-</div>
-""", unsafe_allow_html=True)
+st.markdown("### Click this button to see results:")
 
 analyze_col1, analyze_col2, analyze_col3 = st.columns([1, 2, 1])
 with analyze_col2:
@@ -228,22 +199,12 @@ with analyze_col2:
 # Sidebar
 with st.sidebar:
     # Add Beem logo
-    st.markdown("""
-    <div class="logo-container">
-        <div style="background-color: #FF9D45; color: white; font-size: 32px; font-weight: bold; padding: 5px 20px; border-radius: 5px; text-align: center;">
-            beem.
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.title("beem.")
     
     # Add a prominent header for the sidebar
-    st.markdown("""
-    <div style="background-color: #FF7E33; color: white; padding: 15px; margin-bottom: 20px; border-radius: 10px; text-align: center; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-        <span style="font-size: 20px;">ROUTE ANALYSIS CONTROLS</span>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown("### ROUTE ANALYSIS CONTROLS")
     
-    st.markdown('<h2 style="color: #FF9D45">Route Options</h2>', unsafe_allow_html=True)
+    st.markdown('## Route Options')
     
     # Area selection - EXPANDED LIST
     areas = list(area_coordinates.keys())
@@ -254,7 +215,7 @@ with st.sidebar:
     )
     
     # Time selection
-    st.markdown('<h3 style="color: #FF9D45; margin-top: 20px">Time Options</h3>', unsafe_allow_html=True)
+    st.markdown('### Time Options')
     time_option = st.radio("Select time", ["Current time", "Custom time"])
     
     if time_option == "Custom time":
@@ -268,19 +229,10 @@ with st.sidebar:
     day_type = st.radio("Day type", ["Weekday", "Weekend"])
     
     # Add instructional text with arrow pointing to the button
-    st.markdown("""
-    <div style="margin: 20px 0; display: flex; align-items: center; justify-content: center;">
-        <div style="background-color: #FFE8D6; border: 2px solid #FF9D45; padding: 15px; border-radius: 10px; text-align: center; position: relative; width: 100%;">
-            <span style="font-weight: bold; color: #FF7E33; font-size: 16px;">Click the button below to analyze!</span>
-            <div style="position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%);">
-                <span style="font-size: 28px; color: #FF7E33;">⬇️</span>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.info("**Click the button below to analyze!** ⬇️")
     
     # Add spacing
-    st.markdown("<div style='height: 30px'></div>", unsafe_allow_html=True)
+    st.markdown("")
     
     # Analysis button - Make it much more prominent
     col1, col2, col3 = st.columns([1, 6, 1])
@@ -292,7 +244,7 @@ with st.sidebar:
     # About section
     with st.expander("About Beem"):
         st.markdown("""
-        <div style="color: #FF9D45; font-weight: bold; margin-bottom: 10px">Beem Mobile Billboard Solutions</div>
+        **Beem Mobile Billboard Solutions**
         
         We help businesses reach their audience through eye-catching mobile billboards carried by cyclists.
         
@@ -302,39 +254,27 @@ with st.sidebar:
         - 🎯 Highly targeted
         - 📱 Engaging
         - 📊 Data-driven
-        """, unsafe_allow_html=True)
+        """)
 
 # Add visual banner with dynamic elements - MOVED AFTER analyze is defined
 if analyze:
+    # Analysis banner - keep simple to avoid HTML showing
     st.markdown("""
-    <div style="background: linear-gradient(90deg, #FF7E33, #FFB673); border-radius: 10px; padding: 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(255, 157, 69, 0.25);">
-        <div>
-            <h3 style="color: white !important; margin: 0; font-size: 30px; font-weight: 800; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">Beem Billboard Insights</h3>
-            <p style="color: white !important; margin: 8px 0 0 0; font-weight: 600; font-size: 18px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Optimizing engagement across Manchester</p>
-        </div>
-        <div style="background: white; border-radius: 50%; width: 55px; height: 55px; display: flex; justify-content: center; align-items: center; box-shadow: 0 3px 8px rgba(0,0,0,0.2);">
-            <span style="font-size: 28px">🚲</span>
-        </div>
+    <div style="background: linear-gradient(90deg, #FF7E33, #FFB673); border-radius: 10px; padding: 20px; margin-bottom: 25px;">
+        <h3 style="color: white !important; margin: 0; font-size: 30px; font-weight: 800;">Beem Billboard Insights</h3>
+        <p style="color: white !important; margin: 8px 0 0 0; font-weight: 600; font-size: 18px;">Optimizing engagement across Manchester</p>
     </div>
     """, unsafe_allow_html=True)
 else:
-    # Enhanced welcome banner with billboard and map elements - simplified to avoid HTML tags showing
-    st.markdown("""
-    <div style="background: linear-gradient(90deg, #FF7E33, #FFB673); border-radius: 10px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(255, 157, 69, 0.25);">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <h3 style="color: white !important; margin: 0; font-size: 30px; font-weight: 800; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">Welcome to Beem!</h3>
-                <p style="color: white !important; margin: 10px 0 15px 0; font-weight: 600; font-size: 18px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Mobile billboard optimization platform</p>
-            </div>
-            
-            <div style="display: flex; flex-direction: column; align-items: center;">
-                <div style="background: white; border-radius: 50%; width: 65px; height: 65px; display: flex; justify-content: center; align-items: center; box-shadow: 0 3px 8px rgba(0,0,0,0.2);">
-                    <span style="font-size: 32px">🚲</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    # Welcome banner - extremely simplified to avoid HTML issues
+    st.header("Welcome to Beem!", anchor=False)
+    st.subheader("Mobile billboard optimization platform", anchor=False)
+    
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        st.info("📣 Find the best times and locations for your advertising campaigns")
+    with col2:
+        st.markdown("### 🚲")
 
 # Function to get weather icon based on condition
 def get_weather_icon(condition):
