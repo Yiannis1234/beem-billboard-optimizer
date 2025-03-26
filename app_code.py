@@ -106,6 +106,23 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# Add floating callout for the sidebar toggle button
+st.markdown("""
+<div style="position: fixed; top: 7px; left: 79px; background-color: #FF7E33; color: white; 
+padding: 10px 15px; border-radius: 5px; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.3); 
+border: 2px dashed white; font-size: 16px; z-index: 9999; animation: pulse 2s infinite;">
+⬅️ CLICK HERE TO<br>OPEN CONTROLS!
+</div>
+
+<style>
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+</style>
+""", unsafe_allow_html=True)
+
 # Title
 st.markdown("""
 <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px">
