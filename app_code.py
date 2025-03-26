@@ -185,11 +185,11 @@ if 'just_clicked' in st.session_state and st.session_state.just_clicked:
 # If analyzing, just show the analysis content
 if analyze:
     # Analysis banner - keep simple to avoid HTML showing
-    st.markdown("""
+    st.markdown(f"""
     <div style="background: linear-gradient(90deg, #FF7E33, #FFB673); border-radius: 10px; padding: 10px; margin-bottom: 15px;" id="scroll-target">
-        <h3 style="color: white !important; margin: 0; font-size: 22px; font-weight: 800;">Beem Billboard Insights: {0}</h3>
+        <h3 style="color: white !important; margin: 0; font-size: 22px; font-weight: 800;">Beem Billboard Insights: {area}</h3>
     </div>
-    """.format(area), unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
     
     # IMMEDIATELY SHOW THE ANALYSIS - Don't wait for tabs
     st.markdown(f'<h2 class="gradient-header">Analysis for {area}</h2>', unsafe_allow_html=True)
@@ -317,7 +317,7 @@ else:
             # Force a rerun to update the UI
             st.experimental_rerun()
 
-# Sidebar
+# Sidebar - MOVED UP to define variables before we use them elsewhere
 with st.sidebar:
     # Add Beem logo
     st.title("beem.")
@@ -380,28 +380,6 @@ with st.sidebar:
         - 📱 Engaging
         - 📊 Data-driven
         """)
-
-# Footer with enhanced visual elements
-st.markdown("---")
-st.markdown("""
-<div class="footer-container">
-    <div style="text-align: center">
-        <div style="background-color: #FF9D45; color: white; font-size: 28px; font-weight: bold; padding: 5px 20px; border-radius: 5px; display: inline-block; margin-bottom: 10px;">
-            beem.
-        </div>
-        <div style="color: #FF9D45; margin-top: 10px">© 2025 Beem Mobile Billboard Solutions</div>
-        <div style="color: #999; font-size: 12px; margin-top: 5px">hello@beembillboards.com | +44 123 456 7890</div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-# Add button to return to the top
-if analyze:
-    # Add a button to jump to top
-    st.sidebar.markdown("---")
-    if st.sidebar.button("Return to Top ⬆️"):
-        st.session_state.just_clicked = True
-        st.experimental_rerun()
 
 # Add helper functions to generate data for each tab
 def generate_route_data(area, time):
@@ -743,3 +721,25 @@ def generate_interest_chart():
     )
     
     return fig
+
+# Add button to return to the top
+if analyze:
+    # Add a button to jump to top
+    st.sidebar.markdown("---")
+    if st.sidebar.button("Return to Top ⬆️"):
+        st.session_state.just_clicked = True
+        st.experimental_rerun()
+
+# Footer with enhanced visual elements
+st.markdown("---")
+st.markdown("""
+<div class="footer-container">
+    <div style="text-align: center">
+        <div style="background-color: #FF9D45; color: white; font-size: 28px; font-weight: bold; padding: 5px 20px; border-radius: 5px; display: inline-block; margin-bottom: 10px;">
+            beem.
+        </div>
+        <div style="color: #FF9D45; margin-top: 10px">© 2025 Beem Mobile Billboard Solutions</div>
+        <div style="color: #999; font-size: 12px; margin-top: 5px">hello@beembillboards.com | +44 123 456 7890</div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
