@@ -754,6 +754,26 @@ with st.sidebar:
     
     if st.button("ANALYZE ROUTE", type="primary", use_container_width=True):
         st.session_state.analyze = True
+        # Auto-collapse the sidebar when the analyze button is clicked
+        st.session_state.sidebar_collapsed = True
+        js = '''
+        <script>
+            function hideLeftSidebar() {
+                const leftSidebar = window.parent.document.querySelector('[data-testid="stSidebar"]');
+                const closeButton = window.parent.document.querySelector('[data-testid="collapsedControl"]');
+                if (leftSidebar && !leftSidebar.classList.contains('collapsed')) {
+                    if (closeButton) {
+                        closeButton.click();
+                    }
+                }
+            }
+            // Execute immediately
+            hideLeftSidebar();
+            // Also execute after a small delay to ensure DOM is ready
+            setTimeout(hideLeftSidebar, 100);
+        </script>
+        '''
+        st.markdown(js, unsafe_allow_html=True)
         st.rerun()
     
     with st.expander("About Beem"):
