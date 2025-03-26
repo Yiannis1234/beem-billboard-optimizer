@@ -220,34 +220,7 @@ st.markdown("""
 
 analyze_col1, analyze_col2, analyze_col3 = st.columns([1, 2, 1])
 with analyze_col2:
-    # Add custom styling for the billboard-like button before creating it
-    st.markdown("""
-    <style>
-        /* Billboard-style button for the main analyze button */
-        div[data-testid="stButton"] > button:first-child {
-            position: relative;
-            background: linear-gradient(to bottom, #FF7E33, #FF9D45);
-            color: white;
-            font-weight: bold;
-            border: none;
-            padding: 12px 24px;
-            font-size: 18px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(255, 126, 51, 0.4), 0 0 0 2px rgba(255, 255, 255, 0.2) inset;
-            transition: all 0.3s ease;
-        }
-        div[data-testid="stButton"] > button:first-child:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 6px 16px rgba(255, 126, 51, 0.5), 0 0 0 2px rgba(255, 255, 255, 0.3) inset;
-            background: linear-gradient(to bottom, #FF9D45, #FF7E33);
-        }
-        div[data-testid="stButton"] > button:first-child:active {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(255, 126, 51, 0.4);
-        }
-    </style>
-    """, unsafe_allow_html=True)
-    
+    # Remove the custom button styling that's causing issues
     main_analyze = st.button("🚀 ANALYZE ROUTE NOW 🚀", type="primary", use_container_width=True)
     if main_analyze:
         analyze = True
