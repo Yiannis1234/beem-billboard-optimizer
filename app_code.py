@@ -706,21 +706,11 @@ def generate_route_map(area, data):
         lat=route_lats,
         lon=route_lons,
         mode='lines',
-        line=dict(width=10, color='#FF7E33'),  # Even thicker line for better visibility on mobile
+        line=dict(width=8, color='#FF7E33'),  # Thick line for visibility
         name='Route Following Roads'
     ))
     
-    # Add ALL points as markers to clearly show the route stays on roads
-    fig.add_trace(go.Scattermapbox(
-        lat=route_lats,
-        lon=route_lons,
-        mode='markers',
-        marker=dict(size=12, color='#FF7E33'),  # Larger markers for mobile
-        name='Road Points',
-        showlegend=False
-    ))
-    
-    # Add labels for only the key points to avoid overcrowding
+    # Add markers for key points
     marker_indices = [0]  # Start point
     
     # Add some intermediate street name labels
@@ -736,26 +726,22 @@ def generate_route_map(area, data):
         lat=[route_lats[i] for i in marker_indices],
         lon=[route_lons[i] for i in marker_indices],
         mode='markers+text',
-        marker=dict(size=16, color='#FF7E33', symbol='circle'),  # Larger markers for mobile
+        marker=dict(size=14, color='#FF7E33', symbol='circle'),
         text=[route_points[i] for i in marker_indices],
         textposition="top right",
         name='Key Locations'
     ))
     
-    # Update the layout - fixed height, non-interactive
+    # Update layout for better map display
     fig.update_layout(
         mapbox=dict(
             style="carto-positron",  # Clean map style showing streets clearly
             center=dict(lat=center_lat, lon=center_lon),
-            zoom=15.0,  # Reduced zoom level for better overview
-            dragmode=False  # Disable map dragging
+            zoom=14.5  # Adjusted zoom level
         ),
         margin=dict(l=0, r=0, t=0, b=0),  # Zero margins for maximum map size
-        height=450,  # Reduced fixed height to prevent scroll issues
+        height=450,  # Fixed height to prevent scroll issues
         autosize=True,
-        hovermode=False,  # Disable hover interactions
-        dragmode=False,   # Disable all dragging
-        clickmode=False,  # Disable clicking
         showlegend=False  # Hide legend for cleaner display
     )
     
@@ -1171,33 +1157,16 @@ if analyze:
     /* Make the map container position fixed with clear boundaries */
     .map-container {
         position: relative !important;
-        height: 500px !important; 
+        height: 450px !important; 
         width: 100% !important;
         overflow: hidden !important;
-        pointer-events: none !important; /* Prevent all interaction */
-        touch-action: none !important; /* Disable touch actions */
-        user-select: none !important; /* Prevent selection */
     }
     
-    /* Ensure the plotly map doesn't interfere with page scrolling */
+    /* Ensure the plotly map is sized correctly */
     .js-plotly-plot, .plot-container {
-        pointer-events: none !important;
-        touch-action: none !important;
-        user-select: none !important;
-        max-height: 500px !important;
-        overflow: hidden !important;
-    }
-    
-    /* Disable all map controls and interactions */
-    .mapboxgl-map, .mapboxgl-canvas-container, .mapboxgl-canvas {
-        pointer-events: none !important;
-        touch-action: none !important;
-        user-select: none !important;
-    }
-    
-    /* Hide any controls that might appear */
-    .mapboxgl-control-container, .mapboxgl-ctrl {
-        display: none !important;
+        max-height: 450px !important;
+        height: 100% !important;
+        width: 100% !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -1208,15 +1177,10 @@ if analyze:
     # Generate and display the route map
     route_map = generate_route_map(area, data)
     st.plotly_chart(route_map, use_container_width=True, config={
-        'responsive': True,
         'displayModeBar': False,  # Hide the mode bar for cleaner mobile view
         'scrollZoom': False,      # Disable scroll to zoom
-        'staticPlot': True,       # Make the plot completely static
-        'dragmode': False,        # Disable dragging
-        'showTips': False,        # Disable tooltips
-        'doubleClick': False,     # Disable double-click actions
-        'showAxisDragHandles': False, # Disable axis drag
-        'showAxisRangeEntryBoxes': False # Disable range entry boxes
+        'staticPlot': False,      # Allow basic interactivity
+        'doubleClick': False      # Disable double-click actions
     })
     
     # Close the container
