@@ -358,6 +358,52 @@ if analyze:
             day = random.choice(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])
             time = random.choice(["8:00 AM - 10:00 AM", "11:30 AM - 1:30 PM", "4:00 PM - 6:00 PM"])
             st.success(f"**{day}**: {time} - High business activity and foot traffic")
+        
+        # Add pedestrian density and traffic
+        st.subheader("Pedestrian Density & Traffic Conditions")
+        peak_hours = st.multiselect(
+            "Peak Hours",
+            options=["Morning Rush (7AM-9AM)", "Lunch (12PM-2PM)", "Evening Rush (4PM-7PM)", "Weekend Midday"],
+            default=["Evening Rush (4PM-7PM)"]
+        )
+        
+        # Display traffic and pedestrian data
+        col1, col2 = st.columns(2)
+        with col1:
+            st.subheader("Pedestrian Density")
+            density_data = {
+                "Morning Rush (7AM-9AM)": random.randint(60, 85),
+                "Lunch (12PM-2PM)": random.randint(70, 90),
+                "Evening Rush (4PM-7PM)": random.randint(80, 95),
+                "Weekend Midday": random.randint(75, 90)
+            }
+            
+            for period in peak_hours:
+                st.metric(period, f"{density_data[period]}%")
+            
+        with col2:
+            st.subheader("Traffic Congestion")
+            traffic_data = {
+                "Morning Rush (7AM-9AM)": random.randint(65, 90),
+                "Lunch (12PM-2PM)": random.randint(55, 80),
+                "Evening Rush (4PM-7PM)": random.randint(75, 95),
+                "Weekend Midday": random.randint(50, 75)
+            }
+            
+            for period in peak_hours:
+                st.metric(period, f"{traffic_data[period]}%")
+        
+        # Add weather impact section
+        st.subheader("Weather Impact on Engagement")
+        weather_cols = st.columns(4)
+        with weather_cols[0]:
+            st.metric("Sunny ☀️", f"+{random.randint(10, 25)}%")
+        with weather_cols[1]:
+            st.metric("Cloudy ☁️", f"+{random.randint(5, 15)}%")
+        with weather_cols[2]:
+            st.metric("Rainy 🌧️", f"-{random.randint(10, 30)}%")
+        with weather_cols[3]:
+            st.metric("Cold ❄️", f"-{random.randint(15, 35)}%")
     
     # Tab 2: Demographics
     with tabs[1]:
@@ -376,8 +422,8 @@ else:
     # Welcome page
     st.title("beem.", anchor=False)
     
-    # Banner with instructions
-    st.error("## 👉 CLICK THE GRAY ARROW (>) IN THE TOP LEFT CORNER FIRST! 👈")
+    # Banner with instructions - updated text
+    st.error("## 👉 PRESS TOP LEFT TO ANALYZE YOUR ROUTE 👈")
     
     st.header("🚲 Beem Billboard Route Optimizer")
     
