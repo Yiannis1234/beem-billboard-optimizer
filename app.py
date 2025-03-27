@@ -250,23 +250,36 @@ div.stButton button {
     font-size: 16px !important;
 }
 
-/* Style for selectbox/dropdown - Make it ORANGE */
+/* Style for selectbox/dropdown - Make it ORANGE with a clear dropdown appearance */
 div[data-baseweb="select"] > div:first-child {
     background-color: #FF6600 !important;
     color: white !important;
     border: none !important;
     font-weight: bold !important;
     text-shadow: 0px 1px 2px rgba(0,0,0,0.2) !important;
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
 }
 
-div[data-baseweb="select"] > div:first-child > div {
+/* Add a clear dropdown indicator */
+div[data-baseweb="select"] svg {
+    color: white !important;
+    fill: white !important;
+    height: 24px !important;
+    width: 24px !important;
+}
+
+/* Fix specifically for the dropdown area selected item to ensure white text */
+div[data-baseweb="select"] > div {
+    background-color: #FF6600 !important;
+}
+
+div[data-baseweb="select"] > div span, 
+div[data-baseweb="select"] > div div {
     color: white !important;
     font-weight: bold !important;
-}
-
-div[data-baseweb="select"] span, 
-div[data-baseweb="select"] div[data-testid] {
-    color: white !important;
+    font-size: 16px !important;
 }
 
 /* Style for the dropdown options - NOT ORANGE */
@@ -585,17 +598,6 @@ div[data-baseweb="select"] {
     color: white !important;
 }
 
-/* Fix specifically for the dropdown area selected item */
-div[data-baseweb="select"] > div {
-    background-color: #FF6600 !important;
-    font-weight: 500 !important;
-    font-size: 16px !important;
-}
-
-div[data-baseweb="select"] > div * {
-    color: white !important;
-}
-
 /* Hide all default Streamlit icons that aren't explicitly used */
 img:not([alt]), img[alt=""], svg:not([fill]) {
     display: none !important;
@@ -669,8 +671,9 @@ with st.sidebar:
     areas = list(area_coordinates.keys())
     
     area = st.selectbox(
-        "Select Area",
-        areas
+        "Select Area ▼",
+        areas,
+        placeholder="Click to choose an area",
     )
     
     # Time selection
