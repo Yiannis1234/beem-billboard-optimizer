@@ -200,73 +200,86 @@ st.markdown("""
         margin-top: 0 !important; 
         padding-top: 0 !important;
     }
-</style>
-""", unsafe_allow_html=True)
-
-# Also add a direct script to remove elements
-st.markdown("""
-<script>
-    // Function to remove toolbar elements
-    function removeTopBarElements() {
-        // Remove all elements in the top bar
-        const topElements = document.querySelectorAll('header, [data-testid="stHeader"], [data-testid="stToolbar"], #MainMenu');
-        if (topElements) {
-            topElements.forEach(el => {
-                el.style.display = 'none';
-            });
-        }
-        
-        // Remove share button
-        const shareButtons = document.querySelectorAll('button[title="Share"], button[title="More options"], button[title="View fullscreen"]');
-        if (shareButtons) {
-            shareButtons.forEach(btn => {
-                btn.style.display = 'none';
-            });
-        }
+    
+    /* Fix button colors - make sure no black appears */
+    button, .stButton button {
+        background-color: #FF6600 !important;
+        color: white !important;
+        border: none !important;
     }
     
-    // Run initially
-    removeTopBarElements();
+    button:hover, .stButton button:hover {
+        background-color: #FF8533 !important;
+        color: white !important;
+    }
     
-    // Run again after a short delay to catch dynamically added elements
-    setTimeout(removeTopBarElements, 500);
+    /* Add styling for sidebar collapse button */
+    section[data-testid="stSidebar"] [data-testid="stSidebarNav"] {
+        background-color: #FFF6F0 !important;
+    }
     
-    // Set up a mutation observer to continue removing elements
-    const observer = new MutationObserver(() => {
-        removeTopBarElements();
-    });
+    /* Style any emoji that might be in the header */
+    [data-testid="stSidebarContent"] div:first-child {
+        margin-top: 0 !important;
+    }
     
-    // Start observing the document
-    observer.observe(document, { childList: true, subtree: true });
-</script>
+    /* Hide any strange characters that might be in the top bar */
+    span[aria-hidden="true"] {
+        display: none !important;
+    }
+    
+    /* Make sidebar toggle button visible */
+    button[kind="secondary"] {
+        background-color: transparent !important;
+        color: #FF6600 !important;
+        visibility: visible !important;
+        display: block !important;
+    }
+    
+    /* All divs in header area should be hidden */
+    header > div {
+        display: none !important;
+    }
+    
+    /* Force white background on all containers */
+    .block-container {
+        background-color: white !important;
+    }
+    
+    /* Remove all background colors from button elements */
+    .stButton > button {
+        background-color: #FF6600 !important;
+        color: white !important;
+    }
+    
+    /* Add a nice toggle button for the sidebar */
+    .sidebar-toggle {
+        position: fixed;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #FF6600;
+        color: white;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        padding: 10px 5px;
+        cursor: pointer;
+        z-index: 1000;
+    }
+</style>
 """, unsafe_allow_html=True)
 
-# Add more aggressive iframe hiding method
+# Add this after the CSS to create a sidebar toggle button
 st.markdown("""
-<style>
-/* Completely hide header iframe */
-iframe[title="streamlitApp"] {
-    top: 0 !important;
-}
-</style>
+<button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
 <script>
-// Hide with direct DOM manipulation on load
-window.addEventListener('DOMContentLoaded', (event) => {
-    // Target both the header elements and any button elements
-    const elementsToHide = document.querySelectorAll(
-        'header, [data-testid="stHeader"], [data-testid="stToolbar"], button[title="View fullscreen"], button[title="Share"], iframe header'
-    );
-    
-    elementsToHide.forEach(el => {
-        el.style.display = 'none';
-        el.style.height = '0';
-        el.style.padding = '0';
-        el.style.margin = '0';
-        el.style.overflow = 'hidden';
-        el.style.opacity = '0';
-        el.style.visibility = 'hidden';
-    });
-});
+function toggleSidebar() {
+    // Find the sidebar collapse button and click it
+    const sidebarButton = document.querySelector('[data-testid="collapsedControl"]');
+    if (sidebarButton) {
+        sidebarButton.click();
+    }
+}
 </script>
 """, unsafe_allow_html=True)
 
