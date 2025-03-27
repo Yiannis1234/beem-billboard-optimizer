@@ -44,4 +44,4 @@ with col1:
         st.success("Analysis button clicked!")
 with col2:
     if st.button("Press top left arrow to analyze ⬅️"):
-        st.balloons()
+        st.balloons() 
