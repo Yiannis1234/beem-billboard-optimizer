@@ -216,18 +216,6 @@ st.markdown("""
         padding-top: 0 !important;
     }
     
-    /* Fix button colors - make sure no black appears */
-    button, .stButton button {
-        background-color: #FF6600 !important;
-        color: white !important;
-        border: none !important;
-    }
-    
-    button:hover, .stButton button:hover {
-        background-color: #FF8533 !important;
-        color: white !important;
-    }
-    
     /* Add styling for sidebar collapse button */
     section[data-testid="stSidebar"] [data-testid="stSidebarNav"] {
         background-color: #FFF6F0 !important;
@@ -259,12 +247,6 @@ st.markdown("""
     /* Force white background on all containers */
     .block-container {
         background-color: white !important;
-    }
-    
-    /* Remove all background colors from button elements */
-    .stButton > button {
-        background-color: #FF6600 !important;
-        color: white !important;
     }
     
     /* Add a nice toggle button for the sidebar */
@@ -340,6 +322,69 @@ st.markdown("""
         align-items: center !important;
         justify-content: center !important;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    }
+    
+    /* SUPER SPECIFIC BUTTON RULES - Ensure no black buttons anywhere */
+    /* Target ALL buttons in the sidebar and app */
+    [data-testid="stSidebar"] button,
+    [data-testid="stSidebar"] .stButton > button,
+    [data-testid="stSidebarContent"] button,
+    button:not([kind="secondary"]):not([aria-label]), 
+    .stButton > button, 
+    .streamlit-expanderHeader,
+    [data-testid="baseButton-secondary"],
+    [data-testid="baseButton-primary"],
+    [role="button"],
+    /* Target specific Streamlit button classes that might be black */
+    button.css-12oovmm,
+    button.css-1cpxqw2,
+    button.css-ftagyd,
+    button.css-1qp8f3i,
+    /* Target even more specific CSS */
+    .stButton button[data-baseweb="button"],
+    .stButton [data-testid="baseButton-secondary"] {
+        background-color: #FF6600 !important;
+        color: white !important;
+        border: none !important;
+        font-weight: bold !important;
+    }
+    
+    /* Style hover state for all buttons */
+    [data-testid="stSidebar"] button:hover,
+    [data-testid="stSidebar"] .stButton > button:hover,
+    button:not([kind="secondary"]):not([aria-label]):hover, 
+    .stButton > button:hover, 
+    .streamlit-expanderHeader:hover,
+    [data-testid="baseButton-secondary"]:hover,
+    [data-testid="baseButton-primary"]:hover,
+    [role="button"]:hover {
+        background-color: #FF8533 !important;
+        color: white !important;
+    }
+    
+    /* Override Radio button styles to ensure they're not affected */
+    .stRadio > div {
+        background-color: transparent !important;
+    }
+    .stRadio input {
+        display: inline-block !important;
+    }
+    
+    /* Override any radio button label colors */
+    label[data-baseweb="radio"] div,
+    label[data-testid="stRadioLabel"] span {
+        color: #333333 !important;
+    }
+    
+    /* Ensure any button in the sidebar is properly styled */
+    div[data-testid="stSidebarUserContent"] .stButton > button {
+        background-color: #FF6600 !important;
+        color: white !important;
+        border-radius: 4px !important;
+        font-weight: bold !important;
+        padding: 0.25rem 1rem !important;
+        border: none !important;
+        cursor: pointer !important;
     }
 </style>
 """, unsafe_allow_html=True)
