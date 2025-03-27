@@ -213,7 +213,7 @@ area_coordinates = {
 # Page Configuration
 st.set_page_config(
     page_title="Beem Billboard Optimizer", 
-    page_icon="🚲", 
+    page_icon="📢", 
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items=None
@@ -634,7 +634,7 @@ button[role="tab"] p {
 """, unsafe_allow_html=True)
 
 # Title
-st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="main-header">📢 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
 
 # Add an unmissable banner that is absolutely impossible to miss
 st.markdown("""
@@ -1154,7 +1154,7 @@ if analyze:
             <p style="color: white; margin: 5px 0 0 0">Optimizing engagement across Manchester</p>
         </div>
         <div style="background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center">
-            <span style="font-size: 24px">🚲</span>
+            <span style="font-size: 24px">📢</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -1167,7 +1167,7 @@ else:
             <p style="color: white; margin: 5px 0 0 0">Mobile billboard optimization platform</p>
         </div>
         <div style="background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center">
-            <span style="font-size: 24px">🚲</span>
+            <span style="font-size: 24px">📢</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
