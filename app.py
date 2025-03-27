@@ -529,6 +529,15 @@ if 'sidebar_visible' not in st.session_state:
 def toggle_sidebar():
     st.session_state.sidebar_visible = False
 
+# Initialize analyze variable before both buttons are created
+if 'analyze_clicked' not in st.session_state:
+    st.session_state.analyze_clicked = False
+
+# Function to mark analysis as clicked
+def start_analysis():
+    st.session_state.analyze_clicked = True
+    st.session_state.sidebar_visible = False
+
 # Title
 st.markdown('<h1 class="main-header">📢 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
 
@@ -541,6 +550,11 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("Optimize your mobile billboard routes for maximum engagement")
+
+# Add main Analysis button that works the same as the sidebar Analyze button
+main_analyze_col1, main_analyze_col2, main_analyze_col3 = st.columns([1, 2, 1])
+with main_analyze_col2:
+    main_analyze = st.button("ANALYZE NOW", type="primary", on_click=start_analysis, key="main_analyze_button")
 
 # Homepage button - just a home emoji
 if st.button("🏠", key="main_homepage"):
@@ -607,7 +621,7 @@ with st.sidebar:
     
     # Analysis button
     st.markdown('<div style="margin-top: 25px;"></div>', unsafe_allow_html=True)
-    analyze = st.button("Analyze Route", type="primary", on_click=toggle_sidebar)
+    analyze_button = st.button("Analyze Route", type="primary", on_click=start_analysis)
     
     # Add CSS to hide the sidebar when analyze button is clicked
     if not st.session_state.sidebar_visible:
@@ -713,7 +727,8 @@ tabs = st.tabs(["Route Analysis", "Map & Visualization", "Historical Data", "Bes
 
 # Tab 1: Route Analysis
 with tabs[0]:
-    if analyze:
+    # Check both analyze_button and session state to determine if analysis should be shown
+    if analyze_button or st.session_state.analyze_clicked:
         st.markdown(f'<h2 class="gradient-header">Analysis for {area}</h2>', unsafe_allow_html=True)
         
         with st.spinner("Analyzing route data..."):
@@ -918,7 +933,7 @@ with tabs[0]:
 with tabs[1]:
     st.markdown('<h2 style="color: #FF9D45">Map & Visualization</h2>', unsafe_allow_html=True)
     
-    if analyze:
+    if analyze_button or st.session_state.analyze_clicked:
         # Enhanced map with multiple points
         map_data = pd.DataFrame({
             'lat': [53.4808, 53.4831, 53.4751, 53.4772, 53.4795],
@@ -957,7 +972,7 @@ with tabs[1]:
 with tabs[2]:
     st.markdown('<h2 style="color: #FF9D45">Historical Engagement Data</h2>', unsafe_allow_html=True)
     
-    if analyze:
+    if analyze_button or st.session_state.analyze_clicked:
         # Enhanced chart with labeled data
         days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         engagement = [65, 68, 70, 72, 85, 90, 80]
@@ -984,7 +999,7 @@ with tabs[2]:
 with tabs[3]:
     st.markdown('<h2 style="color: #FF9D45">Best Times to Display</h2>', unsafe_allow_html=True)
     
-    if analyze:
+    if analyze_button or st.session_state.analyze_clicked:
         st.markdown('<h3 style="color: #FF9D45">Recommended Times:</h3>', unsafe_allow_html=True)
         
         # Best times displayed correctly with CSS classes
@@ -1027,7 +1042,7 @@ with tabs[3]:
 with tabs[4]:
     st.markdown('<h2 style="color: #FF9D45">Demographics Analysis</h2>', unsafe_allow_html=True)
     
-    if analyze:
+    if analyze_button or st.session_state.analyze_clicked:
         st.subheader(f"Demographic Profile for {area}")
         
         # Demographics info based on area
@@ -1082,7 +1097,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Add visual banner with dynamic elements
-if analyze:
+if analyze_button or st.session_state.analyze_clicked:
     st.markdown("""
     <div style="background: linear-gradient(90deg, #FF9D45, #FFB673); border-radius: 10px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center">
         <div>
