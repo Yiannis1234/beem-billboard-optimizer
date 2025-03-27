@@ -486,10 +486,11 @@ if st.button("HOMEPAGE", key="main_homepage"):
 
 # Sidebar
 with st.sidebar:
-    # Add Beem logo
+    # Add Beem logo as text instead of image
     st.markdown("""
-    <div class="logo-container">
-        <img src="https://raw.githubusercontent.com/ioannisvamvakas/beem_resources/main/beem_logo.png" width="180">
+    <div style="text-align: center; margin-bottom: 20px">
+        <div style="font-size: 36px; font-weight: bold; color: #FF6600; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">BEEM</div>
+        <div style="font-size: 16px; color: #FF6600; margin-top: -5px;">Mobile Billboard Solutions</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -806,7 +807,7 @@ with tabs[0]:
         st.markdown("""
         <div style="display: flex; justify-content: center; align-items: center; height: 300px">
             <div style="text-align: center">
-                <img src="https://raw.githubusercontent.com/ioannisvamvakas/beem_resources/main/beem_logo.png" width="200">
+                <div style="font-size: 60px; color: #FF6600; margin-bottom: 20px">📢</div>
                 <p style="color: #FF9D45; margin-top: 20px; font-size: 18px">Select options and analyze to see data</p>
             </div>
         </div>
@@ -970,12 +971,10 @@ with tabs[4]:
 # Footer with enhanced visual elements
 st.markdown("---")
 st.markdown("""
-<div class="footer-container">
-    <div style="text-align: center">
-        <img src="https://raw.githubusercontent.com/ioannisvamvakas/beem_resources/main/beem_logo.png" width="100">
-        <div style="color: #FF9D45; margin-top: 10px">© 2025 Beem Mobile Billboard Solutions</div>
-        <div style="color: #999; font-size: 12px; margin-top: 5px">hello@beembillboards.com | +44 123 456 7890</div>
-    </div>
+<div class="footer-container" style="text-align: center">
+    <div style="font-size: 24px; font-weight: bold; color: #FF6600; margin-bottom: 10px;">BEEM</div>
+    <div style="color: #FF9D45; margin-top: 5px">© 2025 Beem Mobile Billboard Solutions</div>
+    <div style="color: #999; font-size: 12px; margin-top: 5px">hello@beembillboards.com | +44 123 456 7890</div>
 </div>
 """, unsafe_allow_html=True)
 
