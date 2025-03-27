@@ -521,6 +521,14 @@ svg.icon {
 </style>
 """, unsafe_allow_html=True)
 
+# Initialize the session state for sidebar visibility
+if 'sidebar_visible' not in st.session_state:
+    st.session_state.sidebar_visible = True
+
+# Create a function to toggle sidebar visibility
+def toggle_sidebar():
+    st.session_state.sidebar_visible = False
+
 # Title
 st.markdown('<h1 class="main-header">📢 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
 
@@ -599,7 +607,26 @@ with st.sidebar:
     
     # Analysis button
     st.markdown('<div style="margin-top: 25px;"></div>', unsafe_allow_html=True)
-    analyze = st.button("Analyze Route", type="primary")
+    analyze = st.button("Analyze Route", type="primary", on_click=toggle_sidebar)
+    
+    # Add CSS to hide the sidebar when analyze button is clicked
+    if not st.session_state.sidebar_visible:
+        st.markdown("""
+        <style>
+        [data-testid="stSidebar"] {
+            display: none !important;
+            width: 0 !important;
+            margin-right: 0 !important;
+            padding: 0 !important;
+        }
+        
+        .main .block-container {
+            max-width: 100% !important;
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
     
     # About section
     st.markdown('<div style="margin-top: 30px;"></div>', unsafe_allow_html=True)
