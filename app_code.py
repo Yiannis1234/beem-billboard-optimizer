@@ -318,6 +318,29 @@ st.markdown("""
         padding: 10px 5px !important;
         opacity: 1 !important;
     }
+    
+    /* Add a custom sidebar collapse/expand button styling */
+    [data-testid="collapsedControl"] svg {
+        color: white !important;
+        background: #FF6600 !important;
+        border-radius: 0 4px 4px 0 !important;
+        padding: 3px !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    }
+    
+    [data-testid="collapsedControl"] {
+        border: none !important;
+        background: #FF6600 !important;
+        color: white !important;
+        border-radius: 0 4px 4px 0 !important;
+        padding: 7px 0 !important;
+        width: 24px !important;
+        height: 36px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
