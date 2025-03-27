@@ -85,7 +85,7 @@ st.markdown("Optimize your mobile billboard routes for maximum engagement")
 
 # Homepage button
 st.markdown(
-    '<a href="https://beem-billboard-optimizer-lvvnqjcpqucrxzvnhg3vc6.streamlit.app/" class="homepage-button">HOMEPAGE</a>',
+    '<a href="https://beem-billboard-optimizer-lvvnqjcpqucrxzvnhg3vc6.streamlit.app/" target="_self" class="homepage-button">HOMEPAGE</a>',
     unsafe_allow_html=True
 )
 
@@ -142,7 +142,7 @@ with st.sidebar:
         
     # Homepage button in sidebar too
     st.markdown(
-        '<a href="https://beem-billboard-optimizer-lvvnqjcpqucrxzvnhg3vc6.streamlit.app/" class="homepage-button">HOMEPAGE</a>',
+        '<a href="https://beem-billboard-optimizer-lvvnqjcpqucrxzvnhg3vc6.streamlit.app/" target="_self" class="homepage-button">HOMEPAGE</a>',
         unsafe_allow_html=True
     )
 
