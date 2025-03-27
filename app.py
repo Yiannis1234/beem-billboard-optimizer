@@ -6,9 +6,111 @@ import plotly.express as px
 import plotly.graph_objects as go
 import requests
 import time as time_module
+import random
 
-# Import the BeemDataCollector from the src directory
-from src.data.data_collector import BeemDataCollector
+# MAIN APP FILE - All functionality consolidated here
+
+# Create a mock data collector class
+class BeemDataCollector:
+    def __init__(self, config):
+        self.weather_api_key = config.get('weather_api_key', 'demo_key')
+        self.traffic_api_key = config.get('traffic_api_key', 'demo_key')
+    
+    def get_weather_data(self, latitude, longitude, day=None):
+        """Mock weather data collection"""
+        # Return mock data
+        weather_conditions = ["Sunny", "Cloudy", "Partly Cloudy", "Rainy", "Light Rain"]
+        temps = [12, 15, 18, 20, 22, 24]
+        wind_speeds = [5, 8, 10, 12, 15, 18]
+        
+        hourly_data = []
+        
+        # Generate data for 24 hours
+        for hour in range(24):
+            hourly_data.append({
+                "time": f"{hour:02d}:00",
+                "temp_c": random.choice(temps),
+                "condition": random.choice(weather_conditions),
+                "wind_kph": random.choice(wind_speeds),
+                "chance_of_rain": random.randint(0, 100),
+                "is_day": 1 if 6 <= hour <= 18 else 0
+            })
+        
+        return {
+            "current": {
+                "temp_c": random.choice(temps),
+                "condition": {"text": random.choice(weather_conditions)},
+                "wind_kph": random.choice(wind_speeds),
+                "feelslike_c": random.choice(temps) - 2,
+                "is_day": 1
+            },
+            "forecast": {
+                "forecastday": [{
+                    "date": datetime.now().strftime("%Y-%m-%d"),
+                    "day": {
+                        "maxtemp_c": max(temps),
+                        "mintemp_c": min(temps),
+                        "avgtemp_c": sum(temps) // len(temps),
+                        "daily_chance_of_rain": random.randint(0, 100),
+                        "condition": {"text": random.choice(weather_conditions)}
+                    },
+                    "hour": hourly_data
+                }]
+            }
+        }
+    
+    def get_traffic_data(self, latitude, longitude, radius=1000):
+        """Mock traffic data collection"""
+        congestion_levels = ["Low", "Moderate", "High", "Very High"]
+        incident_types = ["accident", "construction", "congestion"]
+        
+        return {
+            "congestion_level": random.choice(congestion_levels),
+            "flow_speed": random.randint(5, 60),
+            "free_flow_speed": random.randint(40, 80),
+            "incidents": [
+                {
+                    "type": random.choice(incident_types),
+                    "severity": random.randint(1, 4),
+                    "description": f"Mock incident {i+1}"
+                } for i in range(random.randint(0, 3))
+            ]
+        }
+    
+    def get_pedestrian_density(self, area_id, time_of_day="morning"):
+        """Mock pedestrian density data collection"""
+        densities = {
+            "morning": {"min": 40, "max": 80},
+            "afternoon": {"min": 60, "max": 100},
+            "evening": {"min": 70, "max": 120},
+            "night": {"min": 10, "max": 30}
+        }
+        
+        time_range = densities.get(time_of_day, {"min": 50, "max": 100})
+        
+        # Generate hourly mock data
+        hourly_data = []
+        peak_hour = 12 if time_of_day == "afternoon" else (8 if time_of_day == "morning" else 18)
+        
+        for hour in range(24):
+            multiplier = 1.0
+            # Increase density around peak hours
+            if abs(hour - peak_hour) < 3:
+                multiplier = 1.5
+            
+            base_density = random.randint(time_range["min"], time_range["max"])
+            hourly_data.append({
+                "hour": hour,
+                "density": int(base_density * multiplier),
+                "primary_demographic": random.choice(["commuters", "tourists", "students", "shoppers"])
+            })
+        
+        return {
+            "average_density": sum(item["density"] for item in hourly_data) // len(hourly_data),
+            "peak_density": max(item["density"] for item in hourly_data),
+            "hourly_breakdown": hourly_data,
+            "area_type": random.choice(["commercial", "residential", "mixed", "entertainment"])
+        }
 
 # Define config with API keys (you can replace 'demo_key' with actual keys later)
 config = {
@@ -385,6 +487,31 @@ st.markdown("""
         padding: 0.25rem 1rem !important;
         border: none !important;
         cursor: pointer !important;
+    }
+    
+    /* ULTRA specific selector for the Analyze button */
+    div[data-testid="stSidebarContent"] button[data-testid="baseButton-primary"],
+    div[data-testid="stSidebarContent"] button[kind="primary"],
+    div[data-testid="stSidebarContent"] [data-testid="baseButton-primary"],
+    div[data-testid="stSidebarContent"] button[data-baseweb="button"] {
+        background-color: #FF6600 !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 4px !important;
+        font-weight: bold !important;
+        padding: 0.5rem 1rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+    }
+    
+    /* And their hover states */
+    div[data-testid="stSidebarContent"] button[data-testid="baseButton-primary"]:hover,
+    div[data-testid="stSidebarContent"] button[kind="primary"]:hover,
+    div[data-testid="stSidebarContent"] [data-testid="baseButton-primary"]:hover,
+    div[data-testid="stSidebarContent"] button[data-baseweb="button"]:hover {
+        background-color: #FF8533 !important;
+        box-shadow: 0 3px 7px rgba(0,0,0,0.15) !important;
     }
 </style>
 """, unsafe_allow_html=True)
