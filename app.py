@@ -250,7 +250,7 @@ div.stButton button {
     font-size: 16px !important;
 }
 
-/* Style for selectbox/dropdown - Make it ORANGE with a clear dropdown appearance */
+/* Style for selectbox/dropdown - Make it ORANGE with WHITE text */
 div[data-baseweb="select"] > div:first-child {
     background-color: #FF6600 !important;
     color: white !important;
@@ -264,24 +264,19 @@ div[data-baseweb="select"] > div:first-child {
     margin-bottom: 15px !important;
 }
 
-/* Add a clear dropdown indicator */
+/* ENSURE ALL TEXT IN DROPDOWN IS WHITE */
+div[data-baseweb="select"] > div:first-child * {
+    color: white !important;
+    fill: white !important;
+}
+
+/* Add a clear dropdown indicator with white arrow */
 div[data-baseweb="select"] svg {
     color: white !important;
     fill: white !important;
     height: 24px !important;
     width: 24px !important;
     margin-right: 5px !important;
-    background-color: rgba(255, 255, 255, 0.2) !important;
-    border-radius: 4px !important;
-    padding: 2px !important;
-}
-
-/* Make the dropdown container look more like a dropdown */
-div[data-baseweb="popover"] {
-    margin-top: 5px !important;
-    border-radius: 8px !important;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.2) !important;
-    border: 1px solid #DDD !important;
 }
 
 /* Style dropdown option menu for better visibility */
@@ -295,25 +290,19 @@ ul[data-baseweb="menu"] li {
     margin: 2px 0 !important;
     padding: 8px 10px !important;
     border-radius: 4px !important;
+    background-color: white !important;
+    color: #333333 !important;
 }
 
 ul[data-baseweb="menu"] li:hover {
     background-color: #FFF0E6 !important;
 }
 
-/* Style for the dropdown options - NOT ORANGE */
-ul[data-baseweb="menu"] li,
-ul[data-baseweb="list"] li,
-ul[data-testid="stSelectbox"] li {
-    background-color: white !important;
-    color: #333333 !important;
-    font-weight: 500 !important;
-}
-
-/* Make the dropdown arrow white */
-div[data-baseweb="select"] svg {
-    color: white !important;
-    fill: white !important;
+/* Style the selected item in the dropdown */
+ul[data-baseweb="menu"] li[aria-selected="true"] {
+    background-color: #FFF0E6 !important;
+    color: #FF6600 !important;
+    font-weight: bold !important;
 }
 
 /* Make sidebar collapse control ORANGE */
@@ -322,9 +311,6 @@ div[data-baseweb="select"] svg {
     color: white !important;
     visibility: visible !important;
     border-radius: 0 4px 4px 0 !important;
-    padding: 10px 5px !important;
-    opacity: 1 !important;
-    border: none !important;
     padding: 7px 0 !important;
     width: 24px !important;
     height: 36px !important;
@@ -406,270 +392,6 @@ h4 {
 
 /* Progress bar color */
 .stProgress .st-bo {background-color: #FF6600}
-
-/* Card elements with light backgrounds */
-.highlight {
-    background-color: #FFF6F0; 
-    padding: 15px; 
-    border-radius: 5px; 
-    color: #333333 !important; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    margin: 10px 0;
-    border: 1px solid #FFDDCC;
-}
-.highlight p, .highlight li {color: #333333 !important; font-weight: 500 !important}
-
-.time-card {
-    background-color: #FFF6F0; 
-    padding: 15px; 
-    border-radius: 5px; 
-    margin-top: 10px; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    border: 1px solid #FFDDCC;
-}
-.time-title {
-    color: #FF6600; 
-    font-weight: bold; 
-    margin-bottom: 5px;
-    font-size: 18px !important;
-}
-.time-detail {
-    margin-left: 20px; 
-    margin-bottom: 10px; 
-    color: #333333 !important; 
-    font-weight: 500 !important
-}
-
-.traffic-box {
-    background-color: #FFF6F0; 
-    padding: 15px; 
-    border-radius: 5px; 
-    margin-top: 10px; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    border: 1px solid #FFDDCC;
-}
-.traffic-box p, .traffic-box div {
-    color: #333333 !important; 
-    font-weight: 500 !important;
-    font-size: 16px !important;
-}
-
-.weather-box {
-    background-color: #FFF6F0; 
-    padding: 15px; 
-    border-radius: 5px; 
-    margin-top: 10px; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    border: 1px solid #FFDDCC;
-}
-.weather-box p, .weather-box div {
-    color: #333333 !important; 
-    font-weight: 500 !important;
-    font-size: 16px !important;
-}
-
-.logo-container {display: flex; justify-content: center; margin-bottom: 20px}
-.footer-container {display: flex; justify-content: center; align-items: center; margin-top: 20px}
-
-.card {
-    background-color: #FFF6F0; 
-    border-radius: 10px; 
-    padding: 20px; 
-    margin: 10px 0; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    border: 1px solid #FFDDCC;
-}
-.card p, .card div, .card span {
-    color: #333333 !important; 
-    font-weight: 500 !important;
-    font-size: 16px !important;
-}
-
-.dashboard-metric {
-    background-color: #FFF6F0; 
-    border-left: 5px solid #FF6600; 
-    padding: 15px; 
-    margin: 10px 0; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    border-top: 1px solid #FFDDCC;
-    border-right: 1px solid #FFDDCC;
-    border-bottom: 1px solid #FFDDCC;
-}
-.dashboard-metric p, .dashboard-metric div {
-    color: #333333 !important; 
-    font-weight: 500 !important;
-    font-size: 16px !important;
-}
-
-.gradient-header {
-    background: linear-gradient(90deg, #FF6600, #FF8533); 
-    color: white !important; 
-    padding: 15px; 
-    border-radius: 5px; 
-    margin-bottom: 20px; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-.gradient-header p, .gradient-header div, .gradient-header h2, .gradient-header h3 {
-    color: white !important; 
-    font-weight: 700 !important;
-    text-shadow: 0px 1px 2px rgba(0,0,0,0.3) !important;
-    font-size: 24px !important;
-}
-
-/* Fix for radio button text color */
-.stRadio > div {
-    background-color: transparent !important;
-}
-.stRadio input {
-    display: inline-block !important;
-}
-
-/* Override any radio button label colors */
-label[data-baseweb="radio"] div,
-label[data-testid="stRadioLabel"] span {
-    color: #333333 !important;
-    font-weight: 500 !important;
-    font-size: 16px !important;
-}
-
-/* Hide any unwanted symbols or images */
-section[data-testid="stSidebar"] img:not([src*="beem_logo.png"]) {
-    display: none !important;
-}
-
-/* Fix text highlighting in input fields - WHITE BACKGROUND, DARK TEXT */
-input, input:focus, input:hover, input:active, 
-textarea, textarea:focus, textarea:hover, textarea:active,
-.stSlider, [data-baseweb="slider"],
-[data-testid="stDateInput"] div,
-.stDateInput > div {
-    background-color: white !important;
-    color: #333333 !important;
-    font-weight: 500 !important;
-    font-size: 16px !important;
-}
-
-/* Make all form controls white with dark text */
-[data-testid="stWidgetLabel"] {
-    color: #333333 !important;
-    font-weight: 600 !important;
-    font-size: 16px !important;
-    margin-bottom: 5px !important;
-}
-
-[data-testid="stWidgetLabel"] ~ div * {
-    background-color: white !important;
-    color: #333333 !important;
-    font-weight: 500 !important;
-    font-size: 16px !important;
-}
-
-/* Specifically target radio buttons to NOT highlight in orange */
-.stRadio label {
-    background-color: transparent !important;
-}
-.stRadio label > div {
-    background-color: transparent !important;
-    color: #333333 !important;
-    font-weight: 500 !important;
-    font-size: 16px !important;
-}
-
-/* Fix for highlighted active form fields */
-[data-baseweb="select"] div[aria-selected="true"], 
-[data-baseweb="menu"] div[aria-selected="true"] {
-    background-color: white !important;
-    color: #333333 !important;
-    font-weight: 500 !important;
-    font-size: 16px !important;
-}
-
-/* Fix for dropdown selected item */
-div[role="listbox"] div[aria-selected="true"] {
-    background-color: white !important;
-    color: #333333 !important;
-    font-weight: 500 !important;
-    font-size: 16px !important;
-}
-
-/* Fix for all other form elements */
-[data-testid="stDateInput"], [data-testid="stTimeInput"],
-[data-testid="stNumberInput"], [data-testid="stTextInput"],
-[data-baseweb="input"], [data-baseweb="textarea"],
-[data-baseweb="calendar"], [data-baseweb="datepicker"],
-[data-baseweb="timepicker"] {
-    background-color: white !important;
-    color: #333333 !important;
-    font-weight: 500 !important;
-    font-size: 16px !important;
-}
-
-/* Style selectbox labels */
-label[data-baseweb="select"] span,
-label[data-testid="stSelectbox"] span {
-    color: #333333 !important;
-    font-weight: 600 !important;
-    font-size: 16px !important;
-}
-
-/* Style just the outer container of select boxes */
-div[data-baseweb="select"] {
-    color: white !important;
-}
-
-/* Hide all default Streamlit icons that aren't explicitly used */
-img:not([alt]), img[alt=""], svg:not([fill]) {
-    display: none !important;
-}
-
-/* Ensure text in the info boxes is visible */
-.stAlert > div {
-    color: #333333 !important;
-    font-weight: 500 !important;
-    font-size: 16px !important;
-}
-
-/* Fix text in tabs */
-button[role="tab"] p {
-    font-weight: 600 !important;
-    font-size: 16px !important;
-}
-
-/* Fix text in expanders */
-[data-testid="stExpander"] summary {
-    font-weight: 600 !important;
-    font-size: 16px !important;
-}
-
-/* Ensure good contrast on tab content */
-[data-testid="stVerticalBlock"] {
-    color: #333333 !important;
-}
-
-/* Better contrast for UI feedback messages */
-.stSuccess, .stInfo, .stWarning, .stError {
-    font-weight: 500 !important;
-    font-size: 16px !important;
-}
-
-/* Fix specifically for the dropdown area selected item to ensure white text */
-div[data-baseweb="select"] > div {
-    background-color: #FF6600 !important;
-}
-
-div[data-baseweb="select"] > div span, 
-div[data-baseweb="select"] > div div {
-    color: white !important;
-    font-weight: bold !important;
-    font-size: 16px !important;
-}
-
-/* Style the selected item in the dropdown */
-ul[data-baseweb="menu"] li[aria-selected="true"] {
-    background-color: #FFF0E6 !important;
-    color: #FF6600 !important;
-    font-weight: bold !important;
-}
 </style>
 """, unsafe_allow_html=True)
 
