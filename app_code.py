@@ -313,6 +313,25 @@ st.markdown("""
             min-height: 80vh !important;
         }
     }
+    
+    /* Force orange styling for homepage buttons */
+    button[data-testid="baseButton-primary"] {
+        background: linear-gradient(135deg, #FF7E33, #FF9945) !important;
+        color: white !important;
+        border: none !important;
+        font-size: 18px !important;
+        padding: 12px 20px !important;
+        width: 100% !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 8px rgba(255,126,51,0.25) !important;
+        transition: all 0.2s ease !important;
+    }
+
+    /* Additional specific styling for homepage buttons */
+    button[data-testid="baseButton-primary"]:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 12px rgba(255,126,51,0.3) !important;
+    }
 </style>
 
 <script>
@@ -1142,6 +1161,18 @@ else:
         background: linear-gradient(135deg, #FF7E33, #FF9945) !important;
         color: white !important;
         border: none !important;
+        font-size: 18px !important;
+        padding: 12px 20px !important;
+        width: 100% !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 8px rgba(255,126,51,0.25) !important;
+        transition: all 0.2s ease !important;
+    }
+
+    /* Additional specific styling for homepage buttons */
+    button[data-testid="baseButton-primary"]:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 12px rgba(255,126,51,0.3) !important;
     }
     </style>
     """, unsafe_allow_html=True)
