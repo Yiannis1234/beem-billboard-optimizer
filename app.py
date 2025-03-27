@@ -460,6 +460,64 @@ div[data-baseweb="select"] svg {
 [data-testid="stSelectbox"] span {
     color: white !important;
 }
+
+/* Hide all unwanted symbols and images */
+img:not([alt]),
+img[alt=""],
+[data-testid="stMarkdownContainer"] img,
+svg:not([fill]) {
+    display: none !important;
+}
+
+/* Hide all 'i' information icons */
+[data-baseweb="tooltip"],
+div[title],
+span[title],
+i.bi-info-circle,
+i.fa-info-circle,
+i.info-icon,
+[aria-label*="info"],
+[class*="info-icon"],
+[class*="InfoIcon"] {
+    display: none !important;
+}
+
+/* Remove the blue info symbol from all elements */
+div[data-baseweb="select"],
+div[data-baseweb="select"] *::after,
+div[data-baseweb="select"] *::before,
+div[data-baseweb="select"] *,
+[data-testid="stSelectbox"] *::after,
+[data-testid="stSelectbox"] *::before {
+    background-image: none !important;
+}
+
+/* Hide broken images */
+img:-moz-broken,
+img:-moz-user-disabled,
+img:not([src]),
+img[src=""],
+img[src="data:,"],
+img:not([src]):not([srcset]),
+.streamlit-info-icon {
+    display: none !important;
+}
+
+/* Hide absolutely all tooltips and icons */
+.stTooltipIcon, 
+[data-baseweb*="tooltip"], 
+[role="tooltip"],
+[aria-describedby],
+svg[width="16"][height="16"],
+svg.icon {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute !important;
+    pointer-events: none !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -496,13 +554,29 @@ with st.sidebar:
     
     st.markdown('<h2 style="color: #FF6600; font-weight: 700; font-size: 26px;">Route Options</h2>', unsafe_allow_html=True)
     
-    # Area selection - EXPANDED LIST
+    # Area selection - EXPANDED LIST but without any info icons
     areas = list(area_coordinates.keys())
+    
+    # Custom styling to ensure no info icons appear
+    st.markdown("""
+    <style>
+    [data-testid="stSelectbox"] > div > label {
+        position: relative !important;
+        z-index: 1 !important;
+    }
+    
+    [data-testid="stSelectbox"] > div > label::after {
+        content: "" !important;
+        display: none !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
     
     area = st.selectbox(
         "Select Area",
         areas,
         placeholder="Click to choose an area",
+        label_visibility="visible"
     )
     
     # Add a hint about the dropdown
