@@ -83,7 +83,9 @@ st.markdown("""
     .stButton button[data-testid="baseButton-primary"]:hover,
     .stButton button[data-testid="baseButton-primary"]:focus,
     .stButton button[data-testid="baseButton-primary"]:active {
-        background: linear-gradient(135deg, #FF7E33, #FF9945) !important;
+        background: #FF7E33 !important;
+        background-image: linear-gradient(135deg, #FF7E33, #FF9945) !important;
+        background-color: #FF7E33 !important;
         color: white !important;
         border: none !important;
         font-size: 18px !important;
@@ -94,15 +96,20 @@ st.markdown("""
         transition: all 0.2s ease !important;
     }
     
+    .stButton button[data-testid="baseButton-primary"]:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 12px rgba(255,126,51,0.3) !important;
+    }
+    
     /* Info boxes */
     .stAlert {
-        border-color: #FF9D45 !important;
+        border-color: #FFA500 !important;
         box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
     }
     
     /* Metrics */
     .stMetric {
-        background-color: #FFF8F0;
+        background-color: #FFA500;
         border-radius: 8px;
         box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         padding: 10px !important;
