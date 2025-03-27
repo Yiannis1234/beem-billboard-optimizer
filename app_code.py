@@ -350,12 +350,12 @@ button[id="custom-sidebar-toggle"] {
 
 /* Global resets for light theme */
 body {
-    background-color: #FFFFFF !important;
+    background-color: #FFF2E6 !important;
     color: #333333 !important;
 }
 
 .stApp {
-    background-color: #FFFFFF !important;
+    background-color: #FFF2E6 !important;
 }
 
 /* Main styles with better contrast on light background */
@@ -363,7 +363,7 @@ body {
 
 /* Sidebar styling for light theme */
 section[data-testid="stSidebar"] {
-    background-color: #FFF6F0 !important;
+    background-color: #FFE6CC !important;
 }
 
 /* Headers */
