@@ -262,439 +262,69 @@ st.set_page_config(
     menu_items=None
 )
 
-# Custom CSS for orange theme
+# Completely replace all custom sidebar and button CSS with a much simpler approach
 st.markdown("""
 <style>
-    /* Global resets for light theme */
-    body {
-        background-color: #FFFFFF !important;
-        color: #333333 !important;
-    }
-    
-    .stApp {
-        background-color: #FFFFFF !important;
-    }
-    
-    /* Main styles with better contrast on light background */
-    .main-header {color: #FF6600 !important; font-weight: 600}
-    div.stButton > button {background-color: #FF6600; color: white !important; border: none; font-weight: bold !important}
-    div.stButton > button:hover {background-color: #FF8533}
-    
-    /* Sidebar styling for light theme */
-    section[data-testid="stSidebar"] {
-        background-color: #FFF6F0 !important;
-    }
-    
-    /* Fix sidebar heading colors */
-    [data-testid="stSidebar"] h2, 
-    [data-testid="stSidebar"] h3, 
-    [data-testid="stSidebar"] h4 {
-        color: #FF6600 !important;
-        font-weight: 600 !important;
-    }
-    
-    /* Sidebar expander and other elements */
-    [data-testid="stSidebar"] .streamlit-expanderHeader,
-    [data-testid="stSidebar"] .streamlit-expanderContent {
-        background-color: transparent !important;
-        color: #333333 !important;
-    }
-    
-    /* Headers */
-    h1, h2, h3, h4 {color: #FF6600 !important}
-    
-    /* Progress bar color */
-    .stProgress .st-bo {background-color: #FF6600}
-    
-    /* Tabs styling */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-    }
-    
-    .stTabs [aria-selected="true"] {
-        background-color: #FFF6F0 !important;
-        color: #FF6600 !important;
-        font-weight: bold;
-    }
-    
-    .stTabs [aria-selected="false"] {
-        color: #666666 !important;
-    }
-    
-    /* Card elements with light backgrounds */
-    .highlight {background-color: #FFF6F0; padding: 10px; border-radius: 5px; color: #333333 !important; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-    .highlight p, .highlight li {color: #333333 !important; font-weight: 500 !important}
-    
-    .time-card {background-color: #FFF6F0; padding: 15px; border-radius: 5px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-    .time-title {color: #FF6600; font-weight: bold; margin-bottom: 5px}
-    .time-detail {margin-left: 20px; margin-bottom: 10px; color: #333333 !important; font-weight: 500 !important}
-    
-    .traffic-box {background-color: #FFF6F0; padding: 15px; border-radius: 5px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-    .traffic-box p, .traffic-box div {color: #333333 !important; font-weight: 500 !important}
-    
-    .weather-box {background-color: #FFF6F0; padding: 15px; border-radius: 5px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-    .weather-box p, .weather-box div {color: #333333 !important; font-weight: 500 !important}
-    
-    .logo-container {display: flex; justify-content: center; margin-bottom: 20px}
-    .footer-container {display: flex; justify-content: center; align-items: center; margin-top: 20px}
-    
-    .card {background-color: #FFF6F0; border-radius: 10px; padding: 20px; margin: 10px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-    .card p, .card div, .card span {color: #333333 !important; font-weight: 500 !important}
-    
-    .icon-text {display: flex; align-items: center}
-    .icon-text span {margin-left: 10px; color: #333333 !important; font-weight: 500 !important}
-    
-    .dashboard-metric {background-color: #FFF6F0; border-left: 5px solid #FF6600; padding: 15px; margin: 10px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-    .dashboard-metric p, .dashboard-metric div {color: #333333 !important; font-weight: 500 !important}
-    
-    .gradient-header {background: linear-gradient(90deg, #FF6600, #FF8533); color: white !important; padding: 10px; border-radius: 5px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
-    .gradient-header p, .gradient-header div {color: white !important; font-weight: 500 !important}
-    
-    /* Ensure all text in Streamlit components is clearly visible */
-    p, li, div, span {color: #333333 !important}
-    .stMarkdown p, .stMarkdown li {color: #333333 !important}
-    label span p {color: #333333 !important}
-    
-    /* Override any dark backgrounds in the ui */
-    .st-emotion-cache-1gulkj5 {
-        background-color: #FFFFFF !important;
-    }
-    
-    /* Streamlit base elements */
-    .st-emotion-cache-16txtl3 h1, 
-    .st-emotion-cache-16txtl3 h2,
-    .st-emotion-cache-16txtl3 h3 {
-        color: #FF6600 !important;
-    }
-    
-    /* Homepage button styling */
-    .homepage-button {
-        background-color: #FF6600;
-        color: white !important;
-        padding: 10px 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-        border-radius: 8px;
-        border: none;
-        font-weight: bold !important;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .homepage-button:hover {
-        background-color: #FF8533;
-    }
-    
-    /* Form elements */
-    .stRadio label, .stCheckbox label, .stSelectbox label, .stSlider label {
-        color: #333333 !important;
-        font-weight: 500 !important;
-    }
-    
-    /* Remove all toolbar elements */
-    header {display: none !important;}
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    .viewerBadge_container__1QSob {visibility: hidden;}
-    div.stActionButton {display: none;}
-    button[kind="headerNoPadding"] {display: none;}
-    div[data-testid="stDecoration"] {display: none;}
-    div[data-testid="stToolbar"] {display: none;}
-    div[data-testid="stHeader"] {display: none;}
-    section[data-testid="stToolbar"] {display: none;}
-    .e8zbici2 {display: none;}
-    .e16nr0p30 {display: none;}
-    .stDeployButton {display: none;}
-    
-    /* Catch all - hide any remaining elements in top right */
-    /* This targets the fullscreen button specifically */
-    button[title="View fullscreen"],
-    button[title="Share"],
-    button[title="More options"],
-    .st-emotion-cache-1erivf3,
-    .st-emotion-cache-1d34df7,
-    .st-emotion-cache-18ni7ap {
-        display: none !important;
-    }
-    
-    /* Additional Streamlit-specific selectors */
-    .st-emotion-cache-z5fcl4 {
-        padding-top: 0 !important;
-    }
-    
-    .stApp > header {
-        background-color: transparent !important;
-        height: 0 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        display: none !important;
-    }
-    
-    /* Remove title padding */
-    .e8zbici2 {
-        margin-top: 0 !important; 
-        padding-top: 0 !important;
-    }
-    
-    /* Add styling for sidebar collapse button */
-    section[data-testid="stSidebar"] [data-testid="stSidebarNav"] {
-        background-color: #FFF6F0 !important;
-    }
-    
-    /* Style any emoji that might be in the header */
-    [data-testid="stSidebarContent"] div:first-child {
-        margin-top: 0 !important;
-    }
-    
-    /* Hide any strange characters that might be in the top bar */
-    span[aria-hidden="true"] {
-        display: none !important;
-    }
-    
-    /* Make sidebar toggle button visible */
-    button[kind="secondary"] {
-        background-color: transparent !important;
-        color: #FF6600 !important;
-        visibility: visible !important;
-        display: block !important;
-    }
-    
-    /* All divs in header area should be hidden */
-    header > div {
-        display: none !important;
-    }
-    
-    /* Force white background on all containers */
-    .block-container {
-        background-color: white !important;
-    }
-    
-    /* Add a nice toggle button for the sidebar */
-    .sidebar-toggle {
-        position: fixed;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        background-color: #FF6600;
-        color: white;
-        border: none;
-        border-radius: 0 4px 4px 0;
-        padding: 10px 5px;
-        cursor: pointer;
-        z-index: 1000;
-    }
-    
-    /* Style specifically for sidebar markdown headers to ensure they're visible */
-    [data-testid="stSidebarContent"] [data-testid="stMarkdown"] h2,
-    [data-testid="stSidebarContent"] [data-testid="stMarkdown"] h3 {
-        color: #FF6600 !important;
-        font-weight: 600 !important;
-        margin-top: 15px !important;
-        margin-bottom: 10px !important;
-    }
-    
-    /* Special case for the About Beem expander */
-    [data-testid="stSidebarContent"] .streamlit-expanderHeader {
-        color: #FF6600 !important;
-        font-weight: 600 !important;
-        background-color: transparent !important;
-    }
-    
-    /* Style for sidebar labels */
-    [data-testid="stSidebarContent"] label {
-        font-weight: 500 !important;
-        color: #333333 !important;
-    }
-    
-    /* Fix for radio button text color */
-    [data-testid="stSidebarContent"] .stRadio label span p {
-        color: #333333 !important;
-        font-weight: 500 !important;
-    }
-    
-    /* Add arrow for sidebar open/close that is more visible */
-    [data-testid="collapsedControl"] {
-        background-color: #FF6600 !important;
-        color: white !important;
-        border-radius: 0 4px 4px 0 !important;
-        padding: 10px 5px !important;
-        opacity: 1 !important;
-    }
-    
-    /* Add a custom sidebar collapse/expand button styling */
-    [data-testid="collapsedControl"] svg {
-        color: white !important;
-        background: #FF6600 !important;
-        border-radius: 0 4px 4px 0 !important;
-        padding: 3px !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-    }
-    
-    [data-testid="collapsedControl"] {
-        border: none !important;
-        background: #FF6600 !important;
-        color: white !important;
-        border-radius: 0 4px 4px 0 !important;
-        padding: 7px 0 !important;
-        width: 24px !important;
-        height: 36px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-    }
-    
-    /* SUPER SPECIFIC BUTTON RULES - Ensure no black buttons anywhere */
-    /* Target ALL buttons in the sidebar and app */
-    [data-testid="stSidebar"] button,
-    [data-testid="stSidebar"] .stButton > button,
-    [data-testid="stSidebarContent"] button,
-    button:not([kind="secondary"]):not([aria-label]), 
-    .stButton > button, 
-    .streamlit-expanderHeader,
-    [data-testid="baseButton-secondary"],
-    [data-testid="baseButton-primary"],
-    [role="button"],
-    /* Target specific Streamlit button classes that might be black */
-    button.css-12oovmm,
-    button.css-1cpxqw2,
-    button.css-ftagyd,
-    button.css-1qp8f3i,
-    /* Target even more specific CSS */
-    .stButton button[data-baseweb="button"],
-    .stButton [data-testid="baseButton-secondary"] {
-        background-color: #FF6600 !important;
-        color: white !important;
-        border: none !important;
-        font-weight: bold !important;
-    }
-    
-    /* Style hover state for all buttons */
-    [data-testid="stSidebar"] button:hover,
-    [data-testid="stSidebar"] .stButton > button:hover,
-    button:not([kind="secondary"]):not([aria-label]):hover, 
-    .stButton > button:hover, 
-    .streamlit-expanderHeader:hover,
-    [data-testid="baseButton-secondary"]:hover,
-    [data-testid="baseButton-primary"]:hover,
-    [role="button"]:hover {
-        background-color: #FF8533 !important;
-        color: white !important;
-    }
-    
-    /* Override Radio button styles to ensure they're not affected */
-    .stRadio > div {
-        background-color: transparent !important;
-    }
-    .stRadio input {
-        display: inline-block !important;
-    }
-    
-    /* Override any radio button label colors */
-    label[data-baseweb="radio"] div,
-    label[data-testid="stRadioLabel"] span {
-        color: #333333 !important;
-    }
-    
-    /* Ensure any button in the sidebar is properly styled */
-    div[data-testid="stSidebarUserContent"] .stButton > button {
-        background-color: #FF6600 !important;
-        color: white !important;
-        border-radius: 4px !important;
-        font-weight: bold !important;
-        padding: 0.25rem 1rem !important;
-        border: none !important;
-        cursor: pointer !important;
-    }
-    
-    /* ULTRA specific selector for the Analyze button */
-    div[data-testid="stSidebarContent"] button[data-testid="baseButton-primary"],
-    div[data-testid="stSidebarContent"] button[kind="primary"],
-    div[data-testid="stSidebarContent"] [data-testid="baseButton-primary"],
-    div[data-testid="stSidebarContent"] button[data-baseweb="button"] {
-        background-color: #FF6600 !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 4px !important;
-        font-weight: bold !important;
-        padding: 0.5rem 1rem !important;
-        text-transform: uppercase !important;
-        letter-spacing: 0.5px !important;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
-    }
-    
-    /* And their hover states */
-    div[data-testid="stSidebarContent"] button[data-testid="baseButton-primary"]:hover,
-    div[data-testid="stSidebarContent"] button[kind="primary"]:hover,
-    div[data-testid="stSidebarContent"] [data-testid="baseButton-primary"]:hover,
-    div[data-testid="stSidebarContent"] button[data-baseweb="button"]:hover {
-        background-color: #FF8533 !important;
-        box-shadow: 0 3px 7px rgba(0,0,0,0.15) !important;
-    }
-</style>
-""", unsafe_allow_html=True)
+/* MAKE EVERYTHING ORANGE - BRUTE FORCE METHOD */
+button,
+.st-bq,
+.st-bm, 
+.st-bn,
+.st-bo,
+.st-bp,
+.st-c3,
+.st-c4,
+.stButton > button,
+[data-testid="baseButton-secondary"],
+[data-testid="baseButton-primary"],
+[data-baseweb="button"],
+[kind="primary"],
+[kind="secondary"],
+header button,
+div.stButton button,
+button.css-jggiw1,
+button.css-1d3q4k7,
+.css-1cpxqw2, 
+[aria-label="Close"],
+.stApp button {
+    background-color: #FF6600 !important;
+    color: white !important;
+    border: none !important;
+    font-weight: bold !important;
+}
 
-# Additional CSS specifically for the Area dropdown buttons
-st.markdown("""
-<style>
-    /* Force ALL buttons in the sidebar to be orange */
-    section[data-testid="stSidebar"] button,
-    section[data-testid="stSidebar"] .stButton button,
-    section[data-testid="stSidebar"] div[data-testid="StyledLinkButton"] button,
-    section[data-testid="stSidebar"] .stSelectbox button,
-    section[data-testid="stSidebar"] .css-1cpxqw2,
-    section[data-testid="stSidebar"] .css-1d8xkn3,
-    section[data-testid="stSidebar"] .css-12ozogq,
-    section[data-testid="stSidebar"] .css-cio0dv,
-    section[data-testid="stSidebar"] .css-qrbaxs {
-        background-color: #FF6600 !important;
-        color: white !important;
-        border: none !important;
-        font-weight: bold !important;
-        padding: 0.5rem 1rem !important;
-    }
-</style>
-""", unsafe_allow_html=True)
+/* Make sidebar collapse control ORANGE */
+[data-testid="collapsedControl"] {
+    background-color: #FF6600 !important;
+    color: white !important;
+    visibility: visible !important;
+    border-radius: 0 4px 4px 0 !important;
+    padding: 10px 5px !important;
+    opacity: 1 !important;
+    border: none !important;
+    padding: 7px 0 !important;
+    width: 24px !important;
+    height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+}
 
-# Add this after the CSS to create a sidebar toggle button - DIRECT INJECTION
-st.markdown("""
-<iframe name="dummy-target" id="dummy-target" style="display:none;"></iframe>
-<button id="custom-sidebar-toggle" onclick="window.open('about:blank','dummy-target'); setTimeout(function() {
-  try {
-    var buttons = document.querySelectorAll('[data-testid=\"collapsedControl\"], [class*=\"st-emotion-cache\"][kind=\"secondary\"], button[kind=\"secondary\"]'); 
-    for (var i = 0; i < buttons.length; i++) {
-      if (buttons[i].offsetParent !== null) {
-        console.log('Clicking sidebar toggle', buttons[i]);
-        buttons[i].click();
-        break;
-      }
-    }
-  } catch(e) { console.error(e); }
-}, 100);" style="position: fixed; left: 0; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; background-color: #FF6600; color: white; border: none; border-radius: 0 4px 4px 0; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 6px rgba(0,0,0,0.16); z-index: 9999;">☰</button>
-""", unsafe_allow_html=True)
+[data-testid="collapsedControl"] svg {
+    color: white !important;
+    fill: white !important;
+}
 
-# Additional CSS specifically for ALL buttons to ensure they're orange
-st.markdown("""
-<style>
-    /* Force all default buttons to be orange */
-    div.stButton button, 
-    button.css-1cpxqw2, 
-    button.css-1gdgy1o, 
-    button.css-12uog8n, 
-    button.css-qrbaxs, 
-    button.css-1q8dd3e,
-    .stSelectbox [aria-selected="true"],
-    button[data-baseweb="button"],
-    .stApp button:not([aria-label="Close"]),
-    .stApp button:not(#custom-sidebar-toggle),
-    header button {
-        background-color: #FF6600 !important;
-        color: white !important;
-        border: none !important;
-        font-weight: bold !important;
-    }
+/* HIDE ALL toggle button attempts */
+#sidebar-button-container,
+.custom-sidebar-toggle,
+#custom-sidebar-toggle,
+#dummy-target,
+iframe#dummy-target,
+button[id="custom-sidebar-toggle"] {
+    display: none !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
