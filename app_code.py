@@ -254,12 +254,14 @@ div.stButton button {
 div[data-baseweb="select"] > div:first-child {
     background-color: #FF6600 !important;
     color: white !important;
-    border: none !important;
+    border: 2px solid #FF4400 !important;
     font-weight: bold !important;
     text-shadow: 0px 1px 2px rgba(0,0,0,0.2) !important;
-    padding: 8px 12px !important;
+    padding: 10px 15px !important;
     border-radius: 8px !important;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15) !important;
+    margin-top: 5px !important;
+    margin-bottom: 15px !important;
 }
 
 /* Add a clear dropdown indicator */
@@ -268,18 +270,35 @@ div[data-baseweb="select"] svg {
     fill: white !important;
     height: 24px !important;
     width: 24px !important;
+    margin-right: 5px !important;
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border-radius: 4px !important;
+    padding: 2px !important;
 }
 
-/* Fix specifically for the dropdown area selected item to ensure white text */
-div[data-baseweb="select"] > div {
-    background-color: #FF6600 !important;
+/* Make the dropdown container look more like a dropdown */
+div[data-baseweb="popover"] {
+    margin-top: 5px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2) !important;
+    border: 1px solid #DDD !important;
 }
 
-div[data-baseweb="select"] > div span, 
-div[data-baseweb="select"] > div div {
-    color: white !important;
-    font-weight: bold !important;
-    font-size: 16px !important;
+/* Style dropdown option menu for better visibility */
+ul[data-baseweb="menu"] {
+    padding: 5px !important;
+    background-color: white !important;
+    border-radius: 8px !important;
+}
+
+ul[data-baseweb="menu"] li {
+    margin: 2px 0 !important;
+    padding: 8px 10px !important;
+    border-radius: 4px !important;
+}
+
+ul[data-baseweb="menu"] li:hover {
+    background-color: #FFF0E6 !important;
 }
 
 /* Style for the dropdown options - NOT ORANGE */
@@ -632,6 +651,25 @@ button[role="tab"] p {
     font-weight: 500 !important;
     font-size: 16px !important;
 }
+
+/* Fix specifically for the dropdown area selected item to ensure white text */
+div[data-baseweb="select"] > div {
+    background-color: #FF6600 !important;
+}
+
+div[data-baseweb="select"] > div span, 
+div[data-baseweb="select"] > div div {
+    color: white !important;
+    font-weight: bold !important;
+    font-size: 16px !important;
+}
+
+/* Style the selected item in the dropdown */
+ul[data-baseweb="menu"] li[aria-selected="true"] {
+    background-color: #FFF0E6 !important;
+    color: #FF6600 !important;
+    font-weight: bold !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -671,10 +709,13 @@ with st.sidebar:
     areas = list(area_coordinates.keys())
     
     area = st.selectbox(
-        "Select Area ▼",
+        "Select Area ⬇️",
         areas,
         placeholder="Click to choose an area",
     )
+    
+    # Add a hint about the dropdown
+    st.markdown('<div style="color: #FF6600; font-size: 14px; margin-top: -10px; margin-bottom: 20px;">↑ Click the orange box to select</div>', unsafe_allow_html=True)
     
     # Time selection
     st.markdown('<h3 style="color: #FF6600; font-weight: 700; font-size: 22px; margin-top: 25px; margin-bottom: 10px;">Time Options</h3>', unsafe_allow_html=True)
