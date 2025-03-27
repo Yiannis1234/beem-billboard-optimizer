@@ -8,6 +8,15 @@ import requests
 import time as time_module
 import random
 
+# Page Configuration
+st.set_page_config(
+    page_title="Beem Advertising Optimization", 
+    page_icon="📢", 
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items=None
+)
+
 # MAIN APP FILE - All functionality consolidated here
 
 # Create a mock data collector class
@@ -209,15 +218,6 @@ area_coordinates = {
     "Oxford Road": {"latitude": 53.4710, "longitude": -2.2376, "zone_id": "oxford_road"},
     "Spinningfields": {"latitude": 53.4802, "longitude": -2.2516, "zone_id": "spinningfields"}
 }
-
-# Page Configuration
-st.set_page_config(
-    page_title="Beem Billboard Optimizer", 
-    page_icon="📢", 
-    layout="wide",
-    initial_sidebar_state="expanded",
-    menu_items=None
-)
 
 # Completely replace all custom sidebar and button CSS with a much simpler approach
 st.markdown("""
