@@ -17,8 +17,24 @@ class BeemDataCollector:
         self.traffic_api_key = config.get('traffic_api_key', 'demo_key')
     
     def get_weather_data(self, latitude, longitude, day=None):
-        """Mock weather data collection"""
-        # Return mock data
+        """Get real weather data from WeatherAPI.com"""
+        # Check if we have an actual API key
+        if self.weather_api_key and self.weather_api_key != 'demo_key':
+            try:
+                # WeatherAPI.com endpoint
+                url = f"http://api.weatherapi.com/v1/forecast.json?key={self.weather_api_key}&q={latitude},{longitude}&days=1&aqi=no&alerts=no"
+                
+                response = requests.get(url, timeout=10)
+                
+                if response.status_code == 200:
+                    # Return the actual API response
+                    return response.json()
+            except Exception as e:
+                st.error(f"Weather API error: {e}")
+                # Fall back to mock data if there's an error
+                pass
+                
+        # Fall back to mock data if API key is missing or API call failed
         weather_conditions = ["Sunny", "Cloudy", "Partly Cloudy", "Rainy", "Light Rain"]
         temps = [12, 15, 18, 20, 22, 24]
         wind_speeds = [5, 8, 10, 12, 15, 18]
@@ -60,7 +76,48 @@ class BeemDataCollector:
         }
     
     def get_traffic_data(self, latitude, longitude, radius=1000):
-        """Mock traffic data collection"""
+        """Get real traffic data from TomTom API"""
+        # Check if we have an actual API key
+        if self.traffic_api_key and self.traffic_api_key != 'demo_key':
+            try:
+                # TomTom Traffic Flow API
+                url = f"https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point={latitude},{longitude}&key={self.traffic_api_key}"
+                
+                response = requests.get(url, timeout=10)
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    
+                    # Extract relevant traffic data
+                    if 'flowSegmentData' in data:
+                        flow_data = data['flowSegmentData']
+                        current_speed = flow_data.get('currentSpeed', 40)
+                        free_flow_speed = flow_data.get('freeFlowSpeed', 50) 
+                        
+                        # Calculate congestion level (0-1 range)
+                        congestion_level = min(1.0, max(0.0, 1 - (current_speed / max(1, free_flow_speed))))
+                        
+                        # Convert numerical congestion to text for compatibility
+                        congestion_text = "Low"
+                        if congestion_level > 0.7:
+                            congestion_text = "Very High"
+                        elif congestion_level > 0.5:
+                            congestion_text = "High"
+                        elif congestion_level > 0.3:
+                            congestion_text = "Moderate"
+                        
+                        return {
+                            "congestion_level": congestion_text,
+                            "flow_speed": current_speed,
+                            "free_flow_speed": free_flow_speed,
+                            "incidents": []
+                        }
+            except Exception as e:
+                st.error(f"Traffic API error: {e}")
+                # Fall back to mock data
+                pass
+        
+        # Fall back to mock data if API key is missing or API call failed
         congestion_levels = ["Low", "Moderate", "High", "Very High"]
         incident_types = ["accident", "construction", "congestion"]
         
@@ -177,8 +234,8 @@ class BeemDataCollector:
 
 # Define config with API keys (you can replace 'demo_key' with actual keys later)
 config = {
-    'weather_api_key': 'demo_key',  # Replace with your WeatherAPI.com key
-    'traffic_api_key': 'demo_key'   # Replace with your TomTom API key
+    'weather_api_key': 'c43d5e7fe8694a7d879125624230208',  # WeatherAPI.com key
+    'traffic_api_key': 'UpJxQZe4G5KVzlBvM53wRuCcXC2H8BDc'   # TomTom API key
 }
 
 # Initialize the data collector
