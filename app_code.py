@@ -658,81 +658,85 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Add this after the CSS to create a sidebar toggle button
+# Add this after the CSS to create a sidebar toggle button - FIXED VERSION
 st.markdown("""
-<button 
-    class="sidebar-toggle" 
-    style="position: fixed; left: 0; top: 50%; transform: translateY(-50%); background-color: #FF6600; color: white; border: none; border-radius: 0 4px 4px 0; padding: 10px 5px; cursor: pointer; z-index: 1000; font-size: 18px;" 
-    onclick="toggleSidebar()"
->☰</button>
+<div id="sidebar-button-container" style="position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 9999; width: 40px; height: 40px;">
+  <button 
+    id="sidebar-button"
+    style="width: 40px; height: 40px; background-color: #FF6600; color: white; border: none; border-radius: 0 4px 4px 0; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"
+  >☰</button>
+</div>
 
 <script>
-function toggleSidebar() {
-    // Try multiple methods to find and click the sidebar collapse button
-    var sidebarButtons = document.querySelectorAll('[data-testid="collapsedControl"]');
-    if (sidebarButtons && sidebarButtons.length > 0) {
-        sidebarButtons[0].click();
-    } else {
-        // Alternate method - look for any sidebar collapse element
-        var altButtons = document.querySelectorAll('.st-emotion-cache-1egp75f');
-        if (altButtons && altButtons.length > 0) {
-            altButtons[0].click();
-        } else {
-            // Another fallback
-            var allButtons = document.querySelectorAll('button');
-            for (var i = 0; i < allButtons.length; i++) {
-                if (allButtons[i].title === "Collapse" || allButtons[i].title === "Expand") {
-                    allButtons[i].click();
-                    break;
-                }
-            }
+document.addEventListener('DOMContentLoaded', function() {
+  // Get the sidebar button
+  const sidebarButton = document.getElementById('sidebar-button');
+  
+  if (sidebarButton) {
+    sidebarButton.addEventListener('click', function() {
+      // Find all sidebar toggle buttons by class or attribute
+      const toggleButtons = document.querySelectorAll('.st-emotion-cache-1inwz65, .st-emotion-cache-1egp75f, [data-testid="collapsedControl"]');
+      
+      if (toggleButtons && toggleButtons.length > 0) {
+        // Click the first one we find
+        toggleButtons[0].click();
+      } else {
+        // Fallback - find all buttons and look for collapse/expand title
+        const allButtons = document.querySelectorAll('button');
+        for (let i = 0; i < allButtons.length; i++) {
+          if (allButtons[i].title === "Collapse" || allButtons[i].title === "Expand" || 
+              allButtons[i].getAttribute('aria-label') === "Collapse" || 
+              allButtons[i].getAttribute('aria-label') === "Expand") {
+            allButtons[i].click();
+            break;
+          }
         }
-    }
-}
+      }
+    });
+  }
+});
 </script>
 """, unsafe_allow_html=True)
 
-# Additional CSS specifically for the top buttons (outside sidebar)
+# Additional CSS specifically for ALL buttons to be orange
 st.markdown("""
 <style>
-    /* Target ALL buttons on the page, especially those at the top */
-    header button,
-    button[kind="header"],
-    [data-testid="stHeader"] button,
-    .stApp header button,
-    button.st-emotion-cache-1v04i7i,
-    button.st-emotion-cache-1cpxqw2,
-    button.st-emotion-cache-r421ms,
-    button.st-emotion-cache-19rxjzo,
-    /* Comprehensive list of common Streamlit CSS classes for buttons */
-    button.css-1v04i7i, 
-    button.css-1cpxqw2,
-    button.css-r421ms,
-    button.css-19rxjzo,
+    /* Target ALL buttons on the entire page */
+    button, 
+    .stButton button,
+    button[kind="secondary"],
+    button[kind="primary"],
     button[data-baseweb="button"],
-    /* Extremely specific selectors */
-    div[data-testid="stHeader"] button,
-    div[data-testid="stToolbar"] button,
-    div[class*="stHeader"] button,
-    /* Cover absolutely all buttons */
-    button:not([data-testid="collapsedControl"]):not(.sidebar-toggle) {
+    [role="button"],
+    div[data-testid="StyledLinkButton"] button,
+    .streamlit-expanderHeader,
+    /* Specific Streamlit classes */
+    .st-emotion-cache-1w8n1xc,
+    .st-emotion-cache-7ym5gk,
+    .st-emotion-cache-1erivex,
+    .st-emotion-cache-1r6slb0,
+    .st-emotion-cache-1q1n0ol,
+    .st-emotion-cache-1cpxqw2,
+    .st-emotion-cache-1aw8i8e,
+    .st-emotion-cache-1pdm8ug,
+    /* Literally all buttons except the sidebar toggle we just created */
+    button:not(#sidebar-button) {
         background-color: #FF6600 !important;
         color: white !important;
         border: none !important;
         font-weight: bold !important;
     }
     
-    /* Ensure the correct sidebar toggle color */
-    [data-testid="collapsedControl"],
-    button[data-testid="collapsedControl"] {
-        background-color: #FF6600 !important;
-        color: white !important;
-    }
-    
-    /* Fix for the sidebar close button */
-    button.st-emotion-cache-1v04i7i:first-child,
-    button.css-1v04i7i:first-child {
-        background-color: #FF6600 !important;
+    /* And their hover states */
+    button:hover, 
+    .stButton button:hover,
+    button[kind="secondary"]:hover,
+    button[kind="primary"]:hover,
+    button[data-baseweb="button"]:hover,
+    [role="button"]:hover,
+    div[data-testid="StyledLinkButton"] button:hover,
+    .streamlit-expanderHeader:hover {
+        background-color: #FF8533 !important;
         color: white !important;
     }
 </style>
