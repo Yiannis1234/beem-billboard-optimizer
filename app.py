@@ -674,6 +674,14 @@ function toggleSidebar() {
 
 # Title
 st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
+
+# Add a very visible notification to confirm changes are working
+st.markdown("""
+<div style="background-color: #FF6600; color: white; padding: 15px; border-radius: 10px; text-align: center; margin: 20px 0; font-weight: bold; font-size: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    ✅ UPDATED VERSION WITH REAL APIs AND ORANGE BUTTONS
+</div>
+""", unsafe_allow_html=True)
+
 st.markdown("Optimize your mobile billboard routes for maximum engagement")
 
 # Homepage button
