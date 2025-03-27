@@ -282,27 +282,43 @@ div[data-baseweb="select"] svg {
 /* Style dropdown option menu for better visibility */
 ul[data-baseweb="menu"] {
     padding: 5px !important;
-    background-color: white !important;
+    background-color: #333333 !important;
     border-radius: 8px !important;
+    border: 2px solid #FF4400 !important;
 }
 
 ul[data-baseweb="menu"] li {
     margin: 2px 0 !important;
     padding: 8px 10px !important;
     border-radius: 4px !important;
-    background-color: white !important;
-    color: #333333 !important;
+    background-color: #333333 !important;
+    color: white !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
 }
 
 ul[data-baseweb="menu"] li:hover {
-    background-color: #FFF0E6 !important;
+    background-color: #FF6600 !important;
+    color: white !important;
 }
 
 /* Style the selected item in the dropdown */
 ul[data-baseweb="menu"] li[aria-selected="true"] {
-    background-color: #FFF0E6 !important;
-    color: #FF6600 !important;
+    background-color: #FF6600 !important;
+    color: white !important;
     font-weight: bold !important;
+}
+
+/* Force every item in menu to be white text on dark background */
+ul[data-baseweb="menu"] li *,
+ul[data-baseweb="menu"] span,
+ul[data-baseweb="menu"] div,
+[role="menuitem"] *,
+[role="option"] *,
+[data-baseweb="menu"] * {
+    color: white !important;
+    fill: white !important;
+    background-color: transparent !important;
 }
 
 /* Make sidebar collapse control ORANGE */
