@@ -115,6 +115,47 @@ st.markdown("""
     .stRadio label, .stCheckbox label {color: #333333 !important}
     .stSelectbox label {color: #333333 !important}
     .stSlider label {color: #333333 !important}
+    
+    /* Hide hamburger menu and icons in top right corner */
+    .stDeployButton, 
+    div[data-testid="stToolbar"],
+    header[data-testid="stHeader"],
+    button[kind="header"],
+    .stActionButton,
+    .viewerBadge_container__1QSob,
+    .menu,
+    .block-container > div[aria-label="null"] {
+        display: none !important;
+    }
+    
+    /* Hide icons in the top right corner */
+    .css-14xtw13,
+    .css-1rs6os,
+    .css-17ziqus,
+    .css-qbe2hs,
+    .css-1r6slb0 {
+        display: none !important;
+    }
+    
+    /* Hide more specific Streamlit elements */
+    [data-testid="stDecoration"],
+    [data-testid="stStatusWidget"],
+    [data-testid="stWidgetLabel"] button,
+    .stActionButtonLabel,
+    .stDownloadButton {
+        display: none !important;
+    }
+    
+    /* Remove any margin where the top icons would be */
+    .main > div:first-child {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+    
+    /* Override any other toolbar or header elements */
+    header {
+        visibility: hidden !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
