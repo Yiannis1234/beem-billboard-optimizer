@@ -58,12 +58,36 @@ st.markdown("""
     .icon-text span {margin-left: 10px}
     .dashboard-metric {background-color: #FFF1E6; border-left: 5px solid #FF9D45; padding: 15px; margin: 10px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05)}
     .gradient-header {background: linear-gradient(90deg, #FF9D45, #FFB673); color: white !important; padding: 10px; border-radius: 5px; margin-bottom: 20px}
+    .homepage-button {
+        background-color: #FF9D45;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 8px;
+        border: none;
+        font-weight: bold;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .homepage-button:hover {
+        background-color: #FFB673;
+    }
 </style>
 """, unsafe_allow_html=True)
 
 # Title
 st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
 st.markdown("Optimize your mobile billboard routes for maximum engagement")
+
+# Homepage button
+st.markdown(
+    '<a href="https://beem-billboard-optimizer-lvvnqjcpqucrxzvnhg3vc6.streamlit.app/" class="homepage-button">HOMEPAGE</a>',
+    unsafe_allow_html=True
+)
 
 # Sidebar
 with st.sidebar:
@@ -115,6 +139,12 @@ with st.sidebar:
         - 📱 Engaging
         - 📊 Data-driven
         """, unsafe_allow_html=True)
+        
+    # Homepage button in sidebar too
+    st.markdown(
+        '<a href="https://beem-billboard-optimizer-lvvnqjcpqucrxzvnhg3vc6.streamlit.app/" class="homepage-button">HOMEPAGE</a>',
+        unsafe_allow_html=True
+    )
 
 # Function to get weather icon based on condition
 def get_weather_icon(condition):
