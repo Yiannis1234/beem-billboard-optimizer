@@ -82,7 +82,7 @@ st.markdown("""
     
     /* Button styling */
     .stButton button {
-        background: #FF7E33 !important;
+        background: #FFA500 !important;
         background-image: linear-gradient(135deg, #FF7E33, #FF9945) !important;
         background-color: #FF7E33 !important;
         color: white !important;
