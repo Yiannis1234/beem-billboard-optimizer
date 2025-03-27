@@ -222,6 +222,19 @@ st.set_page_config(
 # Completely replace all custom sidebar and button CSS with a much simpler approach
 st.markdown("""
 <style>
+/* Base text styles for better visibility */
+body, p, div, span, li, a, h1, h2, h3, h4, h5, h6, label, button {
+    font-family: 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+/* Ensure all general text has good contrast */
+p, div, span, li {
+    color: #333333 !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 1.5 !important;
+}
+
 /* MAKE EVERYTHING ORANGE - BRUTE FORCE METHOD */
 button,
 .stButton > button,
@@ -233,6 +246,8 @@ div.stButton button {
     color: white !important;
     border: none !important;
     font-weight: bold !important;
+    text-shadow: 0px 1px 2px rgba(0,0,0,0.2) !important;
+    font-size: 16px !important;
 }
 
 /* Style for selectbox/dropdown - Make it ORANGE */
@@ -240,6 +255,8 @@ div[data-baseweb="select"] > div:first-child {
     background-color: #FF6600 !important;
     color: white !important;
     border: none !important;
+    font-weight: bold !important;
+    text-shadow: 0px 1px 2px rgba(0,0,0,0.2) !important;
 }
 
 /* Style for the dropdown options - NOT ORANGE */
@@ -248,6 +265,7 @@ ul[data-baseweb="list"] li,
 ul[data-testid="stSelectbox"] li {
     background-color: white !important;
     color: #333333 !important;
+    font-weight: 500 !important;
 }
 
 /* Make the dropdown arrow white */
@@ -290,44 +308,171 @@ body {
 }
 
 /* Main styles with better contrast on light background */
-.main-header {color: #FF6600 !important; font-weight: 600}
+.main-header {
+    color: #FF6600 !important; 
+    font-weight: 700 !important;
+    font-size: 32px !important;
+    margin-bottom: 20px !important;
+    text-shadow: 0px 1px 2px rgba(0,0,0,0.1) !important;
+}
 
 /* Sidebar styling for light theme */
 section[data-testid="stSidebar"] {
     background-color: #FFE6CC !important;
 }
 
-/* Headers */
-h1, h2, h3, h4 {color: #FF6600 !important}
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] div:not([class*="logo-container"]),
+section[data-testid="stSidebar"] span,
+section[data-testid="stSidebar"] li,
+section[data-testid="stSidebar"] label {
+    color: #333333 !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+}
+
+/* Headers with better visibility */
+h1 {
+    color: #FF6600 !important;
+    font-weight: 700 !important;
+    font-size: 32px !important;
+    margin-bottom: 20px !important;
+    text-shadow: 0px 1px 2px rgba(0,0,0,0.1) !important;
+}
+
+h2 {
+    color: #FF6600 !important;
+    font-weight: 700 !important;
+    font-size: 28px !important;
+    margin: 15px 0 !important;
+    text-shadow: 0px 1px 2px rgba(0,0,0,0.1) !important;
+}
+
+h3 {
+    color: #FF6600 !important;
+    font-weight: 600 !important;
+    font-size: 24px !important;
+    margin: 15px 0 !important;
+}
+
+h4 {
+    color: #FF6600 !important;
+    font-weight: 600 !important;
+    font-size: 20px !important;
+    margin: 10px 0 !important;
+}
 
 /* Progress bar color */
 .stProgress .st-bo {background-color: #FF6600}
 
 /* Card elements with light backgrounds */
-.highlight {background-color: #FFF6F0; padding: 10px; border-radius: 5px; color: #333333 !important; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+.highlight {
+    background-color: #FFF6F0; 
+    padding: 15px; 
+    border-radius: 5px; 
+    color: #333333 !important; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin: 10px 0;
+    border: 1px solid #FFDDCC;
+}
 .highlight p, .highlight li {color: #333333 !important; font-weight: 500 !important}
 
-.time-card {background-color: #FFF6F0; padding: 15px; border-radius: 5px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-.time-title {color: #FF6600; font-weight: bold; margin-bottom: 5px}
-.time-detail {margin-left: 20px; margin-bottom: 10px; color: #333333 !important; font-weight: 500 !important}
+.time-card {
+    background-color: #FFF6F0; 
+    padding: 15px; 
+    border-radius: 5px; 
+    margin-top: 10px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border: 1px solid #FFDDCC;
+}
+.time-title {
+    color: #FF6600; 
+    font-weight: bold; 
+    margin-bottom: 5px;
+    font-size: 18px !important;
+}
+.time-detail {
+    margin-left: 20px; 
+    margin-bottom: 10px; 
+    color: #333333 !important; 
+    font-weight: 500 !important
+}
 
-.traffic-box {background-color: #FFF6F0; padding: 15px; border-radius: 5px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-.traffic-box p, .traffic-box div {color: #333333 !important; font-weight: 500 !important}
+.traffic-box {
+    background-color: #FFF6F0; 
+    padding: 15px; 
+    border-radius: 5px; 
+    margin-top: 10px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border: 1px solid #FFDDCC;
+}
+.traffic-box p, .traffic-box div {
+    color: #333333 !important; 
+    font-weight: 500 !important;
+    font-size: 16px !important;
+}
 
-.weather-box {background-color: #FFF6F0; padding: 15px; border-radius: 5px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-.weather-box p, .weather-box div {color: #333333 !important; font-weight: 500 !important}
+.weather-box {
+    background-color: #FFF6F0; 
+    padding: 15px; 
+    border-radius: 5px; 
+    margin-top: 10px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border: 1px solid #FFDDCC;
+}
+.weather-box p, .weather-box div {
+    color: #333333 !important; 
+    font-weight: 500 !important;
+    font-size: 16px !important;
+}
 
 .logo-container {display: flex; justify-content: center; margin-bottom: 20px}
 .footer-container {display: flex; justify-content: center; align-items: center; margin-top: 20px}
 
-.card {background-color: #FFF6F0; border-radius: 10px; padding: 20px; margin: 10px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-.card p, .card div, .card span {color: #333333 !important; font-weight: 500 !important}
+.card {
+    background-color: #FFF6F0; 
+    border-radius: 10px; 
+    padding: 20px; 
+    margin: 10px 0; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border: 1px solid #FFDDCC;
+}
+.card p, .card div, .card span {
+    color: #333333 !important; 
+    font-weight: 500 !important;
+    font-size: 16px !important;
+}
 
-.dashboard-metric {background-color: #FFF6F0; border-left: 5px solid #FF6600; padding: 15px; margin: 10px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-.dashboard-metric p, .dashboard-metric div {color: #333333 !important; font-weight: 500 !important}
+.dashboard-metric {
+    background-color: #FFF6F0; 
+    border-left: 5px solid #FF6600; 
+    padding: 15px; 
+    margin: 10px 0; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-top: 1px solid #FFDDCC;
+    border-right: 1px solid #FFDDCC;
+    border-bottom: 1px solid #FFDDCC;
+}
+.dashboard-metric p, .dashboard-metric div {
+    color: #333333 !important; 
+    font-weight: 500 !important;
+    font-size: 16px !important;
+}
 
-.gradient-header {background: linear-gradient(90deg, #FF6600, #FF8533); color: white !important; padding: 10px; border-radius: 5px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
-.gradient-header p, .gradient-header div {color: white !important; font-weight: 500 !important}
+.gradient-header {
+    background: linear-gradient(90deg, #FF6600, #FF8533); 
+    color: white !important; 
+    padding: 15px; 
+    border-radius: 5px; 
+    margin-bottom: 20px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.gradient-header p, .gradient-header div, .gradient-header h2, .gradient-header h3 {
+    color: white !important; 
+    font-weight: 700 !important;
+    text-shadow: 0px 1px 2px rgba(0,0,0,0.3) !important;
+    font-size: 24px !important;
+}
 
 /* Fix for radio button text color */
 .stRadio > div {
@@ -341,6 +486,8 @@ h1, h2, h3, h4 {color: #FF6600 !important}
 label[data-baseweb="radio"] div,
 label[data-testid="stRadioLabel"] span {
     color: #333333 !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
 }
 
 /* Hide any unwanted symbols or images */
@@ -356,12 +503,23 @@ textarea, textarea:focus, textarea:hover, textarea:active,
 .stDateInput > div {
     background-color: white !important;
     color: #333333 !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
 }
 
-/* Make all form controls white */
+/* Make all form controls white with dark text */
+[data-testid="stWidgetLabel"] {
+    color: #333333 !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    margin-bottom: 5px !important;
+}
+
 [data-testid="stWidgetLabel"] ~ div * {
     background-color: white !important;
     color: #333333 !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
 }
 
 /* Specifically target radio buttons to NOT highlight in orange */
@@ -371,6 +529,8 @@ textarea, textarea:focus, textarea:hover, textarea:active,
 .stRadio label > div {
     background-color: transparent !important;
     color: #333333 !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
 }
 
 /* Fix for highlighted active form fields */
@@ -378,12 +538,16 @@ textarea, textarea:focus, textarea:hover, textarea:active,
 [data-baseweb="menu"] div[aria-selected="true"] {
     background-color: white !important;
     color: #333333 !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
 }
 
 /* Fix for dropdown selected item */
 div[role="listbox"] div[aria-selected="true"] {
     background-color: white !important;
     color: #333333 !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
 }
 
 /* Fix for all other form elements */
@@ -394,6 +558,16 @@ div[role="listbox"] div[aria-selected="true"] {
 [data-baseweb="timepicker"] {
     background-color: white !important;
     color: #333333 !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+}
+
+/* Style selectbox labels */
+label[data-baseweb="select"] span,
+label[data-testid="stSelectbox"] span {
+    color: #333333 !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
 }
 
 /* Style just the outer container of select boxes */
@@ -404,11 +578,43 @@ div[data-baseweb="select"] {
 /* Fix specifically for the dropdown area selected item */
 div[data-baseweb="select"] > div {
     background-color: #FF6600 !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
 }
 
 /* Hide all default Streamlit icons that aren't explicitly used */
 img:not([alt]), img[alt=""], svg:not([fill]) {
     display: none !important;
+}
+
+/* Ensure text in the info boxes is visible */
+.stAlert > div {
+    color: #333333 !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+}
+
+/* Fix text in tabs */
+button[role="tab"] p {
+    font-weight: 600 !important;
+    font-size: 16px !important;
+}
+
+/* Fix text in expanders */
+[data-testid="stExpander"] summary {
+    font-weight: 600 !important;
+    font-size: 16px !important;
+}
+
+/* Ensure good contrast on tab content */
+[data-testid="stVerticalBlock"] {
+    color: #333333 !important;
+}
+
+/* Better contrast for UI feedback messages */
+.stSuccess, .stInfo, .stWarning, .stError {
+    font-weight: 500 !important;
+    font-size: 16px !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -418,9 +624,9 @@ st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', 
 
 # Add an unmissable banner that is absolutely impossible to miss
 st.markdown("""
-<div style="background: linear-gradient(90deg, #FF6600, #FF8533); color: white; padding: 25px; border-radius: 15px; text-align: center; margin: 25px 0; box-shadow: 0 6px 12px rgba(0,0,0,0.4); border: 4px solid white;">
-    <h2 style="color: white !important; margin: 0; font-size: 32px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); font-weight: 800;">➡️ CLICK THE ORANGE ARROW</h2>
-    <p style="font-size: 24px; font-weight: bold; margin: 15px 0 0 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">TO OPEN SIDEBAR MENU AND ANALYZE</p>
+<div style="background: linear-gradient(90deg, #FF6600, #FF8533); color: white; padding: 30px; border-radius: 15px; text-align: center; margin: 25px 0; box-shadow: 0 8px 16px rgba(0,0,0,0.2); border: 4px solid white;">
+    <h2 style="color: white !important; margin: 0; font-size: 36px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); font-weight: 800; letter-spacing: 1px;">➡️ CLICK THE ORANGE ARROW</h2>
+    <p style="font-size: 26px; font-weight: bold; margin: 20px 0 0 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); color: white !important;">TO OPEN SIDEBAR MENU AND ANALYZE</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -443,7 +649,7 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown('<h2 style="color: #FF6600; font-weight: 600;">Route Options</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 style="color: #FF6600; font-weight: 700; font-size: 26px;">Route Options</h2>', unsafe_allow_html=True)
     
     # Area selection - EXPANDED LIST
     areas = list(area_coordinates.keys())
@@ -454,7 +660,7 @@ with st.sidebar:
     )
     
     # Time selection
-    st.markdown('<h3 style="color: #FF6600; font-weight: 600; margin-top: 20px">Time Options</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="color: #FF6600; font-weight: 700; font-size: 22px; margin-top: 25px; margin-bottom: 10px;">Time Options</h3>', unsafe_allow_html=True)
     time_option = st.radio("Select time", ["Current time", "Custom time"])
     
     if time_option == "Custom time":
@@ -465,29 +671,33 @@ with st.sidebar:
         selected_time = datetime.now()
     
     # Day type (new)
+    st.markdown('<div style="margin-top: 20px;"></div>', unsafe_allow_html=True)
     day_type = st.radio("Day type", ["Weekday", "Weekend"])
     
     # Analysis button
+    st.markdown('<div style="margin-top: 25px;"></div>', unsafe_allow_html=True)
     analyze = st.button("Analyze Route", type="primary")
     
     # About section
+    st.markdown('<div style="margin-top: 30px;"></div>', unsafe_allow_html=True)
     with st.expander("About Beem"):
         st.markdown("""
-        <div style="color: #FF6600; font-weight: bold; margin-bottom: 10px">Beem Mobile Billboard Solutions</div>
+        <div style="color: #FF6600; font-weight: bold; font-size: 18px; margin-bottom: 15px;">Beem Mobile Billboard Solutions</div>
         
-        <p>We help businesses reach their audience through eye-catching mobile billboards carried by cyclists.</p>
+        <p style="color: #333333; font-weight: 500; font-size: 16px; line-height: 1.5; margin-bottom: 15px;">We help businesses reach their audience through eye-catching mobile billboards carried by cyclists.</p>
         
-        <p>Our approach is:</p>
-        <ul>
-        <li>🌿 Eco-friendly</li>
-        <li>💰 Cost-effective</li>
-        <li>🎯 Highly targeted</li>
-        <li>📱 Engaging</li>
-        <li>📊 Data-driven</li>
+        <p style="color: #333333; font-weight: 600; font-size: 16px; line-height: 1.5; margin-bottom: 10px;">Our approach is:</p>
+        <ul style="color: #333333; padding-left: 20px; margin-bottom: 15px;">
+        <li style="color: #333333; font-weight: 500; font-size: 16px; line-height: 1.5; margin-bottom: 8px;">🌿 Eco-friendly</li>
+        <li style="color: #333333; font-weight: 500; font-size: 16px; line-height: 1.5; margin-bottom: 8px;">💰 Cost-effective</li>
+        <li style="color: #333333; font-weight: 500; font-size: 16px; line-height: 1.5; margin-bottom: 8px;">🎯 Highly targeted</li>
+        <li style="color: #333333; font-weight: 500; font-size: 16px; line-height: 1.5; margin-bottom: 8px;">📱 Engaging</li>
+        <li style="color: #333333; font-weight: 500; font-size: 16px; line-height: 1.5;">📊 Data-driven</li>
         </ul>
         """, unsafe_allow_html=True)
         
     # Homepage button in sidebar too
+    st.markdown('<div style="margin-top: 25px;"></div>', unsafe_allow_html=True)
     if st.button("HOMEPAGE", key="sidebar_homepage"):
         st.markdown("""
         <script>
