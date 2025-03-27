@@ -63,6 +63,21 @@ st.markdown("""
         background-color: #FFF6F0 !important;
     }
     
+    /* Fix sidebar heading colors */
+    [data-testid="stSidebar"] h2, 
+    [data-testid="stSidebar"] h3, 
+    [data-testid="stSidebar"] h4 {
+        color: #FF6600 !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Sidebar expander and other elements */
+    [data-testid="stSidebar"] .streamlit-expanderHeader,
+    [data-testid="stSidebar"] .streamlit-expanderContent {
+        background-color: transparent !important;
+        color: #333333 !important;
+    }
+    
     /* Headers */
     h1, h2, h3, h4 {color: #FF6600 !important}
     
@@ -266,6 +281,43 @@ st.markdown("""
         cursor: pointer;
         z-index: 1000;
     }
+    
+    /* Style specifically for sidebar markdown headers to ensure they're visible */
+    [data-testid="stSidebarContent"] [data-testid="stMarkdown"] h2,
+    [data-testid="stSidebarContent"] [data-testid="stMarkdown"] h3 {
+        color: #FF6600 !important;
+        font-weight: 600 !important;
+        margin-top: 15px !important;
+        margin-bottom: 10px !important;
+    }
+    
+    /* Special case for the About Beem expander */
+    [data-testid="stSidebarContent"] .streamlit-expanderHeader {
+        color: #FF6600 !important;
+        font-weight: 600 !important;
+        background-color: transparent !important;
+    }
+    
+    /* Style for sidebar labels */
+    [data-testid="stSidebarContent"] label {
+        font-weight: 500 !important;
+        color: #333333 !important;
+    }
+    
+    /* Fix for radio button text color */
+    [data-testid="stSidebarContent"] .stRadio label span p {
+        color: #333333 !important;
+        font-weight: 500 !important;
+    }
+    
+    /* Add arrow for sidebar open/close that is more visible */
+    [data-testid="collapsedControl"] {
+        background-color: #FF6600 !important;
+        color: white !important;
+        border-radius: 0 4px 4px 0 !important;
+        padding: 10px 5px !important;
+        opacity: 1 !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -304,7 +356,7 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown('<h2 style="color: #FF9D45">Route Options</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 style="color: #FF6600; font-weight: 600;">Route Options</h2>', unsafe_allow_html=True)
     
     # Area selection - EXPANDED LIST
     areas = list(area_coordinates.keys())
@@ -315,7 +367,7 @@ with st.sidebar:
     )
     
     # Time selection
-    st.markdown('<h3 style="color: #FF9D45; margin-top: 20px">Time Options</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="color: #FF6600; font-weight: 600; margin-top: 20px">Time Options</h3>', unsafe_allow_html=True)
     time_option = st.radio("Select time", ["Current time", "Custom time"])
     
     if time_option == "Custom time":
@@ -334,7 +386,7 @@ with st.sidebar:
     # About section
     with st.expander("About Beem"):
         st.markdown("""
-        <div style="color: #FF9D45; font-weight: bold; margin-bottom: 10px">Beem Mobile Billboard Solutions</div>
+        <div style="color: #FF6600; font-weight: bold; margin-bottom: 10px">Beem Mobile Billboard Solutions</div>
         
         We help businesses reach their audience through eye-catching mobile billboards carried by cyclists.
         
