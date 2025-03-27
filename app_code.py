@@ -111,6 +111,69 @@ class BeemDataCollector:
             "hourly_breakdown": hourly_data,
             "area_type": random.choice(["commercial", "residential", "mixed", "entertainment"])
         }
+        
+    def integrate_data(self, zone, timestamp):
+        """
+        Integrate all data sources for a given zone and time
+        Returns combined weather, traffic and pedestrian data
+        """
+        # Determine time of day for pedestrian density
+        hour = timestamp.hour
+        if 5 <= hour < 12:
+            time_of_day = "morning"
+        elif 12 <= hour < 17:
+            time_of_day = "afternoon"
+        elif 17 <= hour < 22:
+            time_of_day = "evening"
+        else:
+            time_of_day = "night"
+            
+        # Get data from each source
+        weather_data_full = self.get_weather_data(zone['latitude'], zone['longitude'])
+        traffic_data_full = self.get_traffic_data(zone['latitude'], zone['longitude'])
+        pedestrian_density = self.get_pedestrian_density(zone['zone_id'], time_of_day)
+        
+        # Extract current weather from the full response
+        current_weather = weather_data_full['current']
+        
+        # Format traffic data
+        congestion_level = 0.0
+        if traffic_data_full["congestion_level"] == "Low":
+            congestion_level = 0.2
+        elif traffic_data_full["congestion_level"] == "Moderate":
+            congestion_level = 0.5
+        elif traffic_data_full["congestion_level"] == "High":
+            congestion_level = 0.8
+        elif traffic_data_full["congestion_level"] == "Very High":
+            congestion_level = 0.95
+        
+        # Format simplified data for application use
+        weather_data = {
+            'temperature': current_weather['temp_c'],
+            'condition': current_weather['condition']['text'],
+            'wind_speed': current_weather['wind_kph'],
+            'precipitation': 0 if 'rain' not in current_weather['condition']['text'].lower() else 1.0
+        }
+        
+        traffic_data = {
+            'congestion_level': congestion_level,
+            'flow_speed': traffic_data_full['flow_speed'],
+            'free_flow_speed': traffic_data_full['free_flow_speed']
+        }
+        
+        # Calculate a normalized pedestrian density value between 0-1
+        avg_density = pedestrian_density['average_density']
+        normalized_density = min(1.0, max(0.0, avg_density / 100))
+        
+        return {
+            'zone_id': zone['zone_id'],
+            'timestamp': timestamp,
+            'weather': weather_data,
+            'traffic': traffic_data,
+            'pedestrian_density': normalized_density,
+            'latitude': zone['latitude'],
+            'longitude': zone['longitude']
+        }
 
 # Define config with API keys (you can replace 'demo_key' with actual keys later)
 config = {
