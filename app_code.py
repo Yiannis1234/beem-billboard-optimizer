@@ -37,63 +37,102 @@ st.set_page_config(
     page_icon="🚲", 
     layout="wide",
     initial_sidebar_state="expanded",
-    menu_items={
-        "Get Help": None,
-        "Report a bug": None,
-        "About": None
-    }
+    menu_items=None
 )
 
 # Custom CSS for orange theme
 st.markdown("""
 <style>
-    /* Main styles with better contrast */
-    .main-header {color: #FF7E33 !important; font-weight: 600}
-    div.stButton > button {background-color: #FF7E33; color: white !important; border: none; font-weight: bold !important}
-    div.stButton > button:hover {background-color: #FF9945}
-    .css-1aumxhk {background-color: #FFF1E6} /* Sidebar background */
-    .css-18e3th9 {padding-top: 2rem; padding-bottom: 10rem; padding-left: 5rem; padding-right: 5rem}
-    h1, h2, h3, h4 {color: #FF7E33 !important}
-    .stProgress .st-bo {background-color: #FF7E33}
-    .stTabs [aria-selected="true"] {background-color: #FFF1E6; color: #FF7E33 !important}
+    /* Global resets for light theme */
+    body {
+        background-color: #FFFFFF !important;
+        color: #333333 !important;
+    }
     
-    /* Card elements with better text contrast */
-    .highlight {background-color: #FFF1E6; padding: 10px; border-radius: 5px; color: #333333 !important}
+    .stApp {
+        background-color: #FFFFFF !important;
+    }
+    
+    /* Main styles with better contrast on light background */
+    .main-header {color: #FF6600 !important; font-weight: 600}
+    div.stButton > button {background-color: #FF6600; color: white !important; border: none; font-weight: bold !important}
+    div.stButton > button:hover {background-color: #FF8533}
+    
+    /* Sidebar styling for light theme */
+    section[data-testid="stSidebar"] {
+        background-color: #FFF6F0 !important;
+    }
+    
+    /* Headers */
+    h1, h2, h3, h4 {color: #FF6600 !important}
+    
+    /* Progress bar color */
+    .stProgress .st-bo {background-color: #FF6600}
+    
+    /* Tabs styling */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background-color: #FFF6F0 !important;
+        color: #FF6600 !important;
+        font-weight: bold;
+    }
+    
+    .stTabs [aria-selected="false"] {
+        color: #666666 !important;
+    }
+    
+    /* Card elements with light backgrounds */
+    .highlight {background-color: #FFF6F0; padding: 10px; border-radius: 5px; color: #333333 !important; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
     .highlight p, .highlight li {color: #333333 !important; font-weight: 500 !important}
     
-    .time-card {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
-    .time-title {color: #FF7E33; font-weight: bold; margin-bottom: 5px}
+    .time-card {background-color: #FFF6F0; padding: 15px; border-radius: 5px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+    .time-title {color: #FF6600; font-weight: bold; margin-bottom: 5px}
     .time-detail {margin-left: 20px; margin-bottom: 10px; color: #333333 !important; font-weight: 500 !important}
     
-    .traffic-box {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
+    .traffic-box {background-color: #FFF6F0; padding: 15px; border-radius: 5px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
     .traffic-box p, .traffic-box div {color: #333333 !important; font-weight: 500 !important}
     
-    .weather-box {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
+    .weather-box {background-color: #FFF6F0; padding: 15px; border-radius: 5px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
     .weather-box p, .weather-box div {color: #333333 !important; font-weight: 500 !important}
     
     .logo-container {display: flex; justify-content: center; margin-bottom: 20px}
     .footer-container {display: flex; justify-content: center; align-items: center; margin-top: 20px}
     
-    .card {background-color: #FFF1E6; border-radius: 10px; padding: 20px; margin: 10px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1)}
+    .card {background-color: #FFF6F0; border-radius: 10px; padding: 20px; margin: 10px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
     .card p, .card div, .card span {color: #333333 !important; font-weight: 500 !important}
     
     .icon-text {display: flex; align-items: center}
     .icon-text span {margin-left: 10px; color: #333333 !important; font-weight: 500 !important}
     
-    .dashboard-metric {background-color: #FFF1E6; border-left: 5px solid #FF7E33; padding: 15px; margin: 10px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05)}
+    .dashboard-metric {background-color: #FFF6F0; border-left: 5px solid #FF6600; padding: 15px; margin: 10px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
     .dashboard-metric p, .dashboard-metric div {color: #333333 !important; font-weight: 500 !important}
     
-    .gradient-header {background: linear-gradient(90deg, #FF7E33, #FF9945); color: white !important; padding: 10px; border-radius: 5px; margin-bottom: 20px}
+    .gradient-header {background: linear-gradient(90deg, #FF6600, #FF8533); color: white !important; padding: 10px; border-radius: 5px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
     .gradient-header p, .gradient-header div {color: white !important; font-weight: 500 !important}
     
-    /* Ensure all text in Streamlit components is visible */
+    /* Ensure all text in Streamlit components is clearly visible */
     p, li, div, span {color: #333333 !important}
     .stMarkdown p, .stMarkdown li {color: #333333 !important}
     label span p {color: #333333 !important}
     
+    /* Override any dark backgrounds in the ui */
+    .st-emotion-cache-1gulkj5 {
+        background-color: #FFFFFF !important;
+    }
+    
+    /* Streamlit base elements */
+    .st-emotion-cache-16txtl3 h1, 
+    .st-emotion-cache-16txtl3 h2,
+    .st-emotion-cache-16txtl3 h3 {
+        color: #FF6600 !important;
+    }
+    
     /* Homepage button styling */
     .homepage-button {
-        background-color: #FF7E33;
+        background-color: #FF6600;
         color: white !important;
         padding: 10px 20px;
         text-align: center;
@@ -105,89 +144,61 @@ st.markdown("""
         border-radius: 8px;
         border: none;
         font-weight: bold !important;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     .homepage-button:hover {
-        background-color: #FF9945;
+        background-color: #FF8533;
     }
     
-    /* Fix for radio buttons and other input elements */
-    .stRadio label, .stCheckbox label {color: #333333 !important}
-    .stSelectbox label {color: #333333 !important}
-    .stSlider label {color: #333333 !important}
-    
-    /* Hide hamburger menu and icons in top right corner */
-    .stDeployButton, 
-    div[data-testid="stToolbar"],
-    header[data-testid="stHeader"],
-    button[kind="header"],
-    .stActionButton,
-    .viewerBadge_container__1QSob,
-    .menu,
-    .block-container > div[aria-label="null"] {
-        display: none !important;
+    /* Form elements */
+    .stRadio label, .stCheckbox label, .stSelectbox label, .stSlider label {
+        color: #333333 !important;
+        font-weight: 500 !important;
     }
     
-    /* Hide icons in the top right corner */
-    .css-14xtw13,
-    .css-1rs6os,
-    .css-17ziqus,
-    .css-qbe2hs,
-    .css-1r6slb0 {
-        display: none !important;
-    }
+    /* Remove all toolbar elements */
+    header {display: none !important;}
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    .viewerBadge_container__1QSob {visibility: hidden;}
+    div.stActionButton {display: none;}
+    button[kind="headerNoPadding"] {display: none;}
+    div[data-testid="stDecoration"] {display: none;}
+    div[data-testid="stToolbar"] {display: none;}
+    div[data-testid="stHeader"] {display: none;}
+    section[data-testid="stToolbar"] {display: none;}
+    .e8zbici2 {display: none;}
+    .e16nr0p30 {display: none;}
+    .stDeployButton {display: none;}
     
-    /* Hide more specific Streamlit elements */
-    [data-testid="stDecoration"],
-    [data-testid="stStatusWidget"],
-    [data-testid="stWidgetLabel"] button,
-    .stActionButtonLabel,
-    .stDownloadButton {
-        display: none !important;
-    }
-    
-    /* Remove any margin where the top icons would be */
-    .main > div:first-child {
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-    }
-    
-    /* Override any other toolbar or header elements */
-    header {
-        visibility: hidden !important;
-    }
-    
-    /* Aggressive hiding for ALL header components */
-    [data-testid="stHeader"] {
-        display: none !important;
-    }
-    
+    /* Catch all - hide any remaining elements in top right */
+    /* This targets the fullscreen button specifically */
     button[title="View fullscreen"],
     button[title="Share"],
     button[title="More options"],
-    .ViewerBadge_container,
-    .styles_terminalButton__JBj5T,
+    .st-emotion-cache-1erivf3,
+    .st-emotion-cache-1d34df7,
+    .st-emotion-cache-18ni7ap {
+        display: none !important;
+    }
+    
+    /* Additional Streamlit-specific selectors */
+    .st-emotion-cache-z5fcl4 {
+        padding-top: 0 !important;
+    }
+    
     .stApp > header {
-        display: none !important;
-    }
-    
-    /* Remove all decoration at the top */
-    #MainMenu, #stDecoration {
-        display: none !important;
-    }
-    
-    /* Force hide all top elements */
-    div[data-testid="stToolbar"] {
-        visibility: hidden !important;
+        background-color: transparent !important;
         height: 0 !important;
-        margin: 0 !important;
         padding: 0 !important;
-        overflow: hidden !important;
+        margin: 0 !important;
+        display: none !important;
     }
     
-    /* Remove full outer container at top */
-    [data-testid="stAppViewBlockContainer"] > div:first-child {
-        display: none !important;
+    /* Remove title padding */
+    .e8zbici2 {
+        margin-top: 0 !important; 
+        padding-top: 0 !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -227,6 +238,35 @@ st.markdown("""
     
     // Start observing the document
     observer.observe(document, { childList: true, subtree: true });
+</script>
+""", unsafe_allow_html=True)
+
+# Add more aggressive iframe hiding method
+st.markdown("""
+<style>
+/* Completely hide header iframe */
+iframe[title="streamlitApp"] {
+    top: 0 !important;
+}
+</style>
+<script>
+// Hide with direct DOM manipulation on load
+window.addEventListener('DOMContentLoaded', (event) => {
+    // Target both the header elements and any button elements
+    const elementsToHide = document.querySelectorAll(
+        'header, [data-testid="stHeader"], [data-testid="stToolbar"], button[title="View fullscreen"], button[title="Share"], iframe header'
+    );
+    
+    elementsToHide.forEach(el => {
+        el.style.display = 'none';
+        el.style.height = '0';
+        el.style.padding = '0';
+        el.style.margin = '0';
+        el.style.overflow = 'hidden';
+        el.style.opacity = '0';
+        el.style.visibility = 'hidden';
+    });
+});
 </script>
 """, unsafe_allow_html=True)
 
