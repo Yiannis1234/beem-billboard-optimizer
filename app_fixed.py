@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta, time
-from src.data.data_collector import BeemDataCollector
-import json
 import plotly.express as px
 import plotly.graph_objects as go
 import time as time_module
@@ -11,6 +9,52 @@ import altair as alt
 from PIL import Image
 from io import BytesIO
 import requests
+
+# Mock data collector for development
+class BeemDataCollector:
+    def __init__(self, config=None):
+        pass
+        
+    def get_weather_forecast(self, location):
+        return {
+            'temperature': 18.5,
+            'condition': 'Partly Cloudy',
+            'wind_speed': 12.0,
+            'precipitation': 0.0
+        }
+        
+    def get_traffic_data(self, zone):
+        return {
+            'flow_speed': 30.0,
+            'free_flow_speed': 40.0,
+            'congestion_level': 0.3
+        }
+        
+    def get_historical_engagement(self, start_date, end_date):
+        dates = pd.date_range(start_date, end_date, freq='H')
+        return pd.DataFrame({
+            'timestamp': dates,
+            'engagement_rate': np.random.uniform(0.3, 0.8, len(dates))
+        })
+        
+    def get_pedestrian_density(self, zone, timestamp):
+        hour = timestamp.hour
+        if 12 <= hour <= 14 or 17 <= hour <= 19:  # Lunch and rush hours
+            return 0.7
+        elif 9 <= hour <= 16:  # Business hours
+            return 0.5
+        else:
+            return 0.3
+            
+    def integrate_data(self, zone, timestamp):
+        return {
+            'weather': self.get_weather_forecast(zone),
+            'traffic': self.get_traffic_data(zone),
+            'pedestrian_density': self.get_pedestrian_density(zone, timestamp)
+        }
+
+# Initialize data collector
+data_collector = BeemDataCollector()
 
 # Page configuration
 st.set_page_config(
