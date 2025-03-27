@@ -1134,7 +1134,7 @@ else:
     # Create direct buttons with no styling interference
     st.markdown("<h3>Choose an option:</h3>", unsafe_allow_html=True)
     
-    # Add instruction button to press top left arrow
+    # Add instruction button to press top left arrow - ensure primary type for orange color
     if st.button("Press top left arrow to analyze ➡️", type="primary", key="arrow_instruction_button", use_container_width=True):
         # When clicked, make sure the sidebar is visible
         st.session_state.sidebar_visible = True
@@ -1143,7 +1143,7 @@ else:
     # Add some space between buttons
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # START ANALYSIS button
+    # START ANALYSIS button - ensure primary type for orange color
     if st.button("START ANALYSIS 🚀", type="primary", key="direct_analysis_button", use_container_width=True):
         st.session_state.analyze = True
         st.rerun()
