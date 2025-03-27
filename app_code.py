@@ -47,30 +47,54 @@ st.set_page_config(
 # Custom CSS for orange theme
 st.markdown("""
 <style>
-    .main-header {color: #FF9D45 !important; font-weight: 600}
-    div.stButton > button {background-color: #FF9D45; color: white; border: none}
-    div.stButton > button:hover {background-color: #FFB673}
+    /* Main styles with better contrast */
+    .main-header {color: #FF7E33 !important; font-weight: 600}
+    div.stButton > button {background-color: #FF7E33; color: white !important; border: none; font-weight: bold !important}
+    div.stButton > button:hover {background-color: #FF9945}
     .css-1aumxhk {background-color: #FFF1E6} /* Sidebar background */
     .css-18e3th9 {padding-top: 2rem; padding-bottom: 10rem; padding-left: 5rem; padding-right: 5rem}
-    h1, h2, h3, h4 {color: #FF9D45 !important}
-    .stProgress .st-bo {background-color: #FF9D45}
-    .stTabs [aria-selected="true"] {background-color: #FFF1E6; color: #FF9D45 !important}
-    .highlight {background-color: #FFF1E6; padding: 10px; border-radius: 5px}
+    h1, h2, h3, h4 {color: #FF7E33 !important}
+    .stProgress .st-bo {background-color: #FF7E33}
+    .stTabs [aria-selected="true"] {background-color: #FFF1E6; color: #FF7E33 !important}
+    
+    /* Card elements with better text contrast */
+    .highlight {background-color: #FFF1E6; padding: 10px; border-radius: 5px; color: #333333 !important}
+    .highlight p, .highlight li {color: #333333 !important; font-weight: 500 !important}
+    
     .time-card {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
-    .time-title {color: #FF9D45; font-weight: bold; margin-bottom: 5px}
-    .time-detail {margin-left: 20px; margin-bottom: 10px}
+    .time-title {color: #FF7E33; font-weight: bold; margin-bottom: 5px}
+    .time-detail {margin-left: 20px; margin-bottom: 10px; color: #333333 !important; font-weight: 500 !important}
+    
     .traffic-box {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
+    .traffic-box p, .traffic-box div {color: #333333 !important; font-weight: 500 !important}
+    
     .weather-box {background-color: #FFF1E6; padding: 15px; border-radius: 5px; margin-top: 10px}
+    .weather-box p, .weather-box div {color: #333333 !important; font-weight: 500 !important}
+    
     .logo-container {display: flex; justify-content: center; margin-bottom: 20px}
     .footer-container {display: flex; justify-content: center; align-items: center; margin-top: 20px}
+    
     .card {background-color: #FFF1E6; border-radius: 10px; padding: 20px; margin: 10px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1)}
+    .card p, .card div, .card span {color: #333333 !important; font-weight: 500 !important}
+    
     .icon-text {display: flex; align-items: center}
-    .icon-text span {margin-left: 10px}
-    .dashboard-metric {background-color: #FFF1E6; border-left: 5px solid #FF9D45; padding: 15px; margin: 10px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05)}
-    .gradient-header {background: linear-gradient(90deg, #FF9D45, #FFB673); color: white !important; padding: 10px; border-radius: 5px; margin-bottom: 20px}
+    .icon-text span {margin-left: 10px; color: #333333 !important; font-weight: 500 !important}
+    
+    .dashboard-metric {background-color: #FFF1E6; border-left: 5px solid #FF7E33; padding: 15px; margin: 10px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05)}
+    .dashboard-metric p, .dashboard-metric div {color: #333333 !important; font-weight: 500 !important}
+    
+    .gradient-header {background: linear-gradient(90deg, #FF7E33, #FF9945); color: white !important; padding: 10px; border-radius: 5px; margin-bottom: 20px}
+    .gradient-header p, .gradient-header div {color: white !important; font-weight: 500 !important}
+    
+    /* Ensure all text in Streamlit components is visible */
+    p, li, div, span {color: #333333 !important}
+    .stMarkdown p, .stMarkdown li {color: #333333 !important}
+    label span p {color: #333333 !important}
+    
+    /* Homepage button styling */
     .homepage-button {
-        background-color: #FF9D45;
-        color: white;
+        background-color: #FF7E33;
+        color: white !important;
         padding: 10px 20px;
         text-align: center;
         text-decoration: none;
@@ -80,12 +104,17 @@ st.markdown("""
         cursor: pointer;
         border-radius: 8px;
         border: none;
-        font-weight: bold;
+        font-weight: bold !important;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
     .homepage-button:hover {
-        background-color: #FFB673;
+        background-color: #FF9945;
     }
+    
+    /* Fix for radio buttons and other input elements */
+    .stRadio label, .stCheckbox label {color: #333333 !important}
+    .stSelectbox label {color: #333333 !important}
+    .stSlider label {color: #333333 !important}
 </style>
 """, unsafe_allow_html=True)
 
