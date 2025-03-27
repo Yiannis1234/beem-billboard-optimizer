@@ -293,6 +293,28 @@ button.css-1d3q4k7,
     font-weight: bold !important;
 }
 
+/* Style for selectbox/dropdown - Make it ORANGE */
+div[data-baseweb="select"] > div {
+    background-color: #FF6600 !important;
+    color: white !important;
+    border: none !important;
+    font-weight: bold !important;
+}
+
+/* Style for the dropdown options */
+ul[data-baseweb="menu"] li,
+ul[data-baseweb="list"] li,
+ul[data-testid="stSelectbox"] li {
+    background-color: #FF6600 !important;
+    color: white !important;
+}
+
+/* Make the dropdown arrow white */
+div[data-baseweb="select"] svg {
+    color: white !important;
+    fill: white !important;
+}
+
 /* Make sidebar collapse control ORANGE */
 [data-testid="collapsedControl"] {
     background-color: #FF6600 !important;
@@ -388,6 +410,11 @@ h1, h2, h3, h4 {color: #FF6600 !important}
 label[data-baseweb="radio"] div,
 label[data-testid="stRadioLabel"] span {
     color: #333333 !important;
+}
+
+/* Hide any unwanted symbols or images */
+section[data-testid="stSidebar"] img:not([src*="beem_logo.png"]) {
+    display: none !important;
 }
 </style>
 """, unsafe_allow_html=True)
