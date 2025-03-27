@@ -486,6 +486,31 @@ st.markdown("""
         border: none !important;
         cursor: pointer !important;
     }
+    
+    /* ULTRA specific selector for the Analyze button */
+    div[data-testid="stSidebarContent"] button[data-testid="baseButton-primary"],
+    div[data-testid="stSidebarContent"] button[kind="primary"],
+    div[data-testid="stSidebarContent"] [data-testid="baseButton-primary"],
+    div[data-testid="stSidebarContent"] button[data-baseweb="button"] {
+        background-color: #FF6600 !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 4px !important;
+        font-weight: bold !important;
+        padding: 0.5rem 1rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+    }
+    
+    /* And their hover states */
+    div[data-testid="stSidebarContent"] button[data-testid="baseButton-primary"]:hover,
+    div[data-testid="stSidebarContent"] button[kind="primary"]:hover,
+    div[data-testid="stSidebarContent"] [data-testid="baseButton-primary"]:hover,
+    div[data-testid="stSidebarContent"] button[data-baseweb="button"]:hover {
+        background-color: #FF8533 !important;
+        box-shadow: 0 3px 7px rgba(0,0,0,0.15) !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
