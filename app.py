@@ -397,8 +397,8 @@ st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', 
 
 # Add an unmissable banner that is absolutely impossible to miss
 st.markdown("""
-<div style="background: #FF6600; color: white; padding: 25px; border-radius: 15px; text-align: center; margin: 25px 0; box-shadow: 0 6px 12px rgba(0,0,0,0.4); border: 4px solid white;">
-    <h2 style="color: white !important; margin: 0; font-size: 26px;">⬅️ CLICK THE ORANGE ARROW</h2>
+<div style="background: linear-gradient(90deg, #FF6600, #FF8533); color: white; padding: 25px; border-radius: 15px; text-align: center; margin: 25px 0; box-shadow: 0 6px 12px rgba(0,0,0,0.4); border: 4px solid white;">
+    <h2 style="color: white !important; margin: 0; font-size: 26px;">CLICK THE ORANGE ARROW ➡️</h2>
     <p style="font-size: 22px; font-weight: bold; margin: 15px 0 0 0;">TO OPEN SIDEBAR MENU AND ANALYZE</p>
 </div>
 """, unsafe_allow_html=True)
