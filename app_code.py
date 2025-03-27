@@ -84,10 +84,12 @@ st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', 
 st.markdown("Optimize your mobile billboard routes for maximum engagement")
 
 # Homepage button
-st.markdown(
-    '<a href="https://beem-billboard-optimizer-lvvnqjcpqucrxzvnhg3vc6.streamlit.app/" target="_self" class="homepage-button">HOMEPAGE</a>',
-    unsafe_allow_html=True
-)
+if st.button("HOMEPAGE", key="main_homepage"):
+    st.markdown("""
+    <script>
+    window.location.href = 'https://beem-billboard-optimizer-lvvnqjcpqucrxzvnhg3vc6.streamlit.app/';
+    </script>
+    """, unsafe_allow_html=True)
 
 # Sidebar
 with st.sidebar:
@@ -141,10 +143,12 @@ with st.sidebar:
         """, unsafe_allow_html=True)
         
     # Homepage button in sidebar too
-    st.markdown(
-        '<a href="https://beem-billboard-optimizer-lvvnqjcpqucrxzvnhg3vc6.streamlit.app/" target="_self" class="homepage-button">HOMEPAGE</a>',
-        unsafe_allow_html=True
-    )
+    if st.button("HOMEPAGE", key="sidebar_homepage"):
+        st.markdown("""
+        <script>
+        window.location.href = 'https://beem-billboard-optimizer-lvvnqjcpqucrxzvnhg3vc6.streamlit.app/';
+        </script>
+        """, unsafe_allow_html=True)
 
 # Function to get weather icon based on condition
 def get_weather_icon(condition):
