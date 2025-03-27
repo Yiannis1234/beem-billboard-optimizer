@@ -658,86 +658,42 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Add this after the CSS to create a sidebar toggle button - FIXED VERSION
+# Add this after the CSS to create a sidebar toggle button - DIRECT INJECTION
 st.markdown("""
-<div id="sidebar-button-container" style="position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 9999; width: 40px; height: 40px;">
-  <button 
-    id="sidebar-button"
-    style="width: 40px; height: 40px; background-color: #FF6600; color: white; border: none; border-radius: 0 4px 4px 0; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"
-  >☰</button>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Get the sidebar button
-  const sidebarButton = document.getElementById('sidebar-button');
-  
-  if (sidebarButton) {
-    sidebarButton.addEventListener('click', function() {
-      // Find all sidebar toggle buttons by class or attribute
-      const toggleButtons = document.querySelectorAll('.st-emotion-cache-1inwz65, .st-emotion-cache-1egp75f, [data-testid="collapsedControl"]');
-      
-      if (toggleButtons && toggleButtons.length > 0) {
-        // Click the first one we find
-        toggleButtons[0].click();
-      } else {
-        // Fallback - find all buttons and look for collapse/expand title
-        const allButtons = document.querySelectorAll('button');
-        for (let i = 0; i < allButtons.length; i++) {
-          if (allButtons[i].title === "Collapse" || allButtons[i].title === "Expand" || 
-              allButtons[i].getAttribute('aria-label') === "Collapse" || 
-              allButtons[i].getAttribute('aria-label') === "Expand") {
-            allButtons[i].click();
-            break;
-          }
-        }
+<iframe name="dummy-target" id="dummy-target" style="display:none;"></iframe>
+<button id="custom-sidebar-toggle" onclick="window.open('about:blank','dummy-target'); setTimeout(function() {
+  try {
+    var buttons = document.querySelectorAll('[data-testid=\"collapsedControl\"], [class*=\"st-emotion-cache\"][kind=\"secondary\"], button[kind=\"secondary\"]'); 
+    for (var i = 0; i < buttons.length; i++) {
+      if (buttons[i].offsetParent !== null) {
+        console.log('Clicking sidebar toggle', buttons[i]);
+        buttons[i].click();
+        break;
       }
-    });
-  }
-});
-</script>
+    }
+  } catch(e) { console.error(e); }
+}, 100);" style="position: fixed; left: 0; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; background-color: #FF6600; color: white; border: none; border-radius: 0 4px 4px 0; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 6px rgba(0,0,0,0.16); z-index: 9999;">☰</button>
 """, unsafe_allow_html=True)
 
-# Additional CSS specifically for ALL buttons to be orange
+# Additional CSS specifically for ALL buttons to ensure they're orange
 st.markdown("""
 <style>
-    /* Target ALL buttons on the entire page */
-    button, 
-    .stButton button,
-    button[kind="secondary"],
-    button[kind="primary"],
+    /* Force all default buttons to be orange */
+    div.stButton button, 
+    button.css-1cpxqw2, 
+    button.css-1gdgy1o, 
+    button.css-12uog8n, 
+    button.css-qrbaxs, 
+    button.css-1q8dd3e,
+    .stSelectbox [aria-selected="true"],
     button[data-baseweb="button"],
-    [role="button"],
-    div[data-testid="StyledLinkButton"] button,
-    .streamlit-expanderHeader,
-    /* Specific Streamlit classes */
-    .st-emotion-cache-1w8n1xc,
-    .st-emotion-cache-7ym5gk,
-    .st-emotion-cache-1erivex,
-    .st-emotion-cache-1r6slb0,
-    .st-emotion-cache-1q1n0ol,
-    .st-emotion-cache-1cpxqw2,
-    .st-emotion-cache-1aw8i8e,
-    .st-emotion-cache-1pdm8ug,
-    /* Literally all buttons except the sidebar toggle we just created */
-    button:not(#sidebar-button) {
+    .stApp button:not([aria-label="Close"]),
+    .stApp button:not(#custom-sidebar-toggle),
+    header button {
         background-color: #FF6600 !important;
         color: white !important;
         border: none !important;
         font-weight: bold !important;
-    }
-    
-    /* And their hover states */
-    button:hover, 
-    .stButton button:hover,
-    button[kind="secondary"]:hover,
-    button[kind="primary"]:hover,
-    button[data-baseweb="button"]:hover,
-    [role="button"]:hover,
-    div[data-testid="StyledLinkButton"] button:hover,
-    .streamlit-expanderHeader:hover {
-        background-color: #FF8533 !important;
-        color: white !important;
     }
 </style>
 """, unsafe_allow_html=True)
