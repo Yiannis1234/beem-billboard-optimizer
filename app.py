@@ -224,26 +224,11 @@ st.markdown("""
 <style>
 /* MAKE EVERYTHING ORANGE - BRUTE FORCE METHOD */
 button,
-.st-bq,
-.st-bm, 
-.st-bn,
-.st-bo,
-.st-bp,
-.st-c3,
-.st-c4,
 .stButton > button,
 [data-testid="baseButton-secondary"],
 [data-testid="baseButton-primary"],
 [data-baseweb="button"],
-[kind="primary"],
-[kind="secondary"],
-header button,
-div.stButton button,
-button.css-jggiw1,
-button.css-1d3q4k7,
-.css-1cpxqw2, 
-[aria-label="Close"],
-.stApp button {
+div.stButton button {
     background-color: #FF6600 !important;
     color: white !important;
     border: none !important;
@@ -251,19 +236,18 @@ button.css-1d3q4k7,
 }
 
 /* Style for selectbox/dropdown - Make it ORANGE */
-div[data-baseweb="select"] > div {
+div[data-baseweb="select"] > div:first-child {
     background-color: #FF6600 !important;
     color: white !important;
     border: none !important;
-    font-weight: bold !important;
 }
 
-/* Style for the dropdown options */
+/* Style for the dropdown options - NOT ORANGE */
 ul[data-baseweb="menu"] li,
 ul[data-baseweb="list"] li,
 ul[data-testid="stSelectbox"] li {
-    background-color: #FF6600 !important;
-    color: white !important;
+    background-color: white !important;
+    color: #333333 !important;
 }
 
 /* Make the dropdown arrow white */
@@ -293,16 +277,6 @@ div[data-baseweb="select"] svg {
 [data-testid="collapsedControl"] svg {
     color: white !important;
     fill: white !important;
-}
-
-/* HIDE ALL toggle button attempts */
-#sidebar-button-container,
-.custom-sidebar-toggle,
-#custom-sidebar-toggle,
-#dummy-target,
-iframe#dummy-target,
-button[id="custom-sidebar-toggle"] {
-    display: none !important;
 }
 
 /* Global resets for light theme */
@@ -374,21 +348,42 @@ section[data-testid="stSidebar"] img:not([src*="beem_logo.png"]) {
     display: none !important;
 }
 
-/* Fix text highlighting in input fields */
+/* Fix text highlighting in input fields - WHITE BACKGROUND, DARK TEXT */
 input, input:focus, input:hover, input:active, 
 textarea, textarea:focus, textarea:hover, textarea:active,
 .stSlider, [data-baseweb="slider"],
-[data-testid="stDateInput"] div {
+[data-testid="stDateInput"] div,
+.stDateInput > div {
     background-color: white !important;
+    color: #333333 !important;
+}
+
+/* Make all form controls white */
+[data-testid="stWidgetLabel"] ~ div * {
+    background-color: white !important;
+    color: #333333 !important;
+}
+
+/* Specifically target radio buttons to NOT highlight in orange */
+.stRadio label {
+    background-color: transparent !important;
+}
+.stRadio label > div {
+    background-color: transparent !important;
     color: #333333 !important;
 }
 
 /* Fix for highlighted active form fields */
 [data-baseweb="select"] div[aria-selected="true"], 
-[data-baseweb="menu"] div[aria-selected="true"],
-[data-baseweb="select"]:focus-within > div {
-    background-color: #FF6600 !important;
-    color: white !important;
+[data-baseweb="menu"] div[aria-selected="true"] {
+    background-color: white !important;
+    color: #333333 !important;
+}
+
+/* Fix for dropdown selected item */
+div[role="listbox"] div[aria-selected="true"] {
+    background-color: white !important;
+    color: #333333 !important;
 }
 
 /* Fix for all other form elements */
@@ -399,6 +394,16 @@ textarea, textarea:focus, textarea:hover, textarea:active,
 [data-baseweb="timepicker"] {
     background-color: white !important;
     color: #333333 !important;
+}
+
+/* Style just the outer container of select boxes */
+div[data-baseweb="select"] {
+    color: white !important;
+}
+
+/* Fix specifically for the dropdown area selected item */
+div[data-baseweb="select"] > div {
+    background-color: #FF6600 !important;
 }
 
 /* Hide all default Streamlit icons that aren't explicitly used */
