@@ -8,6 +8,8 @@ import requests
 import time as time_module
 import random
 
+# MAIN APP FILE - All functionality consolidated here
+
 # Create a mock data collector class
 class BeemDataCollector:
     def __init__(self, config):
