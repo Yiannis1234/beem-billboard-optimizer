@@ -542,8 +542,8 @@ st.markdown("""
 
 st.markdown("Optimize your mobile billboard routes for maximum engagement")
 
-# Homepage button
-if st.button("HOMEPAGE", key="main_homepage"):
+# Homepage button - just a home emoji
+if st.button("🏠", key="main_homepage"):
     st.markdown("""
     <script>
     window.location.href = 'https://beem-billboard-optimizer-lvvnqjcpqucrxzvnhg3vc6.streamlit.app/';
@@ -648,7 +648,7 @@ with st.sidebar:
         
     # Homepage button in sidebar too
     st.markdown('<div style="margin-top: 25px;"></div>', unsafe_allow_html=True)
-    if st.button("HOMEPAGE", key="sidebar_homepage"):
+    if st.button("🏠", key="sidebar_homepage"):
         st.markdown("""
         <script>
         window.location.href = 'https://beem-billboard-optimizer-lvvnqjcpqucrxzvnhg3vc6.streamlit.app/';
@@ -1069,13 +1069,15 @@ with tabs[4]:
     else:
         st.info("Select options and click 'Analyze Route' to see demographic analysis.")
 
-# Footer with enhanced visual elements
+# Footer with enhanced visual elements - with home emoji button
 st.markdown("---")
 st.markdown("""
-<div class="footer-container" style="text-align: center">
-    <div style="font-size: 24px; font-weight: bold; color: #FF6600; margin-bottom: 10px;">BEEM</div>
-    <div style="color: #FF9D45; margin-top: 5px">© 2025 Beem Mobile Billboard Solutions</div>
-    <div style="color: #999; font-size: 12px; margin-top: 5px">hello@beembillboards.com | +44 123 456 7890</div>
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <div class="footer-container" style="text-align: center; flex-grow: 1;">
+        <div style="font-size: 24px; font-weight: bold; color: #FF6600; margin-bottom: 10px;">BEEM</div>
+        <div style="color: #FF9D45; margin-top: 5px">© 2025 Beem Mobile Billboard Solutions</div>
+        <div style="color: #999; font-size: 12px; margin-top: 5px">hello@beembillboards.com | +44 123 456 7890</div>
+    </div>
 </div>
 """, unsafe_allow_html=True)
 
