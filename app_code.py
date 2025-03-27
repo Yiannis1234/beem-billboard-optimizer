@@ -397,17 +397,10 @@ st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', 
 
 # Add an unmissable banner that is absolutely impossible to miss
 st.markdown("""
-<div style="background: linear-gradient(90deg, #FF6600, #FF8533); color: white; padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 3px solid white; animation: pulse 2s infinite;">
-    <h2 style="color: white !important; margin: 0; text-transform: uppercase; font-size: 28px;">🔥 APP UPDATED ON MARCH 27, 2024 🔥</h2>
-    <p style="font-size: 20px; font-weight: bold; margin: 10px 0 0 0;">⬅️ PRESS ARROW TOP LEFT TO ANALYZE</p>
+<div style="background: #FF6600; color: white; padding: 25px; border-radius: 15px; text-align: center; margin: 25px 0; box-shadow: 0 6px 12px rgba(0,0,0,0.4); border: 4px solid white;">
+    <h2 style="color: white !important; margin: 0; font-size: 26px;">⬅️ CLICK THE ORANGE ARROW</h2>
+    <p style="font-size: 22px; font-weight: bold; margin: 15px 0 0 0;">TO OPEN SIDEBAR MENU AND ANALYZE</p>
 </div>
-<style>
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-  100% { transform: scale(1); }
-}
-</style>
 """, unsafe_allow_html=True)
 
 st.markdown("Optimize your mobile billboard routes for maximum engagement")
