@@ -325,6 +325,70 @@ iframe#dummy-target,
 button[id="custom-sidebar-toggle"] {
     display: none !important;
 }
+
+/* Global resets for light theme */
+body {
+    background-color: #FFFFFF !important;
+    color: #333333 !important;
+}
+
+.stApp {
+    background-color: #FFFFFF !important;
+}
+
+/* Main styles with better contrast on light background */
+.main-header {color: #FF6600 !important; font-weight: 600}
+
+/* Sidebar styling for light theme */
+section[data-testid="stSidebar"] {
+    background-color: #FFF6F0 !important;
+}
+
+/* Headers */
+h1, h2, h3, h4 {color: #FF6600 !important}
+
+/* Progress bar color */
+.stProgress .st-bo {background-color: #FF6600}
+
+/* Card elements with light backgrounds */
+.highlight {background-color: #FFF6F0; padding: 10px; border-radius: 5px; color: #333333 !important; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+.highlight p, .highlight li {color: #333333 !important; font-weight: 500 !important}
+
+.time-card {background-color: #FFF6F0; padding: 15px; border-radius: 5px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+.time-title {color: #FF6600; font-weight: bold; margin-bottom: 5px}
+.time-detail {margin-left: 20px; margin-bottom: 10px; color: #333333 !important; font-weight: 500 !important}
+
+.traffic-box {background-color: #FFF6F0; padding: 15px; border-radius: 5px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+.traffic-box p, .traffic-box div {color: #333333 !important; font-weight: 500 !important}
+
+.weather-box {background-color: #FFF6F0; padding: 15px; border-radius: 5px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+.weather-box p, .weather-box div {color: #333333 !important; font-weight: 500 !important}
+
+.logo-container {display: flex; justify-content: center; margin-bottom: 20px}
+.footer-container {display: flex; justify-content: center; align-items: center; margin-top: 20px}
+
+.card {background-color: #FFF6F0; border-radius: 10px; padding: 20px; margin: 10px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+.card p, .card div, .card span {color: #333333 !important; font-weight: 500 !important}
+
+.dashboard-metric {background-color: #FFF6F0; border-left: 5px solid #FF6600; padding: 15px; margin: 10px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+.dashboard-metric p, .dashboard-metric div {color: #333333 !important; font-weight: 500 !important}
+
+.gradient-header {background: linear-gradient(90deg, #FF6600, #FF8533); color: white !important; padding: 10px; border-radius: 5px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+.gradient-header p, .gradient-header div {color: white !important; font-weight: 500 !important}
+
+/* Fix for radio button text color */
+.stRadio > div {
+    background-color: transparent !important;
+}
+.stRadio input {
+    display: inline-block !important;
+}
+
+/* Override any radio button label colors */
+label[data-baseweb="radio"] div,
+label[data-testid="stRadioLabel"] span {
+    color: #333333 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
