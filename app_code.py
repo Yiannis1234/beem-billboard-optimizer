@@ -1134,6 +1134,18 @@ else:
     # Create direct buttons with no styling interference
     st.markdown("<h3>Choose an option:</h3>", unsafe_allow_html=True)
     
+    # Add custom CSS to force orange button color
+    st.markdown("""
+    <style>
+    /* Force orange styling for homepage buttons */
+    button[data-testid="baseButton-primary"] {
+        background: linear-gradient(135deg, #FF7E33, #FF9945) !important;
+        color: white !important;
+        border: none !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     # Add instruction button to press top left arrow - ensure primary type for orange color
     if st.button("Press top left arrow to analyze ➡️", type="primary", key="arrow_instruction_button", use_container_width=True):
         # When clicked, make sure the sidebar is visible
