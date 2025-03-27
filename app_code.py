@@ -65,7 +65,7 @@ class BeemDataCollector:
 
     def get_weather_forecast(self, location: str) -> Dict[str, float]:
         """Get weather forecast for a location."""
-        return {
+                return {
             'temperature': 18.5,
             'condition': 'Partly Cloudy',
             'wind_speed': 12.0,
@@ -74,7 +74,7 @@ class BeemDataCollector:
 
     def get_traffic_data(self, zone: str) -> Dict[str, float]:
         """Get traffic data for a zone."""
-        return {
+    return {
             'flow_speed': 30.0,
             'free_flow_speed': 40.0,
             'congestion_level': 0.3
