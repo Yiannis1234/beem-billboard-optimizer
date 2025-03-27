@@ -675,11 +675,19 @@ function toggleSidebar() {
 # Title
 st.markdown('<h1 class="main-header">🚲 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
 
-# Add a very visible notification to confirm changes are working
+# Add an unmissable banner that is absolutely impossible to miss
 st.markdown("""
-<div style="background-color: #FF6600; color: white; padding: 15px; border-radius: 10px; text-align: center; margin: 20px 0; font-weight: bold; font-size: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-    ✅ UPDATED VERSION WITH REAL APIs AND ORANGE BUTTONS
+<div style="background: linear-gradient(90deg, #FF6600, #FF8533); color: white; padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 3px solid white; animation: pulse 2s infinite;">
+    <h2 style="color: white !important; margin: 0; text-transform: uppercase; font-size: 28px;">🔥 APP UPDATED ON MARCH 27, 2024 🔥</h2>
+    <p style="font-size: 20px; font-weight: bold; margin: 10px 0 0 0;">All buttons are now ORANGE and using real Weather + TomTom APIs</p>
 </div>
+<style>
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+</style>
 """, unsafe_allow_html=True)
 
 st.markdown("Optimize your mobile billboard routes for maximum engagement")
