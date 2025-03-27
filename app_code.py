@@ -499,7 +499,7 @@ with st.sidebar:
     areas = list(area_coordinates.keys())
     
     area = st.selectbox(
-        "Select Area ⬇️",
+        "Select Area",
         areas,
         placeholder="Click to choose an area",
     )
