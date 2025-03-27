@@ -259,6 +259,16 @@ div[data-baseweb="select"] > div:first-child {
     text-shadow: 0px 1px 2px rgba(0,0,0,0.2) !important;
 }
 
+div[data-baseweb="select"] > div:first-child > div {
+    color: white !important;
+    font-weight: bold !important;
+}
+
+div[data-baseweb="select"] span, 
+div[data-baseweb="select"] div[data-testid] {
+    color: white !important;
+}
+
 /* Style for the dropdown options - NOT ORANGE */
 ul[data-baseweb="menu"] li,
 ul[data-baseweb="list"] li,
@@ -580,6 +590,10 @@ div[data-baseweb="select"] > div {
     background-color: #FF6600 !important;
     font-weight: 500 !important;
     font-size: 16px !important;
+}
+
+div[data-baseweb="select"] > div * {
+    color: white !important;
 }
 
 /* Hide all default Streamlit icons that aren't explicitly used */
