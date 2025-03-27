@@ -156,7 +156,78 @@ st.markdown("""
     header {
         visibility: hidden !important;
     }
+    
+    /* Aggressive hiding for ALL header components */
+    [data-testid="stHeader"] {
+        display: none !important;
+    }
+    
+    button[title="View fullscreen"],
+    button[title="Share"],
+    button[title="More options"],
+    .ViewerBadge_container,
+    .styles_terminalButton__JBj5T,
+    .stApp > header {
+        display: none !important;
+    }
+    
+    /* Remove all decoration at the top */
+    #MainMenu, #stDecoration {
+        display: none !important;
+    }
+    
+    /* Force hide all top elements */
+    div[data-testid="stToolbar"] {
+        visibility: hidden !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+    
+    /* Remove full outer container at top */
+    [data-testid="stAppViewBlockContainer"] > div:first-child {
+        display: none !important;
+    }
 </style>
+""", unsafe_allow_html=True)
+
+# Also add a direct script to remove elements
+st.markdown("""
+<script>
+    // Function to remove toolbar elements
+    function removeTopBarElements() {
+        // Remove all elements in the top bar
+        const topElements = document.querySelectorAll('header, [data-testid="stHeader"], [data-testid="stToolbar"], #MainMenu');
+        if (topElements) {
+            topElements.forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+        
+        // Remove share button
+        const shareButtons = document.querySelectorAll('button[title="Share"], button[title="More options"], button[title="View fullscreen"]');
+        if (shareButtons) {
+            shareButtons.forEach(btn => {
+                btn.style.display = 'none';
+            });
+        }
+    }
+    
+    // Run initially
+    removeTopBarElements();
+    
+    // Run again after a short delay to catch dynamically added elements
+    setTimeout(removeTopBarElements, 500);
+    
+    // Set up a mutation observer to continue removing elements
+    const observer = new MutationObserver(() => {
+        removeTopBarElements();
+    });
+    
+    // Start observing the document
+    observer.observe(document, { childList: true, subtree: true });
+</script>
 """, unsafe_allow_html=True)
 
 # Title
