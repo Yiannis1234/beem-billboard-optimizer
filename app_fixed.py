@@ -20,6 +20,14 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Initialize session state variables
+if 'selected_area' not in st.session_state:
+    st.session_state.selected_area = "Northern Quarter"
+if 'analyze' not in st.session_state:
+    st.session_state.analyze = False
+if 'day_type' not in st.session_state:
+    st.session_state.day_type = "Weekday"
+
 # Custom CSS for better styling
 st.markdown("""
 <style>
