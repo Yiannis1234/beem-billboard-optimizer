@@ -18,121 +18,67 @@ class BeemDataCollector:
     
     def get_weather_data(self, latitude, longitude, day=None):
         """Get real weather data from WeatherAPI.com"""
-        # Check if we have an actual API key
-        if self.weather_api_key and self.weather_api_key != 'demo_key':
-            try:
-                # WeatherAPI.com endpoint
-                url = f"http://api.weatherapi.com/v1/forecast.json?key={self.weather_api_key}&q={latitude},{longitude}&days=1&aqi=no&alerts=no"
-                
-                response = requests.get(url, timeout=10)
-                
-                if response.status_code == 200:
-                    # Return the actual API response
-                    return response.json()
-            except Exception as e:
-                st.error(f"Weather API error: {e}")
-                # Fall back to mock data if there's an error
-                pass
-                
-        # Fall back to mock data if API key is missing or API call failed
-        weather_conditions = ["Sunny", "Cloudy", "Partly Cloudy", "Rainy", "Light Rain"]
-        temps = [12, 15, 18, 20, 22, 24]
-        wind_speeds = [5, 8, 10, 12, 15, 18]
-        
-        hourly_data = []
-        
-        # Generate data for 24 hours
-        for hour in range(24):
-            hourly_data.append({
-                "time": f"{hour:02d}:00",
-                "temp_c": random.choice(temps),
-                "condition": random.choice(weather_conditions),
-                "wind_kph": random.choice(wind_speeds),
-                "chance_of_rain": random.randint(0, 100),
-                "is_day": 1 if 6 <= hour <= 18 else 0
-            })
-        
-        return {
-            "current": {
-                "temp_c": random.choice(temps),
-                "condition": {"text": random.choice(weather_conditions)},
-                "wind_kph": random.choice(wind_speeds),
-                "feelslike_c": random.choice(temps) - 2,
-                "is_day": 1
-            },
-            "forecast": {
-                "forecastday": [{
-                    "date": datetime.now().strftime("%Y-%m-%d"),
-                    "day": {
-                        "maxtemp_c": max(temps),
-                        "mintemp_c": min(temps),
-                        "avgtemp_c": sum(temps) // len(temps),
-                        "daily_chance_of_rain": random.randint(0, 100),
-                        "condition": {"text": random.choice(weather_conditions)}
-                    },
-                    "hour": hourly_data
-                }]
-            }
-        }
+        # Always use the real API
+        try:
+            # WeatherAPI.com endpoint
+            url = f"http://api.weatherapi.com/v1/forecast.json?key={self.weather_api_key}&q={latitude},{longitude}&days=1&aqi=no&alerts=no"
+            
+            response = requests.get(url, timeout=10)
+            
+            if response.status_code == 200:
+                # Return the actual API response
+                return response.json()
+            else:
+                st.error(f"Weather API returned status code: {response.status_code}")
+                raise Exception(f"Weather API error: {response.status_code}")
+        except Exception as e:
+            st.error(f"Weather API error: {e}")
+            raise Exception(f"Failed to get weather data: {e}")
     
     def get_traffic_data(self, latitude, longitude, radius=1000):
         """Get real traffic data from TomTom API"""
-        # Check if we have an actual API key
-        if self.traffic_api_key and self.traffic_api_key != 'demo_key':
-            try:
-                # TomTom Traffic Flow API
-                url = f"https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point={latitude},{longitude}&key={self.traffic_api_key}"
+        try:
+            # TomTom Traffic Flow API
+            url = f"https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point={latitude},{longitude}&key={self.traffic_api_key}"
+            
+            response = requests.get(url, timeout=10)
+            
+            if response.status_code == 200:
+                data = response.json()
                 
-                response = requests.get(url, timeout=10)
-                
-                if response.status_code == 200:
-                    data = response.json()
+                # Extract relevant traffic data
+                if 'flowSegmentData' in data:
+                    flow_data = data['flowSegmentData']
+                    current_speed = flow_data.get('currentSpeed', 40)
+                    free_flow_speed = flow_data.get('freeFlowSpeed', 50) 
                     
-                    # Extract relevant traffic data
-                    if 'flowSegmentData' in data:
-                        flow_data = data['flowSegmentData']
-                        current_speed = flow_data.get('currentSpeed', 40)
-                        free_flow_speed = flow_data.get('freeFlowSpeed', 50) 
-                        
-                        # Calculate congestion level (0-1 range)
-                        congestion_level = min(1.0, max(0.0, 1 - (current_speed / max(1, free_flow_speed))))
-                        
-                        # Convert numerical congestion to text for compatibility
-                        congestion_text = "Low"
-                        if congestion_level > 0.7:
-                            congestion_text = "Very High"
-                        elif congestion_level > 0.5:
-                            congestion_text = "High"
-                        elif congestion_level > 0.3:
-                            congestion_text = "Moderate"
-                        
-                        return {
-                            "congestion_level": congestion_text,
-                            "flow_speed": current_speed,
-                            "free_flow_speed": free_flow_speed,
-                            "incidents": []
-                        }
-            except Exception as e:
-                st.error(f"Traffic API error: {e}")
-                # Fall back to mock data
-                pass
-        
-        # Fall back to mock data if API key is missing or API call failed
-        congestion_levels = ["Low", "Moderate", "High", "Very High"]
-        incident_types = ["accident", "construction", "congestion"]
-        
-        return {
-            "congestion_level": random.choice(congestion_levels),
-            "flow_speed": random.randint(5, 60),
-            "free_flow_speed": random.randint(40, 80),
-            "incidents": [
-                {
-                    "type": random.choice(incident_types),
-                    "severity": random.randint(1, 4),
-                    "description": f"Mock incident {i+1}"
-                } for i in range(random.randint(0, 3))
-            ]
-        }
+                    # Calculate congestion level (0-1 range)
+                    congestion_level = min(1.0, max(0.0, 1 - (current_speed / max(1, free_flow_speed))))
+                    
+                    # Convert numerical congestion to text for compatibility
+                    congestion_text = "Low"
+                    if congestion_level > 0.7:
+                        congestion_text = "Very High"
+                    elif congestion_level > 0.5:
+                        congestion_text = "High"
+                    elif congestion_level > 0.3:
+                        congestion_text = "Moderate"
+                    
+                    return {
+                        "congestion_level": congestion_text,
+                        "flow_speed": current_speed,
+                        "free_flow_speed": free_flow_speed,
+                        "incidents": []
+                    }
+                else:
+                    st.error("No flow segment data found in TomTom API response")
+                    raise Exception("No flow segment data in response")
+            else:
+                st.error(f"Traffic API returned status code: {response.status_code}")
+                raise Exception(f"Traffic API error: {response.status_code}")
+        except Exception as e:
+            st.error(f"Traffic API error: {e}")
+            raise Exception(f"Failed to get traffic data: {e}")
     
     def get_pedestrian_density(self, area_id, time_of_day="morning"):
         """Mock pedestrian density data collection"""
@@ -185,38 +131,49 @@ class BeemDataCollector:
         else:
             time_of_day = "night"
             
-        # Get data from each source
-        weather_data_full = self.get_weather_data(zone['latitude'], zone['longitude'])
-        traffic_data_full = self.get_traffic_data(zone['latitude'], zone['longitude'])
+        try:
+            # Get real data from the weather API
+            weather_data_full = self.get_weather_data(zone['latitude'], zone['longitude'])
+            # Extract current weather from the full response
+            current_weather = weather_data_full['current']
+            
+            # Format simplified data for application use
+            weather_data = {
+                'temperature': current_weather['temp_c'],
+                'condition': current_weather['condition']['text'],
+                'wind_speed': current_weather['wind_kph'],
+                'precipitation': 0 if 'rain' not in current_weather['condition']['text'].lower() else 1.0
+            }
+        except Exception as e:
+            st.error(f"Failed to get weather data: {e}")
+            raise Exception(f"Weather API error: {e}")
+        
+        try:
+            # Get real data from the traffic API
+            traffic_data_full = self.get_traffic_data(zone['latitude'], zone['longitude'])
+            
+            # Format traffic data
+            congestion_level = 0.0
+            if traffic_data_full["congestion_level"] == "Low":
+                congestion_level = 0.2
+            elif traffic_data_full["congestion_level"] == "Moderate":
+                congestion_level = 0.5
+            elif traffic_data_full["congestion_level"] == "High":
+                congestion_level = 0.8
+            elif traffic_data_full["congestion_level"] == "Very High":
+                congestion_level = 0.95
+            
+            traffic_data = {
+                'congestion_level': congestion_level,
+                'flow_speed': traffic_data_full['flow_speed'],
+                'free_flow_speed': traffic_data_full['free_flow_speed']
+            }
+        except Exception as e:
+            st.error(f"Failed to get traffic data: {e}")
+            raise Exception(f"Traffic API error: {e}")
+        
+        # For pedestrian density, we still use the simulated data since there's no real API for this
         pedestrian_density = self.get_pedestrian_density(zone['zone_id'], time_of_day)
-        
-        # Extract current weather from the full response
-        current_weather = weather_data_full['current']
-        
-        # Format traffic data
-        congestion_level = 0.0
-        if traffic_data_full["congestion_level"] == "Low":
-            congestion_level = 0.2
-        elif traffic_data_full["congestion_level"] == "Moderate":
-            congestion_level = 0.5
-        elif traffic_data_full["congestion_level"] == "High":
-            congestion_level = 0.8
-        elif traffic_data_full["congestion_level"] == "Very High":
-            congestion_level = 0.95
-        
-        # Format simplified data for application use
-        weather_data = {
-            'temperature': current_weather['temp_c'],
-            'condition': current_weather['condition']['text'],
-            'wind_speed': current_weather['wind_kph'],
-            'precipitation': 0 if 'rain' not in current_weather['condition']['text'].lower() else 1.0
-        }
-        
-        traffic_data = {
-            'congestion_level': congestion_level,
-            'flow_speed': traffic_data_full['flow_speed'],
-            'free_flow_speed': traffic_data_full['free_flow_speed']
-        }
         
         # Calculate a normalized pedestrian density value between 0-1
         avg_density = pedestrian_density['average_density']
@@ -234,8 +191,8 @@ class BeemDataCollector:
 
 # Define config with API keys (you can replace 'demo_key' with actual keys later)
 config = {
-    'weather_api_key': 'c43d5e7fe8694a7d879125624230208',  # WeatherAPI.com key
-    'traffic_api_key': 'UpJxQZe4G5KVzlBvM53wRuCcXC2H8BDc'   # TomTom API key
+    'weather_api_key': 'f70bd534000447b2a14202431252303',  # WeatherAPI.com key
+    'traffic_api_key': 'Uc0dPKIMHcqZ91VbGAnbEAINdzwqRzil'   # TomTom API key
 }
 
 # Initialize the data collector
@@ -416,6 +373,38 @@ label[data-testid="stRadioLabel"] span {
 section[data-testid="stSidebar"] img:not([src*="beem_logo.png"]) {
     display: none !important;
 }
+
+/* Fix text highlighting in input fields */
+input, input:focus, input:hover, input:active, 
+textarea, textarea:focus, textarea:hover, textarea:active,
+.stSlider, [data-baseweb="slider"],
+[data-testid="stDateInput"] div {
+    background-color: white !important;
+    color: #333333 !important;
+}
+
+/* Fix for highlighted active form fields */
+[data-baseweb="select"] div[aria-selected="true"], 
+[data-baseweb="menu"] div[aria-selected="true"],
+[data-baseweb="select"]:focus-within > div {
+    background-color: #FF6600 !important;
+    color: white !important;
+}
+
+/* Fix for all other form elements */
+[data-testid="stDateInput"], [data-testid="stTimeInput"],
+[data-testid="stNumberInput"], [data-testid="stTextInput"],
+[data-baseweb="input"], [data-baseweb="textarea"],
+[data-baseweb="calendar"], [data-baseweb="datepicker"],
+[data-baseweb="timepicker"] {
+    background-color: white !important;
+    color: #333333 !important;
+}
+
+/* Hide all default Streamlit icons that aren't explicitly used */
+img:not([alt]), img[alt=""], svg:not([fill]) {
+    display: none !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -481,14 +470,16 @@ with st.sidebar:
         st.markdown("""
         <div style="color: #FF6600; font-weight: bold; margin-bottom: 10px">Beem Mobile Billboard Solutions</div>
         
-        We help businesses reach their audience through eye-catching mobile billboards carried by cyclists.
+        <p>We help businesses reach their audience through eye-catching mobile billboards carried by cyclists.</p>
         
-        Our approach is:
-        - 🌿 Eco-friendly
-        - 💰 Cost-effective
-        - 🎯 Highly targeted
-        - 📱 Engaging
-        - 📊 Data-driven
+        <p>Our approach is:</p>
+        <ul>
+        <li>🌿 Eco-friendly</li>
+        <li>💰 Cost-effective</li>
+        <li>🎯 Highly targeted</li>
+        <li>📱 Engaging</li>
+        <li>📊 Data-driven</li>
+        </ul>
         """, unsafe_allow_html=True)
         
     # Homepage button in sidebar too
