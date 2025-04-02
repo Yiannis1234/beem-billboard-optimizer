@@ -250,13 +250,11 @@ div.stButton button {
     font-size: 16px !important;
 }
 
-/* Style for selectbox/dropdown - Make it ORANGE with WHITE text */
+/* Style for selectbox/dropdown - Make it ORANGE with a WHITE selection area */
 div[data-baseweb="select"] > div:first-child {
     background-color: #FF6600 !important;
-    color: white !important;
     border: 2px solid #FF4400 !important;
     font-weight: bold !important;
-    text-shadow: 0px 1px 2px rgba(0,0,0,0.2) !important;
     padding: 10px 15px !important;
     border-radius: 8px !important;
     box-shadow: 0 3px 6px rgba(0,0,0,0.15) !important;
@@ -264,16 +262,27 @@ div[data-baseweb="select"] > div:first-child {
     margin-bottom: 15px !important;
 }
 
-/* ENSURE ALL TEXT IN DROPDOWN IS WHITE */
-div[data-baseweb="select"] > div:first-child * {
-    color: white !important;
-    fill: white !important;
+/* Make the actual selected value area WHITE with BLACK text */
+div[data-baseweb="select"] [data-testid="stSelectbox"] div[role="combobox"] {
+    background-color: white !important;
+    color: #333333 !important;
+    border-radius: 4px !important;
+    padding: 5px 10px !important;
+    margin: -5px 0 !important;
+    font-weight: bold !important;
+    text-shadow: none !important;
 }
 
-/* Add a clear dropdown indicator with white arrow */
+/* Ensure the selected value text is BLACK */
+div[data-baseweb="select"] [role="combobox"] * {
+    color: #333333 !important;
+    fill: #333333 !important;
+}
+
+/* Keep the dropdown indicator arrow ORANGE */
 div[data-baseweb="select"] svg {
-    color: white !important;
-    fill: white !important;
+    color: #FF6600 !important;
+    fill: #FF6600 !important;
     height: 24px !important;
     width: 24px !important;
     margin-right: 5px !important;
@@ -282,42 +291,43 @@ div[data-baseweb="select"] svg {
 /* Style dropdown option menu for better visibility */
 ul[data-baseweb="menu"] {
     padding: 5px !important;
-    background-color: #333333 !important;
+    background-color: white !important;
     border-radius: 8px !important;
     border: 2px solid #FF4400 !important;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2) !important;
 }
 
 ul[data-baseweb="menu"] li {
     margin: 2px 0 !important;
     padding: 8px 10px !important;
     border-radius: 4px !important;
-    background-color: #333333 !important;
-    color: white !important;
+    background-color: white !important;
+    color: #333333 !important;
     font-weight: 500 !important;
     font-size: 16px !important;
 }
 
 ul[data-baseweb="menu"] li:hover {
-    background-color: #FF6600 !important;
-    color: white !important;
+    background-color: #FFF2E6 !important;
+    color: #FF6600 !important;
 }
 
 /* Style the selected item in the dropdown */
 ul[data-baseweb="menu"] li[aria-selected="true"] {
-    background-color: #FF6600 !important;
-    color: white !important;
+    background-color: #FFE6CC !important;
+    color: #FF6600 !important;
     font-weight: bold !important;
 }
 
-/* Force every item in menu to be white text on dark background */
+/* Force all dropdown menu items to have dark text for readability */
 ul[data-baseweb="menu"] li *,
 ul[data-baseweb="menu"] span,
 ul[data-baseweb="menu"] div,
 [role="menuitem"] *,
 [role="option"] *,
 [data-baseweb="menu"] * {
-    color: white !important;
-    fill: white !important;
+    color: #333333 !important;
+    fill: #333333 !important;
     background-color: transparent !important;
 }
 
