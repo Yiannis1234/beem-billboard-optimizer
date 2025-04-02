@@ -801,13 +801,32 @@ with st.sidebar:
     if not st.session_state.sidebar_visible:
         st.markdown("""
         <style>
-        [data-testid="stSidebar"] {
-            display: none !important;
+        /* Hide sidebar contents but maintain the collapse control functionality */
+        [data-testid="stSidebar"] > div {
             width: 0 !important;
-            margin-right: 0 !important;
-            padding: 0 !important;
+            min-width: 0 !important;
+            max-width: 0 !important;
+            transform: translateX(-100%);
         }
         
+        /* Make sure the collapse control remains visible and functional */
+        [data-testid="collapsedControl"] {
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            transform: translateX(0) !important;
+            width: 24px !important;
+            height: 36px !important;
+            position: fixed !important;
+            top: 50% !important;
+            left: 0 !important;
+            z-index: 999 !important;
+            background-color: #FF6600 !important;
+            color: white !important;
+            border-radius: 0 4px 4px 0 !important;
+        }
+        
+        /* Ensure the main content expands properly */
         .main .block-container {
             max-width: 100% !important;
             padding-left: 1rem !important;
