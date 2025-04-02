@@ -219,6 +219,54 @@ area_coordinates = {
     "Spinningfields": {"latitude": 53.4802, "longitude": -2.2516, "zone_id": "spinningfields"}
 }
 
+# Add function to fetch gender distribution data from the Nomis API
+def get_gender_data(area_code):
+    """
+    Fetch gender distribution data from Nomis API for a given area
+    Returns a dictionary with male, female, and total counts of JSA claimants
+    """
+    try:
+        # For demo purposes we return mock data by area
+        # In production, this would call the actual API:
+        # f"https://www.nomisweb.co.uk/api/v01/dataset/NM_1_1.data.json?geography={area_code}&sex=5,6,7&measures=20100,20201"
+        
+        if area in ["Northern Quarter", "Oxford Road"]:
+            return {
+                "male_percent": 48,
+                "female_percent": 52,
+                "male_count": 240,
+                "female_count": 260
+            }
+        elif area in ["City Centre", "Deansgate"]:
+            return {
+                "male_percent": 46,
+                "female_percent": 54,
+                "male_count": 345,
+                "female_count": 405
+            }
+        elif area in ["Media City", "Spinningfields"]:
+            return {
+                "male_percent": 52,
+                "female_percent": 48,
+                "male_count": 312,
+                "female_count": 288
+            }
+        else:
+            return {
+                "male_percent": 49,
+                "female_percent": 51,
+                "male_count": 294,
+                "female_count": 306
+            }
+    except Exception as e:
+        st.error(f"Failed to get gender data: {e}")
+        return {
+            "male_percent": 50,
+            "female_percent": 50,
+            "male_count": 300,
+            "female_count": 300
+        }
+
 # Completely replace all custom sidebar and button CSS with a much simpler approach
 st.markdown("""
 <style>
@@ -1377,51 +1425,3 @@ else:
         </div>
     </div>
     """, unsafe_allow_html=True)
-
-# Add function to fetch gender distribution data from the Nomis API
-def get_gender_data(area_code):
-    """
-    Fetch gender distribution data from Nomis API for a given area
-    Returns a dictionary with male, female, and total counts of JSA claimants
-    """
-    try:
-        # For demo purposes we return mock data by area
-        # In production, this would call the actual API:
-        # f"https://www.nomisweb.co.uk/api/v01/dataset/NM_1_1.data.json?geography={area_code}&sex=5,6,7&measures=20100,20201"
-        
-        if area in ["Northern Quarter", "Oxford Road"]:
-            return {
-                "male_percent": 48,
-                "female_percent": 52,
-                "male_count": 240,
-                "female_count": 260
-            }
-        elif area in ["City Centre", "Deansgate"]:
-            return {
-                "male_percent": 46,
-                "female_percent": 54,
-                "male_count": 345,
-                "female_count": 405
-            }
-        elif area in ["Media City", "Spinningfields"]:
-            return {
-                "male_percent": 52,
-                "female_percent": 48,
-                "male_count": 312,
-                "female_count": 288
-            }
-        else:
-            return {
-                "male_percent": 49,
-                "female_percent": 51,
-                "male_count": 294,
-                "female_count": 306
-            }
-    except Exception as e:
-        st.error(f"Failed to get gender data: {e}")
-        return {
-            "male_percent": 50,
-            "female_percent": 50,
-            "male_count": 300,
-            "female_count": 300
-        }
