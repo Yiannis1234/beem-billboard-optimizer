@@ -611,7 +611,7 @@ with st.sidebar:
     area = st.selectbox(
         "Select Area",
         areas,
-        placeholder="Click to choose an area",
+        index=0,
         label_visibility="visible"
     )
     
