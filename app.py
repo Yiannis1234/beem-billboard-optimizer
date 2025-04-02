@@ -540,6 +540,27 @@ ul[data-baseweb="menu"] li,
     color: #333333 !important;
     border-bottom: 1px solid #f0f0f0 !important;
 }
+
+/* Make the dropdown selection text DARK and BOLD for maximum visibility */
+div[data-baseweb="select"] div[data-testid="stSelectbox"] div,
+div[data-baseweb="select"] div[data-testid="stSelectbox"] span,
+[data-testid="stSelectbox"] [role="combobox"] span,
+[data-testid="stSelectbox"] [role="combobox"] div,
+div[class*="ValueContainer"] > div,
+div[class*="selectedOption"] > div {
+    color: #333333 !important;
+    font-weight: bold !important;
+    font-size: 16px !important;
+}
+
+/* Override any white text coloring */
+[data-testid="stSelectbox"] div[role="button"],
+[data-testid="stSelectbox"] [role="combobox"],
+div[data-baseweb="select"] span,
+div[data-baseweb="select"] p {
+    color: #333333 !important;
+    background-color: white !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
