@@ -659,6 +659,49 @@ if 'sidebar_visible' not in st.session_state:
 def toggle_sidebar():
     st.session_state.sidebar_visible = False
 
+# Create a function to restore sidebar visibility (for the arrow button)
+def restore_sidebar():
+    st.session_state.sidebar_visible = True
+
+# Add JavaScript to detect clicks on the collapse control and restore sidebar
+st.markdown("""
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to handle clicks on the collapsed control
+    function handleControlClick() {
+        const collapseControls = document.querySelectorAll('[data-testid="collapsedControl"]');
+        collapseControls.forEach(control => {
+            control.addEventListener('click', function() {
+                // Use Streamlit's special callback to restore sidebar
+                window.parent.postMessage({
+                    type: 'streamlit:setComponentValue',
+                    value: true,
+                    dataType: 'bool',
+                    componentId: 'restore_sidebar'
+                }, '*');
+            });
+        });
+    }
+    
+    // Check periodically for the control to appear
+    const checkInterval = setInterval(function() {
+        const control = document.querySelector('[data-testid="collapsedControl"]');
+        if (control) {
+            handleControlClick();
+            clearInterval(checkInterval);
+        }
+    }, 300);
+});
+</script>
+""", unsafe_allow_html=True)
+
+# This component will catch the JavaScript message to restore sidebar
+if st.session_state.sidebar_visible == False:
+    restore_click = st.empty()
+    if restore_click.button('restore_sidebar', key='restore_sidebar', label_visibility='hidden'):
+        restore_sidebar()
+        st.rerun()
+
 # Initialize analyze variable before both buttons are created
 if 'analyze_clicked' not in st.session_state:
     st.session_state.analyze_clicked = False
@@ -807,32 +850,15 @@ with st.sidebar:
     if not st.session_state.sidebar_visible:
         st.markdown("""
         <style>
-        /* Hide sidebar contents but maintain the collapse control functionality */
-        [data-testid="stSidebar"] > div {
+        /* We'll only hide the inner content of the sidebar, not the toggle control */
+        [data-testid="stSidebar"] > div:first-child > div:first-child {
             width: 0 !important;
             min-width: 0 !important;
             max-width: 0 !important;
-            transform: translateX(-100%);
+            overflow: hidden !important;
         }
         
-        /* Make sure the collapse control remains visible and functional */
-        [data-testid="collapsedControl"] {
-            display: flex !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            transform: translateX(0) !important;
-            width: 24px !important;
-            height: 36px !important;
-            position: fixed !important;
-            top: 50% !important;
-            left: 0 !important;
-            z-index: 999 !important;
-            background-color: #FF6600 !important;
-            color: white !important;
-            border-radius: 0 4px 4px 0 !important;
-        }
-        
-        /* Ensure the main content expands properly */
+        /* Make sure the main content expands properly */
         .main .block-container {
             max-width: 100% !important;
             padding-left: 1rem !important;
@@ -840,6 +866,21 @@ with st.sidebar:
         }
         </style>
         """, unsafe_allow_html=True)
+        
+        # Add a special button that looks like the sidebar toggle to restore the sidebar
+        st.sidebar.markdown("""
+        <style>
+        [data-testid="stSidebar"] {
+            min-width: 0 !important;
+            width: auto !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        # This creates a button in the sidebar that will restore visibility
+        if st.sidebar.button("→", key="restore_sidebar", help="Show sidebar"):
+            st.session_state.sidebar_visible = True
+            st.rerun()
     
     # About section
     st.markdown('<div style="margin-top: 30px;"></div>', unsafe_allow_html=True)
