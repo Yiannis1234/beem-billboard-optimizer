@@ -561,7 +561,7 @@ if st.button("🏠", key="main_homepage"):
     # Reset all session state variables
     for key in st.session_state.keys():
         del st.session_state[key]
-    st.experimental_rerun()
+    st.rerun()
 
 # Sidebar
 with st.sidebar:
@@ -665,7 +665,7 @@ with st.sidebar:
         # Reset all session state variables
         for key in st.session_state.keys():
             del st.session_state[key]
-        st.experimental_rerun()
+        st.rerun()
 
 # Function to get weather icon based on condition
 def get_weather_icon(condition):
