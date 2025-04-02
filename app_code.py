@@ -561,6 +561,30 @@ div[data-baseweb="select"] p {
     color: #333333 !important;
     background-color: white !important;
 }
+
+/* CRITICAL FIX - Make the SELECTED VALUE visible with black text */
+div[data-baseweb="select"] > div > div:first-child,
+div[data-baseweb="select"] > div > div:first-child span,
+[data-testid="stSelectbox"] > div > div:first-child,
+[data-testid="stSelectbox"] > div > div > div,
+[data-testid="stSelectbox"] > div > div > div > div,
+div[role="combobox"] > div,
+div[role="combobox"] > div > span,
+[role="combobox"] > div,
+[data-baseweb="select"] > div > div > div {
+    color: black !important;
+    background-color: white !important; 
+    font-size: 16px !important;
+    font-weight: bold !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Force the placeholder to be visible too */
+[placeholder] {
+    color: black !important;
+    opacity: 1 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
