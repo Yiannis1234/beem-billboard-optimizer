@@ -558,11 +558,10 @@ with main_analyze_col2:
 
 # Homepage button - just a home emoji
 if st.button("🏠", key="main_homepage"):
-    st.markdown("""
-    <script>
-    window.location.href = 'https://beem-billboard-optimizer-lvvnqjcpqucrxzvnhg3vc6.streamlit.app/';
-    </script>
-    """, unsafe_allow_html=True)
+    # Reset all session state variables
+    for key in st.session_state.keys():
+        del st.session_state[key]
+    st.experimental_rerun()
 
 # Sidebar
 with st.sidebar:
@@ -663,11 +662,10 @@ with st.sidebar:
     # Homepage button in sidebar too
     st.markdown('<div style="margin-top: 25px;"></div>', unsafe_allow_html=True)
     if st.button("🏠", key="sidebar_homepage"):
-        st.markdown("""
-        <script>
-        window.location.href = 'https://beem-billboard-optimizer-lvvnqjcpqucrxzvnhg3vc6.streamlit.app/';
-        </script>
-        """, unsafe_allow_html=True)
+        # Reset all session state variables
+        for key in st.session_state.keys():
+            del st.session_state[key]
+        st.experimental_rerun()
 
 # Function to get weather icon based on condition
 def get_weather_icon(condition):
