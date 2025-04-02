@@ -1605,88 +1605,95 @@ with tabs[4]:
         # Determine education level
         high_education = gender_data['education']['degree_or_higher']['percent'] > 50
         
-        # Create recommendations based on demographic data
-        insights_html = """
-        <div style="margin-top:15px;">
-            <p><strong>Key Demographic Insights:</strong></p>
-            <ul>
-        """
+        # Create recommendations based on demographic data - using st.markdown instead of HTML variables
+        st.markdown("<p><strong>Key Demographic Insights:</strong></p>", unsafe_allow_html=True)
         
         # Age-based insights
         if largest_age_group == "18-24":
-            insights_html += """
-            <li>Young adult demographic - likely students or early career</li>
-            <li>High digital engagement and social media usage</li>
-            <li>Price-sensitive but experience-oriented</li>
-            """
+            st.markdown("""
+            <ul>
+                <li>Young adult demographic - likely students or early career</li>
+                <li>High digital engagement and social media usage</li>
+                <li>Price-sensitive but experience-oriented</li>
+            </ul>
+            """, unsafe_allow_html=True)
         elif largest_age_group == "25-34":
-            insights_html += """
-            <li>Young professional demographic - establishing careers</li>
-            <li>Higher disposable income and brand consciousness</li>
-            <li>Tech-savvy and convenience-oriented</li>
-            """
+            st.markdown("""
+            <ul>
+                <li>Young professional demographic - establishing careers</li>
+                <li>Higher disposable income and brand consciousness</li>
+                <li>Tech-savvy and convenience-oriented</li>
+            </ul>
+            """, unsafe_allow_html=True)
         elif largest_age_group == "35-49":
-            insights_html += """
-            <li>Established professionals - potential family decision-makers</li>
-            <li>Value-oriented purchasing with higher budget</li>
-            <li>Mix of digital and traditional media consumption</li>
-            """
+            st.markdown("""
+            <ul>
+                <li>Established professionals - potential family decision-makers</li>
+                <li>Value-oriented purchasing with higher budget</li>
+                <li>Mix of digital and traditional media consumption</li>
+            </ul>
+            """, unsafe_allow_html=True)
         else:  # 50-64
-            insights_html += """
-            <li>Senior demographic - established career or approaching retirement</li>
-            <li>Quality and service focused rather than price sensitive</li>
-            <li>More traditional media consumption habits</li>
-            """
+            st.markdown("""
+            <ul>
+                <li>Senior demographic - established career or approaching retirement</li>
+                <li>Quality and service focused rather than price sensitive</li>
+                <li>More traditional media consumption habits</li>
+            </ul>
+            """, unsafe_allow_html=True)
         
         # Education and employment insights
         if high_education:
-            insights_html += """
-            <li>Highly educated audience - more analytical messaging may be effective</li>
-            <li>May respond well to detailed information and statistics</li>
-            """
-        else:
-            insights_html += """
-            <li>More practical, benefit-focused messaging recommended</li>
-            <li>Visual demonstrations and clear value propositions important</li>
-            """
-            
-        insights_html += """
-            </ul>
-            
-            <p><strong>Recommended Marketing Approaches:</strong></p>
+            st.markdown("""
             <ul>
-        """
+                <li>Highly educated audience - more analytical messaging may be effective</li>
+                <li>May respond well to detailed information and statistics</li>
+            </ul>
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown("""
+            <ul>
+                <li>More practical, benefit-focused messaging recommended</li>
+                <li>Visual demonstrations and clear value propositions important</li>
+            </ul>
+            """, unsafe_allow_html=True)
+        
+        # Recommendations heading
+        st.markdown("<p><strong>Recommended Marketing Approaches:</strong></p>", unsafe_allow_html=True)
         
         # Recommendations based on demographics
         if male_skew and largest_age_group in ["18-24", "25-34"]:
-            insights_html += """
-            <li>Technology and gaming promotions</li>
-            <li>Sports and fitness events or sponsorships</li>
-            <li>Automotive and electronics advertising</li>
-            """
-        elif female_skew and largest_age_group in ["18-24", "25-34"]:
-            insights_html += """
-            <li>Fashion and beauty campaigns</li>
-            <li>Lifestyle and wellness events</li>
-            <li>Social cause marketing</li>
-            """
-        elif largest_age_group in ["35-49", "50-64"]:
-            insights_html += """
-            <li>Home improvement and luxury goods</li>
-            <li>Financial services and investment opportunities</li>
-            <li>Health and wellness solutions</li>
-            """
-            
-        insights_html += """
+            st.markdown("""
+            <ul>
+                <li>Technology and gaming promotions</li>
+                <li>Sports and fitness events or sponsorships</li>
+                <li>Automotive and electronics advertising</li>
             </ul>
+            """, unsafe_allow_html=True)
+        elif female_skew and largest_age_group in ["18-24", "25-34"]:
+            st.markdown("""
+            <ul>
+                <li>Fashion and beauty campaigns</li>
+                <li>Lifestyle and wellness events</li>
+                <li>Social cause marketing</li>
+            </ul>
+            """, unsafe_allow_html=True)
+        elif largest_age_group in ["35-49", "50-64"]:
+            st.markdown("""
+            <ul>
+                <li>Home improvement and luxury goods</li>
+                <li>Financial services and investment opportunities</li>
+                <li>Health and wellness solutions</li>
+            </ul>
+            """, unsafe_allow_html=True)
             
-            <div style="margin-top:15px; font-size:12px; color:#666;">
-                <strong>Note:</strong> These recommendations are based on demographic data analysis from the Nomis API and local market research.
-            </div>
+        # Source note
+        st.markdown("""
+        <div style="margin-top:15px; font-size:12px; color:#666;">
+            <strong>Note:</strong> These recommendations are based on demographic data analysis from the Nomis API and local market research.
         </div>
-        """
+        """, unsafe_allow_html=True)
         
-        st.markdown(insights_html, unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
     else:
         st.info("Select options and click 'Analyze Route' to see demographic analysis.")
