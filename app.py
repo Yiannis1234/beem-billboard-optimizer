@@ -765,9 +765,15 @@ with st.sidebar:
     time_option = st.radio("Select time", ["Current time", "Custom time"])
 
     if time_option == "Custom time":
-        # Fix date input for better selection
+        # Fix date input to be fully functional
         current_date = datetime.now().date()
-        date = st.date_input("Date", value=current_date, min_value=current_date, max_value=current_date + timedelta(days=30))
+        date = st.date_input(
+            "Date", 
+            value=current_date,
+            # Remove min/max constraints to allow free date selection
+            # min_value=current_date,
+            # max_value=current_date + timedelta(days=30)
+        )
         hour = st.slider("Hour", 0, 23, datetime.now().hour, format="%d")
         selected_time = datetime.combine(date, datetime.min.time()) + timedelta(hours=hour)
         
