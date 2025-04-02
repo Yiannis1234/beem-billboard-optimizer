@@ -563,21 +563,14 @@ div[data-baseweb="select"] p {
 }
 
 /* CRITICAL FIX - Make the SELECTED VALUE visible with black text */
-div[data-baseweb="select"] > div > div:first-child,
-div[data-baseweb="select"] > div > div:first-child span,
-[data-testid="stSelectbox"] > div > div:first-child,
-[data-testid="stSelectbox"] > div > div > div,
-[data-testid="stSelectbox"] > div > div > div > div,
-div[role="combobox"] > div,
-div[role="combobox"] > div > span,
-[role="combobox"] > div,
-[data-baseweb="select"] > div > div > div {
+div[data-baseweb="select"] > div > div:first-child {
     color: black !important;
-    background-color: white !important; 
-    font-size: 16px !important;
+    background-color: white !important;
     font-weight: bold !important;
-    opacity: 1 !important;
+    font-size: 16px !important;
     visibility: visible !important;
+    z-index: 999 !important;
+    position: relative !important;
 }
 
 /* Force the placeholder to be visible too */
@@ -607,6 +600,53 @@ div[role="combobox"] > div > span,
 [data-testid="stSelectbox"] > div > label::after {
     content: "" !important;
     display: none !important;
+}
+
+/* COMPLETELY NEW STYLE FOR DROPDOWN - MAXIMUM VISIBILITY */
+[data-testid="stSelectbox"] {
+    background-color: white !important;
+    border: 3px solid #FF6600 !important;
+    border-radius: 8px !important;
+    padding: 5px !important;
+    margin-bottom: 15px !important;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2) !important;
+}
+
+[data-testid="stSelectbox"] > div {
+    background-color: white !important;
+}
+
+/* Force label to be visible */
+[data-testid="stSelectbox"] > div > label {
+    color: #333333 !important;
+    font-weight: bold !important;
+    font-size: 16px !important;
+    margin-bottom: 5px !important;
+    display: block !important;
+}
+
+/* Force selected value text to be BLACK and VISIBLE */
+[data-testid="stSelectbox"] div[role="combobox"],
+[data-testid="stSelectbox"] div[role="combobox"] * {
+    color: black !important;
+    background-color: white !important;
+    font-weight: bold !important;
+    font-size: 18px !important;
+    text-align: center !important;
+    display: block !important;
+}
+
+/* Make the entire dropdown button area highly visible */
+div[data-baseweb="select"] {
+    background-color: white !important;
+    padding: 5px !important;
+    border-radius: 8px !important;
+}
+
+/* Make the dropdown arrow orange */
+div[data-baseweb="select"] svg {
+    fill: #FF6600 !important;
+    color: #FF6600 !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -697,8 +737,8 @@ with st.sidebar:
         label_visibility="visible"
     )
     
-    # Add a hint about the dropdown
-    st.markdown('<div style="color: #FF6600; font-size: 14px; margin-top: -10px; margin-bottom: 20px;">↑ Click the orange box to select</div>', unsafe_allow_html=True)
+    # Add a confirmation of what's selected
+    st.markdown(f'<div style="background-color: #FFE6CC; color: black; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; font-size: 18px; margin-top: -15px; margin-bottom: 15px; border: 2px solid #FF6600;">Selected: {area}</div>', unsafe_allow_html=True)
     
     # Time selection
     st.markdown('<h3 style="color: #FF6600; font-weight: 700; font-size: 22px; margin-top: 25px; margin-bottom: 10px;">Time Options</h3>', unsafe_allow_html=True)
