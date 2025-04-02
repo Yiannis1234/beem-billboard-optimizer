@@ -698,7 +698,9 @@ document.addEventListener('DOMContentLoaded', function() {
 # This component will catch the JavaScript message to restore sidebar
 if st.session_state.sidebar_visible == False:
     restore_click = st.empty()
-    if restore_click.button('restore_sidebar', key='restore_sidebar', label_visibility='hidden'):
+    # Fix - Don't use empty container to create a button
+    # Instead, create button directly with a unique key
+    if st.button('Show Sidebar', key='restore_sidebar_button', label_visibility='hidden'):
         restore_sidebar()
         st.rerun()
 
