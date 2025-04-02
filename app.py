@@ -946,35 +946,113 @@ with st.sidebar:
     time_option = st.radio("Select time", ["Current time", "Custom time"])
 
     if time_option == "Custom time":
+        # Create a more visible time selection UI
+        st.markdown('<div style="background-color: white; padding: 15px; border-radius: 10px; border: 2px solid #FF6600; margin-bottom: 15px;">', unsafe_allow_html=True)
+        
         # Fix date input to be fully functional
         current_date = datetime.now().date()
         date = st.date_input(
             "Date", 
             value=current_date,
             # Remove min/max constraints to allow free date selection
-            # min_value=current_date,
-            # max_value=current_date + timedelta(days=30)
         )
-        hour = st.slider("Hour", 0, 23, datetime.now().hour, format="%d")
-        selected_time = datetime.combine(date, datetime.min.time()) + timedelta(hours=hour)
+        
+        # Separate time selection into hours and minutes with proper formatting
+        time_cols = st.columns(2)
+        with time_cols[0]:
+            hour = st.number_input("Hour (0-23)", min_value=0, max_value=23, value=datetime.now().hour, step=1)
+        
+        with time_cols[1]:
+            minute = st.number_input("Minute (0-59)", min_value=0, max_value=59, value=0, step=5)
+        
+        selected_time = datetime.combine(date, datetime.min.time()) + timedelta(hours=hour, minutes=minute)
         
         # Show selected date and time for clarity
         st.markdown(f"""
         <div style="
-            background-color: white;
+            background-color: #FFE6CC;
             border: 2px solid #FF6600;
             border-radius: 8px;
             padding: 10px;
             margin-top: 10px;
-            margin-bottom: 15px;
             text-align: center;
             font-weight: bold;
+            font-size: 16px;
         ">
-            Selected: {date.strftime('%A, %B %d, %Y')} at {hour:02d}:00
+            Selected: {date.strftime('%A, %B %d, %Y')} at {hour:02d}:{minute:02d}
         </div>
         """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
     else:
         selected_time = datetime.now()
+    
+    # Improved area selection styling to ensure visibility
+    st.markdown("""
+    <style>
+    /* Super high visibility styling for area dropdown */
+    [data-testid="stSelectbox"] {
+        background-color: white !important;
+        border: 3px solid #FF6600 !important;
+        border-radius: 8px !important;
+        padding: 5px !important;
+        margin-bottom: 20px !important;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.2) !important;
+    }
+
+    /* Make dropdown text BLACK and super visible */
+    [data-testid="stSelectbox"] div[role="button"] *,
+    [data-testid="stSelectbox"] [role="combobox"] *,
+    .st-emotion-cache-qbmosi {
+        color: black !important;
+        font-weight: bold !important;
+        font-size: 16px !important;
+        background-color: white !important;
+    }
+
+    /* Make dropdown label super visible */
+    .st-emotion-cache-n9riji label {
+        color: black !important;
+        font-weight: bold !important;
+        font-size: 16px !important;
+        margin-bottom: 5px !important;
+    }
+
+    /* Make area confirmation box super visible */
+    .area-confirmation {
+        background-color: #FFE6CC !important;
+        border: 3px solid #FF6600 !important;
+        padding: 15px !important;
+        border-radius: 10px !important;
+        margin: 10px 0 20px 0 !important;
+        text-align: center !important;
+        font-weight: bold !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # Super clear area selection with absolutely guaranteed visibility
+    st.markdown("<h3 style='color: #FF6600; font-weight: 700; margin-top: 15px;'>AREA SELECTION</h3>", unsafe_allow_html=True)
+
+    # Force a default selection to ensure box is never empty
+    area = st.selectbox(
+        "Select Area",
+        areas,
+        index=0,  # Northern Quarter is default selected
+        label_visibility="visible"
+    )
+
+    # Add an extra confirmation display box to make selection unmistakably visible
+    st.markdown(
+        f"""
+        <div class="area-confirmation">
+            <div style="color: #FF6600; font-size: 14px; margin-bottom: 5px;">SELECTED AREA:</div>
+            <div style="font-size: 22px; color: #000;">{area}</div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
     
     # Day type (new)
     st.markdown('<div style="margin-top: 20px;"></div>', unsafe_allow_html=True)
