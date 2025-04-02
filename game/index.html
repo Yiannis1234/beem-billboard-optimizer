@@ -3,64 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Text Detection Analyzer</title>
+    <title>PyBuild - Learn Python Through Projects</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>AI Text Detection Analyzer</h1>
-            <p>Check if your text is likely to be detected as AI-generated</p>
-        </header>
-        
-        <section class="input-section">
-            <h2>Paste Your Text</h2>
-            <textarea id="textInput" placeholder="Paste text to analyze for AI detection likelihood..."></textarea>
-            <div class="button-group">
-                <button onclick="analyzeText()" class="primary-btn">Analyze Text</button>
-                <button onclick="humanizeText()" class="secondary-btn">Humanize Text</button>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon"><i class="fab fa-python"></i></span>
+                <span class="logo-text">PyBuild</span>
             </div>
-        </section>
-        
-        <section class="results-section" id="resultsSection">
-            <h2>Analysis Results</h2>
-            
-            <div class="score-container">
-                <h3>AI Detection Score</h3>
-                <div id="aiScore" class="score">--</div>
-                <p class="score-explanation">Lower scores indicate more human-like text</p>
+            <nav>
+                <ul>
+                    <li><a href="#projects" class="active">Projects</a></li>
+                    <li><a href="#resources">Resources</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Build Real Python Projects</h1>
+                <p>Advance your Python skills through hands-on project-based learning.</p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn primary-btn">Explore Projects</a>
+                    <a href="#approach" class="btn secondary-btn">Our Approach</a>
+                </div>
             </div>
-            
-            <div class="analysis-details">
-                <h3>Detailed Metrics</h3>
-                <div class="metrics">
-                    <div class="metric">
-                        <h4>Perplexity</h4>
-                        <div id="perplexityScore">--</div>
+            <div class="hero-image">
+                <img src="https://via.placeholder.com/500x400" alt="Python coding">
+            </div>
+        </div>
+    </section>
+
+    <section id="approach" class="approach">
+        <div class="container">
+            <h2>Our Learning Approach</h2>
+            <div class="cards">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-project-diagram"></i>
                     </div>
-                    <div class="metric">
-                        <h4>Vocabulary Diversity</h4>
-                        <div id="vocabularyScore">--</div>
+                    <h3>Project-Based</h3>
+                    <p>Learn by building complete applications from scratch with increasing complexity.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-code-branch"></i>
                     </div>
-                    <div class="metric">
-                        <h4>Sentence Structure</h4>
-                        <div id="sentenceScore">--</div>
+                    <h3>Step-by-Step</h3>
+                    <p>Follow detailed instructions with explanations at each stage of development.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-puzzle-piece"></i>
                     </div>
-                    <div class="metric">
-                        <h4>Pattern Consistency</h4>
-                        <div id="patternScore">--</div>
+                    <h3>Challenges</h3>
+                    <p>Face mini-challenges throughout projects to test your understanding and creativity.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2>Projects</h2>
+            <div class="filter-tabs">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="beginner">Beginner</button>
+                <button class="filter-btn" data-filter="intermediate">Intermediate</button>
+                <button class="filter-btn" data-filter="advanced">Advanced</button>
+            </div>
+            <div class="project-grid">
+                <div class="project-card" data-category="beginner">
+                    <div class="project-img">
+                        <img src="https://via.placeholder.com/300x200" alt="Weather App">
+                        <div class="difficulty beginner">Beginner</div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Weather Dashboard</h3>
+                        <p>Build a weather app that fetches data from a real API and displays forecasts.</p>
+                        <div class="project-tags">
+                            <span>APIs</span>
+                            <span>Requests</span>
+                            <span>JSON</span>
+                        </div>
+                        <a href="projects/weather_dashboard.html" class="project-link">Start Project <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="project-card" data-category="beginner">
+                    <div class="project-img">
+                        <img src="https://via.placeholder.com/300x200" alt="To-Do App">
+                        <div class="difficulty beginner">Beginner</div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Task Manager</h3>
+                        <p>Create a command-line task manager with file persistence and priority features.</p>
+                        <div class="project-tags">
+                            <span>File I/O</span>
+                            <span>OOP</span>
+                            <span>CLI</span>
+                        </div>
+                        <a href="projects/task_manager.html" class="project-link">Start Project <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="project-card" data-category="intermediate">
+                    <div class="project-img">
+                        <img src="https://via.placeholder.com/300x200" alt="Data Analysis">
+                        <div class="difficulty intermediate">Intermediate</div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Data Visualizer</h3>
+                        <p>Analyze and visualize real-world datasets using pandas, matplotlib and seaborn.</p>
+                        <div class="project-tags">
+                            <span>Pandas</span>
+                            <span>Matplotlib</span>
+                            <span>Data Analysis</span>
+                        </div>
+                        <a href="projects/data_visualizer.html" class="project-link">Start Project <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="project-card" data-category="intermediate">
+                    <div class="project-img">
+                        <img src="https://via.placeholder.com/300x200" alt="Web Scraper">
+                        <div class="difficulty intermediate">Intermediate</div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Web Scraper</h3>
+                        <p>Build a web scraper that extracts information from websites and saves it in various formats.</p>
+                        <div class="project-tags">
+                            <span>BeautifulSoup</span>
+                            <span>Requests</span>
+                            <span>CSV/JSON</span>
+                        </div>
+                        <a href="projects/web_scraper.html" class="project-link">Start Project <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="project-card" data-category="advanced">
+                    <div class="project-img">
+                        <img src="https://via.placeholder.com/300x200" alt="Flask API">
+                        <div class="difficulty advanced">Advanced</div>
+                    </div>
+                    <div class="project-content">
+                        <h3>RESTful API</h3>
+                        <p>Develop a full-featured RESTful API using Flask with authentication and database integration.</p>
+                        <div class="project-tags">
+                            <span>Flask</span>
+                            <span>SQLAlchemy</span>
+                            <span>JWT</span>
+                        </div>
+                        <a href="projects/restful_api.html" class="project-link">Start Project <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="project-card" data-category="advanced">
+                    <div class="project-img">
+                        <img src="https://via.placeholder.com/300x200" alt="Machine Learning">
+                        <div class="difficulty advanced">Advanced</div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Predictive Model</h3>
+                        <p>Train and deploy a machine learning model to predict outcomes using scikit-learn.</p>
+                        <div class="project-tags">
+                            <span>scikit-learn</span>
+                            <span>pandas</span>
+                            <span>ML</span>
+                        </div>
+                        <a href="projects/predictive_model.html" class="project-link">Start Project <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
-            
-            <div class="suggestions">
-                <h3>Suggestions to Make Text More Human-like</h3>
-                <ul id="suggestionsList">
-                    <li>Paste some text and click "Analyze" to see suggestions</li>
-                </ul>
+        </div>
+    </section>
+
+    <section id="learning-path" class="learning-path">
+        <div class="container">
+            <h2>Your Learning Path</h2>
+            <div class="path-container">
+                <div class="path-item">
+                    <div class="path-number">1</div>
+                    <div class="path-content">
+                        <h3>Project Selection</h3>
+                        <p>Choose a project that matches your skill level and interests.</p>
+                    </div>
+                </div>
+                <div class="path-item">
+                    <div class="path-number">2</div>
+                    <div class="path-content">
+                        <h3>Setup Environment</h3>
+                        <p>Follow the setup instructions to prepare your coding environment.</p>
+                    </div>
+                </div>
+                <div class="path-item">
+                    <div class="path-number">3</div>
+                    <div class="path-content">
+                        <h3>Step-by-Step Building</h3>
+                        <p>Follow the tutorial to build your project incrementally with detailed explanations.</p>
+                    </div>
+                </div>
+                <div class="path-item">
+                    <div class="path-number">4</div>
+                    <div class="path-content">
+                        <h3>Solve Challenges</h3>
+                        <p>Complete mini-challenges throughout the project to strengthen your skills.</p>
+                    </div>
+                </div>
+                <div class="path-item">
+                    <div class="path-number">5</div>
+                    <div class="path-content">
+                        <h3>Extend Your Project</h3>
+                        <p>Add your own features and improvements to make the project truly your own.</p>
+                    </div>
+                </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
+
+    <section id="resources" class="resources">
+        <div class="container">
+            <h2>Helpful Resources</h2>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3>Documentation</h3>
+                    <ul>
+                        <li><a href="https://docs.python.org/3/" target="_blank">Python Official Docs</a></li>
+                        <li><a href="https://pandas.pydata.org/docs/" target="_blank">Pandas Documentation</a></li>
+                        <li><a href="https://flask.palletsprojects.com/" target="_blank">Flask Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>Video Tutorials</h3>
+                    <ul>
+                        <li><a href="#" target="_blank">Python Project Structure</a></li>
+                        <li><a href="#" target="_blank">Working with APIs in Python</a></li>
+                        <li><a href="#" target="_blank">Database Fundamentals</a></li>
+                    </ul>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>Tools</h3>
+                    <ul>
+                        <li><a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a></li>
+                        <li><a href="https://www.jetbrains.com/pycharm/" target="_blank">PyCharm IDE</a></li>
+                        <li><a href="https://github.com/" target="_blank">GitHub (Version Control)</a></li>
+                    </ul>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Communities</h3>
+                    <ul>
+                        <li><a href="https://stackoverflow.com/questions/tagged/python" target="_blank">Stack Overflow</a></li>
+                        <li><a href="https://www.reddit.com/r/learnpython/" target="_blank">r/learnpython</a></li>
+                        <li><a href="https://realpython.com/" target="_blank">Real Python</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About PyBuild</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>PyBuild was created with one goal in mind: to help Python learners bridge the gap between understanding basic syntax and building real-world applications.</p>
+                    <p>Our project-based learning approach emphasizes hands-on experience, practical skills, and the joy of creating something functional from scratch.</p>
+                    <p>Each project is carefully designed to introduce new concepts while reinforcing fundamentals, creating a comprehensive learning experience that grows with you.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-icon"><i class="fab fa-python"></i></span>
+                    <span class="logo-text">PyBuild</span>
+                </div>
+                <div class="footer-links">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="#projects">Projects</a></li>
+                        <li><a href="#resources">Resources</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="mailto:contact@pybuild.com">Email Us</a></li>
+                        <li><a href="#" target="_blank">Discord Community</a></li>
+                        <li><a href="#" target="_blank">GitHub</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 PyBuild. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html> 

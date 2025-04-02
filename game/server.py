@@ -1,41 +1,37 @@
 import http.server
 import socketserver
+import socket
 import os
-import sys
+import time
 
-PORT = 8000
-Handler = http.server.SimpleHTTPRequestHandler
+def find_free_port():
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(('', 0))
+        s.listen(1)
+        port = s.getsockname()[1]
+    return port
 
-def find_free_port(start_port):
-    port = start_port
-    max_port = start_port + 100
+def run_server():
+    PORT = 8000
+    Handler = http.server.SimpleHTTPRequestHandler
+
+    # Try using port 8000 first, if not available use a random port
+    try:
+        httpd = socketserver.TCPServer(("", PORT), Handler)
+    except OSError:
+        PORT = find_free_port()
+        httpd = socketserver.TCPServer(("", PORT), Handler)
+
+    print(f"Server running at http://localhost:{PORT}")
+    print(f"Access the Greek Recipes at: http://localhost:{PORT}/greek_recipes.html")
+    print(f"Access the Career Quiz at: http://localhost:{PORT}/career_quiz.html")
+    print("Press Ctrl+C to stop the server")
     
-    while port < max_port:
-        try:
-            with socketserver.TCPServer(("", port), Handler) as httpd:
-                httpd.server_close()
-                return port
-        except OSError:
-            port += 1
-    
-    return None
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("\nServer stopped")
+        httpd.server_close()
 
 if __name__ == "__main__":
-    try:
-        # Check if port 8000 is already in use
-        try:
-            with socketserver.TCPServer(("", PORT), Handler) as test_server:
-                test_server.server_close()
-        except OSError:
-            # Find a free port
-            PORT = find_free_port(8001)
-            if PORT is None:
-                print("Could not find a free port. Please close some applications and try again.")
-                sys.exit(1)
-        
-        print(f"Serving at http://localhost:{PORT}")
-        with socketserver.TCPServer(("", PORT), Handler) as httpd:
-            httpd.serve_forever()
-    except KeyboardInterrupt:
-        print("\nServer stopped.")
-        sys.exit(0) 
+    run_server() 
