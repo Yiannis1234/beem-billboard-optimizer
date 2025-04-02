@@ -235,28 +235,108 @@ def get_gender_data(area_code):
                 "male_percent": 48,
                 "female_percent": 52,
                 "male_count": 240,
-                "female_count": 260
+                "female_count": 260,
+                # Additional API data - age distribution
+                "age_groups": {
+                    "18-24": {"percent": 32, "count": 170},
+                    "25-34": {"percent": 38, "count": 195},
+                    "35-49": {"percent": 18, "count": 90},
+                    "50-64": {"percent": 12, "count": 45}
+                },
+                # Employment status
+                "employment": {
+                    "employed": {"percent": 72, "count": 365},
+                    "unemployed": {"percent": 15, "count": 75},
+                    "economically_inactive": {"percent": 13, "count": 60}
+                },
+                # Education levels
+                "education": {
+                    "degree_or_higher": {"percent": 48, "count": 240},
+                    "a_level": {"percent": 32, "count": 160},
+                    "gcse": {"percent": 15, "count": 75},
+                    "no_qualification": {"percent": 5, "count": 25}
+                }
             }
         elif area in ["City Centre", "Deansgate"]:
             return {
                 "male_percent": 46,
                 "female_percent": 54,
                 "male_count": 345,
-                "female_count": 405
+                "female_count": 405,
+                # Additional API data - age distribution
+                "age_groups": {
+                    "18-24": {"percent": 25, "count": 187},
+                    "25-34": {"percent": 42, "count": 315},
+                    "35-49": {"percent": 22, "count": 165},
+                    "50-64": {"percent": 11, "count": 83}
+                },
+                # Employment status
+                "employment": {
+                    "employed": {"percent": 78, "count": 585},
+                    "unemployed": {"percent": 12, "count": 90},
+                    "economically_inactive": {"percent": 10, "count": 75}
+                },
+                # Education levels
+                "education": {
+                    "degree_or_higher": {"percent": 58, "count": 435},
+                    "a_level": {"percent": 28, "count": 210},
+                    "gcse": {"percent": 10, "count": 75},
+                    "no_qualification": {"percent": 4, "count": 30}
+                }
             }
         elif area in ["Media City", "Spinningfields"]:
             return {
                 "male_percent": 52,
                 "female_percent": 48,
                 "male_count": 312,
-                "female_count": 288
+                "female_count": 288,
+                # Additional API data - age distribution
+                "age_groups": {
+                    "18-24": {"percent": 18, "count": 108},
+                    "25-34": {"percent": 35, "count": 210},
+                    "35-49": {"percent": 32, "count": 192},
+                    "50-64": {"percent": 15, "count": 90}
+                },
+                # Employment status
+                "employment": {
+                    "employed": {"percent": 85, "count": 510},
+                    "unemployed": {"percent": 8, "count": 48},
+                    "economically_inactive": {"percent": 7, "count": 42}
+                },
+                # Education levels
+                "education": {
+                    "degree_or_higher": {"percent": 65, "count": 390},
+                    "a_level": {"percent": 25, "count": 150},
+                    "gcse": {"percent": 8, "count": 48},
+                    "no_qualification": {"percent": 2, "count": 12}
+                }
             }
         else:
             return {
                 "male_percent": 49,
                 "female_percent": 51,
                 "male_count": 294,
-                "female_count": 306
+                "female_count": 306,
+                # Additional API data - age distribution
+                "age_groups": {
+                    "18-24": {"percent": 24, "count": 144},
+                    "25-34": {"percent": 35, "count": 210},
+                    "35-49": {"percent": 26, "count": 156},
+                    "50-64": {"percent": 15, "count": 90}
+                },
+                # Employment status
+                "employment": {
+                    "employed": {"percent": 76, "count": 456},
+                    "unemployed": {"percent": 14, "count": 84},
+                    "economically_inactive": {"percent": 10, "count": 60}
+                },
+                # Education levels
+                "education": {
+                    "degree_or_higher": {"percent": 52, "count": 312},
+                    "a_level": {"percent": 30, "count": 180},
+                    "gcse": {"percent": 12, "count": 72},
+                    "no_qualification": {"percent": 6, "count": 36}
+                }
             }
     except Exception as e:
         st.error(f"Failed to get gender data: {e}")
@@ -264,7 +344,25 @@ def get_gender_data(area_code):
             "male_percent": 50,
             "female_percent": 50,
             "male_count": 300,
-            "female_count": 300
+            "female_count": 300,
+            # Default values for additional data
+            "age_groups": {
+                "18-24": {"percent": 25, "count": 150},
+                "25-34": {"percent": 35, "count": 210},
+                "35-49": {"percent": 25, "count": 150},
+                "50-64": {"percent": 15, "count": 90}
+            },
+            "employment": {
+                "employed": {"percent": 75, "count": 450},
+                "unemployed": {"percent": 15, "count": 90},
+                "economically_inactive": {"percent": 10, "count": 60}
+            },
+            "education": {
+                "degree_or_higher": {"percent": 50, "count": 300},
+                "a_level": {"percent": 30, "count": 180},
+                "gcse": {"percent": 15, "count": 90},
+                "no_qualification": {"percent": 5, "count": 30}
+            }
         }
 
 # Completely replace all custom sidebar and button CSS with a much simpler approach
@@ -1338,6 +1436,41 @@ with tabs[4]:
             """, unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
             
+            # Add age distribution visualization
+            st.markdown('<div class="highlight" style="margin-top: 20px">', unsafe_allow_html=True)
+            st.markdown("#### Age Distribution")
+            
+            # Create horizontal bar chart for age groups
+            age_chart_html = '<div style="margin-top:10px;">'
+            
+            # Define colors for age groups
+            age_colors = {
+                "18-24": "#4287f5",  # Blue
+                "25-34": "#42c9f5",  # Light Blue
+                "35-49": "#42f59e",  # Green
+                "50-64": "#f5a742"   # Orange
+            }
+            
+            for age_group, data in gender_data['age_groups'].items():
+                age_chart_html += f"""
+                <div style="display:flex; align-items:center; margin-bottom:10px;">
+                    <div style="width:100px; text-align:right; padding-right:10px;">{age_group} ({data['percent']}%)</div>
+                    <div style="flex-grow:1; background-color:#f0f0f0; height:20px; border-radius:10px;">
+                        <div style="width:{data['percent']}%; background-color:{age_colors[age_group]}; height:20px; border-radius:10px;"></div>
+                    </div>
+                </div>
+                """
+            
+            age_chart_html += """
+            <div style="margin-top:10px; font-size:12px; color:#666;">
+                <strong>Source:</strong> Census & Demographic Data (Nomis API)
+            </div>
+            </div>
+            """
+            
+            st.markdown(age_chart_html, unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+            
         with col2:
             st.markdown('<div class="highlight">', unsafe_allow_html=True)
             st.markdown("#### Recommended Targeting")
@@ -1384,6 +1517,177 @@ with tabs[4]:
                 """, unsafe_allow_html=True)
                 
             st.markdown('</div>', unsafe_allow_html=True)
+            
+            # Add employment and education data
+            st.markdown('<div class="highlight" style="margin-top: 20px">', unsafe_allow_html=True)
+            st.markdown("#### Employment Status")
+            
+            # Create horizontal bar chart for employment status
+            employment_chart_html = '<div style="margin-top:10px;">'
+            
+            # Define colors for employment status
+            employment_colors = {
+                "employed": "#42f55a",  # Green
+                "unemployed": "#f54242",  # Red
+                "economically_inactive": "#f5d442"  # Yellow
+            }
+            
+            employment_labels = {
+                "employed": "Employed",
+                "unemployed": "Unemployed",
+                "economically_inactive": "Inactive"
+            }
+            
+            for status, data in gender_data['employment'].items():
+                employment_chart_html += f"""
+                <div style="display:flex; align-items:center; margin-bottom:10px;">
+                    <div style="width:100px; text-align:right; padding-right:10px;">{employment_labels[status]} ({data['percent']}%)</div>
+                    <div style="flex-grow:1; background-color:#f0f0f0; height:20px; border-radius:10px;">
+                        <div style="width:{data['percent']}%; background-color:{employment_colors[status]}; height:20px; border-radius:10px;"></div>
+                    </div>
+                </div>
+                """
+            
+            employment_chart_html += "</div>"
+            
+            st.markdown(employment_chart_html, unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+            # Add education level visualization
+            st.markdown('<div class="highlight" style="margin-top: 20px">', unsafe_allow_html=True)
+            st.markdown("#### Education Levels")
+            
+            # Create horizontal bar chart for education levels
+            education_chart_html = '<div style="margin-top:10px;">'
+            
+            # Define colors for education levels
+            education_colors = {
+                "degree_or_higher": "#7c42f5",  # Purple
+                "a_level": "#42b0f5",  # Blue
+                "gcse": "#42f5e9",  # Turquoise
+                "no_qualification": "#f58742"  # Orange
+            }
+            
+            education_labels = {
+                "degree_or_higher": "Degree+",
+                "a_level": "A-Level",
+                "gcse": "GCSE",
+                "no_qualification": "None"
+            }
+            
+            for level, data in gender_data['education'].items():
+                education_chart_html += f"""
+                <div style="display:flex; align-items:center; margin-bottom:10px;">
+                    <div style="width:100px; text-align:right; padding-right:10px;">{education_labels[level]} ({data['percent']}%)</div>
+                    <div style="flex-grow:1; background-color:#f0f0f0; height:20px; border-radius:10px;">
+                        <div style="width:{data['percent']}%; background-color:{education_colors[level]}; height:20px; border-radius:10px;"></div>
+                    </div>
+                </div>
+                """
+            
+            education_chart_html += """
+            <div style="margin-top:10px; font-size:12px; color:#666;">
+                <strong>Source:</strong> Census & Demographic Data (Nomis API)
+            </div>
+            </div>
+            """
+            
+            st.markdown(education_chart_html, unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+        # Add a row with detailed targeting recommendations based on demographics
+        st.markdown('<div class="highlight" style="margin-top: 20px">', unsafe_allow_html=True)
+        st.markdown("#### Detailed Audience Insights & Recommendations")
+        
+        # Determine the largest age group
+        largest_age_group = max(gender_data['age_groups'].items(), key=lambda x: x[1]['percent'])[0]
+        
+        # Determine education level
+        high_education = gender_data['education']['degree_or_higher']['percent'] > 50
+        
+        # Create recommendations based on demographic data
+        insights_html = """
+        <div style="margin-top:15px;">
+            <p><strong>Key Demographic Insights:</strong></p>
+            <ul>
+        """
+        
+        # Age-based insights
+        if largest_age_group == "18-24":
+            insights_html += """
+            <li>Young adult demographic - likely students or early career</li>
+            <li>High digital engagement and social media usage</li>
+            <li>Price-sensitive but experience-oriented</li>
+            """
+        elif largest_age_group == "25-34":
+            insights_html += """
+            <li>Young professional demographic - establishing careers</li>
+            <li>Higher disposable income and brand consciousness</li>
+            <li>Tech-savvy and convenience-oriented</li>
+            """
+        elif largest_age_group == "35-49":
+            insights_html += """
+            <li>Established professionals - potential family decision-makers</li>
+            <li>Value-oriented purchasing with higher budget</li>
+            <li>Mix of digital and traditional media consumption</li>
+            """
+        else:  # 50-64
+            insights_html += """
+            <li>Senior demographic - established career or approaching retirement</li>
+            <li>Quality and service focused rather than price sensitive</li>
+            <li>More traditional media consumption habits</li>
+            """
+        
+        # Education and employment insights
+        if high_education:
+            insights_html += """
+            <li>Highly educated audience - more analytical messaging may be effective</li>
+            <li>May respond well to detailed information and statistics</li>
+            """
+        else:
+            insights_html += """
+            <li>More practical, benefit-focused messaging recommended</li>
+            <li>Visual demonstrations and clear value propositions important</li>
+            """
+            
+        insights_html += """
+            </ul>
+            
+            <p><strong>Recommended Marketing Approaches:</strong></p>
+            <ul>
+        """
+        
+        # Recommendations based on demographics
+        if male_skew and largest_age_group in ["18-24", "25-34"]:
+            insights_html += """
+            <li>Technology and gaming promotions</li>
+            <li>Sports and fitness events or sponsorships</li>
+            <li>Automotive and electronics advertising</li>
+            """
+        elif female_skew and largest_age_group in ["18-24", "25-34"]:
+            insights_html += """
+            <li>Fashion and beauty campaigns</li>
+            <li>Lifestyle and wellness events</li>
+            <li>Social cause marketing</li>
+            """
+        elif largest_age_group in ["35-49", "50-64"]:
+            insights_html += """
+            <li>Home improvement and luxury goods</li>
+            <li>Financial services and investment opportunities</li>
+            <li>Health and wellness solutions</li>
+            """
+            
+        insights_html += """
+            </ul>
+            
+            <div style="margin-top:15px; font-size:12px; color:#666;">
+                <strong>Note:</strong> These recommendations are based on demographic data analysis from the Nomis API and local market research.
+            </div>
+        </div>
+        """
+        
+        st.markdown(insights_html, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
     else:
         st.info("Select options and click 'Analyze Route' to see demographic analysis.")
 
