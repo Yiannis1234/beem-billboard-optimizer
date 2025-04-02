@@ -411,6 +411,7 @@ h4 {
 .stProgress .st-bo {background-color: #FF6600}
 
 /* Override for all dropdown text elements */
+/*
 div[data-baseweb="select"] > div span,
 div[data-baseweb="select"] > div div,
 div[data-baseweb="select"] > div p,
@@ -421,45 +422,39 @@ div[data-baseweb="select"] p,
     color: white !important;
     fill: white !important;
 }
+*/
 
 /* Fix specifically for the dropdown items visible in the dropdown */
 div[data-baseweb="select"] [data-testid="stSelectbox"] {
-    color: white !important;
-    fill: white !important;
+    color: #333333 !important;
+    fill: #333333 !important;
 }
 
 /* Super extreme selector targeting absolutely everything inside dropdown */
+/*
 div[data-baseweb="select"] *:not(ul *) {
     color: white !important;
     fill: white !important;
     border-color: #FF4400 !important;
 }
+*/
 
 /* Force SVG icons to be white */
 div[data-baseweb="select"] svg path,
 div[data-baseweb="select"] svg {
-    stroke: white !important;
-    fill: white !important;
-    color: white !important;
+    stroke: #FF6600 !important;
+    fill: #FF6600 !important;
+    color: #FF6600 !important;
 }
 
-/* BRUTE FORCE - make dropdown text visible */
+/* BRUTE FORCE - make dropdown background white and text black */
 [data-testid="stSelectbox"] > div {
-    background-color: #FF6600 !important;
-    border-color: #FF4400 !important;
+    background-color: white !important;
+    border-color: #FF6600 !important;
 }
 
 [data-testid="stSelectbox"] > div > div {
-    color: white !important;
-}
-
-[data-testid="stSelectbox"] div[data-baseweb] {
-    background-color: #FF6600 !important;
-    color: white !important;
-}
-
-[data-testid="stSelectbox"] span {
-    color: white !important;
+    color: #333333 !important;
 }
 
 /* Hide all unwanted symbols and images */
