@@ -987,72 +987,7 @@ with st.sidebar:
     else:
         selected_time = datetime.now()
     
-    # Improved area selection styling to ensure visibility
-    st.markdown("""
-    <style>
-    /* Super high visibility styling for area dropdown */
-    [data-testid="stSelectbox"] {
-        background-color: white !important;
-        border: 3px solid #FF6600 !important;
-        border-radius: 8px !important;
-        padding: 5px !important;
-        margin-bottom: 20px !important;
-        box-shadow: 0 3px 8px rgba(0,0,0,0.2) !important;
-    }
-
-    /* Make dropdown text BLACK and super visible */
-    [data-testid="stSelectbox"] div[role="button"] *,
-    [data-testid="stSelectbox"] [role="combobox"] *,
-    .st-emotion-cache-qbmosi {
-        color: black !important;
-        font-weight: bold !important;
-        font-size: 16px !important;
-        background-color: white !important;
-    }
-
-    /* Make dropdown label super visible */
-    .st-emotion-cache-n9riji label {
-        color: black !important;
-        font-weight: bold !important;
-        font-size: 16px !important;
-        margin-bottom: 5px !important;
-    }
-
-    /* Make area confirmation box super visible */
-    .area-confirmation {
-        background-color: #FFE6CC !important;
-        border: 3px solid #FF6600 !important;
-        padding: 15px !important;
-        border-radius: 10px !important;
-        margin: 10px 0 20px 0 !important;
-        text-align: center !important;
-        font-weight: bold !important;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-    # Super clear area selection with absolutely guaranteed visibility
-    st.markdown("<h3 style='color: #FF6600; font-weight: 700; margin-top: 15px;'>AREA SELECTION</h3>", unsafe_allow_html=True)
-
-    # Force a default selection to ensure box is never empty
-    area = st.selectbox(
-        "Select Area",
-        areas,
-        index=0,  # Northern Quarter is default selected
-        label_visibility="visible"
-    )
-
-    # Add an extra confirmation display box to make selection unmistakably visible
-    st.markdown(
-        f"""
-        <div class="area-confirmation">
-            <div style="color: #FF6600; font-size: 14px; margin-bottom: 5px;">SELECTED AREA:</div>
-            <div style="font-size: 22px; color: #000;">{area}</div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    # REMOVE THE DUPLICATE AREA SELECTION - DELETE THIS ENTIRE SECTION
     
     # Day type (new)
     st.markdown('<div style="margin-top: 20px;"></div>', unsafe_allow_html=True)
