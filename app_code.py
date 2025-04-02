@@ -1440,9 +1440,7 @@ with tabs[4]:
             st.markdown('<div class="highlight" style="margin-top: 20px">', unsafe_allow_html=True)
             st.markdown("#### Age Distribution")
             
-            # Create horizontal bar chart for age groups
-            age_chart_html = '<div style="margin-top:10px;">'
-            
+            # Create horizontal bar chart for age groups - using direct markdown instead of building HTML in variables
             # Define colors for age groups
             age_colors = {
                 "18-24": "#4287f5",  # Blue
@@ -1452,23 +1450,21 @@ with tabs[4]:
             }
             
             for age_group, data in gender_data['age_groups'].items():
-                age_chart_html += f"""
+                st.markdown(f"""
                 <div style="display:flex; align-items:center; margin-bottom:10px;">
                     <div style="width:100px; text-align:right; padding-right:10px;">{age_group} ({data['percent']}%)</div>
                     <div style="flex-grow:1; background-color:#f0f0f0; height:20px; border-radius:10px;">
                         <div style="width:{data['percent']}%; background-color:{age_colors[age_group]}; height:20px; border-radius:10px;"></div>
                     </div>
                 </div>
-                """
+                """, unsafe_allow_html=True)
             
-            age_chart_html += """
+            st.markdown("""
             <div style="margin-top:10px; font-size:12px; color:#666;">
                 <strong>Source:</strong> Census & Demographic Data (Nomis API)
             </div>
-            </div>
-            """
+            """, unsafe_allow_html=True)
             
-            st.markdown(age_chart_html, unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
             
         with col2:
@@ -1522,9 +1518,6 @@ with tabs[4]:
             st.markdown('<div class="highlight" style="margin-top: 20px">', unsafe_allow_html=True)
             st.markdown("#### Employment Status")
             
-            # Create horizontal bar chart for employment status
-            employment_chart_html = '<div style="margin-top:10px;">'
-            
             # Define colors for employment status
             employment_colors = {
                 "employed": "#42f55a",  # Green
@@ -1538,27 +1531,22 @@ with tabs[4]:
                 "economically_inactive": "Inactive"
             }
             
+            # Create horizontal bar chart for employment status with direct markdown
             for status, data in gender_data['employment'].items():
-                employment_chart_html += f"""
+                st.markdown(f"""
                 <div style="display:flex; align-items:center; margin-bottom:10px;">
                     <div style="width:100px; text-align:right; padding-right:10px;">{employment_labels[status]} ({data['percent']}%)</div>
                     <div style="flex-grow:1; background-color:#f0f0f0; height:20px; border-radius:10px;">
                         <div style="width:{data['percent']}%; background-color:{employment_colors[status]}; height:20px; border-radius:10px;"></div>
                     </div>
                 </div>
-                """
+                """, unsafe_allow_html=True)
             
-            employment_chart_html += "</div>"
-            
-            st.markdown(employment_chart_html, unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
             
             # Add education level visualization
             st.markdown('<div class="highlight" style="margin-top: 20px">', unsafe_allow_html=True)
             st.markdown("#### Education Levels")
-            
-            # Create horizontal bar chart for education levels
-            education_chart_html = '<div style="margin-top:10px;">'
             
             # Define colors for education levels
             education_colors = {
@@ -1575,24 +1563,23 @@ with tabs[4]:
                 "no_qualification": "None"
             }
             
+            # Create horizontal bar chart for education levels with direct markdown
             for level, data in gender_data['education'].items():
-                education_chart_html += f"""
+                st.markdown(f"""
                 <div style="display:flex; align-items:center; margin-bottom:10px;">
                     <div style="width:100px; text-align:right; padding-right:10px;">{education_labels[level]} ({data['percent']}%)</div>
                     <div style="flex-grow:1; background-color:#f0f0f0; height:20px; border-radius:10px;">
                         <div style="width:{data['percent']}%; background-color:{education_colors[level]}; height:20px; border-radius:10px;"></div>
                     </div>
                 </div>
-                """
+                """, unsafe_allow_html=True)
             
-            education_chart_html += """
+            st.markdown("""
             <div style="margin-top:10px; font-size:12px; color:#666;">
                 <strong>Source:</strong> Census & Demographic Data (Nomis API)
             </div>
-            </div>
-            """
+            """, unsafe_allow_html=True)
             
-            st.markdown(education_chart_html, unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
             
         # Add a row with detailed targeting recommendations based on demographics
