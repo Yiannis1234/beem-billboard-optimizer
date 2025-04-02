@@ -250,10 +250,10 @@ div.stButton button {
     font-size: 16px !important;
 }
 
-/* Style for selectbox/dropdown - Make it ORANGE with a WHITE selection area */
+/* Style for selectbox/dropdown - Container stays orange but content is white */
 div[data-baseweb="select"] > div:first-child {
-    background-color: #FF6600 !important;
-    border: 2px solid #FF4400 !important;
+    background-color: white !important;
+    border: 2px solid #FF6600 !important;
     font-weight: bold !important;
     padding: 10px 15px !important;
     border-radius: 8px !important;
@@ -262,30 +262,21 @@ div[data-baseweb="select"] > div:first-child {
     margin-bottom: 15px !important;
 }
 
-/* Make the actual selected value area WHITE with BLACK text */
+/* Text and elements inside dropdown */
 div[data-baseweb="select"] [data-testid="stSelectbox"] div[role="combobox"] {
+    color: #333333 !important;
     background-color: white !important;
-    color: #333333 !important;
-    border-radius: 4px !important;
-    padding: 5px 10px !important;
-    margin: -5px 0 !important;
-    font-weight: bold !important;
-    text-shadow: none !important;
 }
 
-/* Ensure the selected value text is BLACK */
-div[data-baseweb="select"] [role="combobox"] * {
+/* All text in the dropdown */
+div[data-baseweb="select"] * {
     color: #333333 !important;
-    fill: #333333 !important;
 }
 
-/* Keep the dropdown indicator arrow ORANGE */
+/* Keep dropdown button orange */
 div[data-baseweb="select"] svg {
-    color: #FF6600 !important;
     fill: #FF6600 !important;
-    height: 24px !important;
-    width: 24px !important;
-    margin-right: 5px !important;
+    color: #FF6600 !important;
 }
 
 /* Style dropdown option menu for better visibility */
