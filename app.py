@@ -691,11 +691,14 @@ if not st.session_state.sidebar_visible:
 # Initialize analyze variable before both buttons are created
 if 'analyze_clicked' not in st.session_state:
     st.session_state.analyze_clicked = False
+    st.session_state.first_analysis = True
 
 # Function to mark analysis as clicked
 def start_analysis():
+    if st.session_state.first_analysis:
+        st.session_state.sidebar_visible = False
+        st.session_state.first_analysis = False
     st.session_state.analyze_clicked = True
-    st.session_state.sidebar_visible = False
 
 # Title
 st.markdown('<h1 class="main-header">📢 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
