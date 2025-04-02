@@ -655,49 +655,52 @@ div[data-baseweb="select"] svg {
 if 'sidebar_visible' not in st.session_state:
     st.session_state.sidebar_visible = True
 
-# Create a function to toggle sidebar visibility
+# Create a function to toggle sidebar visibility - DISABLED
 def toggle_sidebar():
-    st.session_state.sidebar_visible = False
+    # No longer hide the sidebar
+    pass
 
-# Create a function to restore sidebar visibility (for the arrow button)
+# Create a function to restore sidebar visibility - DISABLED
 def restore_sidebar():
-    st.session_state.sidebar_visible = True
+    # No longer needed
+    pass
 
-# Add CSS to hide the sidebar when analyze button is clicked
-if not st.session_state.sidebar_visible:
-    st.markdown("""
-    <style>
-    /* Hide sidebar contents only */
-    section[data-testid="stSidebar"] > div:first-child {
-        width: 1px !important;
-        min-width: 1px !important;
-        max-width: 1px !important;
-        overflow: hidden !important;
-    }
-    
-    /* Make sure the main content expands properly */
-    .main .block-container {
-        max-width: 100% !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
-    # Remove all the complex JavaScript and button juggling
-    # Just provide a simple restore button
-    st.sidebar.button("Show Menu", on_click=restore_sidebar)
+# Remove CSS that hides the sidebar - commented out completely
+# if not st.session_state.sidebar_visible:
+#     st.markdown("""
+#     <style>
+#     /* Hide sidebar contents only */
+#     section[data-testid="stSidebar"] > div:first-child {
+#         width: 1px !important;
+#         min-width: 1px !important;
+#         max-width: 1px !important;
+#         overflow: hidden !important;
+#     }
+#     
+#     /* Make sure the main content expands properly */
+#     .main .block-container {
+#         max-width: 100% !important;
+#         padding-left: 1rem !important;
+#         padding-right: 1rem !important;
+#     }
+#     </style>
+#     """, unsafe_allow_html=True)
+#     
+#     # Remove all the complex JavaScript and button juggling
+#     # Just provide a simple restore button
+#     st.sidebar.button("Show Menu", on_click=restore_sidebar)
 
 # Initialize analyze variable before both buttons are created
 if 'analyze_clicked' not in st.session_state:
     st.session_state.analyze_clicked = False
     st.session_state.first_analysis = True
 
-# Function to mark analysis as clicked
+# Function to mark analysis as clicked - NO LONGER HIDES SIDEBAR
 def start_analysis():
-    if st.session_state.first_analysis:
-        st.session_state.sidebar_visible = False
-        st.session_state.first_analysis = False
+    # Remove sidebar hiding completely
+    # if st.session_state.first_analysis:
+    #     st.session_state.sidebar_visible = False
+    #     st.session_state.first_analysis = False
     st.session_state.analyze_clicked = True
 
 # Title
