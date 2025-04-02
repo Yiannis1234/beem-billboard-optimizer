@@ -514,6 +514,32 @@ svg.icon {
     position: absolute !important;
     pointer-events: none !important;
 }
+
+/* Fix the dropdown menu specifically to have white background */
+div.stSelectbox ul[role="listbox"],
+div[data-baseweb="popover"] ul,
+div[data-baseweb="menu"] ul,
+div[data-baseweb="select"] ul,
+[data-testid="stSelectbox"] ul,
+[role="listbox"],
+ul[data-baseweb="menu"] {
+    background-color: white !important;
+    border: 2px solid #FF6600 !important;
+}
+
+/* Target each list item to ensure it has white background */
+div.stSelectbox ul[role="listbox"] li,
+div[data-baseweb="popover"] ul li,
+div[data-baseweb="menu"] ul li,
+div[data-baseweb="select"] ul li, 
+[data-testid="stSelectbox"] ul li,
+[role="listbox"] li,
+ul[data-baseweb="menu"] li,
+[role="option"] {
+    background-color: white !important;
+    color: #333333 !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -551,13 +577,6 @@ st.markdown("Optimize your mobile billboard routes for maximum engagement")
 main_analyze_col1, main_analyze_col2, main_analyze_col3 = st.columns([1, 2, 1])
 with main_analyze_col2:
     main_analyze = st.button("ANALYZE NOW", type="primary", on_click=start_analysis, key="main_analyze_button")
-
-# Homepage button - just a home emoji
-if st.button("🏠", key="main_homepage"):
-    # Reset all session state variables
-    for key in st.session_state.keys():
-        del st.session_state[key]
-    st.rerun()
 
 # Sidebar
 with st.sidebar:
@@ -654,14 +673,6 @@ with st.sidebar:
         <li style="color: #333333; font-weight: 500; font-size: 16px; line-height: 1.5;">📊 Data-driven</li>
         </ul>
         """, unsafe_allow_html=True)
-        
-    # Homepage button in sidebar too
-    st.markdown('<div style="margin-top: 25px;"></div>', unsafe_allow_html=True)
-    if st.button("🏠", key="sidebar_homepage"):
-        # Reset all session state variables
-        for key in st.session_state.keys():
-            del st.session_state[key]
-        st.rerun()
 
 # Function to get weather icon based on condition
 def get_weather_icon(condition):
