@@ -914,83 +914,12 @@ with st.sidebar:
     # Area selection - EXPANDED LIST but without any info icons
     areas = list(area_coordinates.keys())
     
-    # Custom styling to ensure no info icons appear and selected value is ALWAYS visible
-    st.markdown("""
-    <style>
-    /* Ensure dropdown text is always visible */
-    [data-testid="stSelectbox"] > div > div:first-child {
-        color: black !important;
-        background-color: white !important;
-        font-weight: bold !important;
-        font-size: 16px !important;
-    }
-    
-    /* Ensure label is visible and properly positioned */
-    [data-testid="stSelectbox"] > div > label {
-        position: relative !important;
-        z-index: 1 !important;
-    }
-    
-    /* Remove any info icon */
-    [data-testid="stSelectbox"] > div > label::after {
-        content: "" !important;
-        display: none !important;
-    }
-    
-    /* Custom styling for the text input to match selectbox */
-    .search-box {
-        margin-bottom: 0 !important;
-        padding: 0 !important;
-    }
-    
-    .search-box input {
-        padding: 8px 10px !important;
-        font-size: 16px !important;
-        font-weight: bold !important;
-        border: 2px solid #FF6600 !important;
-        border-radius: 6px !important;
-        background-color: white !important;
-        color: black !important;
-    }
-    
-    .search-box label {
-        font-weight: bold !important;
-        font-size: 14px !important;
-        color: #333 !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
-    # Create a text input for search/filtering
-    st.markdown('<div class="search-box">', unsafe_allow_html=True)
-    search_term = st.text_input("Search Area", "", key="area_search")
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Filter the areas based on search term
-    if search_term:
-        filtered_areas = [a for a in areas if search_term.lower() in a.lower()]
-    else:
-        filtered_areas = areas
-    
-    # If there are matching areas, let the user select from the filtered list
-    if filtered_areas:
-        # Set default index to first item or the exact match if found
-        default_index = 0
-        for i, a in enumerate(filtered_areas):
-            if search_term.lower() == a.lower():
-                default_index = i
-                break
-                
-        area = st.selectbox(
-            "Select Area",
-            filtered_areas,
-            index=default_index,
-            label_visibility="collapsed"  # Hide the label since we have our own above
-        )
-    else:
-        if search_term:
-            st.warning(f"No areas match '{search_term}'")
-        area = areas[0]  # Default to first area if no matches
+    # Simple dropdown selection without search box
+    area = st.selectbox(
+        "Select Area",
+        areas,
+        index=0  # Northern Quarter is default selected
+    )
     
     # Add an extra confirmation display box to make selection unmistakably visible
     st.markdown(
