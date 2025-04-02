@@ -1400,288 +1400,172 @@ with tabs[4]:
         area_code = area_coordinates[area]['zone_id']
         gender_data = get_gender_data(area_code)
         
+        # Create main columns layout
         col1, col2 = st.columns(2)
         
+        # Column 1: Audience and Gender data
         with col1:
-            st.markdown('<div class="highlight">', unsafe_allow_html=True)
+            # Create a card-like container for primary audience
             st.markdown("#### Primary Audience")
-            st.markdown(f"**Type:** {audience}")
-            st.markdown(f"**Age Range:** {age}")
-            st.markdown(f"**Key Interests:** {interests}")
-            st.markdown('</div>', unsafe_allow_html=True)
+            audience_container = st.container(border=True)
+            with audience_container:
+                st.write(f"**Type:** {audience}")
+                st.write(f"**Age Range:** {age}")
+                st.write(f"**Key Interests:** {interests}")
             
-            # Add gender distribution visualization
-            st.markdown('<div class="highlight" style="margin-top: 20px">', unsafe_allow_html=True)
+            # Create a simple gender distribution using Streamlit's progress bars
             st.markdown("#### Gender Distribution")
-            
-            # Create a horizontal bar chart for gender distribution
-            st.markdown(f"""
-            <div style="margin-top:10px;">
-                <div style="display:flex; align-items:center; margin-bottom:10px;">
-                    <div style="width:100px; text-align:right; padding-right:10px;">Male ({gender_data['male_percent']}%)</div>
-                    <div style="flex-grow:1; background-color:#f0f0f0; height:20px; border-radius:10px;">
-                        <div style="width:{gender_data['male_percent']}%; background-color:#4287f5; height:20px; border-radius:10px;"></div>
-                    </div>
-                </div>
-                <div style="display:flex; align-items:center;">
-                    <div style="width:100px; text-align:right; padding-right:10px;">Female ({gender_data['female_percent']}%)</div>
-                    <div style="flex-grow:1; background-color:#f0f0f0; height:20px; border-radius:10px;">
-                        <div style="width:{gender_data['female_percent']}%; background-color:#f542cb; height:20px; border-radius:10px;"></div>
-                    </div>
-                </div>
-            </div>
-            <div style="margin-top:10px; font-size:12px; color:#666;">
-                <strong>Source:</strong> Jobseeker's Allowance Data (Nomis API)
-            </div>
-            """, unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-            
-            # Add age distribution visualization
-            st.markdown('<div class="highlight" style="margin-top: 20px">', unsafe_allow_html=True)
-            st.markdown("#### Age Distribution")
-            
-            # Create horizontal bar chart for age groups - using direct markdown instead of building HTML in variables
-            # Define colors for age groups
-            age_colors = {
-                "18-24": "#4287f5",  # Blue
-                "25-34": "#42c9f5",  # Light Blue
-                "35-49": "#42f59e",  # Green
-                "50-64": "#f5a742"   # Orange
-            }
-            
-            for age_group, data in gender_data['age_groups'].items():
-                st.markdown(f"""
-                <div style="display:flex; align-items:center; margin-bottom:10px;">
-                    <div style="width:100px; text-align:right; padding-right:10px;">{age_group} ({data['percent']}%)</div>
-                    <div style="flex-grow:1; background-color:#f0f0f0; height:20px; border-radius:10px;">
-                        <div style="width:{data['percent']}%; background-color:{age_colors[age_group]}; height:20px; border-radius:10px;"></div>
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            st.markdown("""
-            <div style="margin-top:10px; font-size:12px; color:#666;">
-                <strong>Source:</strong> Census & Demographic Data (Nomis API)
-            </div>
-            """, unsafe_allow_html=True)
-            
-            st.markdown('</div>', unsafe_allow_html=True)
-            
-        with col2:
-            st.markdown('<div class="highlight">', unsafe_allow_html=True)
-            st.markdown("#### Recommended Targeting")
-            st.markdown("- Digital products")
-            st.markdown("- Food and dining")
-            st.markdown("- Entertainment events")
-            st.markdown("- Use QR codes for interaction")
-            st.markdown('</div>', unsafe_allow_html=True)
-            
-            # Add gender-specific targeting recommendations
-            st.markdown('<div class="highlight" style="margin-top: 20px">', unsafe_allow_html=True)
-            st.markdown("#### Gender-Specific Targeting")
-            
-            male_skew = gender_data['male_percent'] > 50
-            female_skew = gender_data['female_percent'] > 50
-            balanced = abs(gender_data['male_percent'] - gender_data['female_percent']) < 5
-            
-            if male_skew:
-                st.markdown("""
-                <p><strong>Male-focused strategies:</strong></p>
-                <ul>
-                <li>Tech and gadget promotions</li>
-                <li>Sports-related events</li>
-                <li>Business services</li>
-                </ul>
-                """, unsafe_allow_html=True)
-            elif female_skew:
-                st.markdown("""
-                <p><strong>Female-focused strategies:</strong></p>
-                <ul>
-                <li>Fashion and beauty promotions</li>
-                <li>Wellness and health services</li>
-                <li>Community events</li>
-                </ul>
-                """, unsafe_allow_html=True)
-            else:
-                st.markdown("""
-                <p><strong>Balanced audience strategies:</strong></p>
-                <ul>
-                <li>Family-friendly promotions</li>
-                <li>General interest events</li>
-                <li>Inclusive messaging</li>
-                </ul>
-                """, unsafe_allow_html=True)
+            gender_container = st.container(border=True)
+            with gender_container:
+                st.write("Male")
+                st.progress(gender_data['male_percent']/100)
+                st.write(f"{gender_data['male_percent']}% ({gender_data['male_count']} people)")
                 
-            st.markdown('</div>', unsafe_allow_html=True)
+                st.write("Female")
+                st.progress(gender_data['female_percent']/100)
+                st.write(f"{gender_data['female_percent']}% ({gender_data['female_count']} people)")
+                
+                st.caption("Source: Jobseeker's Allowance Data (Nomis API)")
             
-            # Add employment and education data
-            st.markdown('<div class="highlight" style="margin-top: 20px">', unsafe_allow_html=True)
+            # Age distribution using native Streamlit components
+            st.markdown("#### Age Distribution")
+            age_container = st.container(border=True)
+            with age_container:
+                for age_group, data in gender_data['age_groups'].items():
+                    st.write(f"{age_group}")
+                    st.progress(data['percent']/100)
+                    st.write(f"{data['percent']}% ({data['count']} people)")
+                
+                st.caption("Source: Census & Demographic Data (Nomis API)")
+        
+        # Column 2: Targeting and Employment/Education data
+        with col2:
+            # Create targeting recommendations container
+            st.markdown("#### Recommended Targeting")
+            targeting_container = st.container(border=True)
+            with targeting_container:
+                st.write("- Digital products")
+                st.write("- Food and dining")
+                st.write("- Entertainment events")
+                st.write("- Use QR codes for interaction")
+            
+            # Gender-specific targeting
+            st.markdown("#### Gender-Specific Targeting")
+            gender_targeting_container = st.container(border=True)
+            with gender_targeting_container:
+                male_skew = gender_data['male_percent'] > 50
+                female_skew = gender_data['female_percent'] > 50
+                balanced = abs(gender_data['male_percent'] - gender_data['female_percent']) < 5
+                
+                if male_skew:
+                    st.write("**Male-focused strategies:**")
+                    st.write("- Tech and gadget promotions")
+                    st.write("- Sports-related events")
+                    st.write("- Business services")
+                elif female_skew:
+                    st.write("**Female-focused strategies:**")
+                    st.write("- Fashion and beauty promotions")
+                    st.write("- Wellness and health services")
+                    st.write("- Community events")
+                else:
+                    st.write("**Balanced audience strategies:**")
+                    st.write("- Family-friendly promotions")
+                    st.write("- General interest events")
+                    st.write("- Inclusive messaging")
+            
+            # Employment status
             st.markdown("#### Employment Status")
+            employment_container = st.container(border=True)
+            with employment_container:
+                employment_labels = {
+                    "employed": "Employed",
+                    "unemployed": "Unemployed",
+                    "economically_inactive": "Inactive"
+                }
+                
+                for status, data in gender_data['employment'].items():
+                    st.write(f"{employment_labels[status]}")
+                    st.progress(data['percent']/100)
+                    st.write(f"{data['percent']}% ({data['count']} people)")
             
-            # Define colors for employment status
-            employment_colors = {
-                "employed": "#42f55a",  # Green
-                "unemployed": "#f54242",  # Red
-                "economically_inactive": "#f5d442"  # Yellow
-            }
-            
-            employment_labels = {
-                "employed": "Employed",
-                "unemployed": "Unemployed",
-                "economically_inactive": "Inactive"
-            }
-            
-            # Create horizontal bar chart for employment status with direct markdown
-            for status, data in gender_data['employment'].items():
-                st.markdown(f"""
-                <div style="display:flex; align-items:center; margin-bottom:10px;">
-                    <div style="width:100px; text-align:right; padding-right:10px;">{employment_labels[status]} ({data['percent']}%)</div>
-                    <div style="flex-grow:1; background-color:#f0f0f0; height:20px; border-radius:10px;">
-                        <div style="width:{data['percent']}%; background-color:{employment_colors[status]}; height:20px; border-radius:10px;"></div>
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            st.markdown('</div>', unsafe_allow_html=True)
-            
-            # Add education level visualization
-            st.markdown('<div class="highlight" style="margin-top: 20px">', unsafe_allow_html=True)
+            # Education levels
             st.markdown("#### Education Levels")
-            
-            # Define colors for education levels
-            education_colors = {
-                "degree_or_higher": "#7c42f5",  # Purple
-                "a_level": "#42b0f5",  # Blue
-                "gcse": "#42f5e9",  # Turquoise
-                "no_qualification": "#f58742"  # Orange
-            }
-            
-            education_labels = {
-                "degree_or_higher": "Degree+",
-                "a_level": "A-Level",
-                "gcse": "GCSE",
-                "no_qualification": "None"
-            }
-            
-            # Create horizontal bar chart for education levels with direct markdown
-            for level, data in gender_data['education'].items():
-                st.markdown(f"""
-                <div style="display:flex; align-items:center; margin-bottom:10px;">
-                    <div style="width:100px; text-align:right; padding-right:10px;">{education_labels[level]} ({data['percent']}%)</div>
-                    <div style="flex-grow:1; background-color:#f0f0f0; height:20px; border-radius:10px;">
-                        <div style="width:{data['percent']}%; background-color:{education_colors[level]}; height:20px; border-radius:10px;"></div>
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            st.markdown("""
-            <div style="margin-top:10px; font-size:12px; color:#666;">
-                <strong>Source:</strong> Census & Demographic Data (Nomis API)
-            </div>
-            """, unsafe_allow_html=True)
-            
-            st.markdown('</div>', unsafe_allow_html=True)
-            
-        # Add a row with detailed targeting recommendations based on demographics
-        st.markdown('<div class="highlight" style="margin-top: 20px">', unsafe_allow_html=True)
+            education_container = st.container(border=True)
+            with education_container:
+                education_labels = {
+                    "degree_or_higher": "Degree+",
+                    "a_level": "A-Level",
+                    "gcse": "GCSE",
+                    "no_qualification": "None"
+                }
+                
+                for level, data in gender_data['education'].items():
+                    st.write(f"{education_labels[level]}")
+                    st.progress(data['percent']/100)
+                    st.write(f"{data['percent']}% ({data['count']} people)")
+                
+                st.caption("Source: Census & Demographic Data (Nomis API)")
+        
+        # Detailed audience insights in a full-width container
         st.markdown("#### Detailed Audience Insights & Recommendations")
-        
-        # Determine the largest age group
-        largest_age_group = max(gender_data['age_groups'].items(), key=lambda x: x[1]['percent'])[0]
-        
-        # Determine education level
-        high_education = gender_data['education']['degree_or_higher']['percent'] > 50
-        
-        # Create recommendations based on demographic data - using st.markdown instead of HTML variables
-        st.markdown("<p><strong>Key Demographic Insights:</strong></p>", unsafe_allow_html=True)
-        
-        # Age-based insights
-        if largest_age_group == "18-24":
-            st.markdown("""
-            <ul>
-                <li>Young adult demographic - likely students or early career</li>
-                <li>High digital engagement and social media usage</li>
-                <li>Price-sensitive but experience-oriented</li>
-            </ul>
-            """, unsafe_allow_html=True)
-        elif largest_age_group == "25-34":
-            st.markdown("""
-            <ul>
-                <li>Young professional demographic - establishing careers</li>
-                <li>Higher disposable income and brand consciousness</li>
-                <li>Tech-savvy and convenience-oriented</li>
-            </ul>
-            """, unsafe_allow_html=True)
-        elif largest_age_group == "35-49":
-            st.markdown("""
-            <ul>
-                <li>Established professionals - potential family decision-makers</li>
-                <li>Value-oriented purchasing with higher budget</li>
-                <li>Mix of digital and traditional media consumption</li>
-            </ul>
-            """, unsafe_allow_html=True)
-        else:  # 50-64
-            st.markdown("""
-            <ul>
-                <li>Senior demographic - established career or approaching retirement</li>
-                <li>Quality and service focused rather than price sensitive</li>
-                <li>More traditional media consumption habits</li>
-            </ul>
-            """, unsafe_allow_html=True)
-        
-        # Education and employment insights
-        if high_education:
-            st.markdown("""
-            <ul>
-                <li>Highly educated audience - more analytical messaging may be effective</li>
-                <li>May respond well to detailed information and statistics</li>
-            </ul>
-            """, unsafe_allow_html=True)
-        else:
-            st.markdown("""
-            <ul>
-                <li>More practical, benefit-focused messaging recommended</li>
-                <li>Visual demonstrations and clear value propositions important</li>
-            </ul>
-            """, unsafe_allow_html=True)
-        
-        # Recommendations heading
-        st.markdown("<p><strong>Recommended Marketing Approaches:</strong></p>", unsafe_allow_html=True)
-        
-        # Recommendations based on demographics
-        if male_skew and largest_age_group in ["18-24", "25-34"]:
-            st.markdown("""
-            <ul>
-                <li>Technology and gaming promotions</li>
-                <li>Sports and fitness events or sponsorships</li>
-                <li>Automotive and electronics advertising</li>
-            </ul>
-            """, unsafe_allow_html=True)
-        elif female_skew and largest_age_group in ["18-24", "25-34"]:
-            st.markdown("""
-            <ul>
-                <li>Fashion and beauty campaigns</li>
-                <li>Lifestyle and wellness events</li>
-                <li>Social cause marketing</li>
-            </ul>
-            """, unsafe_allow_html=True)
-        elif largest_age_group in ["35-49", "50-64"]:
-            st.markdown("""
-            <ul>
-                <li>Home improvement and luxury goods</li>
-                <li>Financial services and investment opportunities</li>
-                <li>Health and wellness solutions</li>
-            </ul>
-            """, unsafe_allow_html=True)
+        insights_container = st.container(border=True)
+        with insights_container:
+            # Create two columns inside the container
+            insight_col1, insight_col2 = st.columns(2)
             
-        # Source note
-        st.markdown("""
-        <div style="margin-top:15px; font-size:12px; color:#666;">
-            <strong>Note:</strong> These recommendations are based on demographic data analysis from the Nomis API and local market research.
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown('</div>', unsafe_allow_html=True)
+            with insight_col1:
+                st.subheader("Key Demographic Insights")
+                
+                # Determine the largest age group
+                largest_age_group = max(gender_data['age_groups'].items(), key=lambda x: x[1]['percent'])[0]
+                
+                # Determine education level
+                high_education = gender_data['education']['degree_or_higher']['percent'] > 50
+                
+                # Age-based insights
+                if largest_age_group == "18-24":
+                    st.write("- Young adult demographic - likely students or early career")
+                    st.write("- High digital engagement and social media usage")
+                    st.write("- Price-sensitive but experience-oriented")
+                elif largest_age_group == "25-34":
+                    st.write("- Young professional demographic - establishing careers")
+                    st.write("- Higher disposable income and brand consciousness")
+                    st.write("- Tech-savvy and convenience-oriented")
+                elif largest_age_group == "35-49":
+                    st.write("- Established professionals - potential family decision-makers")
+                    st.write("- Value-oriented purchasing with higher budget")
+                    st.write("- Mix of digital and traditional media consumption")
+                else:  # 50-64
+                    st.write("- Senior demographic - established career or approaching retirement")
+                    st.write("- Quality and service focused rather than price sensitive")
+                    st.write("- More traditional media consumption habits")
+                
+                # Education and employment insights
+                if high_education:
+                    st.write("- Highly educated audience - more analytical messaging may be effective")
+                    st.write("- May respond well to detailed information and statistics")
+                else:
+                    st.write("- More practical, benefit-focused messaging recommended")
+                    st.write("- Visual demonstrations and clear value propositions important")
+            
+            with insight_col2:
+                st.subheader("Recommended Marketing Approaches")
+                
+                # Recommendations based on demographics
+                if male_skew and largest_age_group in ["18-24", "25-34"]:
+                    st.write("- Technology and gaming promotions")
+                    st.write("- Sports and fitness events or sponsorships")
+                    st.write("- Automotive and electronics advertising")
+                elif female_skew and largest_age_group in ["18-24", "25-34"]:
+                    st.write("- Fashion and beauty campaigns")
+                    st.write("- Lifestyle and wellness events")
+                    st.write("- Social cause marketing")
+                elif largest_age_group in ["35-49", "50-64"]:
+                    st.write("- Home improvement and luxury goods")
+                    st.write("- Financial services and investment opportunities")
+                    st.write("- Health and wellness solutions")
+            
+            st.caption("These recommendations are based on demographic data analysis from the Nomis API and local market research.")
     else:
         st.info("Select options and click 'Analyze Route' to see demographic analysis.")
 
