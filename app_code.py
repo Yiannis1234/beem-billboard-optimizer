@@ -389,7 +389,7 @@ button,
 [data-baseweb="button"],
 div.stButton button {
     background-color: #FF6600 !important;
-    color: white !important;
+        color: white !important;
     border: none !important;
     font-weight: bold !important;
     text-shadow: 0px 1px 2px rgba(0,0,0,0.2) !important;
@@ -402,7 +402,7 @@ div[data-baseweb="select"] > div:first-child {
     border: 2px solid #FF6600 !important;
     font-weight: bold !important;
     padding: 10px 15px !important;
-    border-radius: 8px !important;
+        border-radius: 8px !important;
     box-shadow: 0 3px 6px rgba(0,0,0,0.15) !important;
     margin-top: 5px !important;
     margin-bottom: 15px !important;
@@ -519,8 +519,8 @@ section[data-testid="stSidebar"] li,
 section[data-testid="stSidebar"] label {
     color: #333333 !important;
     font-weight: 500 !important;
-    font-size: 16px !important;
-}
+            font-size: 16px !important;
+        }
 
 /* Headers with better visibility */
 h1 {
@@ -549,7 +549,7 @@ h3 {
 h4 {
     color: #FF6600 !important;
     font-weight: 600 !important;
-    font-size: 20px !important;
+            font-size: 20px !important;
     margin: 10px 0 !important;
 }
 
@@ -794,38 +794,6 @@ div[data-baseweb="select"] svg {
     fill: #FF6600 !important;
     color: #FF6600 !important;
 }
-
-/* Style for text input */
-.search-input {
-    border: 2px solid #FF6600 !important;
-    border-radius: 8px !important;
-    padding: 8px !important;
-    margin-bottom: 10px !important;
-    width: 100% !important;
-    font-size: 16px !important;
-}
-
-/* Custom styling for the text input to match selectbox */
-.search-box {
-    margin-bottom: 0 !important;
-    padding: 0 !important;
-}
-
-.search-box input {
-    padding: 8px 10px !important;
-    font-size: 16px !important;
-    font-weight: bold !important;
-    border: 2px solid #FF6600 !important;
-    border-radius: 6px !important;
-    background-color: white !important;
-    color: black !important;
-}
-
-.search-box label {
-    font-weight: bold !important;
-    font-size: 14px !important;
-    color: #333 !important;
-}
 </style>
 """, unsafe_allow_html=True)
 
@@ -923,9 +891,6 @@ with st.sidebar:
         background-color: white !important;
         font-weight: bold !important;
         font-size: 16px !important;
-        visibility: visible !important;
-        z-index: 999 !important;
-        position: relative !important;
     }
     
     /* Ensure label is visible and properly positioned */
@@ -939,61 +904,16 @@ with st.sidebar:
         content: "" !important;
         display: none !important;
     }
-    
-    /* Custom styling for the text input to match selectbox */
-    .search-box {
-        margin-bottom: 0 !important;
-        padding: 0 !important;
-    }
-    
-    .search-box input {
-        padding: 8px 10px !important;
-        font-size: 16px !important;
-        font-weight: bold !important;
-        border: 2px solid #FF6600 !important;
-        border-radius: 6px !important;
-        background-color: white !important;
-        color: black !important;
-    }
-    
-    .search-box label {
-        font-weight: bold !important;
-        font-size: 14px !important;
-        color: #333 !important;
-    }
     </style>
     """, unsafe_allow_html=True)
     
-    # Create a text input for search/filtering
-    st.markdown('<div class="search-box">', unsafe_allow_html=True)
-    search_term = st.text_input("Search Area", "", key="area_search")
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Filter the areas based on search term
-    if search_term:
-        filtered_areas = [a for a in areas if search_term.lower() in a.lower()]
-    else:
-        filtered_areas = areas
-    
-    # If there are matching areas, let the user select from the filtered list
-    if filtered_areas:
-        # Set default index to first item or the exact match if found
-        default_index = 0
-        for i, a in enumerate(filtered_areas):
-            if search_term.lower() == a.lower():
-                default_index = i
-                break
-                
-        area = st.selectbox(
-            "Select Area",
-            filtered_areas,
-            index=default_index,
-            label_visibility="collapsed"  # Hide the label since we have our own above
-        )
-    else:
-        if search_term:
-            st.warning(f"No areas match '{search_term}'")
-        area = areas[0]  # Default to first area if no matches
+    # Force a default selection to ensure box is never empty
+    area = st.selectbox(
+        "Select Area",
+        areas,
+        index=0,  # Northern Quarter is default selected
+        label_visibility="visible"
+    )
     
     # Add an extra confirmation display box to make selection unmistakably visible
     st.markdown(
@@ -1107,7 +1027,7 @@ def get_weather_icon(condition):
         return "⛈️"  # Storm
     elif 'fog' in condition or 'mist' in condition:
         return "🌫️"  # Foggy
-    else:
+        else:
         return "🌤️"  # Partly cloudy (default)
 
 # Function to get traffic status icon and text
@@ -1256,7 +1176,7 @@ with tabs[0]:
                 """, unsafe_allow_html=True)
                 
             with hours_col3:
-                st.markdown("""
+        st.markdown("""
                 <div class="card">
                     <h4 style="margin-top: 0">Evening</h4>
                     <div class="icon-text">
@@ -1265,15 +1185,15 @@ with tabs[0]:
                     </div>
                     <p style="color: #666; margin-top: 10px">Evening commuters (85/100)</p>
                 </div>
-                """, unsafe_allow_html=True)
-            
+        """, unsafe_allow_html=True)
+        
             # Additional insights with enhanced visuals
             st.subheader("Route Details")
             
             col1, col2 = st.columns(2)
             
             with col1:
-                st.markdown("""
+        st.markdown("""
                 <div class="traffic-box">
                     <h4 style="margin-top: 0">🚦 Traffic Conditions</h4>
                     <div style="display: flex; justify-content: space-between; margin: 15px 0">
@@ -1326,7 +1246,7 @@ with tabs[0]:
                     <strong>Condition:</strong> {weather_data['condition']}<br>
                     <strong>Precipitation:</strong> {weather_data['precipitation']:.1f} mm
                 </div>
-                """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
                 
                 # Weather rating for billboard
                 if weather_data['precipitation'] < 0.5 and weather_data['wind_speed'] < 20:
@@ -1335,7 +1255,7 @@ with tabs[0]:
                     st.markdown("<div style='margin-top: 15px'>⭐⭐⭐⭐ Good - Good visibility conditions</div>", unsafe_allow_html=True)
                 elif weather_data['precipitation'] < 5 and weather_data['wind_speed'] < 40:
                     st.markdown("<div style='margin-top: 15px'>⭐⭐⭐ Average - Acceptable conditions</div>", unsafe_allow_html=True)
-                else:
+    else:
                     st.markdown("<div style='margin-top: 15px'>⭐⭐ Challenging - Poor visibility possible</div>", unsafe_allow_html=True)
                     
                 st.markdown('</div>', unsafe_allow_html=True)
@@ -1557,7 +1477,7 @@ with tabs[4]:
                     st.write("- Fashion and beauty promotions")
                     st.write("- Wellness and health services")
                     st.write("- Community events")
-                else:
+else:
                     st.write("**Balanced audience strategies:**")
                     st.write("- Family-friendly promotions")
                     st.write("- General interest events")
@@ -1661,16 +1581,16 @@ with tabs[4]:
 
 # Footer with enhanced visual elements - with home emoji button
 st.markdown("---")
-st.markdown("""
+        st.markdown("""
 <div style="display: flex; justify-content: space-between; align-items: center;">
     <div class="footer-container" style="text-align: center; flex-grow: 1;">
         <div style="font-size: 24px; font-weight: bold; color: #FF6600; margin-bottom: 10px;">BEEM</div>
         <div style="color: #FF9D45; margin-top: 5px">© 2025 Beem Mobile Billboard Solutions</div>
         <div style="color: #999; font-size: 12px; margin-top: 5px">hello@beembillboards.com | +44 123 456 7890</div>
     </div>
-</div>
-""", unsafe_allow_html=True)
-
+        </div>
+        """, unsafe_allow_html=True)
+    
 # Add visual banner with dynamic elements
 if analyze_button or st.session_state.analyze_clicked:
     st.markdown("""
@@ -1686,7 +1606,7 @@ if analyze_button or st.session_state.analyze_clicked:
     """, unsafe_allow_html=True)
 else:
     # Even when not analyzing, show a welcome banner
-    st.markdown("""
+st.markdown("""
     <div style="background: linear-gradient(90deg, #FF9D45, #FFB673); border-radius: 10px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center">
         <div>
             <h3 style="color: white !important; margin: 0">Welcome to Beem</h3>
@@ -1694,6 +1614,6 @@ else:
         </div>
         <div style="background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center">
             <span style="font-size: 24px">📢</span>
-        </div>
     </div>
-    """, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
