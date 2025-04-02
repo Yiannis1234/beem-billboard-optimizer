@@ -763,11 +763,29 @@ with st.sidebar:
     # Time selection
     st.markdown('<h3 style="color: #FF6600; font-weight: 700; font-size: 22px; margin-top: 25px; margin-bottom: 10px;">Time Options</h3>', unsafe_allow_html=True)
     time_option = st.radio("Select time", ["Current time", "Custom time"])
-    
+
     if time_option == "Custom time":
-        date = st.date_input("Date", datetime.now())
-        hour = st.slider("Hour", 0, 23, 12)
+        # Fix date input for better selection
+        current_date = datetime.now().date()
+        date = st.date_input("Date", value=current_date, min_value=current_date, max_value=current_date + timedelta(days=30))
+        hour = st.slider("Hour", 0, 23, datetime.now().hour, format="%d")
         selected_time = datetime.combine(date, datetime.min.time()) + timedelta(hours=hour)
+        
+        # Show selected date and time for clarity
+        st.markdown(f"""
+        <div style="
+            background-color: white;
+            border: 2px solid #FF6600;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+        ">
+            Selected: {date.strftime('%A, %B %d, %Y')} at {hour:02d}:00
+        </div>
+        """, unsafe_allow_html=True)
     else:
         selected_time = datetime.now()
     
