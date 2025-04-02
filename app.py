@@ -794,6 +794,38 @@ div[data-baseweb="select"] svg {
     fill: #FF6600 !important;
     color: #FF6600 !important;
 }
+
+/* Style for text input */
+.search-input {
+    border: 2px solid #FF6600 !important;
+    border-radius: 8px !important;
+    padding: 8px !important;
+    margin-bottom: 10px !important;
+    width: 100% !important;
+    font-size: 16px !important;
+}
+
+/* Custom styling for the text input to match selectbox */
+.search-box {
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+}
+
+.search-box input {
+    padding: 8px 10px !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    border: 2px solid #FF6600 !important;
+    border-radius: 6px !important;
+    background-color: white !important;
+    color: black !important;
+}
+
+.search-box label {
+    font-weight: bold !important;
+    font-size: 14px !important;
+    color: #333 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -907,16 +939,61 @@ with st.sidebar:
         content: "" !important;
         display: none !important;
     }
+    
+    /* Custom styling for the text input to match selectbox */
+    .search-box {
+        margin-bottom: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .search-box input {
+        padding: 8px 10px !important;
+        font-size: 16px !important;
+        font-weight: bold !important;
+        border: 2px solid #FF6600 !important;
+        border-radius: 6px !important;
+        background-color: white !important;
+        color: black !important;
+    }
+    
+    .search-box label {
+        font-weight: bold !important;
+        font-size: 14px !important;
+        color: #333 !important;
+    }
     </style>
     """, unsafe_allow_html=True)
     
-    # Force a default selection to ensure box is never empty
-    area = st.selectbox(
-        "Select Area",
-        areas,
-        index=0,  # Northern Quarter is default selected
-        label_visibility="visible"
-    )
+    # Create a text input for search/filtering
+    st.markdown('<div class="search-box">', unsafe_allow_html=True)
+    search_term = st.text_input("Search Area", "", key="area_search")
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Filter the areas based on search term
+    if search_term:
+        filtered_areas = [a for a in areas if search_term.lower() in a.lower()]
+    else:
+        filtered_areas = areas
+    
+    # If there are matching areas, let the user select from the filtered list
+    if filtered_areas:
+        # Set default index to first item or the exact match if found
+        default_index = 0
+        for i, a in enumerate(filtered_areas):
+            if search_term.lower() == a.lower():
+                default_index = i
+                break
+                
+        area = st.selectbox(
+            "Select Area",
+            filtered_areas,
+            index=default_index,
+            label_visibility="collapsed"  # Hide the label since we have our own above
+        )
+    else:
+        if search_term:
+            st.warning(f"No areas match '{search_term}'")
+        area = areas[0]  # Default to first area if no matches
     
     # Add an extra confirmation display box to make selection unmistakably visible
     st.markdown(
