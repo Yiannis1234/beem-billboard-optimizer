@@ -585,6 +585,29 @@ div[role="combobox"] > div > span,
     color: black !important;
     opacity: 1 !important;
 }
+
+/* Ensure dropdown text is always visible */
+[data-testid="stSelectbox"] > div > div:first-child {
+    color: black !important;
+    background-color: white !important;
+    font-weight: bold !important;
+    font-size: 16px !important;
+    visibility: visible !important;
+    z-index: 999 !important;
+    position: relative !important;
+}
+
+/* Ensure label is visible and properly positioned */
+[data-testid="stSelectbox"] > div > label {
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+/* Remove any info icon */
+[data-testid="stSelectbox"] > div > label::after {
+    content: "" !important;
+    display: none !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -638,14 +661,27 @@ with st.sidebar:
     # Area selection - EXPANDED LIST but without any info icons
     areas = list(area_coordinates.keys())
     
-    # Custom styling to ensure no info icons appear
+    # Custom styling to ensure no info icons appear and selected value is ALWAYS visible
     st.markdown("""
     <style>
+    /* Ensure dropdown text is always visible */
+    [data-testid="stSelectbox"] > div > div:first-child {
+        color: black !important;
+        background-color: white !important;
+        font-weight: bold !important;
+        font-size: 16px !important;
+        visibility: visible !important;
+        z-index: 999 !important;
+        position: relative !important;
+    }
+    
+    /* Ensure label is visible and properly positioned */
     [data-testid="stSelectbox"] > div > label {
         position: relative !important;
         z-index: 1 !important;
     }
     
+    /* Remove any info icon */
     [data-testid="stSelectbox"] > div > label::after {
         content: "" !important;
         display: none !important;
@@ -653,10 +689,11 @@ with st.sidebar:
     </style>
     """, unsafe_allow_html=True)
     
+    # Force a default selection to ensure box is never empty
     area = st.selectbox(
         "Select Area",
         areas,
-        index=0,
+        index=0,  # Northern Quarter is default selected
         label_visibility="visible"
     )
     
