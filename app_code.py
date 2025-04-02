@@ -923,9 +923,6 @@ with st.sidebar:
         background-color: white !important;
         font-weight: bold !important;
         font-size: 16px !important;
-        visibility: visible !important;
-        z-index: 999 !important;
-        position: relative !important;
     }
     
     /* Ensure label is visible and properly positioned */
