@@ -37,7 +37,7 @@ class BeemDataCollector:
             if response.status_code == 200:
                 # Return the actual API response
                 return response.json()
-            else:
+        else:
                 st.error(f"Weather API returned status code: {response.status_code}")
                 raise Exception(f"Weather API error: {response.status_code}")
         except Exception as e:
@@ -79,10 +79,10 @@ class BeemDataCollector:
                         "free_flow_speed": free_flow_speed,
                         "incidents": []
                     }
-                else:
+            else:
                     st.error("No flow segment data found in TomTom API response")
                     raise Exception("No flow segment data in response")
-            else:
+        else:
                 st.error(f"Traffic API returned status code: {response.status_code}")
                 raise Exception(f"Traffic API error: {response.status_code}")
         except Exception as e:
@@ -137,7 +137,7 @@ class BeemDataCollector:
             time_of_day = "afternoon"
         elif 17 <= hour < 22:
             time_of_day = "evening"
-        else:
+    else:
             time_of_day = "night"
             
         try:
@@ -311,7 +311,7 @@ def get_gender_data(area_code):
                     "no_qualification": {"percent": 2, "count": 12}
                 }
             }
-        else:
+    else:
             return {
                 "male_percent": 49,
                 "female_percent": 51,
@@ -1027,7 +1027,7 @@ def get_weather_icon(condition):
         return "⛈️"  # Storm
     elif 'fog' in condition or 'mist' in condition:
         return "🌫️"  # Foggy
-        else:
+    else:
         return "🌤️"  # Partly cloudy (default)
 
 # Function to get traffic status icon and text
@@ -1217,7 +1217,7 @@ with tabs[0]:
                     st.markdown("<div style='margin-top: 15px'>⭐⭐⭐⭐ Good - Manageable traffic</div>", unsafe_allow_html=True)
                 elif traffic_data['congestion_level'] < 0.7:
                     st.markdown("<div style='margin-top: 15px'>⭐⭐⭐ Average - Moderate congestion</div>", unsafe_allow_html=True)
-                else:
+            else:
                     st.markdown("<div style='margin-top: 15px'>⭐⭐ Challenging - Heavy traffic</div>", unsafe_allow_html=True)
                     
                 st.markdown('</div>', unsafe_allow_html=True)
@@ -1401,7 +1401,7 @@ with tabs[4]:
             audience = "Professionals, business"
             age = "25-50 (75%)"
             interests = "Technology, Business, Food"
-        else:
+    else:
             audience = "Mixed urban"
             age = "25-45 (60%)"
             interests = "Various"
@@ -1545,7 +1545,7 @@ else:
                     st.write("- Established professionals - potential family decision-makers")
                     st.write("- Value-oriented purchasing with higher budget")
                     st.write("- Mix of digital and traditional media consumption")
-                else:  # 50-64
+            else:  # 50-64
                     st.write("- Senior demographic - established career or approaching retirement")
                     st.write("- Quality and service focused rather than price sensitive")
                     st.write("- More traditional media consumption habits")
@@ -1554,7 +1554,7 @@ else:
                 if high_education:
                     st.write("- Highly educated audience - more analytical messaging may be effective")
                     st.write("- May respond well to detailed information and statistics")
-                else:
+            else:
                     st.write("- More practical, benefit-focused messaging recommended")
                     st.write("- Visual demonstrations and clear value propositions important")
             
