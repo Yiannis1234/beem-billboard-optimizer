@@ -737,8 +737,28 @@ with st.sidebar:
         label_visibility="visible"
     )
     
-    # Add a confirmation of what's selected
-    st.markdown(f'<div style="background-color: #FFE6CC; color: black; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; font-size: 18px; margin-top: -15px; margin-bottom: 15px; border: 2px solid #FF6600;">Selected: {area}</div>', unsafe_allow_html=True)
+    # Add an extra confirmation display box to make selection unmistakably visible
+    st.markdown(
+        f"""
+        <div style="
+            background-color: white;
+            color: black;
+            padding: 10px;
+            border: 3px solid #FF6600;
+            border-radius: 10px;
+            margin-top: -10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        ">
+            <div style="color: #888; font-size: 14px; margin-bottom: 5px;">SELECTED AREA:</div>
+            <div style="font-size: 20px; color: #000;">{area}</div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
     
     # Time selection
     st.markdown('<h3 style="color: #FF6600; font-weight: 700; font-size: 22px; margin-top: 25px; margin-bottom: 10px;">Time Options</h3>', unsafe_allow_html=True)
