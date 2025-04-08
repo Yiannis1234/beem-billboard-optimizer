@@ -886,27 +886,24 @@ st.markdown("""
 <style>
 /* Modern styling updates */
 .hero-section {
-    background: linear-gradient(135deg, #FF6600, #FF8533);
-    padding: 3rem;
-    border-radius: 20px;
-    margin: 2rem 0;
-    box-shadow: 0 10px 30px rgba(255, 102, 0, 0.2);
+    background: #FF6600;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    text-align: center;
 }
 
 .hero-title {
-    color: white;
-    font-size: 3rem;
-    font-weight: 800;
+    color: #000000;
+    font-size: 2.5rem;
+    font-weight: 700;
     margin-bottom: 1rem;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
 .hero-subtitle {
     color: white;
     font-size: 1.2rem;
-    font-weight: 500;
     opacity: 0.9;
-    margin-bottom: 2rem;
 }
 
 .feature-card {
