@@ -1090,39 +1090,48 @@ with st.sidebar:
     # Time selection with modern styling
     st.markdown("""
     <div style="margin: 2rem 0;">
-        <h3 style="color: #FF6600; font-weight: 700; font-size: 1.5rem; margin-bottom: 1rem;">Time Options</h3>
+        <h3 style="color: #FF6600; font-weight: 700; font-size: 1.8rem; margin-bottom: 1rem;">📅 Schedule Your Route</h3>
     </div>
     """, unsafe_allow_html=True)
     
     time_option = st.radio(
         "Select time",
         ["Current time", "Custom time"],
-        help="Choose between current time or set a custom time"
+        help="Choose between current time or set a custom time",
+        horizontal=True  # Make radio buttons horizontal
     )
 
     if time_option == "Custom time":
         st.markdown("""
         <div style="
-            background: white;
-            padding: 1.5rem;
+            background: linear-gradient(135deg, #ffffff, #fff5e6);
+            padding: 1.8rem;
             border-radius: 15px;
             border: 2px solid #FF6600;
             margin: 1rem 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.1);
         ">
+            <div style="text-align: center; margin-bottom: 1rem;">
+                <span style="background: #FF6600; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600;">
+                    CUSTOM SCHEDULE
+                </span>
+            </div>
         """, unsafe_allow_html=True)
         
         current_date = datetime.now().date()
         date = st.date_input(
-            "Select Date",
+            "📅 Select Date",
             value=current_date,
-            help="Choose the date for route analysis"
+            help="Choose the date for route analysis",
+            key="custom_date"
         )
+        
+        st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)
         
         time_cols = st.columns(2)
         with time_cols[0]:
             hour = st.number_input(
-                "Hour",
+                "🕐 Hour",
                 min_value=0,
                 max_value=23,
                 value=datetime.now().hour,
@@ -1132,7 +1141,7 @@ with st.sidebar:
         
         with time_cols[1]:
             minute = st.number_input(
-                "Minute",
+                "⏰ Minute",
                 min_value=0,
                 max_value=59,
                 value=0,
@@ -1146,13 +1155,17 @@ with st.sidebar:
         <div style="
             background: #FFE6CC;
             border-radius: 10px;
-            padding: 1rem;
+            padding: 1.2rem;
             margin-top: 1rem;
             text-align: center;
+            box-shadow: 0 2px 8px rgba(255, 102, 0, 0.15);
         ">
-            <div style="color: #FF6600; font-weight: 600; font-size: 0.9rem;">SELECTED DATE & TIME</div>
-            <div style="color: #333; font-size: 1.1rem; font-weight: 500; margin-top: 0.5rem;">
+            <div style="color: #FF6600; font-weight: 600; font-size: 1rem;">YOUR SELECTED SCHEDULE</div>
+            <div style="color: #333; font-size: 1.2rem; font-weight: 500; margin-top: 0.8rem;">
                 {date.strftime('%A, %B %d, %Y')} at {hour:02d}:{minute:02d}
+            </div>
+            <div style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">
+                {(selected_time - datetime.now()).days} days from now
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -1162,14 +1175,20 @@ with st.sidebar:
         selected_time = datetime.now()
         st.markdown(f"""
         <div style="
-            background: #FFE6CC;
-            border-radius: 10px;
-            padding: 1rem;
+            background: linear-gradient(135deg, #ffffff, #fff5e6);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid #FF6600;
             margin: 1rem 0;
             text-align: center;
+            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.1);
         ">
-            <div style="color: #FF6600; font-weight: 600; font-size: 0.9rem;">CURRENT TIME</div>
-            <div style="color: #333; font-size: 1.1rem; font-weight: 500; margin-top: 0.5rem;">
+            <div style="text-align: center; margin-bottom: 1rem;">
+                <span style="background: #FF6600; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600;">
+                    CURRENT TIME
+                </span>
+            </div>
+            <div style="color: #333; font-size: 1.2rem; font-weight: 500; margin-top: 0.8rem;">
                 {selected_time.strftime('%A, %B %d, %Y')} at {selected_time.strftime('%H:%M')}
             </div>
         </div>
