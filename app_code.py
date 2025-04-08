@@ -881,142 +881,380 @@ def start_analysis():
     #     st.session_state.first_analysis = False
     st.session_state.analyze_clicked = True
 
-# Title
-st.markdown('<h1 class="main-header">📢 Beem Billboard Route Optimizer</h1>', unsafe_allow_html=True)
-
-# Add an unmissable banner that is absolutely impossible to miss
+# Title and Hero Section with modern design
 st.markdown("""
-<div style="background: linear-gradient(90deg, #FF6600, #FF8533); color: white; padding: 30px; border-radius: 15px; text-align: center; margin: 25px 0; box-shadow: 0 8px 16px rgba(0,0,0,0.2); border: 4px solid white;">
-    <span style="color: black; font-size: 36px; font-weight: 900; letter-spacing: 1px; display: block;">CLICK THE ORANGE ARROW</span>
-    <p style="font-size: 26px; font-weight: bold; margin: 20px 0 0 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); color: white !important;">TO OPEN SIDEBAR MENU AND ANALYZE</p>
+<style>
+/* Modern styling updates */
+.hero-section {
+    background: linear-gradient(135deg, #FF6600, #FF8533);
+    padding: 3rem;
+    border-radius: 20px;
+    margin: 2rem 0;
+    box-shadow: 0 10px 30px rgba(255, 102, 0, 0.2);
+}
+
+.hero-title {
+    color: white;
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.hero-subtitle {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 500;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+.feature-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+    border: 1px solid #eee;
+    transition: transform 0.2s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #FF6600;
+}
+
+.feature-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.feature-description {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.cta-button {
+    background: #FF6600;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-align: center;
+    display: inline-block;
+    margin-top: 1rem;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.cta-button:hover {
+    background: #FF8533;
+}
+
+/* Dashboard card styling */
+.dashboard-metric {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+    border: 1px solid #eee;
+}
+
+.dashboard-metric h4 {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-metric h2 {
+    color: #333;
+    font-size: 2rem;
+    margin: 0.5rem 0;
+}
+
+.dashboard-metric p {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* Sidebar improvements */
+.sidebar-header {
+    background: linear-gradient(135deg, #FF6600, #FF8533);
+    color: white;
+    padding: 2rem 1rem;
+    margin: -1rem -1rem 1rem -1rem;
+    border-radius: 0 0 20px 20px;
+}
+
+.sidebar-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-subtitle {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# Hero Section
+st.markdown("""
+<div class="hero-section">
+    <h1 class="hero-title">📢 Beem Billboard Route Optimizer</h1>
+    <p class="hero-subtitle">Maximize your advertising impact with data-driven route optimization</p>
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown("Optimize your mobile billboard routes for maximum engagement")
+# Feature Cards
+col1, col2, col3 = st.columns(3)
 
-# Add main Analysis button that works the same as the sidebar Analyze button
+with col1:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <div class="feature-title">Smart Targeting</div>
+        <div class="feature-description">Reach your ideal audience with precision using real-time demographics and traffic data.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Data Analytics</div>
+        <div class="feature-description">Make informed decisions with comprehensive analytics and engagement metrics.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Real-Time Updates</div>
+        <div class="feature-description">Stay ahead with live weather, traffic, and population density insights.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Main CTA Button
 main_analyze_col1, main_analyze_col2, main_analyze_col3 = st.columns([1, 2, 1])
 with main_analyze_col2:
-    main_analyze = st.button("ANALYZE NOW", type="primary", on_click=start_analysis, key="main_analyze_button")
+    main_analyze = st.button("ANALYZE NOW", type="primary", on_click=start_analysis, key="main_analyze_button", help="Click to start route analysis")
 
-# Sidebar
+# Sidebar with improved styling
 with st.sidebar:
-    # Add Beem logo as text instead of image
     st.markdown("""
-    <div style="text-align: center; margin-bottom: 20px">
-        <div style="font-size: 36px; font-weight: bold; color: #FF6600; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">BEEM</div>
-        <div style="font-size: 16px; color: #FF6600; margin-top: -5px;">Mobile Billboard Solutions</div>
+    <div class="sidebar-header">
+        <div class="sidebar-title">BEEM</div>
+        <div class="sidebar-subtitle">Mobile Billboard Solutions</div>
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown('<h2 style="color: #FF6600; font-weight: 700; font-size: 26px;">Route Options</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 style="color: #FF6600; font-weight: 700; font-size: 1.5rem; margin: 2rem 0 1rem;">Route Options</h2>', unsafe_allow_html=True)
     
-    # Area selection - EXPANDED LIST but without any info icons
+    # Area selection with improved styling
     areas = list(area_coordinates.keys())
-    
-    # Simple dropdown selection without search box
     area = st.selectbox(
         "Select Area",
         areas,
-        index=0  # Northern Quarter is default selected
+        index=0,
+        help="Choose the area for billboard route optimization"
     )
     
-    # Add an extra confirmation display box to make selection unmistakably visible
+    # Selected area confirmation
     st.markdown(
         f"""
         <div style="
-            background-color: white;
-            color: black;
-            padding: 10px;
-            border: 3px solid #FF6600;
-            border-radius: 10px;
-            margin-top: -10px;
-            margin-bottom: 20px;
+            background: white;
+            padding: 1rem;
+            border-radius: 15px;
+            border: 2px solid #FF6600;
+            margin: 1rem 0;
             text-align: center;
-            font-weight: bold;
-            font-size: 18px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         ">
-            <div style="color: #888; font-size: 14px; margin-bottom: 5px;">SELECTED AREA:</div>
-            <div style="font-size: 20px; color: #000;">{area}</div>
+            <div style="color: #666; font-size: 0.9rem;">SELECTED AREA</div>
+            <div style="color: #333; font-size: 1.2rem; font-weight: 600; margin-top: 0.5rem;">{area}</div>
         </div>
         """,
         unsafe_allow_html=True
     )
     
-    # Time selection
-    st.markdown('<h3 style="color: #FF6600; font-weight: 700; font-size: 22px; margin-top: 25px; margin-bottom: 10px;">Time Options</h3>', unsafe_allow_html=True)
-    time_option = st.radio("Select time", ["Current time", "Custom time"])
+    # Time selection with modern styling
+    st.markdown("""
+    <div style="margin: 2rem 0;">
+        <h3 style="color: #FF6600; font-weight: 700; font-size: 1.5rem; margin-bottom: 1rem;">Time Options</h3>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    time_option = st.radio(
+        "Select time",
+        ["Current time", "Custom time"],
+        help="Choose between current time or set a custom time"
+    )
 
     if time_option == "Custom time":
-        # Create a more visible time selection UI
-        st.markdown('<div style="background-color: white; padding: 15px; border-radius: 10px; border: 2px solid #FF6600; margin-bottom: 15px;">', unsafe_allow_html=True)
+        st.markdown("""
+        <div style="
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid #FF6600;
+            margin: 1rem 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        ">
+        """, unsafe_allow_html=True)
         
-        # Fix date input to be fully functional
         current_date = datetime.now().date()
         date = st.date_input(
-            "Date", 
+            "Select Date",
             value=current_date,
-            # Remove min/max constraints to allow free date selection
+            help="Choose the date for route analysis"
         )
         
-        # Separate time selection into hours and minutes with proper formatting
         time_cols = st.columns(2)
         with time_cols[0]:
-            hour = st.number_input("Hour (0-23)", min_value=0, max_value=23, value=datetime.now().hour, step=1)
+            hour = st.number_input(
+                "Hour",
+                min_value=0,
+                max_value=23,
+                value=datetime.now().hour,
+                step=1,
+                help="Set hour (24-hour format)"
+            )
         
         with time_cols[1]:
-            minute = st.number_input("Minute (0-59)", min_value=0, max_value=59, value=0, step=5)
+            minute = st.number_input(
+                "Minute",
+                min_value=0,
+                max_value=59,
+                value=0,
+                step=5,
+                help="Set minute (increments of 5)"
+            )
         
         selected_time = datetime.combine(date, datetime.min.time()) + timedelta(hours=hour, minutes=minute)
         
-        # Show selected date and time for clarity
         st.markdown(f"""
         <div style="
-            background-color: #FFE6CC;
-            border: 2px solid #FF6600;
-            border-radius: 8px;
-            padding: 10px;
-            margin-top: 10px;
+            background: #FFE6CC;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
             text-align: center;
-            font-weight: bold;
-            font-size: 16px;
         ">
-            Selected: {date.strftime('%A, %B %d, %Y')} at {hour:02d}:{minute:02d}
+            <div style="color: #FF6600; font-weight: 600; font-size: 0.9rem;">SELECTED DATE & TIME</div>
+            <div style="color: #333; font-size: 1.1rem; font-weight: 500; margin-top: 0.5rem;">
+                {date.strftime('%A, %B %d, %Y')} at {hour:02d}:{minute:02d}
+            </div>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown('</div>', unsafe_allow_html=True)
     else:
         selected_time = datetime.now()
-    
-    # REMOVE THE DUPLICATE AREA SELECTION - DELETE THIS ENTIRE SECTION
-    
-    # Day type (new)
-    st.markdown('<div style="margin-top: 20px;"></div>', unsafe_allow_html=True)
-    day_type = st.radio("Day type", ["Weekday", "Weekend"])
-    
-    # Analysis button
-    st.markdown('<div style="margin-top: 25px;"></div>', unsafe_allow_html=True)
-    analyze_button = st.button("Analyze Route", type="primary", on_click=start_analysis)
-    
-    # About section
-    st.markdown('<div style="margin-top: 30px;"></div>', unsafe_allow_html=True)
-    with st.expander("About Beem"):
-        st.markdown("""
-        <div style="color: #FF6600; font-weight: bold; font-size: 18px; margin-bottom: 15px;">Beem Mobile Billboard Solutions</div>
-        
-        <p style="color: #333333; font-weight: 500; font-size: 16px; line-height: 1.5; margin-bottom: 15px;">We help businesses reach their audience through eye-catching mobile billboards carried by cyclists.</p>
-        
-        <p style="color: #333333; font-weight: 600; font-size: 16px; line-height: 1.5; margin-bottom: 10px;">Our approach is:</p>
-        <ul style="color: #333333; padding-left: 20px; margin-bottom: 15px;">
-        <li style="color: #333333; font-weight: 500; font-size: 16px; line-height: 1.5; margin-bottom: 8px;">🌿 Eco-friendly</li>
-        <li style="color: #333333; font-weight: 500; font-size: 16px; line-height: 1.5; margin-bottom: 8px;">💰 Cost-effective</li>
-        <li style="color: #333333; font-weight: 500; font-size: 16px; line-height: 1.5; margin-bottom: 8px;">🎯 Highly targeted</li>
-        <li style="color: #333333; font-weight: 500; font-size: 16px; line-height: 1.5; margin-bottom: 8px;">📱 Engaging</li>
-        <li style="color: #333333; font-weight: 500; font-size: 16px; line-height: 1.5;">📊 Data-driven</li>
-        </ul>
+        st.markdown(f"""
+        <div style="
+            background: #FFE6CC;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+        ">
+            <div style="color: #FF6600; font-weight: 600; font-size: 0.9rem;">CURRENT TIME</div>
+            <div style="color: #333; font-size: 1.1rem; font-weight: 500; margin-top: 0.5rem;">
+                {selected_time.strftime('%A, %B %d, %Y')} at {selected_time.strftime('%H:%M')}
+            </div>
+        </div>
         """, unsafe_allow_html=True)
+    
+    # Day type selection with modern styling
+    st.markdown("""
+    <div style="margin: 2rem 0 1rem;">
+        <h3 style="color: #FF6600; font-weight: 700; font-size: 1.5rem;">Day Type</h3>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    day_type = st.radio(
+        "Select day type",
+        ["Weekday", "Weekend"],
+        help="Choose between weekday or weekend for different traffic patterns"
+    )
+    
+    # Analysis button with improved styling
+    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
+    analyze_button = st.button(
+        "Analyze Route",
+        type="primary",
+        on_click=start_analysis,
+        help="Click to analyze the selected route with current settings"
+    )
+    
+    # About section with modern styling
+    with st.sidebar:
+        st.markdown("""
+        <div style="
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        ">
+            <h3 style="color: #FF6600; font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem;">About Beem</h3>
+            <p style="color: #666; font-size: 0.9rem; line-height: 1.6;">
+                Beem is revolutionizing mobile billboard advertising with data-driven route optimization. 
+                Our platform combines real-time weather, traffic, and demographic data to maximize your 
+                advertising impact.
+            </p>
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
+                <div style="color: #FF6600; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                    Features:
+                </div>
+                <ul style="color: #666; font-size: 0.9rem; margin: 0; padding-left: 1.2rem;">
+                    <li>Real-time data analysis</li>
+                    <li>Smart route optimization</li>
+                    <li>Demographic targeting</li>
+                    <li>Performance metrics</li>
+                </ul>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+# Footer
+st.markdown("""
+<div style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 1rem;
+    text-align: center;
+    border-top: 1px solid #eee;
+    font-size: 0.8rem;
+    color: #666;
+    z-index: 1000;
+">
+    <div style="max-width: 800px; margin: 0 auto;">
+        © 2024 Beem Mobile Billboard Solutions. All rights reserved.
+        <div style="margin-top: 0.5rem;">
+            <a href="#" style="color: #FF6600; text-decoration: none; margin: 0 1rem;">Privacy Policy</a>
+            <a href="#" style="color: #FF6600; text-decoration: none; margin: 0 1rem;">Terms of Service</a>
+            <a href="#" style="color: #FF6600; text-decoration: none; margin: 0 1rem;">Contact Us</a>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 # Function to get weather icon based on condition
 def get_weather_icon(condition):
