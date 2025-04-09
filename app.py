@@ -1505,7 +1505,7 @@ tabs = st.tabs(["Route Analysis", "Map & Visualization", "Historical Data", "Bes
 # Tab 1: Route Analysis
 with tabs[0]:
     # Check both analyze_button and session state to determine if analysis should be shown
-    if analyze_button or st.session_state.analyze_clicked:
+    if st.session_state.analyze_clicked:
         st.markdown(f'<h2 class="gradient-header">Analysis for {area}</h2>', unsafe_allow_html=True)
         
         with st.spinner("Analyzing route data..."):
@@ -1710,7 +1710,7 @@ with tabs[0]:
 with tabs[1]:
     st.markdown('<h2 style="color: #FF9D45">Map & Visualization</h2>', unsafe_allow_html=True)
     
-    if analyze_button or st.session_state.analyze_clicked:
+    if st.session_state.analyze_clicked:
         # Enhanced map with multiple points
         map_data = pd.DataFrame({
             'lat': [53.4808, 53.4831, 53.4751, 53.4772, 53.4795],
@@ -1749,7 +1749,7 @@ with tabs[1]:
 with tabs[2]:
     st.markdown('<h2 style="color: #FF9D45">Historical Engagement Data</h2>', unsafe_allow_html=True)
     
-    if analyze_button or st.session_state.analyze_clicked:
+    if st.session_state.analyze_clicked:
         # Enhanced chart with labeled data
         days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         engagement = [65, 68, 70, 72, 85, 90, 80]
@@ -1776,7 +1776,7 @@ with tabs[2]:
 with tabs[3]:
     st.markdown('<h2 style="color: #FF9D45">Best Times to Display</h2>', unsafe_allow_html=True)
     
-    if analyze_button or st.session_state.analyze_clicked:
+    if st.session_state.analyze_clicked:
         st.markdown('<h3 style="color: #FF9D45">Recommended Times:</h3>', unsafe_allow_html=True)
         
         # Best times displayed correctly with CSS classes
@@ -1819,7 +1819,7 @@ with tabs[3]:
 with tabs[4]:
     st.markdown('<h2 style="color: #FF9D45">Demographics Analysis</h2>', unsafe_allow_html=True)
     
-    if analyze_button or st.session_state.analyze_clicked:
+    if st.session_state.analyze_clicked:
         st.subheader(f"Demographic Profile for {area}")
         
         # Demographics info based on area
@@ -2031,7 +2031,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Add visual banner with dynamic elements
-if analyze_button or st.session_state.analyze_clicked:
+if st.session_state.analyze_clicked:
     st.markdown("""
     <div style="background: linear-gradient(90deg, #FF9D45, #FFB673); border-radius: 10px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center">
         <div>
