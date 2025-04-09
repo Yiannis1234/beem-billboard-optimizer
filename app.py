@@ -1114,34 +1114,43 @@ with st.sidebar:
         </h3>
     """, unsafe_allow_html=True)
 
-    # Date Selection
+    # Date Selection with more flexibility
     st.markdown('<p style="color: #666; font-size: 1rem; margin-bottom: 0.5rem;">1. Choose Date</p>', unsafe_allow_html=True)
-    current_date = datetime.now().date()
+    
+    # Allow selecting dates up to 6 months in the future
+    max_date = datetime.now().date() + timedelta(days=180)
     date = st.date_input(
         "",  # Empty label since we're using custom label above
-        value=current_date,
-        min_value=current_date,  # Can't select past dates
-        max_value=current_date + timedelta(days=30),  # Can schedule up to 30 days ahead
-        help="Select your preferred date for the route"
+        value=datetime.now().date(),
+        min_value=datetime.now().date(),
+        max_value=max_date,  # Allow booking up to 6 months ahead
+        help="Select any date within the next 6 months"
     )
 
-    # Show selected date in a nice format
+    # Calculate days from today
+    days_from_today = (date - datetime.now().date()).days
+    days_text = "Today" if days_from_today == 0 else f"{days_from_today} days from today"
+
+    # Show selected date with more details
     st.markdown(f"""
         <div style="
             background: #FFF5E6;
-            padding: 0.8rem;
+            padding: 1rem;
             border-radius: 10px;
             margin: 0.5rem 0;
             text-align: center;
         ">
             <div style="color: #666; font-size: 0.8rem;">SELECTED DATE</div>
-            <div style="color: #FF6600; font-weight: 600; font-size: 1.1rem;">
+            <div style="color: #FF6600; font-weight: 600; font-size: 1.2rem;">
                 {date.strftime('%A, %B %d, %Y')}
+            </div>
+            <div style="color: #666; font-size: 0.9rem; margin-top: 0.3rem;">
+                {days_text}
             </div>
         </div>
     """, unsafe_allow_html=True)
 
-    # Time Selection
+    # Time Selection with better organization
     st.markdown('<p style="color: #666; font-size: 1rem; margin: 1rem 0 0.5rem;">2. Choose Time</p>', unsafe_allow_html=True)
     
     # Predefined time slots
