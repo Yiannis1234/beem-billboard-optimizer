@@ -1100,57 +1100,117 @@ with st.sidebar:
         unsafe_allow_html=True
     )
     
-    # 2. Schedule Selection
-    st.markdown('<h3 style="color: #FF6600; font-size: 1.2rem; margin: 1.5rem 0 1rem;">🕒 Schedule</h3>', unsafe_allow_html=True)
-    
-    # Date picker
+    # 2. Schedule Selection with better organization
+    st.markdown("""
+    <div style="
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin: 1.5rem 0;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    ">
+        <h3 style="color: #FF6600; font-size: 1.3rem; margin-bottom: 1rem; text-align: center;">
+            📅 Schedule Your Route
+        </h3>
+    """, unsafe_allow_html=True)
+
+    # Date Selection
+    st.markdown('<p style="color: #666; font-size: 1rem; margin-bottom: 0.5rem;">1. Choose Date</p>', unsafe_allow_html=True)
     current_date = datetime.now().date()
     date = st.date_input(
-        "Select Date",
+        "",  # Empty label since we're using custom label above
         value=current_date,
-        help="Choose the date for route analysis",
-        key="date_picker"
+        min_value=current_date,  # Can't select past dates
+        max_value=current_date + timedelta(days=30),  # Can schedule up to 30 days ahead
+        help="Select your preferred date for the route"
     )
-    
-    # Time selection
-    time_cols = st.columns(2)
-    with time_cols[0]:
-        hour = st.number_input(
-            "Hour (24h)",
-            min_value=0,
-            max_value=23,
-            value=datetime.now().hour,
-            help="Hour in 24-hour format"
-        )
-    with time_cols[1]:
-        minute = st.number_input(
-            "Minute",
-            min_value=0,
-            max_value=59,
-            value=0,
-            step=5,
-            help="Minute (5-minute intervals)"
-        )
-    
-    # Show selected schedule
-    selected_time = datetime.combine(date, datetime.min.time()) + timedelta(hours=hour, minutes=minute)
+
+    # Show selected date in a nice format
     st.markdown(f"""
         <div style="
             background: #FFF5E6;
             padding: 0.8rem;
             border-radius: 10px;
-            margin: 0.5rem 0 1.5rem 0;
+            margin: 0.5rem 0;
             text-align: center;
         ">
-            <div style="color: #666; font-size: 0.8rem;">SCHEDULED FOR</div>
-            <div style="color: #FF6600; font-weight: 600; margin-top: 0.3rem;">
-                {selected_time.strftime('%A, %B %d')}
-            </div>
-            <div style="color: #FF6600; font-weight: 600;">
-                {selected_time.strftime('%I:%M %p')}
+            <div style="color: #666; font-size: 0.8rem;">SELECTED DATE</div>
+            <div style="color: #FF6600; font-weight: 600; font-size: 1.1rem;">
+                {date.strftime('%A, %B %d, %Y')}
             </div>
         </div>
     """, unsafe_allow_html=True)
+
+    # Time Selection
+    st.markdown('<p style="color: #666; font-size: 1rem; margin: 1rem 0 0.5rem;">2. Choose Time</p>', unsafe_allow_html=True)
+    
+    # Predefined time slots
+    morning_slots = ["6:00 AM", "7:00 AM", "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM"]
+    afternoon_slots = ["12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"]
+    evening_slots = ["6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM"]
+
+    time_period = st.radio(
+        "",  # Empty label
+        ["Morning", "Afternoon", "Evening"],
+        horizontal=True,
+        help="Select the time period"
+    )
+
+    # Show appropriate time slots based on selection
+    if time_period == "Morning":
+        time_slot = st.selectbox("", morning_slots, help="Select a specific time slot")
+    elif time_period == "Afternoon":
+        time_slot = st.selectbox("", afternoon_slots, help="Select a specific time slot")
+    else:  # Evening
+        time_slot = st.selectbox("", evening_slots, help="Select a specific time slot")
+
+    # Convert selected time to 24-hour format for processing
+    selected_hour = datetime.strptime(time_slot, "%I:%M %p").hour
+    selected_minute = datetime.strptime(time_slot, "%I:%M %p").minute
+
+    # Show selected time in a nice format
+    st.markdown(f"""
+        <div style="
+            background: #FFF5E6;
+            padding: 0.8rem;
+            border-radius: 10px;
+            margin: 0.5rem 0;
+            text-align: center;
+        ">
+            <div style="color: #666; font-size: 0.8rem;">SELECTED TIME</div>
+            <div style="color: #FF6600; font-weight: 600; font-size: 1.1rem;">
+                {time_slot}
+            </div>
+            <div style="color: #666; font-size: 0.8rem; margin-top: 0.3rem;">
+                {time_period} Route
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Combine date and time
+    selected_time = datetime.combine(date, datetime.min.time()) + timedelta(hours=selected_hour, minutes=selected_minute)
+
+    # Show full schedule summary
+    st.markdown(f"""
+        <div style="
+            background: linear-gradient(135deg, #FF6600, #FF8533);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            text-align: center;
+            color: white;
+        ">
+            <div style="font-size: 0.9rem; opacity: 0.9;">YOUR SCHEDULE</div>
+            <div style="font-weight: 600; font-size: 1.2rem; margin: 0.5rem 0;">
+                {selected_time.strftime('%A, %B %d at %I:%M %p')}
+            </div>
+            <div style="font-size: 0.8rem; opacity: 0.9;">
+                {(selected_time - datetime.now()).days} days from today
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown('</div>', unsafe_allow_html=True)  # Close the schedule container
     
     # 3. Day Type
     st.markdown('<h3 style="color: #FF6600; font-size: 1.2rem; margin: 1.5rem 0 1rem;">📅 Day Type</h3>', unsafe_allow_html=True)
