@@ -1057,194 +1057,144 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown('<h2 style="color: #FF6600; font-weight: 700; font-size: 1.5rem; margin: 2rem 0 1rem;">Route Options</h2>', unsafe_allow_html=True)
+    # Simple container for all options
+    st.markdown("""
+    <div style="
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin: 1rem 0;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    ">
+    """, unsafe_allow_html=True)
     
-    # Area selection with improved styling
+    # 1. Area Selection - Kept as is but with better styling
+    st.markdown('<h3 style="color: #FF6600; font-size: 1.2rem; margin-bottom: 1rem;">📍 Select Location</h3>', unsafe_allow_html=True)
     areas = list(area_coordinates.keys())
     area = st.selectbox(
-        "Select Area",
+        "Choose your target area",
         areas,
         index=0,
         help="Choose the area for billboard route optimization"
     )
     
-    # Selected area confirmation
+    # Show selected area in a nice format
     st.markdown(
         f"""
         <div style="
-            background: white;
-            padding: 1rem;
-            border-radius: 15px;
-            border: 2px solid #FF6600;
-            margin: 1rem 0;
+            background: #FFF5E6;
+            padding: 0.8rem;
+            border-radius: 10px;
+            margin: 0.5rem 0 1.5rem 0;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         ">
-            <div style="color: #666; font-size: 0.9rem;">SELECTED AREA</div>
-            <div style="color: #333; font-size: 1.2rem; font-weight: 600; margin-top: 0.5rem;">{area}</div>
+            <div style="color: #FF6600; font-weight: 600;">{area}</div>
         </div>
         """,
         unsafe_allow_html=True
     )
     
-    # Time selection with modern styling
-    st.markdown("""
-    <div style="margin: 2rem 0;">
-        <h3 style="color: #FF6600; font-weight: 700; font-size: 1.8rem; margin-bottom: 1rem;">📅 Schedule Your Route</h3>
-    </div>
-    """, unsafe_allow_html=True)
+    # 2. Date and Time Selection - Simplified
+    st.markdown('<h3 style="color: #FF6600; font-size: 1.2rem; margin: 1.5rem 0 1rem;">🕒 Schedule</h3>', unsafe_allow_html=True)
     
-    time_option = st.radio(
-        "Select time",
-        ["Current time", "Custom time"],
-        help="Choose between current time or set a custom time",
-        horizontal=True  # Make radio buttons horizontal
+    # Simple date picker
+    current_date = datetime.now().date()
+    date = st.date_input(
+        "Select Date",
+        value=current_date,
+        help="Choose the date for route analysis",
+        key="date_picker"
     )
-
-    if time_option == "Custom time":
-        st.markdown("""
-        <div style="
-            background: linear-gradient(135deg, #ffffff, #fff5e6);
-            padding: 1.8rem;
-            border-radius: 15px;
-            border: 2px solid #FF6600;
-            margin: 1rem 0;
-            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.1);
-        ">
-            <div style="text-align: center; margin-bottom: 1rem;">
-                <span style="background: #FF6600; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600;">
-                    CUSTOM SCHEDULE
-                </span>
-            </div>
-        """, unsafe_allow_html=True)
-        
-        current_date = datetime.now().date()
-        date = st.date_input(
-            "📅 Select Date",
-            value=current_date,
-            help="Choose the date for route analysis",
-            key="custom_date"
-        )
-        
-        st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)
-        
-        time_cols = st.columns(2)
-        with time_cols[0]:
-            hour = st.number_input(
-                "🕐 Hour",
-                min_value=0,
-                max_value=23,
-                value=datetime.now().hour,
-                step=1,
-                help="Set hour (24-hour format)"
-            )
-        
-        with time_cols[1]:
-            minute = st.number_input(
-                "⏰ Minute",
-                min_value=0,
-                max_value=59,
-                value=0,
-                step=5,
-                help="Set minute (increments of 5)"
-            )
-        
-        selected_time = datetime.combine(date, datetime.min.time()) + timedelta(hours=hour, minutes=minute)
-        
-        st.markdown(f"""
-        <div style="
-            background: #FFE6CC;
-            border-radius: 10px;
-            padding: 1.2rem;
-            margin-top: 1rem;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(255, 102, 0, 0.15);
-        ">
-            <div style="color: #FF6600; font-weight: 600; font-size: 1rem;">YOUR SELECTED SCHEDULE</div>
-            <div style="color: #333; font-size: 1.2rem; font-weight: 500; margin-top: 0.8rem;">
-                {date.strftime('%A, %B %d, %Y')} at {hour:02d}:{minute:02d}
-            </div>
-            <div style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">
-                {(selected_time - datetime.now()).days} days from now
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown('</div>', unsafe_allow_html=True)
-    else:
-        selected_time = datetime.now()
-        st.markdown(f"""
-        <div style="
-            background: linear-gradient(135deg, #ffffff, #fff5e6);
-            padding: 1.5rem;
-            border-radius: 15px;
-            border: 2px solid #FF6600;
-            margin: 1rem 0;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.1);
-        ">
-            <div style="text-align: center; margin-bottom: 1rem;">
-                <span style="background: #FF6600; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600;">
-                    CURRENT TIME
-                </span>
-            </div>
-            <div style="color: #333; font-size: 1.2rem; font-weight: 500; margin-top: 0.8rem;">
-                {selected_time.strftime('%A, %B %d, %Y')} at {selected_time.strftime('%H:%M')}
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
     
-    # Day type selection with modern styling
-    st.markdown("""
-    <div style="margin: 2rem 0 1rem;">
-        <h3 style="color: #FF6600; font-weight: 700; font-size: 1.5rem;">Day Type</h3>
-    </div>
+    # Time selection in a single row
+    time_cols = st.columns(2)
+    with time_cols[0]:
+        hour = st.number_input(
+            "Hour (24h)",
+            min_value=0,
+            max_value=23,
+            value=datetime.now().hour,
+            help="Hour in 24-hour format"
+        )
+    with time_cols[1]:
+        minute = st.number_input(
+            "Minute",
+            min_value=0,
+            max_value=59,
+            value=0,
+            step=5,
+            help="Minute (5-minute intervals)"
+        )
+    
+    # Show selected date and time in a nice format
+    selected_time = datetime.combine(date, datetime.min.time()) + timedelta(hours=hour, minutes=minute)
+    st.markdown(f"""
+        <div style="
+            background: #FFF5E6;
+            padding: 0.8rem;
+            border-radius: 10px;
+            margin: 0.5rem 0 1.5rem 0;
+            text-align: center;
+        ">
+            <div style="color: #666; font-size: 0.8rem;">SCHEDULED FOR</div>
+            <div style="color: #FF6600; font-weight: 600; margin-top: 0.3rem;">
+                {selected_time.strftime('%A, %B %d')}
+            </div>
+            <div style="color: #FF6600; font-weight: 600;">
+                {selected_time.strftime('%I:%M %p')}
+            </div>
+        </div>
     """, unsafe_allow_html=True)
     
+    # 3. Day Type - Simplified
+    st.markdown('<h3 style="color: #FF6600; font-size: 1.2rem; margin: 1.5rem 0 1rem;">📅 Day Type</h3>', unsafe_allow_html=True)
     day_type = st.radio(
         "Select day type",
         ["Weekday", "Weekend"],
-        help="Choose between weekday or weekend for different traffic patterns"
+        horizontal=True,
+        help="Choose between weekday or weekend"
     )
     
-    # Analysis button with improved styling
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)  # Close the white container
+    
+    # Analyze Button - Made more prominent
+    st.markdown("<div style='margin: 1.5rem 0;'></div>", unsafe_allow_html=True)
     analyze_button = st.button(
-        "Analyze Route",
+        "📊 Analyze Route",
         type="primary",
+        use_container_width=True,
         on_click=start_analysis,
-        help="Click to analyze the selected route with current settings"
+        help="Click to analyze the selected route"
     )
     
-    # About section with modern styling
-    with st.sidebar:
-        st.markdown("""
-        <div style="
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            margin: 2rem 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        ">
-            <h3 style="color: #FF6600; font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem;">About Beem</h3>
-            <p style="color: #666; font-size: 0.9rem; line-height: 1.6;">
-                Beem is revolutionizing mobile billboard advertising with data-driven route optimization. 
-                Our platform combines real-time weather, traffic, and demographic data to maximize your 
-                advertising impact.
-            </p>
-            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
-                <div style="color: #FF6600; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem;">
-                    Features:
-                </div>
-                <ul style="color: #666; font-size: 0.9rem; margin: 0; padding-left: 1.2rem;">
-                    <li>Real-time data analysis</li>
-                    <li>Smart route optimization</li>
-                    <li>Demographic targeting</li>
-                    <li>Performance metrics</li>
-                </ul>
+    # About section - Kept as is
+    st.markdown("""
+    <div style="
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin: 2rem 0;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    ">
+        <h3 style="color: #FF6600; font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem;">About Beem</h3>
+        <p style="color: #666; font-size: 0.9rem; line-height: 1.6;">
+            Beem is revolutionizing mobile billboard advertising with data-driven route optimization. 
+            Our platform combines real-time weather, traffic, and demographic data to maximize your 
+            advertising impact.
+        </p>
+        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
+            <div style="color: #FF6600; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                Features:
             </div>
+            <ul style="color: #666; font-size: 0.9rem; margin: 0; padding-left: 1.2rem;">
+                <li>Real-time data analysis</li>
+                <li>Smart route optimization</li>
+                <li>Demographic targeting</li>
+                <li>Performance metrics</li>
+            </ul>
         </div>
-        """, unsafe_allow_html=True)
+    </div>
+    """, unsafe_allow_html=True)
 
 # Footer
 st.markdown("""
