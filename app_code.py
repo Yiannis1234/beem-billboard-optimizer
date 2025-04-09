@@ -900,7 +900,7 @@ if 'analyze_clicked' not in st.session_state:
 # Function to mark analysis as clicked - NO LONGER HIDES SIDEBAR
 def start_analysis():
     st.session_state.analyze_clicked = True
-    st.experimental_rerun()
+    st.rerun()  # Updated from experimental_rerun
 
 # Title and Hero Section with modern design
 st.markdown("""
@@ -1851,16 +1851,23 @@ with tabs[4]:
         with col1:
             # Create a card-like container for primary audience
             st.markdown("#### Primary Audience")
-            audience_container = st.container(border=True)
+            audience_container = st.container()
             with audience_container:
+                st.markdown("""
+                <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                """, unsafe_allow_html=True)
                 st.write(f"**Type:** {audience}")
                 st.write(f"**Age Range:** {age}")
                 st.write(f"**Key Interests:** {interests}")
+                st.markdown("</div>", unsafe_allow_html=True)
             
             # Create a simple gender distribution using Streamlit's progress bars
             st.markdown("#### Gender Distribution")
-            gender_container = st.container(border=True)
+            gender_container = st.container()
             with gender_container:
+                st.markdown("""
+                <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                """, unsafe_allow_html=True)
                 st.write("Male")
                 st.progress(gender_data['male_percent']/100)
                 st.write(f"{gender_data['male_percent']}% ({gender_data['male_count']} people)")
@@ -1870,33 +1877,45 @@ with tabs[4]:
                 st.write(f"{gender_data['female_percent']}% ({gender_data['female_count']} people)")
                 
                 st.caption("Source: Jobseeker's Allowance Data (Nomis API)")
+                st.markdown("</div>", unsafe_allow_html=True)
             
             # Age distribution using native Streamlit components
             st.markdown("#### Age Distribution")
-            age_container = st.container(border=True)
+            age_container = st.container()
             with age_container:
+                st.markdown("""
+                <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                """, unsafe_allow_html=True)
                 for age_group, data in gender_data['age_groups'].items():
                     st.write(f"{age_group}")
                     st.progress(data['percent']/100)
                     st.write(f"{data['percent']}% ({data['count']} people)")
                 
                 st.caption("Source: Census & Demographic Data (Nomis API)")
+                st.markdown("</div>", unsafe_allow_html=True)
         
         # Column 2: Targeting and Employment/Education data
         with col2:
             # Create targeting recommendations container
             st.markdown("#### Recommended Targeting")
-            targeting_container = st.container(border=True)
+            targeting_container = st.container()
             with targeting_container:
+                st.markdown("""
+                <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                """, unsafe_allow_html=True)
                 st.write("- Digital products")
                 st.write("- Food and dining")
                 st.write("- Entertainment events")
                 st.write("- Use QR codes for interaction")
+                st.markdown("</div>", unsafe_allow_html=True)
             
             # Gender-specific targeting
             st.markdown("#### Gender-Specific Targeting")
-            gender_targeting_container = st.container(border=True)
+            gender_targeting_container = st.container()
             with gender_targeting_container:
+                st.markdown("""
+                <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                """, unsafe_allow_html=True)
                 male_skew = gender_data['male_percent'] > 50
                 female_skew = gender_data['female_percent'] > 50
                 balanced = abs(gender_data['male_percent'] - gender_data['female_percent']) < 5
@@ -1916,11 +1935,15 @@ with tabs[4]:
                     st.write("- Family-friendly promotions")
                     st.write("- General interest events")
                     st.write("- Inclusive messaging")
+                st.markdown("</div>", unsafe_allow_html=True)
             
             # Employment status
             st.markdown("#### Employment Status")
-            employment_container = st.container(border=True)
+            employment_container = st.container()
             with employment_container:
+                st.markdown("""
+                <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                """, unsafe_allow_html=True)
                 employment_labels = {
                     "employed": "Employed",
                     "unemployed": "Unemployed",
@@ -1931,11 +1954,15 @@ with tabs[4]:
                     st.write(f"{employment_labels[status]}")
                     st.progress(data['percent']/100)
                     st.write(f"{data['percent']}% ({data['count']} people)")
+                st.markdown("</div>", unsafe_allow_html=True)
             
             # Education levels
             st.markdown("#### Education Levels")
-            education_container = st.container(border=True)
+            education_container = st.container()
             with education_container:
+                st.markdown("""
+                <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                """, unsafe_allow_html=True)
                 education_labels = {
                     "degree_or_higher": "Degree+",
                     "a_level": "A-Level",
@@ -1949,11 +1976,15 @@ with tabs[4]:
                     st.write(f"{data['percent']}% ({data['count']} people)")
                 
                 st.caption("Source: Census & Demographic Data (Nomis API)")
+                st.markdown("</div>", unsafe_allow_html=True)
         
         # Detailed audience insights in a full-width container
         st.markdown("#### Detailed Audience Insights & Recommendations")
-        insights_container = st.container(border=True)
+        insights_container = st.container()
         with insights_container:
+            st.markdown("""
+            <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+            """, unsafe_allow_html=True)
             # Create two columns inside the container
             insight_col1, insight_col2 = st.columns(2)
             
@@ -2010,6 +2041,7 @@ with tabs[4]:
                     st.write("- Health and wellness solutions")
             
             st.caption("These recommendations are based on demographic data analysis from the Nomis API and local market research.")
+            st.markdown("</div>", unsafe_allow_html=True)
         
         # Add the gender chart
         st.markdown("#### Gender Distribution Chart")
