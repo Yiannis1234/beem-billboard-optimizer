@@ -899,11 +899,8 @@ if 'analyze_clicked' not in st.session_state:
 
 # Function to mark analysis as clicked - NO LONGER HIDES SIDEBAR
 def start_analysis():
-    # Remove sidebar hiding completely
-    # if st.session_state.first_analysis:
-    #     st.session_state.sidebar_visible = False
-    #     st.session_state.first_analysis = False
     st.session_state.analyze_clicked = True
+    st.experimental_rerun()
 
 # Title and Hero Section with modern design
 st.markdown("""
@@ -1175,18 +1172,17 @@ with main_analyze_col2:
             margin: 20px 0;
             text-align: center;
             box-shadow: 0 6px 12px rgba(255,102,0,0.4);
-            animation: pulse 2s infinite;
         ">
-            <h3 style="color: white; margin: 0 0 15px 0; font-size: 20px; font-weight: bold;">🔍 ANALYZE THIS ROUTE</h3>
+            <h3 style="color: white; margin: 0; font-size: 20px; font-weight: bold;">🔍 ANALYZE ROUTE</h3>
         </div>
         """, unsafe_allow_html=True)
         
-        analyze_button = st.button(
-            "📊 ANALYZE ROUTE",
+        sidebar_analyze = st.button(
+            "📊 ANALYZE ROUTE", 
             type="primary",
             use_container_width=True,
-            on_click=start_analysis,
-            help="Click to analyze the selected route"
+            key="sidebar_analyze_button",
+            on_click=start_analysis
         )
         
         # Clear space after the button
@@ -1311,92 +1307,72 @@ st.markdown(f"""
 
 st.markdown('</div>', unsafe_allow_html=True)  # Close the container
     
-    # 3. Day Type
-    st.markdown("""
-    <div style="
-        background: white;
-        padding: 1.5rem;
-        border-radius: 15px;
-        margin: 1.5rem 0;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        border: 3px solid #FF6600;
-    ">
-        <h3 style="color: #FF6600; font-size: 1.5rem; margin-bottom: 1rem; text-align: center; font-weight: bold;">
-            📅 SELECT DAY TYPE
-        </h3>
-    """, unsafe_allow_html=True)
+# 3. Day Type
+st.markdown("""
+<div style="
+    background: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    border: 3px solid #FF6600;
+">
+    <h3 style="color: #FF6600; font-size: 1.5rem; margin-bottom: 1rem; text-align: center; font-weight: bold;">
+        📅 SELECT DAY TYPE
+    </h3>
+""", unsafe_allow_html=True)
 
-    st.markdown('<p style="color: #333; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: bold;">Choose Weekday or Weekend:</p>', unsafe_allow_html=True)
+st.markdown('<p style="color: #333; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: bold;">Choose Weekday or Weekend:</p>', unsafe_allow_html=True)
 
-    day_type = st.radio(
-        "",  # Empty label since we're using custom label above
-        ["Weekday", "Weekend"],
-        horizontal=True,
-        help="Choose between weekday or weekend"
-    )
+day_type = st.radio(
+    "",  # Empty label since we're using custom label above
+    ["Weekday", "Weekend"],
+    horizontal=True,
+    help="Choose between weekday or weekend"
+)
 
-    # Show selected day type
-    st.markdown(f"""
-        <div style="
-            background: #FFF5E6;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            text-align: center;
-            border: 2px dashed #FF6600;
-        ">
-            <div style="color: #666; font-size: 1rem;">SELECTED DAY TYPE:</div>
-            <div style="color: #FF6600; font-weight: 700; font-size: 1.8rem; margin: 10px 0;">
-                {day_type}
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown('</div>', unsafe_allow_html=True)  # Close the day type container
-
-    # MASSIVE ANALYZE BUTTON
-    st.markdown("""
-    <div style="
-        background: linear-gradient(135deg, #FF4500, #FF6600);
-        padding: 30px;
-        border-radius: 15px;
-        margin: 30px 0;
-        text-align: center;
-        box-shadow: 0 10px 20px rgba(255,102,0,0.5);
-        animation: pulse 2s infinite;
-        border: 4px solid #FF8C00;
-    ">
-        <h2 style="color: white; margin: 0 0 20px 0; font-size: 32px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-            🚀 ANALYZE YOUR ROUTE NOW 🚀
-        </h2>
-        <div id="super_analyze_button_container"></div>
+# Show selected day type
+st.markdown(f"""
+<div style="
+    background: #FFF5E6;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+    text-align: center;
+    border: 2px dashed #FF6600;
+">
+    <div style="color: #666; font-size: 1rem;">SELECTED DAY TYPE:</div>
+    <div style="color: #FF6600; font-weight: 700; font-size: 1.8rem; margin: 10px 0;">
+        {day_type}
     </div>
-    """, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
 
-    super_analyze_col1, super_analyze_col2, super_analyze_col3 = st.columns([1, 2, 1])
-    with super_analyze_col2:
-        super_analyze = st.button("🔥 ANALYZE ROUTE NOW 🔥", type="primary", on_click=start_analysis, key="super_analyze_button", 
-                          help="Click to start route analysis", use_container_width=True)
-        
-        # Inject JavaScript to move the button into our custom container
-        st.markdown("""
-        <script>
-            setTimeout(function() {
-                const button = document.querySelector('[data-testid="baseButton-primary"][kind="primary"]');
-                const container = document.getElementById('super_analyze_button_container');
-                if (button && container) {
-                    button.style.fontSize = '28px';
-                    button.style.padding = '20px 30px';
-                    button.style.fontWeight = 'bold';
-                    button.style.backgroundColor = '#FF4500';
-                    button.style.border = '3px solid white';
-                    button.style.borderRadius = '50px';
-                    button.style.boxShadow = '0 8px 16px rgba(0,0,0,0.3)';
-                    container.appendChild(button);
-                }
-            }, 100);
-        </script>
-        """, unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)  # Close the day type container
+
+# MASSIVE ANALYZE BUTTON
+st.markdown("""
+<div style="
+    background: linear-gradient(135deg, #FF4500, #FF6600);
+    padding: 30px;
+    border-radius: 15px;
+    margin: 30px 0;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(255,102,0,0.5);
+    animation: pulse 2s infinite;
+    border: 4px solid #FF8C00;
+">
+    <h2 style="color: white; margin: 0 0 20px 0; font-size: 32px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+        🚀 ANALYZE YOUR ROUTE NOW 🚀
+    </h2>
+    <div id="super_analyze_button_container"></div>
+</div>
+""", unsafe_allow_html=True)
+
+super_analyze_col1, super_analyze_col2, super_analyze_col3 = st.columns([1, 2, 1])
+with super_analyze_col2:
+    st.button("🔥 ANALYZE ROUTE NOW 🔥", type="primary", key="super_analyze_button", 
+                          on_click=start_analysis, use_container_width=True)
 
     # Fix the footer indentation
     # Footer
