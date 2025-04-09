@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 import requests
 import time as time_module
 import random
+import matplotlib.pyplot as plt
 
 # Page Configuration
 st.set_page_config(
@@ -364,6 +365,29 @@ def get_gender_data(area_code):
                 "no_qualification": {"percent": 5, "count": 30}
             }
         }
+
+def draw_gender_chart(gender_data):
+    """
+    Draw a simple bar chart showing gender distribution
+    """
+    genders = ['Male', 'Female']
+    percentages = [gender_data['male_percent'], gender_data['female_percent']]
+    
+    plt.figure(figsize=(8, 6))
+    bars = plt.bar(genders, percentages, color=['#FF6600', '#FF8533'])
+    
+    # Add percentage labels on top of bars
+    for bar in bars:
+        height = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2., height,
+                f'{height}%',
+                ha='center', va='bottom')
+    
+    plt.title('Gender Distribution')
+    plt.ylabel('Percentage')
+    plt.ylim(0, 100)
+    
+    return plt
 
 # Completely replace all custom sidebar and button CSS with a much simpler approach
 st.markdown("""
@@ -1043,233 +1067,382 @@ with col3:
     </div>
     """, unsafe_allow_html=True)
 
-# Main CTA Button
+# Main CTA Button - MAKE SUPER VISIBLE
+st.markdown("""
+<div style="
+    background: #FF6600;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 30px 0;
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(255,102,0,0.4);
+    animation: pulse 2s infinite;
+">
+    <style>
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(255,102,0,0.7); }
+        70% { box-shadow: 0 0 0 15px rgba(255,102,0,0); }
+        100% { box-shadow: 0 0 0 0 rgba(255,102,0,0); }
+    }
+    </style>
+    <h2 style="color: white; margin: 0 0 15px 0; font-size: 28px; font-weight: bold;">ANALYZE ROUTE NOW</h2>
+    <div id="main_analyze_button_container"></div>
+</div>
+""", unsafe_allow_html=True)
+
 main_analyze_col1, main_analyze_col2, main_analyze_col3 = st.columns([1, 2, 1])
 with main_analyze_col2:
-    main_analyze = st.button("ANALYZE NOW", type="primary", on_click=start_analysis, key="main_analyze_button", help="Click to start route analysis")
-
-# Sidebar with improved styling
-with st.sidebar:
+    main_analyze = st.button("▶️ ANALYZE NOW", type="primary", on_click=start_analysis, key="main_analyze_button", 
+                              help="Click to start route analysis", use_container_width=True)
+        
+    # Inject JavaScript to move the button into our custom container
     st.markdown("""
-    <div style="
-        background: linear-gradient(135deg, #FF6600, #FF8533);
-        color: white;
-        padding: 1.5rem;
-        margin: -1rem -1rem 1rem -1rem;
-        text-align: center;
-    ">
-        <div style="font-size: 2rem; font-weight: 700;">BEEM</div>
-        <div style="font-size: 1rem; opacity: 0.9;">Mobile Billboard Solutions</div>
-    </div>
+    <script>
+        setTimeout(function() {
+            const button = document.querySelector('[data-testid="baseButton-primary"]');
+            const container = document.getElementById('main_analyze_button_container');
+            if (button && container) {
+                button.style.fontSize = '24px';
+                button.style.padding = '15px 30px';
+                button.style.fontWeight = 'bold';
+                container.appendChild(button);
+            }
+        }, 100);
+    </script>
     """, unsafe_allow_html=True)
     
-    # Main options container
-    st.markdown("""
-    <div style="
-        background: white;
-        padding: 1.5rem;
-        border-radius: 15px;
-        margin: 1rem 0;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    ">
-    """, unsafe_allow_html=True)
-    
-    # 1. Area Selection
-    st.markdown('<h3 style="color: #FF6600; font-size: 1.2rem; margin-bottom: 1rem;">📍 Select Location</h3>', unsafe_allow_html=True)
-    areas = list(area_coordinates.keys())
-    area = st.selectbox(
-        "Choose your target area",
-        areas,
-        index=0,
-        help="Choose the area for billboard route optimization"
-    )
-    
-    # Show selected area
-    st.markdown(
-        f"""
+    # Also make the sidebar button VERY visible
+    with st.sidebar:
+        st.markdown("""
         <div style="
-            background: #FFF5E6;
-            padding: 0.8rem;
-            border-radius: 10px;
-            margin: 0.5rem 0 1.5rem 0;
+            background: linear-gradient(135deg, #FF6600, #FF8533);
+            color: white;
+            padding: 1.5rem;
+            margin: -1rem -1rem 1rem -1rem;
             text-align: center;
         ">
-            <div style="color: #FF6600; font-weight: 600;">{area}</div>
+            <div style="font-size: 2rem; font-weight: 700;">BEEM</div>
+            <div style="font-size: 1rem; opacity: 0.9;">Mobile Billboard Solutions</div>
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+        """, unsafe_allow_html=True)
+        
+        # Main options container
+        st.markdown("""
+        <div style="
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        ">
+        """, unsafe_allow_html=True)
+        
+        # 1. Area Selection
+        st.markdown('<h3 style="color: #FF6600; font-size: 1.2rem; margin-bottom: 1rem;">📍 Select Location</h3>', unsafe_allow_html=True)
+        areas = list(area_coordinates.keys())
+        area = st.selectbox(
+            "Choose your target area",
+            areas,
+            index=0,
+            help="Choose the area for billboard route optimization"
+        )
+        
+        # Show selected area
+        st.markdown(
+            f"""
+            <div style="
+                background: #FFF5E6;
+                padding: 0.8rem;
+                border-radius: 10px;
+                margin: 0.5rem 0 1.5rem 0;
+                text-align: center;
+            ">
+                <div style="color: #FF6600; font-weight: 600;">{area}</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+        
+        # Massive space before the analyze button to ensure visibility
+        st.markdown("<div style='margin: 40px 0;'></div>", unsafe_allow_html=True)
+        
+        # Super visible analyze button
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #FF4500, #FF8C00);
+            padding: 15px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(255,102,0,0.4);
+            animation: pulse 2s infinite;
+        ">
+            <h3 style="color: white; margin: 0 0 15px 0; font-size: 20px; font-weight: bold;">🔍 ANALYZE THIS ROUTE</h3>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        analyze_button = st.button(
+            "📊 ANALYZE ROUTE",
+            type="primary",
+            use_container_width=True,
+            on_click=start_analysis,
+            help="Click to analyze the selected route"
+        )
+        
+        # Clear space after the button
+        st.markdown("<div style='margin: 40px 0;'></div>", unsafe_allow_html=True)
+
+# Date Selection - COMPLETELY FIXED AND CRYSTAL CLEAR
+st.markdown("""
+<div style="
+    background: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    border: 3px solid #FF6600;
+">
+    <h3 style="color: #FF6600; font-size: 1.5rem; margin-bottom: 1rem; text-align: center; font-weight: bold;">
+        📅 CHOOSE YOUR DATE
+    </h3>
+""", unsafe_allow_html=True)
+
+# Date Selection with BIG, CLEAR input
+st.markdown('<p style="color: #333; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: bold;">📆 Select Exact Date:</p>', unsafe_allow_html=True)
     
-    # 2. Schedule Selection with better organization
+# Get current date and calculate max date (6 months ahead)
+current_date = datetime.now().date()
+max_date = current_date + timedelta(days=180)
+    
+# Date picker with clear labeling and styling
+selected_date = st.date_input(
+    "",  # Empty label since we're using custom label above
+    value=current_date,
+    min_value=current_date,
+    max_value=max_date,
+    help="Choose any date within the next 6 months",
+    key="date_picker_main"
+)
+
+# SUPER CLEAR feedback about the selected date
+days_from_today = (selected_date - current_date).days
+days_text = "TODAY" if days_from_today == 0 else f"{days_from_today} DAYS FROM TODAY"
+    
+st.markdown(f"""
+    <div style="
+        background: #FFF5E6;
+        padding: 15px;
+        border-radius: 10px;
+        margin: 15px 0;
+        text-align: center;
+        border: 2px dashed #FF6600;
+    ">
+        <div style="color: #666; font-size: 1rem;">YOU SELECTED:</div>
+        <div style="color: #FF6600; font-weight: 700; font-size: 1.8rem; margin: 10px 0;">
+            {selected_date.strftime('%A, %B %d, %Y')}
+        </div>
+        <div style="color: #FF6600; font-weight: 600; font-size: 1.2rem; background: #FFEBCC; padding: 5px 10px; border-radius: 30px; display: inline-block;">
+            {days_text}
+        </div>
+    </div>
+""", unsafe_allow_html=True)
+
+# Time Selection made SUPER CLEAR
+st.markdown('<p style="color: #333; font-size: 1.2rem; margin: 1.5rem 0 0.5rem; font-weight: bold;">🕒 Select Exact Time:</p>', unsafe_allow_html=True)
+    
+# Hour selection (24-hour format) with big slider
+hour = st.select_slider(
+    '',
+    options=list(range(24)),
+    value=12,
+    format_func=lambda x: f"{x:02d}:00" + (" (Noon)" if x==12 else " (Midnight)" if x==0 else " AM" if x<12 else " PM")
+)
+    
+# Show the selected time clearly
+am_pm = "AM" if hour < 12 else "PM"
+display_hour = hour if hour <= 12 else hour - 12
+if hour == 0:
+    display_hour = 12
+    
+st.markdown(f"""
+    <div style="
+        background: #FFF5E6;
+        padding: 15px;
+        border-radius: 10px;
+        margin: 15px 0;
+        text-align: center;
+        border: 2px dashed #FF6600;
+    ">
+        <div style="color: #666; font-size: 1rem;">SELECTED TIME:</div>
+        <div style="color: #FF6600; font-weight: 700; font-size: 1.8rem; margin: 10px 0;">
+            {display_hour}:00 {am_pm}
+        </div>
+        <div style="color: #666; font-size: 0.9rem;">
+            {hour}:00 in 24-hour format
+        </div>
+    </div>
+""", unsafe_allow_html=True)
+    
+# Show the combined date and time in a SUPER CLEAR summary
+selected_time = datetime.combine(selected_date, datetime.min.time()) + timedelta(hours=hour)
+    
+st.markdown(f"""
+    <div style="
+        background: linear-gradient(135deg, #FF6600, #FF8533);
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+        text-align: center;
+        color: white;
+        box-shadow: 0 6px 12px rgba(255,102,0,0.3);
+    ">
+        <div style="font-size: 1.2rem; opacity: 0.9; font-weight: bold;">YOUR FINAL SCHEDULE</div>
+        <div style="font-weight: 700; font-size: 2rem; margin: 10px 0; text-shadow: 1px 1px 3px rgba(0,0,0,0.2);">
+            {selected_time.strftime('%A, %B %d')}
+        </div>
+        <div style="font-weight: 700; font-size: 1.8rem; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.2);">
+            {selected_time.strftime('%I:%M %p')}
+        </div>
+        <div style="font-size: 1.2rem; margin-top: 10px; opacity: 0.9; font-weight: bold; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 30px; display: inline-block;">
+            {days_text}
+        </div>
+    </div>
+""", unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)  # Close the container
+    
+    # 3. Day Type
     st.markdown("""
     <div style="
         background: white;
         padding: 1.5rem;
         border-radius: 15px;
         margin: 1.5rem 0;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        border: 3px solid #FF6600;
     ">
-        <h3 style="color: #FF6600; font-size: 1.3rem; margin-bottom: 1rem; text-align: center;">
-            📅 Schedule Your Route
+        <h3 style="color: #FF6600; font-size: 1.5rem; margin-bottom: 1rem; text-align: center; font-weight: bold;">
+            📅 SELECT DAY TYPE
         </h3>
     """, unsafe_allow_html=True)
 
-    # Date Selection with more flexibility
-    st.markdown('<p style="color: #666; font-size: 1rem; margin-bottom: 0.5rem;">1. Choose Date</p>', unsafe_allow_html=True)
-    
-    # Allow selecting dates up to 6 months in the future
-    max_date = datetime.now().date() + timedelta(days=180)
-    date = st.date_input(
-        "",  # Empty label since we're using custom label above
-        value=datetime.now().date(),
-        min_value=datetime.now().date(),
-        max_value=max_date,  # Allow booking up to 6 months ahead
-        help="Select any date within the next 6 months"
-    )
+    st.markdown('<p style="color: #333; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: bold;">Choose Weekday or Weekend:</p>', unsafe_allow_html=True)
 
-    # Calculate days from today
-    days_from_today = (date - datetime.now().date()).days
-    days_text = "Today" if days_from_today == 0 else f"{days_from_today} days from today"
-
-    # Show selected date with more details
-    st.markdown(f"""
-        <div style="
-            background: #FFF5E6;
-            padding: 1rem;
-            border-radius: 10px;
-            margin: 0.5rem 0;
-            text-align: center;
-        ">
-            <div style="color: #666; font-size: 0.8rem;">SELECTED DATE</div>
-            <div style="color: #FF6600; font-weight: 600; font-size: 1.2rem;">
-                {date.strftime('%A, %B %d, %Y')}
-            </div>
-            <div style="color: #666; font-size: 0.9rem; margin-top: 0.3rem;">
-                {days_text}
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-    # Time Selection with better organization
-    st.markdown('<p style="color: #666; font-size: 1rem; margin: 1rem 0 0.5rem;">2. Choose Time</p>', unsafe_allow_html=True)
-    
-    # Predefined time slots
-    morning_slots = ["6:00 AM", "7:00 AM", "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM"]
-    afternoon_slots = ["12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"]
-    evening_slots = ["6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM"]
-
-    time_period = st.radio(
-        "",  # Empty label
-        ["Morning", "Afternoon", "Evening"],
-        horizontal=True,
-        help="Select the time period"
-    )
-
-    # Show appropriate time slots based on selection
-    if time_period == "Morning":
-        time_slot = st.selectbox("", morning_slots, help="Select a specific time slot")
-    elif time_period == "Afternoon":
-        time_slot = st.selectbox("", afternoon_slots, help="Select a specific time slot")
-    else:  # Evening
-        time_slot = st.selectbox("", evening_slots, help="Select a specific time slot")
-
-    # Convert selected time to 24-hour format for processing
-    selected_hour = datetime.strptime(time_slot, "%I:%M %p").hour
-    selected_minute = datetime.strptime(time_slot, "%I:%M %p").minute
-
-    # Show selected time in a nice format
-    st.markdown(f"""
-        <div style="
-            background: #FFF5E6;
-            padding: 0.8rem;
-            border-radius: 10px;
-            margin: 0.5rem 0;
-            text-align: center;
-        ">
-            <div style="color: #666; font-size: 0.8rem;">SELECTED TIME</div>
-            <div style="color: #FF6600; font-weight: 600; font-size: 1.1rem;">
-                {time_slot}
-            </div>
-            <div style="color: #666; font-size: 0.8rem; margin-top: 0.3rem;">
-                {time_period} Route
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-    # Combine date and time
-    selected_time = datetime.combine(date, datetime.min.time()) + timedelta(hours=selected_hour, minutes=selected_minute)
-
-    # Show full schedule summary
-    st.markdown(f"""
-        <div style="
-            background: linear-gradient(135deg, #FF6600, #FF8533);
-            padding: 1rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-            text-align: center;
-            color: white;
-        ">
-            <div style="font-size: 0.9rem; opacity: 0.9;">YOUR SCHEDULE</div>
-            <div style="font-weight: 600; font-size: 1.2rem; margin: 0.5rem 0;">
-                {selected_time.strftime('%A, %B %d at %I:%M %p')}
-            </div>
-            <div style="font-size: 0.8rem; opacity: 0.9;">
-                {(selected_time - datetime.now()).days} days from today
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown('</div>', unsafe_allow_html=True)  # Close the schedule container
-    
-    # 3. Day Type
-    st.markdown('<h3 style="color: #FF6600; font-size: 1.2rem; margin: 1.5rem 0 1rem;">📅 Day Type</h3>', unsafe_allow_html=True)
     day_type = st.radio(
-        "Select day type",
+        "",  # Empty label since we're using custom label above
         ["Weekday", "Weekend"],
         horizontal=True,
         help="Choose between weekday or weekend"
     )
-    
-    st.markdown('</div>', unsafe_allow_html=True)  # Close the options container
-    
-    # Analyze Button
-    st.markdown("<div style='margin: 1.5rem 0;'></div>", unsafe_allow_html=True)
-    analyze_button = st.button(
-        "📊 Analyze Route",
-        type="primary",
-        use_container_width=True,
-        on_click=start_analysis,
-        help="Click to analyze the selected route"
-    )
-    
-    # About section
+
+    # Show selected day type
+    st.markdown(f"""
+        <div style="
+            background: #FFF5E6;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            border: 2px dashed #FF6600;
+        ">
+            <div style="color: #666; font-size: 1rem;">SELECTED DAY TYPE:</div>
+            <div style="color: #FF6600; font-weight: 700; font-size: 1.8rem; margin: 10px 0;">
+                {day_type}
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown('</div>', unsafe_allow_html=True)  # Close the day type container
+
+    # MASSIVE ANALYZE BUTTON
+    st.markdown("""
+    <div style="
+        background: linear-gradient(135deg, #FF4500, #FF6600);
+        padding: 30px;
+        border-radius: 15px;
+        margin: 30px 0;
+        text-align: center;
+        box-shadow: 0 10px 20px rgba(255,102,0,0.5);
+        animation: pulse 2s infinite;
+        border: 4px solid #FF8C00;
+    ">
+        <h2 style="color: white; margin: 0 0 20px 0; font-size: 32px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+            🚀 ANALYZE YOUR ROUTE NOW 🚀
+        </h2>
+        <div id="super_analyze_button_container"></div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    super_analyze_col1, super_analyze_col2, super_analyze_col3 = st.columns([1, 2, 1])
+    with super_analyze_col2:
+        super_analyze = st.button("🔥 ANALYZE ROUTE NOW 🔥", type="primary", on_click=start_analysis, key="super_analyze_button", 
+                          help="Click to start route analysis", use_container_width=True)
+        
+        # Inject JavaScript to move the button into our custom container
+        st.markdown("""
+        <script>
+            setTimeout(function() {
+                const button = document.querySelector('[data-testid="baseButton-primary"][kind="primary"]');
+                const container = document.getElementById('super_analyze_button_container');
+                if (button && container) {
+                    button.style.fontSize = '28px';
+                    button.style.padding = '20px 30px';
+                    button.style.fontWeight = 'bold';
+                    button.style.backgroundColor = '#FF4500';
+                    button.style.border = '3px solid white';
+                    button.style.borderRadius = '50px';
+                    button.style.boxShadow = '0 8px 16px rgba(0,0,0,0.3)';
+                    container.appendChild(button);
+                }
+            }, 100);
+        </script>
+        """, unsafe_allow_html=True)
+
+    # Fix the footer indentation
+    # Footer
     st.markdown("""
     <div style="
         background: white;
         padding: 1.5rem;
-        border-radius: 15px;
-        margin: 2rem 0;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border-radius: 15px 15px 0 0;
+        margin-top: 2rem;
+        text-align: center;
+        border-top: 3px solid #FF6600;
     ">
-        <h3 style="color: #FF6600; font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem;">About Beem</h3>
-        <p style="color: #666; font-size: 0.9rem; line-height: 1.6;">
-            Beem is revolutionizing mobile billboard advertising with data-driven route optimization. 
-            Our platform combines real-time weather, traffic, and demographic data to maximize your 
-            advertising impact.
-        </p>
-        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
-            <div style="color: #FF6600; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem;">
-                Features:
-            </div>
-            <ul style="color: #666; font-size: 0.9rem; margin: 0; padding-left: 1.2rem;">
-                <li>Real-time data analysis</li>
-                <li>Smart route optimization</li>
-                <li>Demographic targeting</li>
-                <li>Performance metrics</li>
-            </ul>
-        </div>
+        <div style="font-size: 1.5rem; font-weight: 700; color: #FF6600; margin-bottom: 0.5rem;">BEEM</div>
+        <div style="font-size: 0.9rem; color: #666;">Mobile Billboard Solutions</div>
+        <div style="font-size: 0.8rem; color: #999; margin-top: 1rem;">© 2024 Beem. All rights reserved.</div>
     </div>
     """, unsafe_allow_html=True)
+
+# About section
+st.markdown("""
+<div style="
+    background: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin: 2rem 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+">
+    <h3 style="color: #FF6600; font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem;">About Beem</h3>
+    <p style="color: #666; font-size: 0.9rem; line-height: 1.6;">
+        Beem is revolutionizing mobile billboard advertising with data-driven route optimization. 
+        Our platform combines real-time weather, traffic, and demographic data to maximize your 
+        advertising impact.
+    </p>
+    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
+        <div style="color: #FF6600; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem;">
+            Features:
+        </div>
+        <ul style="color: #666; font-size: 0.9rem; margin: 0; padding-left: 1.2rem;">
+            <li>Real-time data analysis</li>
+            <li>Smart route optimization</li>
+            <li>Demographic targeting</li>
+            <li>Performance metrics</li>
+        </ul>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 # Footer
 st.markdown("""
@@ -1861,6 +2034,11 @@ with tabs[4]:
                     st.write("- Health and wellness solutions")
             
             st.caption("These recommendations are based on demographic data analysis from the Nomis API and local market research.")
+        
+        # Add the gender chart
+        st.markdown("#### Gender Distribution Chart")
+        gender_chart = draw_gender_chart(gender_data)
+        st.pyplot(gender_chart)
     else:
         st.info("Select options and click 'Analyze Route' to see demographic analysis.")
 
