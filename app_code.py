@@ -1051,13 +1051,19 @@ with main_analyze_col2:
 # Sidebar with improved styling
 with st.sidebar:
     st.markdown("""
-    <div class="sidebar-header">
-        <div class="sidebar-title">BEEM</div>
-        <div class="sidebar-subtitle">Mobile Billboard Solutions</div>
+    <div style="
+        background: linear-gradient(135deg, #FF6600, #FF8533);
+        color: white;
+        padding: 1.5rem;
+        margin: -1rem -1rem 1rem -1rem;
+        text-align: center;
+    ">
+        <div style="font-size: 2rem; font-weight: 700;">BEEM</div>
+        <div style="font-size: 1rem; opacity: 0.9;">Mobile Billboard Solutions</div>
     </div>
     """, unsafe_allow_html=True)
     
-    # Simple container for all options
+    # Main options container
     st.markdown("""
     <div style="
         background: white;
@@ -1068,7 +1074,7 @@ with st.sidebar:
     ">
     """, unsafe_allow_html=True)
     
-    # 1. Area Selection - Kept as is but with better styling
+    # 1. Area Selection
     st.markdown('<h3 style="color: #FF6600; font-size: 1.2rem; margin-bottom: 1rem;">📍 Select Location</h3>', unsafe_allow_html=True)
     areas = list(area_coordinates.keys())
     area = st.selectbox(
@@ -1078,7 +1084,7 @@ with st.sidebar:
         help="Choose the area for billboard route optimization"
     )
     
-    # Show selected area in a nice format
+    # Show selected area
     st.markdown(
         f"""
         <div style="
@@ -1094,10 +1100,10 @@ with st.sidebar:
         unsafe_allow_html=True
     )
     
-    # 2. Date and Time Selection - Simplified
+    # 2. Schedule Selection
     st.markdown('<h3 style="color: #FF6600; font-size: 1.2rem; margin: 1.5rem 0 1rem;">🕒 Schedule</h3>', unsafe_allow_html=True)
     
-    # Simple date picker
+    # Date picker
     current_date = datetime.now().date()
     date = st.date_input(
         "Select Date",
@@ -1106,7 +1112,7 @@ with st.sidebar:
         key="date_picker"
     )
     
-    # Time selection in a single row
+    # Time selection
     time_cols = st.columns(2)
     with time_cols[0]:
         hour = st.number_input(
@@ -1126,7 +1132,7 @@ with st.sidebar:
             help="Minute (5-minute intervals)"
         )
     
-    # Show selected date and time in a nice format
+    # Show selected schedule
     selected_time = datetime.combine(date, datetime.min.time()) + timedelta(hours=hour, minutes=minute)
     st.markdown(f"""
         <div style="
@@ -1146,7 +1152,7 @@ with st.sidebar:
         </div>
     """, unsafe_allow_html=True)
     
-    # 3. Day Type - Simplified
+    # 3. Day Type
     st.markdown('<h3 style="color: #FF6600; font-size: 1.2rem; margin: 1.5rem 0 1rem;">📅 Day Type</h3>', unsafe_allow_html=True)
     day_type = st.radio(
         "Select day type",
@@ -1155,9 +1161,9 @@ with st.sidebar:
         help="Choose between weekday or weekend"
     )
     
-    st.markdown('</div>', unsafe_allow_html=True)  # Close the white container
+    st.markdown('</div>', unsafe_allow_html=True)  # Close the options container
     
-    # Analyze Button - Made more prominent
+    # Analyze Button
     st.markdown("<div style='margin: 1.5rem 0;'></div>", unsafe_allow_html=True)
     analyze_button = st.button(
         "📊 Analyze Route",
@@ -1167,7 +1173,7 @@ with st.sidebar:
         help="Click to analyze the selected route"
     )
     
-    # About section - Kept as is
+    # About section
     st.markdown("""
     <div style="
         background: white;
