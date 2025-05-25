@@ -413,7 +413,7 @@ button,
 [data-baseweb="button"],
 div.stButton button {
     background-color: #FF6600 !important;
-    color: white !important;
+        color: white !important;
     border: none !important;
     font-weight: bold !important;
     text-shadow: 0px 1px 2px rgba(0,0,0,0.2) !important;
@@ -426,7 +426,7 @@ div[data-baseweb="select"] > div:first-child {
     border: 2px solid #FF6600 !important;
     font-weight: bold !important;
     padding: 10px 15px !important;
-    border-radius: 8px !important;
+        border-radius: 8px !important;
     box-shadow: 0 3px 6px rgba(0,0,0,0.15) !important;
     margin-top: 5px !important;
     margin-bottom: 15px !important;
@@ -543,8 +543,8 @@ section[data-testid="stSidebar"] li,
 section[data-testid="stSidebar"] label {
     color: #333333 !important;
     font-weight: 500 !important;
-    font-size: 16px !important;
-}
+            font-size: 16px !important;
+        }
 
 /* Headers with better visibility */
 h1 {
@@ -573,7 +573,7 @@ h3 {
 h4 {
     color: #FF6600 !important;
     font-weight: 600 !important;
-    font-size: 20px !important;
+            font-size: 20px !important;
     margin: 10px 0 !important;
 }
 
@@ -1064,144 +1064,54 @@ with col3:
     </div>
     """, unsafe_allow_html=True)
 
-# Main CTA Button - MAKE SUPER VISIBLE
-st.markdown("""
-<div style="
-    background: #FF6600;
-    padding: 20px;
-    border-radius: 15px;
-    margin: 30px 0;
-    text-align: center;
-    box-shadow: 0 8px 16px rgba(255,102,0,0.4);
-    animation: pulse 2s infinite;
-">
-    <style>
-    @keyframes pulse {
-        0% { box-shadow: 0 0 0 0 rgba(255,102,0,0.7); }
-        70% { box-shadow: 0 0 0 15px rgba(255,102,0,0); }
-        100% { box-shadow: 0 0 0 0 rgba(255,102,0,0); }
-    }
-    </style>
-    <h2 style="color: white; margin: 0 0 15px 0; font-size: 28px; font-weight: bold;">ANALYZE ROUTE NOW</h2>
-    <div id="main_analyze_button_container"></div>
-</div>
-""", unsafe_allow_html=True)
 
-main_analyze_col1, main_analyze_col2, main_analyze_col3 = st.columns([1, 2, 1])
-with main_analyze_col2:
-    main_analyze = st.button("▶️ ANALYZE NOW", type="primary", on_click=start_analysis, key="main_analyze_button", 
-                              help="Click to start route analysis", use_container_width=True)
-        
-    # Inject JavaScript to move the button into our custom container
-    st.markdown("""
-    <script>
-        setTimeout(function() {
-            const button = document.querySelector('[data-testid="baseButton-primary"]');
-            const container = document.getElementById('main_analyze_button_container');
-            if (button && container) {
-                button.style.fontSize = '24px';
-                button.style.padding = '15px 30px';
-                button.style.fontWeight = 'bold';
-                container.appendChild(button);
-            }
-        }, 100);
-    </script>
-    """, unsafe_allow_html=True)
+
     
-    # Also make the sidebar button VERY visible
-    with st.sidebar:
-        st.markdown("""
-        <div style="
-            background: linear-gradient(135deg, #FF6600, #FF8533);
-            color: white;
-            padding: 1.5rem;
-            margin: -1rem -1rem 1rem -1rem;
-            text-align: center;
-        ">
-            <div style="font-size: 2rem; font-weight: 700;">BEEM</div>
-            <div style="font-size: 1rem; opacity: 0.9;">Mobile Billboard Solutions</div>
-        </div>
-        """, unsafe_allow_html=True)
+# Also make the sidebar button VERY visible
+with st.sidebar:
+    st.markdown("""
+    <div style="
+        background: linear-gradient(135deg, #FF6600, #FF8533);
+        color: white;
+        padding: 1.5rem;
+        margin: -1rem -1rem 1rem -1rem;
+        text-align: center;
+    ">
+        <div style="font-size: 2rem; font-weight: 700;">BEEM</div>
+        <div style="font-size: 1rem; opacity: 0.9;">Mobile Billboard Solutions</div>
+    </div>
+    """, unsafe_allow_html=True)
         
-        # Main options container
-        st.markdown("""
-        <div style="
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            margin: 1rem 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        ">
-        """, unsafe_allow_html=True)
+    # Main options container
+    st.markdown("""
+    <div style="
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin: 1rem 0;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    ">
+    """, unsafe_allow_html=True)
         
-        # 1. Area Selection
-        st.markdown('<h3 style="color: #FF6600; font-size: 1.2rem; margin-bottom: 1rem;">📍 Select Location</h3>', unsafe_allow_html=True)
-        areas = list(area_coordinates.keys())
-        area = st.selectbox(
-            "Choose your target area",
-            areas,
-            index=0,
-            help="Choose the area for billboard route optimization"
-        )
+    # 1. Area Selection
+    st.markdown('<h3 style="color: #FF6600; font-size: 1.2rem; margin-bottom: 1rem;">📍 Select Location</h3>', unsafe_allow_html=True)
+    areas = list(area_coordinates.keys())
+    area = st.selectbox(
+        "Choose your target area",
+        areas,
+        index=0,
+        help="Choose the area for billboard route optimization"
+    )
         
-        # Show selected area
-        st.markdown(
-            f"""
-            <div style="
-                background: #FFF5E6;
-                padding: 0.8rem;
-                border-radius: 10px;
-                margin: 0.5rem 0 1.5rem 0;
-                text-align: center;
-            ">
-                <div style="color: #FF6600; font-weight: 600;">{area}</div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-        
-        # Massive space before the analyze button to ensure visibility
-        st.markdown("<div style='margin: 40px 0;'></div>", unsafe_allow_html=True)
-        
-        # Super visible analyze button
-        st.markdown("""
-        <div style="
-            background: linear-gradient(135deg, #FF4500, #FF8C00);
-            padding: 15px;
-            border-radius: 15px;
-            margin: 20px 0;
-            text-align: center;
-            box-shadow: 0 6px 12px rgba(255,102,0,0.4);
-        ">
-            <h3 style="color: white; margin: 0; font-size: 20px; font-weight: bold;">🔍 ANALYZE ROUTE</h3>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        sidebar_analyze = st.button(
-            "📊 ANALYZE ROUTE", 
-            type="primary",
-            use_container_width=True,
-            key="sidebar_analyze_button",
-            on_click=start_analysis
-        )
-        
-        # Clear space after the button
-        st.markdown("<div style='margin: 40px 0;'></div>", unsafe_allow_html=True)
 
-# Date Selection - COMPLETELY FIXED AND CRYSTAL CLEAR
-st.markdown("""
-<div style="
-    background: white;
-    padding: 1.5rem;
-    border-radius: 15px;
-    margin: 1.5rem 0;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    border: 3px solid #FF6600;
-">
-    <h3 style="color: #FF6600; font-size: 1.5rem; margin-bottom: 1rem; text-align: center; font-weight: bold;">
-        📅 CHOOSE YOUR DATE
-    </h3>
-""", unsafe_allow_html=True)
+        
+    # Massive space before the analyze button to ensure visibility
+    st.markdown("<div style='margin: 40px 0;'></div>", unsafe_allow_html=True)
+        
+    # Clear space after the button
+    st.markdown("<div style='margin: 40px 0;'></div>", unsafe_allow_html=True)
+
+
 
 # Date Selection with BIG, CLEAR input
 st.markdown('<p style="color: #333; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: bold;">📆 Select Exact Date:</p>', unsafe_allow_html=True)
@@ -1307,31 +1217,18 @@ st.markdown(f"""
 
 st.markdown('</div>', unsafe_allow_html=True)  # Close the container
     
-# 3. Day Type
-st.markdown("""
-<div style="
-    background: white;
-    padding: 1.5rem;
-    border-radius: 15px;
-    margin: 1.5rem 0;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    border: 3px solid #FF6600;
-">
-    <h3 style="color: #FF6600; font-size: 1.5rem; margin-bottom: 1rem; text-align: center; font-weight: bold;">
-        📅 SELECT DAY TYPE
-    </h3>
-""", unsafe_allow_html=True)
 
-st.markdown('<p style="color: #333; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: bold;">Choose Weekday or Weekend:</p>', unsafe_allow_html=True)
 
-day_type = st.radio(
-    "",  # Empty label since we're using custom label above
-    ["Weekday", "Weekend"],
-    horizontal=True,
-    help="Choose between weekday or weekend"
+selected_day = st.selectbox(
+    "Select a day:",
+    ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    index=0,
+    key="day_of_week_select",
+    help="Choose the specific day for your analysis",
+    label_visibility="visible"
 )
 
-# Show selected day type
+# Show selected day
 st.markdown(f"""
 <div style="
     background: #FFF5E6;
@@ -1341,55 +1238,23 @@ st.markdown(f"""
     text-align: center;
     border: 2px dashed #FF6600;
 ">
-    <div style="color: #666; font-size: 1rem;">SELECTED DAY TYPE:</div>
+    <div style="color: #666; font-size: 1rem;">SELECTED DAY:</div>
     <div style="color: #FF6600; font-weight: 700; font-size: 1.8rem; margin: 10px 0;">
-        {day_type}
+        {selected_day}
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown('</div>', unsafe_allow_html=True)  # Close the day type container
+st.markdown('</div>', unsafe_allow_html=True)  # Close the day select container
 
-# MASSIVE ANALYZE BUTTON
-st.markdown("""
-<div style="
-    background: linear-gradient(135deg, #FF4500, #FF6600);
-    padding: 30px;
-    border-radius: 15px;
-    margin: 30px 0;
-    text-align: center;
-    box-shadow: 0 10px 20px rgba(255,102,0,0.5);
-    animation: pulse 2s infinite;
-    border: 4px solid #FF8C00;
-">
-    <h2 style="color: white; margin: 0 0 20px 0; font-size: 32px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-        🚀 ANALYZE YOUR ROUTE NOW 🚀
-    </h2>
-    <div id="super_analyze_button_container"></div>
-</div>
-""", unsafe_allow_html=True)
+# --- ADD THE NEW, SINGLE, PROMINENT ANALYZE BUTTON HERE ---
+st.markdown("<br>", unsafe_allow_html=True) # Add some space before the button
+if st.button("🔍 ANALYZE ROUTE", key="final_analyze_button", use_container_width=True):
+    st.session_state.analyze_clicked = True
+    st.success(f"Analysis started for {selected_day}!")
 
-super_analyze_col1, super_analyze_col2, super_analyze_col3 = st.columns([1, 2, 1])
-with super_analyze_col2:
-    st.button("🔥 ANALYZE ROUTE NOW 🔥", type="primary", key="super_analyze_button", 
-                          on_click=start_analysis, use_container_width=True)
-
-    # Fix the footer indentation
-    # Footer
-    st.markdown("""
-    <div style="
-        background: white;
-        padding: 1.5rem;
-        border-radius: 15px 15px 0 0;
-        margin-top: 2rem;
-        text-align: center;
-        border-top: 3px solid #FF6600;
-    ">
-        <div style="font-size: 1.5rem; font-weight: 700; color: #FF6600; margin-bottom: 0.5rem;">BEEM</div>
-        <div style="font-size: 0.9rem; color: #666;">Mobile Billboard Solutions</div>
-        <div style="font-size: 0.8rem; color: #999; margin-top: 1rem;">© 2024 Beem. All rights reserved.</div>
-    </div>
-    """, unsafe_allow_html=True)
+# --- REMOVE ALL DATE/TIME SELECTION CODE BELOW THIS POINT ---
+# (No st.date_input, no st.select_slider for hour, no time summary, no custom HTML button for analyze, no duplicate analyze buttons)
 
 # About section
 st.markdown("""
@@ -1545,42 +1410,40 @@ with tabs[0]:
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.markdown(f"""
-                <div class="dashboard-metric">
-                    <h4 style="margin-top: 0">{weather_icon} Weather</h4>
-                    <h2 style="color: #333 !important; margin: 5px 0">{weather_data['temperature']:.1f}°C</h2>
-                    <p style="color: #666; margin: 0">{weather_data['condition']}</p>
-                    <hr style="margin: 10px 0; border-color: #ddd">
-                    <p><strong>Exact temperature:</strong> {weather_data["temperature"]:.1f}°C<br>
-                    <strong>Wind:</strong> {weather_data["wind_speed"]:.1f} km/h<br>
-                    <strong>Precipitation:</strong> {weather_data["precipitation"]:.1f} mm</p>
-                </div>
+                    <div class="dashboard-metric">
+                        <h4 style="margin-top: 0">{weather_icon} Weather</h4>
+                        <h2 style="color: #333 !important; margin: 5px 0">{weather_data['temperature']:.1f}°C</h2>
+                        <p style="color: #666; margin: 0">{weather_data['condition']}</p>
+                        <hr style="margin: 10px 0; border-color: #ddd">
+                        <p><strong>Exact temperature:</strong> {weather_data["temperature"]:.1f}°C<br>
+                        <strong>Wind:</strong> {weather_data["wind_speed"]:.1f} km/h<br>
+                        <strong>Precipitation:</strong> {weather_data["precipitation"]:.1f} mm</p>
+                    </div>
                 """, unsafe_allow_html=True)
-                
             with col2:
                 st.markdown(f"""
-                <div class="dashboard-metric">
-                    <h4 style="margin-top: 0">{traffic_icon} Traffic</h4>
-                    <h2 style="color: #333 !important; margin: 5px 0">{traffic_status}</h2>
-                    <p style="color: #666; margin: 0">{int(traffic_data['flow_speed'])} km/h current speed</p>
-                    <hr style="margin: 10px 0; border-color: #ddd">
-                    <p><strong>Congestion:</strong> {int(traffic_data['congestion_level'] * 100)}%<br>
-                    <strong>Free flow:</strong> {int(traffic_data["free_flow_speed"])} km/h</p>
-                </div>
+                    <div class="dashboard-metric">
+                        <h4 style="margin-top: 0">{traffic_icon} Traffic</h4>
+                        <h2 style="color: #333 !important; margin: 5px 0">{traffic_status}</h2>
+                        <p style="color: #666; margin: 0">{int(traffic_data['flow_speed'])} km/h current speed</p>
+                        <hr style="margin: 10px 0; border-color: #ddd">
+                        <p><strong>Congestion:</strong> {int(traffic_data['congestion_level'] * 100)}%<br>
+                        <strong>Free flow:</strong> {int(traffic_data["free_flow_speed"])} km/h</p>
+                    </div>
                 """, unsafe_allow_html=True)
-                
             with col3:
                 pedestrian_rating = "High" if pedestrian_density > 0.7 else "Medium" if pedestrian_density > 0.4 else "Low"
                 st.markdown(f"""
-                <div class="dashboard-metric">
-                    <h4 style="margin-top: 0">📊 Engagement</h4>
-                    <h2 style="color: #333 !important; margin: 5px 0">{engagement_score:.0f}/100</h2>
-                    <p style="color: #666; margin: 0">{pedestrian_rating} foot traffic</p>
-                    <hr style="margin: 10px 0; border-color: #ddd">
-                    <p><strong>Pedestrian density:</strong> {int(pedestrian_density*100)}%<br>
-                    <strong>Estimated views:</strong> {int(pedestrian_density*1000)}/hr</p>
-                </div>
+                    <div class="dashboard-metric">
+                        <h4 style="margin-top: 0">📊 Engagement</h4>
+                        <h2 style="color: #333 !important; margin: 5px 0">{engagement_score:.0f}/100</h2>
+                        <p style="color: #666; margin: 0">{pedestrian_rating} foot traffic</p>
+                        <hr style="margin: 10px 0; border-color: #ddd">
+                        <p><strong>Pedestrian density:</strong> {int(pedestrian_density*100)}%<br>
+                        <strong>Estimated views:</strong> {int(pedestrian_density*1000)}/hr</p>
+                    </div>
                 """, unsafe_allow_html=True)
-            
+    
             # Visual representation of optimal times (new)
             st.markdown("<h3>🎯 Optimal Times Today</h3>", unsafe_allow_html=True)
             hours_col1, hours_col2, hours_col3 = st.columns(3)
@@ -1594,9 +1457,9 @@ with tabs[0]:
                         <span>8:00 - 9:00 AM</span>
                     </div>
                     <p style="color: #666; margin-top: 10px">Morning commuters (75/100)</p>
-                </div>
-                """, unsafe_allow_html=True)
-                
+        </div>
+        """, unsafe_allow_html=True)
+    
             with hours_col2:
                 st.markdown("""
                 <div class="card">
@@ -1635,13 +1498,13 @@ with tabs[0]:
                             <div style="font-size: 24px; margin-bottom: 5px">🚗</div>
                             <div style="font-weight: bold">{0} km/h</div>
                             <div style="font-size: 12px; color: #666">Current Speed</div>
-                        </div>
+            </div>
                         <div style="text-align: center; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 5px; width: 45%">
                             <div style="font-size: 24px; margin-bottom: 5px">⚡</div>
                             <div style="font-weight: bold">{1} km/h</div>
                             <div style="font-size: 12px; color: #666">Free Flow</div>
-                        </div>
-                    </div>
+                </div>
+                </div>
                 """.format(int(traffic_data['flow_speed']), int(traffic_data['free_flow_speed'])), unsafe_allow_html=True)
                 
                 # Traffic rating
@@ -1665,7 +1528,7 @@ with tabs[0]:
                             <div style="font-size: 24px; margin-bottom: 5px">🌡️</div>
                             <div style="font-weight: bold">{1:.1f}°C</div>
                             <div style="font-size: 12px; color: #666">Exact Temperature</div>
-                        </div>
+            </div>
                         <div style="text-align: center; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 5px; width: 45%">
                             <div style="font-size: 24px; margin-bottom: 5px">💨</div>
                             <div style="font-weight: bold">{2:.1f} km/h</div>
@@ -1679,9 +1542,9 @@ with tabs[0]:
                 <div style="margin-top: 15px">
                     <strong>Condition:</strong> {weather_data['condition']}<br>
                     <strong>Precipitation:</strong> {weather_data['precipitation']:.1f} mm
-                </div>
-                """, unsafe_allow_html=True)
-                
+        </div>
+        """, unsafe_allow_html=True)
+    
                 # Weather rating for billboard
                 if weather_data['precipitation'] < 0.5 and weather_data['wind_speed'] < 20:
                     st.markdown("<div style='margin-top: 15px'>⭐⭐⭐⭐⭐ Excellent - Ideal for billboard visibility</div>", unsafe_allow_html=True)
@@ -1697,15 +1560,15 @@ with tabs[0]:
         st.info("Select options and click 'Analyze Route' to see results.")
         
         # Add a visual placeholder when no analysis is running
-        st.markdown("""
+    st.markdown("""
         <div style="display: flex; justify-content: center; align-items: center; height: 300px">
             <div style="text-align: center">
                 <div style="font-size: 60px; color: #FF6600; margin-bottom: 20px">📢</div>
                 <p style="color: #FF9D45; margin-top: 20px; font-size: 18px">Select options and analyze to see data</p>
             </div>
         </div>
-        """, unsafe_allow_html=True)
-
+    """, unsafe_allow_html=True)
+    
 # Tab 2: Map & Visualization
 with tabs[1]:
     st.markdown('<h2 style="color: #FF9D45">Map & Visualization</h2>', unsafe_allow_html=True)
@@ -1854,46 +1717,46 @@ with tabs[4]:
             audience_container = st.container()
             with audience_container:
                 st.markdown("""
-                <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
-                """, unsafe_allow_html=True)
+                    <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                    """, unsafe_allow_html=True)
                 st.write(f"**Type:** {audience}")
                 st.write(f"**Age Range:** {age}")
                 st.write(f"**Key Interests:** {interests}")
                 st.markdown("</div>", unsafe_allow_html=True)
-            
+
             # Create a simple gender distribution using Streamlit's progress bars
             st.markdown("#### Gender Distribution")
             gender_container = st.container()
             with gender_container:
                 st.markdown("""
-                <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
-                """, unsafe_allow_html=True)
+                    <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                    """, unsafe_allow_html=True)
                 st.write("Male")
                 st.progress(gender_data['male_percent']/100)
                 st.write(f"{gender_data['male_percent']}% ({gender_data['male_count']} people)")
-                
+
                 st.write("Female")
                 st.progress(gender_data['female_percent']/100)
                 st.write(f"{gender_data['female_percent']}% ({gender_data['female_count']} people)")
-                
+
                 st.caption("Source: Jobseeker's Allowance Data (Nomis API)")
                 st.markdown("</div>", unsafe_allow_html=True)
-            
+
             # Age distribution using native Streamlit components
             st.markdown("#### Age Distribution")
             age_container = st.container()
             with age_container:
                 st.markdown("""
-                <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
-                """, unsafe_allow_html=True)
+                    <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                    """, unsafe_allow_html=True)
                 for age_group, data in gender_data['age_groups'].items():
                     st.write(f"{age_group}")
                     st.progress(data['percent']/100)
                     st.write(f"{data['percent']}% ({data['count']} people)")
-                
+
                 st.caption("Source: Census & Demographic Data (Nomis API)")
                 st.markdown("</div>", unsafe_allow_html=True)
-        
+
         # Column 2: Targeting and Employment/Education data
         with col2:
             # Create targeting recommendations container
@@ -1901,25 +1764,25 @@ with tabs[4]:
             targeting_container = st.container()
             with targeting_container:
                 st.markdown("""
-                <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
-                """, unsafe_allow_html=True)
+                    <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                    """, unsafe_allow_html=True)
                 st.write("- Digital products")
                 st.write("- Food and dining")
                 st.write("- Entertainment events")
                 st.write("- Use QR codes for interaction")
                 st.markdown("</div>", unsafe_allow_html=True)
-            
+
             # Gender-specific targeting
             st.markdown("#### Gender-Specific Targeting")
             gender_targeting_container = st.container()
             with gender_targeting_container:
                 st.markdown("""
-                <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
-                """, unsafe_allow_html=True)
+                    <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                    """, unsafe_allow_html=True)
                 male_skew = gender_data['male_percent'] > 50
                 female_skew = gender_data['female_percent'] > 50
                 balanced = abs(gender_data['male_percent'] - gender_data['female_percent']) < 5
-                
+
                 if male_skew:
                     st.write("**Male-focused strategies:**")
                     st.write("- Tech and gadget promotions")
@@ -1936,45 +1799,45 @@ with tabs[4]:
                     st.write("- General interest events")
                     st.write("- Inclusive messaging")
                 st.markdown("</div>", unsafe_allow_html=True)
-            
+
             # Employment status
             st.markdown("#### Employment Status")
             employment_container = st.container()
             with employment_container:
                 st.markdown("""
-                <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
-                """, unsafe_allow_html=True)
+                    <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                    """, unsafe_allow_html=True)
                 employment_labels = {
                     "employed": "Employed",
                     "unemployed": "Unemployed",
                     "economically_inactive": "Inactive"
                 }
-                
+
                 for status, data in gender_data['employment'].items():
                     st.write(f"{employment_labels[status]}")
                     st.progress(data['percent']/100)
                     st.write(f"{data['percent']}% ({data['count']} people)")
                 st.markdown("</div>", unsafe_allow_html=True)
-            
+
             # Education levels
             st.markdown("#### Education Levels")
             education_container = st.container()
             with education_container:
                 st.markdown("""
-                <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
-                """, unsafe_allow_html=True)
+                    <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                    """, unsafe_allow_html=True)
                 education_labels = {
                     "degree_or_higher": "Degree+",
                     "a_level": "A-Level",
                     "gcse": "GCSE",
                     "no_qualification": "None"
                 }
-                
+
                 for level, data in gender_data['education'].items():
                     st.write(f"{education_labels[level]}")
                     st.progress(data['percent']/100)
                     st.write(f"{data['percent']}% ({data['count']} people)")
-                
+
                 st.caption("Source: Census & Demographic Data (Nomis API)")
                 st.markdown("</div>", unsafe_allow_html=True)
         
@@ -1983,8 +1846,8 @@ with tabs[4]:
         insights_container = st.container()
         with insights_container:
             st.markdown("""
-            <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
-            """, unsafe_allow_html=True)
+                <div style="border: 1px solid #e6e6e6; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                """, unsafe_allow_html=True)
             # Create two columns inside the container
             insight_col1, insight_col2 = st.columns(2)
             
@@ -2088,3 +1951,5 @@ else:
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+# The rest of your app logic (tabs, analysis, etc.) remains unchanged and will use st.session_state.analyze_clicked to show results.
