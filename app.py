@@ -548,7 +548,7 @@ section[data-testid="stSidebar"] label {
 
 /* Headers with better visibility */
 h1 {
-    color: #FF6600 !important;
+    color: #000 !important;
     font-weight: 700 !important;
     font-size: 32px !important;
     margin-bottom: 20px !important;
@@ -850,6 +850,28 @@ div[data-baseweb="select"] svg {
     font-size: 14px !important;
     color: #333 !important;
 }
+
+/* Modern styling updates */
+.hero-title {
+    color: #000 !important;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+/* Override any other styles that might affect the title */
+h1.hero-title {
+    color: #000 !important;
+    -webkit-text-fill-color: #000 !important;
+    text-shadow: none !important;
+}
+
+/* Override any global h1 styles */
+h1 {
+    color: #000 !important;
+    -webkit-text-fill-color: #000 !important;
+    text-shadow: none !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -906,19 +928,20 @@ def start_analysis():
 st.markdown("""
 <style>
 /* Modern styling updates */
+.hero-title {
+    color: #000 !important;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+}
+
 .hero-section {
     background: #FF6600;
     padding: 2rem;
     border-radius: 15px;
     margin-bottom: 2rem;
     text-align: center;
-}
-
-.hero-title {
-    color: #000000;
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
 }
 
 .hero-subtitle {
@@ -1029,7 +1052,7 @@ st.markdown("""
 # Hero Section
 st.markdown("""
 <div class="hero-section">
-    <h1 class="hero-title">📢 Beem Billboard Route Optimizer</h1>
+    <h1 class="hero-title" style="color: #000 !important; -webkit-text-fill-color: #000 !important; text-shadow: none !important;">📢 Beem Billboard Route Optimizer</h1>
     <p class="hero-subtitle">Maximize your advertising impact with data-driven route optimization</p>
 </div>
 """, unsafe_allow_html=True)
