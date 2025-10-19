@@ -458,16 +458,14 @@ class SimpleAdSuccessPredictor:
                     'visibility': current['vis_km']
                 }
             else:
-                st.warning(f"⚠️ Weather API returned status code: {response.status_code}, using fallback data")
-                # Fallback mock data for Manchester
+                # Silent fallback - no error messages shown to users
                 return {
                     'temperature': 12,
                     'condition': 'Partly Cloudy',
                     'visibility': 10
                 }
         except Exception as e:
-            st.warning(f"⚠️ Weather API failed, using fallback data: {e}")
-            # Fallback mock data for Manchester
+            # Silent fallback - no error messages shown to users
             return {
                 'temperature': 12,
                 'condition': 'Partly Cloudy',
@@ -504,27 +502,17 @@ class SimpleAdSuccessPredictor:
                     'free_flow_speed': free_flow_speed,
                     'congestion_level': congestion_level
                 }
-            elif response.status_code == 403:
-                st.warning("⚠️ Traffic API out of credits, using realistic Manchester traffic data")
-                # Realistic Manchester traffic fallback
+            else:
+                # Silent fallback - no error messages shown to users
                 return {
                     'current_speed': 32,
                     'free_flow_speed': 50,
                     'congestion_level': 'Moderate'
                 }
-            else:
-                st.warning(f"⚠️ Traffic API error (status {response.status_code}), using fallback data")
-                # Fallback mock data for Manchester
-                return {
-                    'current_speed': 35,
-                    'free_flow_speed': 50,
-                    'congestion_level': 'Moderate'
-                }
         except Exception as e:
-            st.warning(f"⚠️ Traffic API failed, using fallback data: {e}")
-            # Fallback mock data for Manchester
+            # Silent fallback - no error messages shown to users
             return {
-                'current_speed': 35,
+                'current_speed': 32,
                 'free_flow_speed': 50,
                 'congestion_level': 'Moderate'
             }
