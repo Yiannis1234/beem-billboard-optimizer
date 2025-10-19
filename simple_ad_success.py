@@ -504,8 +504,16 @@ class SimpleAdSuccessPredictor:
                     'free_flow_speed': free_flow_speed,
                     'congestion_level': congestion_level
                 }
+            elif response.status_code == 403:
+                st.warning("⚠️ Traffic API out of credits, using realistic Manchester traffic data")
+                # Realistic Manchester traffic fallback
+                return {
+                    'current_speed': 32,
+                    'free_flow_speed': 50,
+                    'congestion_level': 'Moderate'
+                }
             else:
-                st.warning(f"⚠️ Traffic API returned status code: {response.status_code}, using fallback data")
+                st.warning(f"⚠️ Traffic API error (status {response.status_code}), using fallback data")
                 # Fallback mock data for Manchester
                 return {
                     'current_speed': 35,
