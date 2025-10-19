@@ -443,7 +443,7 @@ class SimpleAdSuccessPredictor:
         }
     
     def get_weather_data(self, lat, lon):
-        """Get real weather data from WeatherAPI.com"""
+        """Get real weather data from WeatherAPI.com with fallback"""
         try:
             # WeatherAPI.com endpoint
             url = f"http://api.weatherapi.com/v1/forecast.json?key=f70bd534000447b2a14202431252303&q={lat},{lon}&days=1&aqi=no&alerts=no"
@@ -458,14 +458,24 @@ class SimpleAdSuccessPredictor:
                     'visibility': current['vis_km']
                 }
             else:
-                st.error(f"Weather API returned status code: {response.status_code}")
-                raise Exception(f"Weather API failed with status {response.status_code}")
+                st.warning(f"⚠️ Weather API returned status code: {response.status_code}, using fallback data")
+                # Fallback mock data for Manchester
+                return {
+                    'temperature': 12,
+                    'condition': 'Partly Cloudy',
+                    'visibility': 10
+                }
         except Exception as e:
-            st.error(f"Weather API error: {e}")
-            raise Exception(f"Weather API failed: {e}")
+            st.warning(f"⚠️ Weather API failed, using fallback data: {e}")
+            # Fallback mock data for Manchester
+            return {
+                'temperature': 12,
+                'condition': 'Partly Cloudy',
+                'visibility': 10
+            }
     
     def get_traffic_data(self, lat, lon):
-        """Get real traffic data from TomTom API"""
+        """Get real traffic data from TomTom API with fallback"""
         try:
             # TomTom Traffic Flow API
             url = f"https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point={lat},{lon}&key=Uc0dPKIMHcqZ91VbGAnbEAINdzwqRzil"
@@ -495,11 +505,21 @@ class SimpleAdSuccessPredictor:
                     'congestion_level': congestion_level
                 }
             else:
-                st.error(f"Traffic API returned status code: {response.status_code}")
-                raise Exception(f"Traffic API failed with status {response.status_code}")
+                st.warning(f"⚠️ Traffic API returned status code: {response.status_code}, using fallback data")
+                # Fallback mock data for Manchester
+                return {
+                    'current_speed': 35,
+                    'free_flow_speed': 50,
+                    'congestion_level': 'Moderate'
+                }
         except Exception as e:
-            st.error(f"Traffic API error: {e}")
-            raise Exception(f"Traffic API failed: {e}")
+            st.warning(f"⚠️ Traffic API failed, using fallback data: {e}")
+            # Fallback mock data for Manchester
+            return {
+                'current_speed': 35,
+                'free_flow_speed': 50,
+                'congestion_level': 'Moderate'
+            }
     
     def calculate_ad_success_score(self, area_name, area_data, weather_data, traffic_data):
         """Calculate realistic ad success score (0-100)"""
