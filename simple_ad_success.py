@@ -10,7 +10,7 @@ import time
 
 # Configure Streamlit
 st.set_page_config(
-    page_title="Manchester Ad Success Predictor",
+    page_title="Ad Success Predictor (Manchester & London)",
     page_icon="🎯",
     layout="centered",
     initial_sidebar_state="collapsed"
@@ -441,6 +441,99 @@ class SimpleAdSuccessPredictor:
                 "description": "Town center with shopping and transport hub"
             }
         }
+        
+        # London areas (initial set) with clear success factors
+        self.london_areas = {
+            "Oxford Circus": {
+                "center": {"lat": 51.5154, "lon": -0.1410},
+                "population": 20000,
+                "footfall_daily": 450000,
+                "success_factors": {
+                    "high_traffic": True,
+                    "shopping_area": True,
+                    "affluent_audience": True,
+                    "transport_hub": False
+                },
+                "description": "Iconic West End shopping junction with extremely high footfall"
+            },
+            "Piccadilly Circus": {
+                "center": {"lat": 51.5098, "lon": -0.1340},
+                "population": 15000,
+                "footfall_daily": 400000,
+                "success_factors": {
+                    "high_traffic": True,
+                    "shopping_area": True,
+                    "tourist_area": True
+                },
+                "description": "Tourist hotspot with giant screens and constant pedestrian flow"
+            },
+            "Liverpool Street": {
+                "center": {"lat": 51.5178, "lon": -0.0824},
+                "population": 18000,
+                "footfall_daily": 380000,
+                "success_factors": {
+                    "high_traffic": True,
+                    "transport_hub": True,
+                    "business_district": True
+                },
+                "description": "Major commuter hub in the City with strong professional audience"
+            },
+            "Canary Wharf": {
+                "center": {"lat": 51.5054, "lon": -0.0235},
+                "population": 12000,
+                "footfall_daily": 300000,
+                "success_factors": {
+                    "business_district": True,
+                    "affluent_audience": True,
+                    "high_traffic": True
+                },
+                "description": "Financial district with affluent professionals and premium brands"
+            },
+            "Shoreditch": {
+                "center": {"lat": 51.5260, "lon": -0.0803},
+                "population": 10000,
+                "footfall_daily": 180000,
+                "success_factors": {
+                    "creative_area": True,
+                    "nightlife": True,
+                    "high_traffic": True
+                },
+                "description": "Trendy creative area with young, brand-conscious audience"
+            },
+            "South Bank": {
+                "center": {"lat": 51.5066, "lon": -0.1163},
+                "population": 8000,
+                "footfall_daily": 220000,
+                "success_factors": {
+                    "tourist_area": True,
+                    "shopping_area": True,
+                    "high_traffic": True
+                },
+                "description": "Riverside cultural district with heavy tourist footfall"
+            },
+            "King's Cross": {
+                "center": {"lat": 51.5308, "lon": -0.1238},
+                "population": 11000,
+                "footfall_daily": 320000,
+                "success_factors": {
+                    "transport_hub": True,
+                    "business_district": True,
+                    "high_traffic": True
+                },
+                "description": "Major rail hub with offices and retail – long dwell times"
+            },
+            "Camden Town": {
+                "center": {"lat": 51.5416, "lon": -0.1420},
+                "population": 9000,
+                "footfall_daily": 160000,
+                "success_factors": {
+                    "creative_area": True,
+                    "shopping_area": True,
+                    "nightlife": True
+                },
+                "description": "Market and music area – strong youth and tourist traffic"
+            }
+        }
     
     def get_weather_data(self, lat, lon):
         """Get real weather data from WeatherAPI.com with fallback"""
@@ -610,12 +703,12 @@ class SimpleAdSuccessPredictor:
         return reasons[:3]  # Top 3 reasons
 
 def main():
-    st.markdown('<h1 class="main-header">🎯 Manchester Ad Success Predictor</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">🎯 Ad Success Predictor — Manchester & London</h1>', unsafe_allow_html=True)
     
     st.markdown("""
     <div style='text-align: center; margin-bottom: 2rem;'>
-        <h3 style='color: #2d3436;'>Find out which Manchester area will make your ads most successful!</h3>
-        <p style='color: #636e72;'>We analyze traffic, audience, and conditions to predict ad success</p>
+        <h3 style='color: #2d3436;'>Choose Manchester or London and get instant ad success predictions.</h3>
+        <p style='color: #636e72;'>We analyze real traffic, audience and conditions. Separate buttons keep it crystal clear.</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -630,23 +723,35 @@ def main():
     
     predictor = SimpleAdSuccessPredictor()
     
-    # Simple area selection
-    col1, col2 = st.columns([2, 1])
-    
-    with col1:
-        selected_area = st.selectbox(
-            "📍 Choose Manchester Area:",
+    # Dual city selection with distinct buttons
+    left, right = st.columns(2)
+    with left:
+        m_area = st.selectbox(
+            "📍 Manchester Area",
             list(predictor.manchester_areas.keys()),
             index=0,
-            help="Select any Manchester area to see ad success prediction"
+            help="Select a Manchester area"
         )
-    
-    with col2:
-        analyze_clicked = st.button("🔍 Predict Ad Success", type="primary", use_container_width=True)
-    
-    if analyze_clicked or selected_area:
+        manchester_clicked = st.button("🔍 Predict Manchester", type="primary", use_container_width=True)
+    with right:
+        l_area = st.selectbox(
+            "📍 London Area",
+            list(predictor.london_areas.keys()),
+            index=0,
+            help="Select a London area"
+        )
+        london_clicked = st.button("🔍 Predict London", type="primary", use_container_width=True)
+
+    # Determine which city to analyze
+    selected_city = None
+    if manchester_clicked:
+        selected_city = ("Manchester", m_area, predictor.manchester_areas[m_area])
+    elif london_clicked:
+        selected_city = ("London", l_area, predictor.london_areas[l_area])
+
+    if selected_city is not None:
+        city_name, selected_area, area_data = selected_city
         # Get data
-        area_data = predictor.manchester_areas[selected_area]
         weather_data = predictor.get_weather_data(area_data['center']['lat'], area_data['center']['lon'])
         traffic_data = predictor.get_traffic_data(area_data['center']['lat'], area_data['center']['lon'])
         
@@ -759,11 +864,12 @@ def main():
                 """)
         
         # Simple comparison
-        st.subheader("📊 Quick Area Comparison")
+        st.subheader(f"📊 Quick Area Comparison — {city_name}")
         
-        # Calculate scores for all areas
+        # Calculate scores for all areas in the selected city
         all_scores = []
-        for area_name, area_data in predictor.manchester_areas.items():
+        city_dict = predictor.manchester_areas if city_name == "Manchester" else predictor.london_areas
+        for area_name, area_data in city_dict.items():
             weather = predictor.get_weather_data(area_data['center']['lat'], area_data['center']['lon'])
             traffic = predictor.get_traffic_data(area_data['center']['lat'], area_data['center']['lon'])
             success = predictor.calculate_ad_success_score(area_name, area_data, weather, traffic)
