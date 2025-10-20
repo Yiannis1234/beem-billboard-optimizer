@@ -476,7 +476,7 @@ class SimpleAdSuccessPredictor:
         """Get real traffic data from TomTom API with fallback"""
         try:
             # TomTom Traffic Flow API
-            url = f"https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point={lat},{lon}&key=Uc0dPKIMHcqZ91VbGAnbEAINdzwqRzil"
+            url = f"https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point={lat},{lon}&key=sljp3YAvFa7J3EalnGslYfnSCZg6VQUg"
             response = requests.get(url, timeout=10)
             
             if response.status_code == 200:
