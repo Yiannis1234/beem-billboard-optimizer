@@ -78,6 +78,15 @@ class TrafficData:
 
 
 @dataclass
+class CampaignType:
+    """Campaign type and targeting information"""
+    name: str
+    target_demographics: List[str]
+    ideal_factors: List[str]
+    creative_style: str
+    
+    
+@dataclass
 class AdSuccessResult:
     """Ad success prediction result"""
     area_name: str
@@ -90,6 +99,11 @@ class AdSuccessResult:
     weather_score_delta: int
     impression_pct_delta: float
     base_impressions_per_hour: int
+    # New personalization fields
+    audience_match_score: int = 0
+    personalized_tips: List[str] = None
+    creative_recommendations: List[str] = None
+    target_audience_size: int = 0
 
 
 class AreaDatabase:
@@ -105,7 +119,8 @@ class AreaDatabase:
                 business_district=True,
                 transport_hub=True,
                 affluent_audience=True,
-                shopping_area=True
+                shopping_area=True,
+                brand_conscious=True
             ),
             description="Historic square with Town Hall - high foot traffic and prestige"
         ),
@@ -139,7 +154,9 @@ class AreaDatabase:
             success_factors=SuccessFactors(
                 creative_area=True,
                 trendy_audience=True,
-                nightlife=True
+                nightlife=True,
+                young_audience=True,
+                brand_conscious=True
             ),
             description="Creative district - trendy, brand-conscious audience"
         ),
@@ -151,7 +168,8 @@ class AreaDatabase:
                 high_traffic=True,
                 shopping_area=True,
                 affluent_audience=True,
-                leisure_time=True
+                leisure_time=True,
+                brand_conscious=True
             ),
             description="Shopping district - people with money and time to spend"
         ),
@@ -163,7 +181,8 @@ class AreaDatabase:
                 high_traffic=True,
                 business_district=True,
                 affluent_audience=True,
-                corporate_area=True
+                corporate_area=True,
+                brand_conscious=True
             ),
             description="Financial district - high-earning professionals"
         ),
@@ -357,3 +376,70 @@ class AreaDatabase:
     def get_all_cities(cls) -> List[str]:
         """Get list of all available cities"""
         return ["Manchester", "London"]
+
+
+class CampaignDatabase:
+    """Database of campaign types for personalized targeting"""
+    
+    CAMPAIGNS = {
+        "Luxury Fashion Brand": CampaignType(
+            name="Luxury Fashion Brand",
+            target_demographics=["affluent", "business professionals", "trend-conscious"],
+            ideal_factors=["affluent_audience", "business_district", "shopping_area", "brand_conscious"],
+            creative_style="Elegant, minimalist, aspirational imagery"
+        ),
+        "Tech Startup": CampaignType(
+            name="Tech Startup",
+            target_demographics=["young professionals", "students", "early adopters"],
+            ideal_factors=["student_area", "creative_area", "university_district", "young_audience"],
+            creative_style="Bold, innovative, QR codes and AR integration"
+        ),
+        "Fast Food / Quick Service": CampaignType(
+            name="Fast Food / Quick Service",
+            target_demographics=["commuters", "students", "busy professionals"],
+            ideal_factors=["transport_hub", "high_traffic", "student_area", "commuter_area"],
+            creative_style="Vibrant colors, time-limited offers, appetite appeal"
+        ),
+        "Financial Services": CampaignType(
+            name="Financial Services",
+            target_demographics=["professionals", "high earners", "homeowners"],
+            ideal_factors=["business_district", "affluent_audience", "corporate_area", "affluent_suburb"],
+            creative_style="Trust-building, data-driven, professional tone"
+        ),
+        "Entertainment / Events": CampaignType(
+            name="Entertainment / Events",
+            target_demographics=["young adults", "families", "tourists"],
+            ideal_factors=["nightlife", "creative_area", "tourist_area", "leisure_time"],
+            creative_style="Dynamic, colorful, FOMO-driven messaging"
+        ),
+        "Education / Training": CampaignType(
+            name="Education / Training",
+            target_demographics=["students", "young professionals", "career changers"],
+            ideal_factors=["student_area", "university_district", "transport_hub", "young_audience"],
+            creative_style="Aspirational, future-focused, clear CTAs"
+        ),
+        "Local Business / Services": CampaignType(
+            name="Local Business / Services",
+            target_demographics=["local residents", "families", "community members"],
+            ideal_factors=["local_community", "family_area", "local_businesses", "affluent_suburb"],
+            creative_style="Community-focused, friendly, trustworthy"
+        ),
+        "Health & Fitness": CampaignType(
+            name="Health & Fitness",
+            target_demographics=["health-conscious", "young professionals", "affluent"],
+            ideal_factors=["affluent_audience", "young_audience", "business_district", "affluent_suburb"],
+            creative_style="Motivational, transformation-focused, lifestyle imagery"
+        ),
+        "Eco-Friendly / Sustainable": CampaignType(
+            name="Eco-Friendly / Sustainable",
+            target_demographics=["millennials", "families", "affluent conscious consumers"],
+            ideal_factors=["creative_area", "family_area", "trendy_audience", "affluent_suburb"],
+            creative_style="Natural colors, transparent messaging, impact-focused"
+        ),
+        "Nightlife / Hospitality": CampaignType(
+            name="Nightlife / Hospitality",
+            target_demographics=["young adults", "tourists", "social groups"],
+            ideal_factors=["nightlife", "creative_area", "tourist_area", "trendy_audience"],
+            creative_style="Energetic, social proof, time-sensitive promotions"
+        )
+    }

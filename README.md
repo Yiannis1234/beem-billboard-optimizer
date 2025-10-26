@@ -1,6 +1,9 @@
-# Beem Billboard Route Optimizer
+# 📊 BritMetrics
+## Billboard Intelligence Platform
 
-This application helps optimize bicycle routes for Beem's mobile billboards in Manchester. Get real-time weather, traffic, and pedestrian data to maximize engagement and plan your routes efficiently.
+**Go Beyond Generic Billboard Analytics** - Get campaign-specific recommendations tailored to YOUR brand, target audience, and real-time context.
+
+Unlike JCDecaux and other generic location-based analytics, BritMetrics personalizes every insight based on your specific campaign type, target demographics, weather conditions, and area characteristics.
 
 ## Setup and Installation
 
@@ -52,13 +55,26 @@ If you encounter issues running the app:
    pip install streamlit
    ```
 
+## Key Differentiators from JCDecaux
+
+### What Makes Us Different:
+
+1. **Campaign-Specific Targeting** - Not just location metrics, but personalized audience matching for YOUR brand
+2. **Creative Recommendations** - Dynamic suggestions based on weather, demographics, and brand type
+3. **Audience Match Scoring** - See exactly what % of viewers match your target demographic
+4. **Tactical Campaign Tips** - Personalized strategies for maximizing ROI
+5. **Context-Aware Insights** - Weather-responsive messaging and timing recommendations
+
 ## Using the Application
 
-1. **Open the sidebar**: Click the ">" button in the top-left corner
-2. **Select area**: Choose an area from the dropdown in the sidebar
-3. **Set time options**: Choose current time or custom time
-4. **Analyze**: Click the "ANALYZE ROUTE" button to see results
-5. **View data**: Navigate through tabs to see different analyses
+1. **Select Your Campaign Type**: Choose from 10+ campaign categories in the sidebar
+2. **Choose Location**: Pick Manchester or London, then select an area
+3. **Get Personalized Insights**:
+   - Audience Match Score (how well the area matches YOUR target demographic)
+   - Target Audience Size (YOUR demographic per hour, not just total footfall)
+   - Creative Recommendations (weather & context-aware design tips)
+   - Tactical Campaign Strategy (personalized ROI optimization tips)
+4. **Compare Areas**: See rankings specific to YOUR campaign type
 
 ## API Keys
 
@@ -70,20 +86,27 @@ The application uses the following APIs:
 
 The app is deployed on Streamlit Cloud at: [beem-billboard-optimizer](https://beem-billboard-optimizer-lvvnqjcpqucrxzvnhg3vc6.streamlit.app/)
 
-## About
+## About BritMetrics
 
-Beem Billboard Route Optimizer helps businesses optimize mobile billboard routes for maximum engagement through eye-catching billboards carried by cyclists.
+BritMetrics helps advertisers maximize campaign ROI through intelligent, brand-specific targeting and creative recommendations.
 
-Our solution is:
-- 🌿 Eco-friendly
-- 💰 Cost-effective
-- 🎯 Highly targeted
-- 📱 Engaging
-- 📊 Data-driven
+### Why We're Different from JCDecaux:
 
-A web application that helps optimize bike routes for Beem's mobile billboards in Manchester, UK. The application uses real-time weather and traffic data to provide recommendations for the most effective routes and times for billboard display.
+**JCDecaux and Traditional Providers:**
+- ❌ Generic location-based metrics for everyone
+- ❌ Same data regardless of your brand type
+- ❌ No creative or messaging guidance
+- ❌ One-size-fits-all recommendations
 
-![Beem Billboard Bike Route Optimizer Screenshot](https://raw.githubusercontent.com/your-username/beem-billboard-optimizer/main/static/screenshot.png)
+**Our Personalized Approach:**
+- ✅ Campaign-specific audience matching
+- ✅ Brand-tailored creative recommendations
+- ✅ Weather-responsive messaging suggestions
+- ✅ Target demographic isolation (not just total footfall)
+- ✅ Tactical ROI optimization per campaign type
+- 🌿 Eco-friendly bicycle-based billboards
+- 💰 Cost-effective mobile advertising
+- 🎯 Hyper-targeted based on YOUR audience
 
 ## Features
 
