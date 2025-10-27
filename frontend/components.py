@@ -291,12 +291,12 @@ class UIComponents:
         """Render personalized campaign header with logo"""
         st.markdown("""
         <div style='text-align: center; margin-bottom: 2rem; padding: 2rem;'>
-            <div style='background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); padding: 2rem; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 123, 255, 0.2);'>
+            <div style='background: #0078FF; padding: 2rem; border-radius: 15px;'>
                 <!-- Logo next to title -->
                 <div style='display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;'>
                     <div style='width: 80px; height: 80px; background: url("./logo.png") center/contain no-repeat;'></div>
                     <div style='text-align: left;'>
-                        <h1 style='color: #00B8FF; font-size: 3.5rem; font-weight: 900; margin: 0; font-family: "Arial", sans-serif; letter-spacing: 3px; text-shadow: 0 0 20px rgba(0, 184, 255, 0.5);'>BRITMETRICS</h1>
+                        <h1 style='color: #FFFFFF; font-size: 3.5rem; font-weight: 900; margin: 0; font-family: "Arial", sans-serif; letter-spacing: 3px;'>BRITMETRICS</h1>
                         <p style='color: #FFFFFF; font-size: 1.2rem; margin-top: 0.5rem; font-weight: 500;'>Billboard Intelligence Platform</p>
                     </div>
                 </div>
