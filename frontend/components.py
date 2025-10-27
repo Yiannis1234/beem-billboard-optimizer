@@ -288,14 +288,32 @@ class UIComponents:
     
     @staticmethod
     def render_personalized_header():
-        """Render personalized campaign header"""
-        st.markdown('<h1 class="main-header">📊 BritMetrics</h1>', unsafe_allow_html=True)
-        
+        """Render personalized campaign header with logo"""
         st.markdown("""
-        <div style='text-align: center; margin-bottom: 2rem;'>
-            <h2 style='color: var(--primary-color); font-weight: 600; margin-top: -1rem;'>Billboard Intelligence Platform</h2>
-            <h3 style='color: var(--text-primary);'>Campaign-specific recommendations tailored to YOUR brand</h3>
-            <p style='color: var(--text-secondary);'>Unlike generic billboard analytics, we personalize insights based on your <strong>brand type</strong>, <strong>target audience</strong>, and <strong>real-time context</strong></p>
+        <div style='text-align: center; margin-bottom: 2rem; padding: 2rem;'>
+            <div style='background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%); padding: 2rem; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 123, 255, 0.2);'>
+                <svg width="120" height="120" viewBox="0 0 120 120" style='margin: 0 auto 1rem; display: block;'>
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#0078ff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#0056cc;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <!-- Circular arrow with chart -->
+                    <path d="M 20 100 Q 40 60, 60 60 T 80 50 L 95 35" stroke="url(#logoGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
+                    <path d="M 85 25 L 95 35 L 85 45" stroke="url(#logoGradient)" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <!-- Line graph -->
+                    <polyline points="25,85 35,70 45,60 55,55 60,50 65,45 70,40" stroke="url(#logoGradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <path d="M 70 40 L 75 30" stroke="url(#logoGradient)" stroke-width="4" stroke-linecap="round"/>
+                    <!-- Bar chart -->
+                    <rect x="25" y="90" width="8" height="10" fill="url(#logoGradient)"/>
+                    <rect x="38" y="88" width="8" height="12" fill="url(#logoGradient)"/>
+                    <rect x="51" y="86" width="8" height="14" fill="url(#logoGradient)"/>
+                </svg>
+                <h1 style='color: #0078ff; font-size: 3rem; font-weight: 800; margin: 0; font-family: "Arial", sans-serif; letter-spacing: 2px;'>BRITMETRICS</h1>
+                <p style='color: #888; font-size: 1.2rem; margin-top: 0.5rem; font-weight: 500;'>Billboard Intelligence Platform</p>
+                <p style='color: #aaa; font-size: 0.95rem; margin-top: 1rem;'>Campaign-specific recommendations tailored to YOUR brand</p>
+            </div>
         </div>
         """, unsafe_allow_html=True)
     
