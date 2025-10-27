@@ -289,22 +289,20 @@ class UIComponents:
     @staticmethod
     def render_personalized_header():
         """Render personalized campaign header with logo"""
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            st.markdown("""
-            <div style='background: #0078FF; padding: 2rem; border-radius: 15px; text-align: center;'>
-                <div style='display: inline-flex; align-items: center; gap: 20px;'>
-                    """, unsafe_allow_html=True)
-            st.image("britmetrics_logo.png", width=80)
-            st.markdown("""
-                    <div style='text-align: left;'>
-                        <h1 style='color: #FFFFFF; font-size: 3.5rem; font-weight: 900; margin: 0; font-family: "Arial", sans-serif; letter-spacing: 3px;'>BRITMETRICS</h1>
-                        <p style='color: #FFFFFF; font-size: 1.2rem; margin-top: 0.5rem; font-weight: 500;'>Billboard Intelligence Platform</p>
-                    </div>
-                </div>
-                <p style='color: #FFFFFF; font-size: 0.95rem; margin-top: 1rem;'>Campaign-specific recommendations tailored to YOUR brand</p>
+        st.markdown("""
+        <div style='position: relative; background: #0078FF; padding: 3rem 2rem; border-radius: 20px; text-align: center; overflow: hidden;'>
+            <!-- Logo as subtle background -->
+            <div style='position: absolute; right: 20px; top: 50%; transform: translateY(-50%); opacity: 0.15;'>
+                <img src="britmetrics_logo.png" alt="BRITMETRICS Logo" style='width: 300px; height: 300px; filter: brightness(0) invert(1);' />
             </div>
-            """, unsafe_allow_html=True)
+            <!-- Content centered -->
+            <div style='position: relative; z-index: 10;'>
+                <h1 style='color: #FFFFFF; font-size: 4rem; font-weight: 900; margin: 0; font-family: "Arial", sans-serif; letter-spacing: 4px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);'>BRITMETRICS</h1>
+                <p style='color: #FFFFFF; font-size: 1.4rem; margin-top: 0.5rem; font-weight: 600; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);'>Billboard Intelligence Platform</p>
+                <p style='color: #FFFFFF; font-size: 1rem; margin-top: 1rem; opacity: 0.95;'>Campaign-specific recommendations tailored to YOUR brand</p>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     
     @staticmethod
     def render_info_section_personalized(campaign):
