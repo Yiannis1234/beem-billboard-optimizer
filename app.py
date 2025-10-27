@@ -87,16 +87,8 @@ def main():
     
     predictor = st.session_state.predictor
     
-    # Render personalized header
-    st.markdown('<h1 class="main-header">📊 BritMetrics</h1>', unsafe_allow_html=True)
-    
-    st.markdown("""
-    <div style='text-align: center; margin-bottom: 2rem;'>
-        <h2 style='color: var(--primary-color); font-weight: 600; margin-top: -1rem;'>Billboard Intelligence Platform</h2>
-        <h3 style='color: var(--text-primary);'>Campaign-specific recommendations tailored to YOUR brand</h3>
-        <p style='color: var(--text-secondary);'>Unlike generic billboard analytics, we personalize every insight based on your <strong>brand type</strong>, <strong>target audience</strong>, and <strong>real-time context</strong></p>
-    </div>
-    """, unsafe_allow_html=True)
+    # Render personalized header with logo
+    UIComponents.render_personalized_header()
     
     # Campaign selection at the top
     st.markdown("### 🎨 Step 1: Select Your Campaign Type")
