@@ -289,20 +289,19 @@ class UIComponents:
     @staticmethod
     def render_personalized_header():
         """Render personalized campaign header with logo"""
-        st.markdown("""
-        <div style='background: #0078FF; padding: 2rem 1.5rem; border-radius: 15px;'>
-            <div style='display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;'>
-                <div style='flex-shrink: 0;'>
-                    <img src="britmetrics_logo.png" alt="BRITMETRICS" style='max-width: 200px; height: auto; width: 100%;' />
-                </div>
-                <div style='flex: 1; min-width: 250px;'>
-                    <h1 style='color: #FFFFFF; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin: 0; line-height: 1.2; font-family: "Arial", sans-serif; letter-spacing: 2px;'>BRITMETRICS</h1>
-                    <p style='color: #FFFFFF; font-size: clamp(1rem, 2vw, 1.3rem); margin-top: 0.5rem; font-weight: 600; line-height: 1.3;'>Billboard Intelligence Platform</p>
-                    <p style='color: #FFFFFF; font-size: clamp(0.85rem, 1.5vw, 1rem); margin-top: 0.5rem; line-height: 1.4;'>Campaign-specific recommendations tailored to YOUR brand</p>
-                </div>
+        col1, col2 = st.columns([1.2, 2.5])
+        
+        with col1:
+            st.image("britmetrics_logo.png", width=220)
+        
+        with col2:
+            st.markdown("""
+            <div style='background: #0078FF; padding: 1.8rem 2rem; border-radius: 15px; height: 100%; display: flex; flex-direction: column; justify-content: center;'>
+                <h1 style='color: #FFFFFF; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin: 0; line-height: 1.2; font-family: "Arial", sans-serif; letter-spacing: 2px;'>BRITMETRICS</h1>
+                <p style='color: #FFFFFF; font-size: clamp(1rem, 2vw, 1.3rem); margin-top: 0.5rem; font-weight: 600; line-height: 1.3;'>Billboard Intelligence Platform</p>
+                <p style='color: #FFFFFF; font-size: clamp(0.85rem, 1.5vw, 1rem); margin-top: 0.5rem; line-height: 1.4;'>Campaign-specific recommendations tailored to YOUR brand</p>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
     
     @staticmethod
     def render_info_section_personalized(campaign):
