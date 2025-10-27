@@ -288,20 +288,14 @@ class UIComponents:
     
     @staticmethod
     def render_personalized_header():
-        """Render personalized campaign header with logo"""
-        col1, col2 = st.columns([1.2, 2.5])
-        
-        with col1:
-            st.image("britmetrics_logo.png", width=220)
-        
-        with col2:
-            st.markdown("""
-            <div style='background: linear-gradient(90deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3); padding: 1.8rem 2rem; border-radius: 15px; height: 100%; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 8px 32px rgba(0,0,0,0.3);'>
-                <h1 style='color: #FFFFFF; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin: 0; line-height: 1.2; font-family: "Arial", sans-serif; letter-spacing: 2px; text-shadow: 2px 2px 8px rgba(0,0,0,0.5);'>BRITMETRICS</h1>
-                <p style='color: #FFFFFF; font-size: clamp(1rem, 2vw, 1.3rem); margin-top: 0.5rem; font-weight: 600; line-height: 1.3; text-shadow: 1px 1px 4px rgba(0,0,0,0.5);'>Billboard Intelligence Platform</p>
-                <p style='color: #FFFFFF; font-size: clamp(0.85rem, 1.5vw, 1rem); margin-top: 0.5rem; line-height: 1.4; text-shadow: 1px 1px 4px rgba(0,0,0,0.5);'>Campaign-specific recommendations tailored to YOUR brand</p>
-            </div>
-            """, unsafe_allow_html=True)
+        """Render personalized campaign header"""
+        st.markdown("""
+        <div style='background: #0078FF; padding: 2.5rem; border-radius: 15px; text-align: center;'>
+            <h1 style='color: #FFFFFF; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; margin: 0; font-family: "Arial", sans-serif; letter-spacing: 3px;'>📊 BRITMETRICS</h1>
+            <p style='color: #FFFFFF; font-size: clamp(1.2rem, 3vw, 1.8rem); margin-top: 0.5rem; font-weight: 600;'>Billboard Intelligence Platform</p>
+            <p style='color: #FFFFFF; font-size: clamp(0.9rem, 2vw, 1.1rem); margin-top: 1rem;'>Campaign-specific recommendations tailored to YOUR brand</p>
+        </div>
+        """, unsafe_allow_html=True)
     
     @staticmethod
     def render_info_section_personalized(campaign):
