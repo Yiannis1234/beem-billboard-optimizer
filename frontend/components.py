@@ -301,13 +301,17 @@ class UIComponents:
                                 <stop offset="100%" style="stop-color:#0078FF;stop-opacity:1" />
                             </linearGradient>
                         </defs>
-                        <!-- Circular arrow that wraps around -->
-                        <path d="M 30 90 Q 50 30, 70 30 Q 90 30, 90 50" stroke="url(#logoGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
-                        <path d="M 85 40 L 95 50 L 85 60" stroke="url(#logoGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
-                        <!-- Bar chart inside the circle -->
-                        <rect x="35" y="65" width="12" height="25" fill="url(#logoGradient)"/>
-                        <rect x="50" y="60" width="12" height="30" fill="url(#logoGradient)"/>
-                        <rect x="65" y="55" width="12" height="35" fill="url(#logoGradient)"/>
+                        <!-- Circular arrow arc that wraps around (open at top right) -->
+                        <path d="M 20 100 Q 10 80, 15 60 Q 20 40, 35 30 Q 50 20, 70 25 Q 85 30, 95 45" stroke="url(#logoGradient)" stroke-width="8" fill="none" stroke-linecap="round"/>
+                        <!-- Arrowhead -->
+                        <path d="M 88 48 L 95 50 L 88 52" stroke="url(#logoGradient)" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <!-- Line graph inside circle (upward trending line) -->
+                        <polyline points="35,80 45,65 55,55 65,45 75,35" stroke="url(#logoGradient)" stroke-width="5" fill="none" stroke-linecap="round"/>
+                        <path d="M 75 35 L 82 28" stroke="url(#logoGradient)" stroke-width="5" fill="none" stroke-linecap="round"/>
+                        <!-- Bar chart inside circle (bottom, 3 bars increasing) -->
+                        <rect x="40" y="75" width="8" height="15" fill="url(#logoGradient)"/>
+                        <rect x="52" y="70" width="8" height="20" fill="url(#logoGradient)"/>
+                        <rect x="64" y="65" width="8" height="25" fill="url(#logoGradient)"/>
                     </svg>
                     <h1 style='color: #00B8FF; font-size: 3.5rem; font-weight: 900; margin: 0; font-family: "Arial", sans-serif; letter-spacing: 3px;'>BRITMETRICS</h1>
                 </div>
