@@ -289,12 +289,32 @@ class UIComponents:
     @staticmethod
     def render_personalized_header():
         """Render personalized campaign header with logo"""
-        st.markdown("""
-        <div style='text-align: center; margin-bottom: 2rem; padding: 2rem;'>
-            <div style='background: #0078FF; padding: 2rem; border-radius: 15px;'>
-                <!-- Logo next to title -->
-                <div style='display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;'>
-                    <div style='width: 80px; height: 80px; background: url("./logo.png") center/contain no-repeat;'></div>
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            st.markdown("""
+            <div style='background: #0078FF; padding: 2rem; border-radius: 15px; text-align: center;'>
+                <div style='display: inline-flex; align-items: center; gap: 20px;'>
+                    """, unsafe_allow_html=True)
+            st.markdown("""
+                <div style='width: 80px; height: 80px;'>
+                    <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#00B8FF;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#0078FF;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M 15 85 Q 8 65, 12 50 Q 15 35, 25 25 Q 35 15, 50 18 Q 65 20, 75 30 Q 82 38, 85 48" stroke="url(#blueGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
+                        <path d="M 78 46 L 85 48 L 78 50" stroke="url(#blueGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
+                        <polyline points="28,68 38,55 48,48 58,42 68,36" stroke="url(#blueGrad)" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+                        <path d="M 68 36 L 73 28" stroke="url(#blueGrad)" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+                        <rect x="32" y="63" width="10" height="13" fill="url(#blueGrad)"/>
+                        <rect x="45" y="60" width="10" height="16" fill="url(#blueGrad)"/>
+                        <rect x="58" y="57" width="10" height="19" fill="url(#blueGrad)"/>
+                    </svg>
+                </div>
+                """, unsafe_allow_html=True)
+            st.markdown("""
                     <div style='text-align: left;'>
                         <h1 style='color: #FFFFFF; font-size: 3.5rem; font-weight: 900; margin: 0; font-family: "Arial", sans-serif; letter-spacing: 3px;'>BRITMETRICS</h1>
                         <p style='color: #FFFFFF; font-size: 1.2rem; margin-top: 0.5rem; font-weight: 500;'>Billboard Intelligence Platform</p>
@@ -302,8 +322,7 @@ class UIComponents:
                 </div>
                 <p style='color: #FFFFFF; font-size: 0.95rem; margin-top: 1rem;'>Campaign-specific recommendations tailored to YOUR brand</p>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
     
     @staticmethod
     def render_info_section_personalized(campaign):
