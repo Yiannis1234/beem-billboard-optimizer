@@ -200,14 +200,6 @@ def main():
     
     predictor = st.session_state.predictor
     
-    # Add logout button in top right
-    col1, col2, col3 = st.columns([1, 1, 1])
-    with col3:
-        if st.button("🚪 Logout", type="secondary"):
-            st.session_state.authenticated = False
-            st.session_state.payment_completed = False
-            st.rerun()
-    
     # Render personalized header with logo
     UIComponents.render_personalized_header()
     
