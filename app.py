@@ -38,9 +38,23 @@ def check_authentication():
         st.session_state.payment_completed = False
     
     # Check payment status if Stripe is enabled
-    if STRIPE_ENABLED and check_payment_status():
-        st.session_state.payment_completed = True
-        st.session_state.authenticated = True
+    if STRIPE_ENABLED:
+        session_id = st.query_params.get('session_id')
+        
+        # Check if user has paid before (permanent access)
+        from backend.permanent_access import is_customer_paid, get_all_paid_session_ids
+        paid_sessions = get_all_paid_session_ids()
+        
+        if session_id in paid_sessions or st.session_state.get('permanent_access', False):
+            st.session_state.payment_completed = True
+            st.session_state.authenticated = True
+            st.session_state.permanent_access = True
+        
+        # Check if new payment just completed
+        if check_payment_status():
+            st.session_state.payment_completed = True
+            st.session_state.authenticated = True
+            st.session_state.permanent_access = True
     
     return st.session_state.authenticated or st.session_state.payment_completed
 

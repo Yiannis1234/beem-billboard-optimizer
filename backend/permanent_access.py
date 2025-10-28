@@ -66,6 +66,11 @@ def is_customer_paid(email=None, session_id=None):
     
     return False
 
+def get_all_paid_session_ids():
+    """Get all paid session IDs"""
+    customers = load_paid_customers()
+    return [c['session_id'] for c in customers if 'session_id' in c]
+
 def get_paid_customers():
     """Get all paid customers"""
     return load_paid_customers()
