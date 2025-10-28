@@ -11,13 +11,13 @@ from datetime import datetime
 def send_contact_email(name, email, message):
     """Send contact form message to vamvak@outlook.com"""
     try:
-        # Email configuration
-        smtp_server = "smtp.gmail.com"  # Using Gmail SMTP
+        # Email configuration - Using Outlook SMTP
+        smtp_server = "smtp-mail.outlook.com"  # Using Outlook SMTP
         smtp_port = 587
         
-        # You'll need to set these environment variables
-        sender_email = os.getenv("SENDER_EMAIL", "your-gmail@gmail.com")
-        sender_password = os.getenv("SENDER_PASSWORD", "your-app-password")
+        # Outlook credentials
+        sender_email = os.getenv("SENDER_EMAIL", "vamvak@outlook.com")
+        sender_password = os.getenv("SENDER_PASSWORD", "")
         recipient_email = "vamvak@outlook.com"
         
         # Create message
@@ -59,11 +59,11 @@ Sent from BritMetrics Billboard Intelligence Platform
 def send_auto_reply(name, email):
     """Send auto-reply to the person who submitted the form"""
     try:
-        smtp_server = "smtp.gmail.com"
+        smtp_server = "smtp-mail.outlook.com"
         smtp_port = 587
         
-        sender_email = os.getenv("SENDER_EMAIL", "your-gmail@gmail.com")
-        sender_password = os.getenv("SENDER_PASSWORD", "your-app-password")
+        sender_email = os.getenv("SENDER_EMAIL", "vamvak@outlook.com")
+        sender_password = os.getenv("SENDER_PASSWORD", "")
         
         msg = MIMEMultipart()
         msg['From'] = sender_email
