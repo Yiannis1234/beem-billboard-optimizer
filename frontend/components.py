@@ -290,10 +290,13 @@ class UIComponents:
     def render_personalized_header():
         """Render personalized campaign header"""
         st.markdown("""
-        <div style='background: #0078FF; padding: 2.5rem; border-radius: 15px; text-align: center;'>
-            <h1 style='color: #FFFFFF; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin: 0; font-family: "Arial", sans-serif; letter-spacing: 2px;'>📊 BRITMETRICS</h1>
-            <p style='color: #FFFFFF; font-size: clamp(1rem, 2.5vw, 1.5rem); margin-top: 0.5rem; font-weight: 600;'>Billboard Intelligence Platform</p>
-            <p style='color: #FFFFFF; font-size: clamp(0.85rem, 2vw, 1rem); margin-top: 1rem;'>Campaign-specific recommendations tailored to YOUR brand</p>
+        <div style='background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;'>
+            <div style='display: flex; align-items: center; gap: 1rem;'>
+                <h1 style='color: #333333; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin: 0; font-family: "Arial", sans-serif;'>
+                    ▓ BritMetrics
+                </h1>
+            </div>
+            <p style='color: #333333; font-size: clamp(1.1rem, 2.5vw, 1.5rem); margin-top: 0.5rem; font-weight: 600; margin-left: 0;'>Billboard Intelligence Platform</p>
         </div>
         """, unsafe_allow_html=True)
     
