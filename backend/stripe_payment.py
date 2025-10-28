@@ -89,25 +89,19 @@ def render_stripe_payment_button(amount: float, description: str):
         description: Product description
     """
     if st.button(f"💳 Pay £{amount} for Access", type="secondary", use_container_width=True):
-        # Store current URL for success redirect
-        st.session_state['current_url'] = st.query_params.get('payment_success', '')
-        
         # Create Stripe checkout session
         session_id, checkout_url = create_payment_session(amount, description)
         
         if checkout_url:
-            # Use JavaScript redirect instead of st.markdown
             st.markdown(f"""
-            <script>
-                setTimeout(function() {{
-                    window.location.href = '{checkout_url}';
-                }}, 1000);
-            </script>
+            <div style='text-align: center; padding: 1rem; background: #f0f8ff; border-radius: 10px; margin: 1rem 0;'>
+                <h4 style='color: #0078FF; margin-bottom: 1rem;'>🔒 Secure Payment</h4>
+                <p style='margin-bottom: 1rem;'>Click the button below to complete your payment:</p>
+                <a href="{checkout_url}" target="_blank" style='display: inline-block; background: #0078FF; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;'>
+                    💳 Complete Payment - £{amount}
+                </a>
+            </div>
             """, unsafe_allow_html=True)
-            
-            st.success("✅ Redirecting to secure payment...")
-            st.info("If you're not redirected automatically, click here:")
-            st.markdown(f"[🔗 Complete Payment]({checkout_url})")
         else:
             st.error("Failed to create payment session. Please try again.")
 
