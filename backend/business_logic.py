@@ -271,7 +271,7 @@ class AdSuccessCalculator:
             'trendy_audience': factors.trendy_audience,
         }
         
-        # Smart matching - some factors imply others
+        # Calculate matches
         matches = 0
         partial_matches = 0
         
@@ -295,14 +295,60 @@ class AdSuccessCalculator:
             elif ideal_factor == 'creative_area':
                 if factors.trendy_audience or factors.young_audience:
                     partial_matches += 0.3
+            elif ideal_factor == 'business_district':
+                if factors.corporate_area or factors.transport_hub:
+                    partial_matches += 0.4
+            elif ideal_factor == 'transport_hub':
+                if factors.high_traffic or factors.commuter_area:
+                    partial_matches += 0.4
+            elif ideal_factor == 'nightlife':
+                if factors.young_audience or factors.creative_area:
+                    partial_matches += 0.4
+            elif ideal_factor == 'tourist_area':
+                if factors.high_traffic or factors.leisure_time:
+                    partial_matches += 0.3
+            elif ideal_factor == 'student_area':
+                if factors.university_district or factors.young_audience:
+                    partial_matches += 0.5
+            elif ideal_factor == 'university_district':
+                if factors.student_area or factors.young_audience:
+                    partial_matches += 0.5
+            elif ideal_factor == 'commuter_area':
+                if factors.transport_hub or factors.high_traffic:
+                    partial_matches += 0.4
+            elif ideal_factor == 'leisure_time':
+                if factors.tourist_area or factors.shopping_area:
+                    partial_matches += 0.3
+            elif ideal_factor == 'local_community':
+                if factors.family_area or factors.local_businesses:
+                    partial_matches += 0.5
+            elif ideal_factor == 'family_area':
+                if factors.local_community or factors.affluent_suburb:
+                    partial_matches += 0.4
+            elif ideal_factor == 'local_businesses':
+                if factors.local_community or factors.family_area:
+                    partial_matches += 0.4
+            elif ideal_factor == 'affluent_suburb':
+                if factors.affluent_audience or factors.family_area:
+                    partial_matches += 0.4
+            elif ideal_factor == 'corporate_area':
+                if factors.business_district or factors.affluent_audience:
+                    partial_matches += 0.4
+            elif ideal_factor == 'trendy_audience':
+                if factors.young_audience or factors.creative_area:
+                    partial_matches += 0.4
         
         # Calculate score including partial matches
         total_matches = matches + partial_matches
         total_possible = len(campaign.ideal_factors)
+        
+        if total_possible == 0:
+            return 50
+        
         match_score = int((total_matches / total_possible) * 100)
         
-        # Ensure reasonable range (30-100 instead of 20-100 for better differentiation)
-        return max(30, min(100, match_score))
+        # Allow full range 0-100 for better differentiation
+        return max(0, min(100, match_score))
     
     @staticmethod
     def _generate_personalized_tips(campaign: CampaignType, area_data: AreaData, 
