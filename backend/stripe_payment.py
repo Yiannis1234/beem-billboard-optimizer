@@ -120,6 +120,17 @@ def check_payment_status():
     session_id = st.query_params.get('session_id')
     
     if session_id and verify_payment(session_id):
+        # Mark as permanently authenticated
+        st.session_state.payment_completed = True
+        st.session_state.authenticated = True
         return True
     
     return False
+
+
+def is_permanently_authenticated():
+    """
+    Check if user has permanent access (paid or code)
+    """
+    return (st.session_state.get('authenticated', False) or 
+            st.session_state.get('payment_completed', False))

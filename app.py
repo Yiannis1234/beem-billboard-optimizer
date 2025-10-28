@@ -21,7 +21,7 @@ except ImportError as e:
 
 # Import Stripe payment module
 try:
-    from backend.stripe_payment import render_stripe_payment_button, check_payment_status
+    from backend.stripe_payment import render_stripe_payment_button, check_payment_status, is_permanently_authenticated
     STRIPE_ENABLED = True
 except ImportError:
     STRIPE_ENABLED = False
@@ -40,6 +40,7 @@ def check_authentication():
     # Check payment status if Stripe is enabled
     if STRIPE_ENABLED and check_payment_status():
         st.session_state.payment_completed = True
+        st.session_state.authenticated = True
     
     return st.session_state.authenticated or st.session_state.payment_completed
 
