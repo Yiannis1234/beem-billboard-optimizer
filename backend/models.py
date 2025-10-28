@@ -57,9 +57,10 @@ class WeatherData:
     visibility: float
     wind_kph: float
     humidity: int
-    uv: int
-    precip_mm: float
-    is_day: int
+    uv: int = 0
+    precip_mm: float = 0.0
+    is_day: int = 1
+    api_status: str = "Unknown"
 
 
 @dataclass
