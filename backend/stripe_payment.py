@@ -7,6 +7,7 @@ import streamlit as st
 import stripe
 import os
 from dotenv import load_dotenv
+from backend.permanent_access import add_paid_customer, is_customer_paid
 
 # Load environment variables from .env file
 load_dotenv()
@@ -120,9 +121,13 @@ def check_payment_status():
     session_id = st.query_params.get('session_id')
     
     if session_id and verify_payment(session_id):
+        # Add to permanent access list
+        add_paid_customer(session_id)
+        
         # Mark as permanently authenticated
         st.session_state.payment_completed = True
         st.session_state.authenticated = True
+        st.session_state.permanent_access = True
         return True
     
     return False
@@ -132,5 +137,15 @@ def is_permanently_authenticated():
     """
     Check if user has permanent access (paid or code)
     """
+    # Check session state first
+    if st.session_state.get('permanent_access', False):
+        return True
+    
+    # Check if user is in paid customers list
+    session_id = st.query_params.get('session_id')
+    if session_id and is_customer_paid(session_id=session_id):
+        st.session_state.permanent_access = True
+        return True
+    
     return (st.session_state.get('authenticated', False) or 
             st.session_state.get('payment_completed', False))
