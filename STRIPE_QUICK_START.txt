@@ -1,0 +1,38 @@
+# STRIPE INTEGRATION - COPY AND PASTE THESE COMMANDS
+
+# 1. SSH into server
+ssh root@srv1079042.hostinger.com
+
+# 2. Go to project directory
+cd /var/www/britmetrics
+
+# 3. Activate virtual environment
+source venv/bin/activate
+
+# 4. Install Stripe package
+pip install stripe
+
+# 5. Verify installation
+python -c "import stripe; print('Stripe version:', stripe.__version__)"
+
+# 6. Create environment file with YOUR keys
+nano .env
+
+# 7. Add these lines (replace with YOUR keys from Stripe dashboard):
+# STRIPE_PUBLISHABLE_KEY=pk_test_YOUR_KEY_HERE
+# STRIPE_SECRET_KEY=sk_test_YOUR_KEY_HERE
+# 
+# Save: Ctrl+X, Y, Enter
+
+# 8. Pull latest code
+git pull origin main
+
+# 9. Restart Streamlit
+sudo pkill -9 -f streamlit
+sleep 2
+nohup streamlit run app.py --server.port 8502 --server.address localhost --server.headless true > /var/log/britmetrics.log 2>&1 &
+
+# 10. Check if it's running
+tail -f /var/log/britmetrics.log
+
+# Test with card: 4242 4242 4242 4242
