@@ -22,9 +22,12 @@ except ImportError as e:
 # Import Stripe payment module
 try:
     from backend.stripe_payment import render_stripe_payment_button, check_payment_status, is_permanently_authenticated
+    from backend.cookie_access import has_paid_cookie, save_access_to_cookie
     STRIPE_ENABLED = True
 except ImportError:
     STRIPE_ENABLED = False
+    has_paid_cookie = lambda: False
+    save_access_to_cookie = lambda x: None
 
 # Authentication system
 ACCESS_CODE = "tatakas101"
@@ -37,24 +40,22 @@ def check_authentication():
     if 'payment_completed' not in st.session_state:
         st.session_state.payment_completed = False
     
+    # Check if user has paid via cookie
+    if STRIPE_ENABLED and has_paid_cookie():
+        st.session_state.payment_completed = True
+        st.session_state.authenticated = True
+        return True
+    
     # Check payment status if Stripe is enabled
     if STRIPE_ENABLED:
         session_id = st.query_params.get('session_id')
         
-        # Check if user has paid before (permanent access)
-        from backend.permanent_access import is_customer_paid, get_all_paid_session_ids
-        paid_sessions = get_all_paid_session_ids()
-        
-        if session_id in paid_sessions or st.session_state.get('permanent_access', False):
+        # If payment just completed, save to cookie
+        if check_payment_status() and session_id:
+            save_access_to_cookie(session_id)
             st.session_state.payment_completed = True
             st.session_state.authenticated = True
-            st.session_state.permanent_access = True
-        
-        # Check if new payment just completed
-        if check_payment_status():
-            st.session_state.payment_completed = True
-            st.session_state.authenticated = True
-            st.session_state.permanent_access = True
+            return True
     
     return st.session_state.authenticated or st.session_state.payment_completed
 
