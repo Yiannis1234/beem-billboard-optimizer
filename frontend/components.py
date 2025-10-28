@@ -562,7 +562,7 @@ class UIComponents:
     
     @staticmethod
     def render_footer_personalized():
-        """Render personalized footer"""
+        """Render personalized footer with contact form"""
         st.markdown("---")
         st.markdown("""
         <div style='text-align: center; color: var(--text-secondary); padding: 2rem 0;'>
@@ -571,15 +571,36 @@ class UIComponents:
             <p>💡 Go beyond generic analytics | 🎨 Campaign-specific insights | 📊 Match your exact target audience</p>
             <p>🔄 Real-time weather & traffic | ⚡ AI-powered recommendations | 🎯 Maximize campaign ROI</p>
             <p style='margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;'>Powered by Real-Time Data + AI | Manchester & London</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Contact Form
+        st.markdown("---")
+        st.markdown("### 📧 Get in Touch")
+        
+        with st.form("contact_form"):
+            col1, col2 = st.columns(2)
             
-            <div style='margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ddd;'>
-                <p style='font-size: 0.9rem; opacity: 0.7;'>Created by Ioannis Vamvakas</p>
-                <p style='font-size: 0.85rem; margin-top: 0.3rem;'>
-                    📧 vamvak@outlook.com
-                </p>
-                <p style='font-size: 0.85rem; margin-top: 0.3rem;'>
-                    🔗 <a href='https://www.linkedin.com/in/ioannisvamvakas/' target='_blank' style='color: #0078FF; text-decoration: none;'>LinkedIn</a>
-                </p>
-            </div>
+            with col1:
+                name = st.text_input("Your Name", placeholder="Enter your name")
+            
+            with col2:
+                email = st.text_input("Your Email", placeholder="Enter your email")
+            
+            message = st.text_area("Message to Team", placeholder="Tell us how we can help...", height=150)
+            
+            submitted = st.form_submit_button("🚀 Send Message", type="primary", use_container_width=True)
+            
+            if submitted:
+                st.success("✅ Thank you for your message! We'll get back to you soon.")
+                st.info("📧 Or reach us directly at: **vamvak@outlook.com**")
+        
+        st.markdown("""
+        <div style='text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ddd;'>
+            <p style='font-size: 0.9rem; opacity: 0.7;'>Created by Ioannis Vamvakas</p>
+            <p style='font-size: 0.85rem; margin-top: 0.3rem;'>📧 vamvak@outlook.com</p>
+            <p style='font-size: 0.85rem; margin-top: 0.3rem;'>
+                🔗 <a href='https://www.linkedin.com/in/ioannisvamvakas/' target='_blank' style='color: #0078FF; text-decoration: none;'>LinkedIn</a>
+            </p>
         </div>
         """, unsafe_allow_html=True)
