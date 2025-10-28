@@ -1,5 +1,0 @@
-# API Keys for Ad Success Predictor
-# Copy this file to .env and add your actual API keys
-
-WEATHER_API_KEY=your_weather_api_key_here
-TRAFFIC_API_KEY=your_traffic_api_key_here

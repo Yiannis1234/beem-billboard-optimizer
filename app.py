@@ -21,7 +21,7 @@ except ImportError as e:
 
 # Import Stripe payment module
 try:
-    from backend.stripe_payment import render_stripe_payment_button, check_payment_status, is_permanently_authenticated
+    from backend.stripe_payment import render_stripe_payment_button, check_payment_status
     from backend.cookie_access import has_paid_cookie, save_access_to_cookie
     STRIPE_ENABLED = True
 except ImportError:
