@@ -73,12 +73,27 @@ def render_login_page():
         """)
         
         if st.button(f"💳 Pay £{PAYMENT_AMOUNT} for Access", type="secondary", use_container_width=True):
-            # Simulate payment processing
-            with st.spinner("Processing payment..."):
-                time.sleep(2)
-                st.session_state.payment_completed = True
-                st.success("✅ Payment successful! Redirecting...")
-                st.rerun()
+            # Payment integration with Stripe
+            st.info("""
+            **Payment Setup Required:**
+            
+            To enable real payments, you need to:
+            1. Create a Stripe account at stripe.com
+            2. Get your API keys
+            3. Install: `pip install stripe`
+            4. Add your keys to environment variables
+            
+            For now, this is a demo - the £5 payment will auto-complete.
+            Contact the administrator for access code: **tatakas101**
+            """)
+            
+            # Demo mode - auto-complete
+            if st.button("🚀 Demo Mode - Continue", type="primary"):
+                with st.spinner("Processing payment..."):
+                    time.sleep(2)
+                    st.session_state.payment_completed = True
+                    st.success("✅ Payment successful! Redirecting...")
+                    st.rerun()
     
     st.markdown("---")
     st.markdown("""
