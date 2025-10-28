@@ -50,8 +50,8 @@ def create_payment_session(amount: float, description: str, currency: str = "gbp
         
         return checkout_session.id, checkout_session.url
         
-    except stripe.error.StripeError as e:
-        st.error(f"Stripe error: {str(e)}")
+    except Exception as e:
+        st.error(f"Payment error: {str(e)}")
         return None, None
 
 
@@ -68,8 +68,8 @@ def verify_payment(session_id: str):
     try:
         session = stripe.checkout.Session.retrieve(session_id)
         return session.payment_status == 'paid'
-    except stripe.error.StripeError as e:
-        st.error(f"Stripe error: {str(e)}")
+    except Exception as e:
+        st.error(f"Payment verification error: {str(e)}")
         return False
 
 
