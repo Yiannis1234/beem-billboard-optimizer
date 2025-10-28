@@ -291,12 +291,31 @@ class UIComponents:
         """Render personalized campaign header"""
         st.markdown("""
         <div style='background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;'>
-            <div style='display: flex; align-items: center; gap: 1rem;'>
+            <div style='display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;'>
+                <svg width="50" height="50" viewBox="0 0 100 100" style='flex-shrink: 0;'>
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color: #0078FF;" />
+                            <stop offset="100%" style="stop-color: #00C853;" />
+                        </linearGradient>
+                    </defs>
+                    <!-- Circular arrow -->
+                    <circle cx="50" cy="50" r="45" fill="url(#grad1)" stroke="#0078FF" stroke-width="2"/>
+                    <path d="M 30 50 L 50 30 L 50 40 L 70 40 L 70 60 L 50 60 L 50 70 Z" fill="white"/>
+                    <!-- Line graph -->
+                    <line x1="15" y1="65" x2="25" y2="55" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="25" y1="55" x2="35" y2="60" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="35" y1="60" x2="45" y2="50" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                    <!-- Bar chart -->
+                    <rect x="60" y="70" width="8" height="15" fill="white"/>
+                    <rect x="72" y="65" width="8" height="20" fill="white"/>
+                    <rect x="84" y="75" width="8" height="10" fill="white"/>
+                </svg>
                 <h1 style='color: #333333; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin: 0; font-family: "Arial", sans-serif;'>
-                    ▓ BritMetrics
+                    BritMetrics
                 </h1>
             </div>
-            <p style='color: #333333; font-size: clamp(1.1rem, 2.5vw, 1.5rem); margin-top: 0.5rem; font-weight: 600; margin-left: 0;'>Billboard Intelligence Platform</p>
+            <p style='color: #333333; font-size: clamp(1.1rem, 2.5vw, 1.5rem); margin-top: 0.5rem; font-weight: 600; margin-left: 58px;'>Billboard Intelligence Platform</p>
         </div>
         """, unsafe_allow_html=True)
     
