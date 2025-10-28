@@ -6,8 +6,6 @@ Uses the organized backend and frontend structure.
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-import hashlib
-import time
 
 # Import our organized modules
 try:
@@ -22,16 +20,12 @@ except ImportError as e:
 
 # Authentication system
 ACCESS_CODE = "tatakas101"
-PAYMENT_AMOUNT = 5.00  # £5
-PAYMENT_DESCRIPTION = "BritMetrics Premium Access"
 
 def check_authentication():
     """Check if user is authenticated"""
     if 'authenticated' not in st.session_state:
         st.session_state.authenticated = False
-    if 'payment_completed' not in st.session_state:
-        st.session_state.payment_completed = False
-    return st.session_state.authenticated or st.session_state.payment_completed
+    return st.session_state.authenticated
 
 def render_login_page():
     """Render login/payment page"""
@@ -61,39 +55,18 @@ def render_login_page():
                 st.error("❌ Invalid access code")
     
     with col2:
-        st.markdown("### 💳 Premium Access")
-        st.markdown(f"**Get instant access for £{PAYMENT_AMOUNT}**")
+        st.markdown("### 🔐 Access Information")
+        st.markdown("**Free access is available via code only**")
         
         st.markdown("""
-        **What you get:**
+        **Benefits:**
         - Full campaign optimization
         - Personalized recommendations
         - Real-time analytics
-        - Priority support
+        - No payment required
         """)
         
-        if st.button(f"💳 Pay £{PAYMENT_AMOUNT} for Access", type="secondary", use_container_width=True):
-            # Payment integration with Stripe
-            st.info("""
-            **Payment Setup Required:**
-            
-            To enable real payments, you need to:
-            1. Create a Stripe account at stripe.com
-            2. Get your API keys
-            3. Install: `pip install stripe`
-            4. Add your keys to environment variables
-            
-            For now, this is a demo - the £5 payment will auto-complete.
-            Contact the administrator for access code: **tatakas101**
-            """)
-            
-            # Demo mode - auto-complete
-            if st.button("🚀 Demo Mode - Continue", type="primary"):
-                with st.spinner("Processing payment..."):
-                    time.sleep(2)
-                    st.session_state.payment_completed = True
-                    st.success("✅ Payment successful! Redirecting...")
-                    st.rerun()
+        st.info("👤 **Contact administrator for access code**")
     
     st.markdown("---")
     st.markdown("""
@@ -182,7 +155,6 @@ def main():
     with col3:
         if st.button("🚪 Logout", type="secondary"):
             st.session_state.authenticated = False
-            st.session_state.payment_completed = False
             st.rerun()
     
     # Render personalized header with logo
