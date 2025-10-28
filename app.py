@@ -48,11 +48,8 @@ def check_authentication():
     
     # Check payment status if Stripe is enabled
     if STRIPE_ENABLED:
-        session_id = st.query_params.get('session_id')
-        
-        # If payment just completed, save to cookie
-        if check_payment_status() and session_id:
-            save_access_to_cookie(session_id)
+        # This will check and save email automatically
+        if check_payment_status():
             st.session_state.payment_completed = True
             st.session_state.authenticated = True
             return True
@@ -83,15 +80,37 @@ def render_login_page():
     
     st.markdown("---")
     
+    # Check if returning paid customer
+    with st.form("paid_customer_login"):
+        st.markdown("### 💳 Returning Customer")
+        st.markdown("Enter your email to access your account:")
+        
+        email = st.text_input("Email Address", placeholder="your-email@example.com")
+        
+        if st.form_submit_button("🔓 Login", type="primary", use_container_width=True):
+            if email and has_paid_cookie():
+                from backend.cookie_access import is_customer_paid
+                if is_customer_paid(email):
+                    st.session_state.authenticated = True
+                    st.session_state.payment_completed = True
+                    st.success("✅ Welcome back! Redirecting...")
+                    st.rerun()
+                else:
+                    st.warning(f"❌ Email {email} is not registered. Please purchase access below.")
+            else:
+                st.error("❌ Please enter a valid email")
+    
+    st.markdown("---")
+    
     col1, col2 = st.columns(2)
     
     with col1:
         st.markdown("### 🔑 Access Code")
         st.markdown("Enter the access code to unlock BritMetrics:")
         
-        access_code = st.text_input("Access Code", type="password", placeholder="Enter code...")
+        access_code = st.text_input("Access Code", type="password", placeholder="Enter code...", key="access_code_input")
         
-        if st.button("🔓 Unlock with Code", type="primary", use_container_width=True):
+        if st.button("🔓 Unlock with Code", type="primary", use_container_width=True, key="unlock_button"):
             if access_code == ACCESS_CODE:
                 st.session_state.authenticated = True
                 st.success("✅ Access granted! Redirecting...")

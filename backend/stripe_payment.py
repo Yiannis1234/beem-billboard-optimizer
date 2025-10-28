@@ -114,12 +114,17 @@ def render_stripe_payment_button(amount: float, description: str):
 
 def check_payment_status():
     """
-    Check if user has completed payment based on session
+    Check if user has completed payment based on session and email
     """
     # Check query params for session_id (returned from Stripe)
     session_id = st.query_params.get('session_id')
+    email = st.query_params.get('email', st.query_params.get('customer_email', ''))
     
-    if session_id and verify_payment(session_id):
+    if session_id and email and verify_payment(session_id):
+        # Import and use cookie_access to save email
+        from backend.cookie_access import save_access_to_cookie
+        save_access_to_cookie(email, session_id)
+        
         # Mark as permanently authenticated
         st.session_state.payment_completed = True
         st.session_state.authenticated = True
