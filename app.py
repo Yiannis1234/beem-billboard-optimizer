@@ -6,6 +6,7 @@ Uses the organized backend and frontend structure.
 import streamlit as st
 import pandas as pd
 from datetime import datetime
+import os
 
 # Import our organized modules
 try:
@@ -18,14 +19,29 @@ except ImportError as e:
     st.error(f"Import error: {e}")
     st.stop()
 
+# Import Stripe payment module
+try:
+    from backend.stripe_payment import render_stripe_payment_button, check_payment_status
+    STRIPE_ENABLED = True
+except ImportError:
+    STRIPE_ENABLED = False
+
 # Authentication system
 ACCESS_CODE = "tatakas101"
+PAYMENT_AMOUNT = 5.00
 
 def check_authentication():
     """Check if user is authenticated"""
     if 'authenticated' not in st.session_state:
         st.session_state.authenticated = False
-    return st.session_state.authenticated
+    if 'payment_completed' not in st.session_state:
+        st.session_state.payment_completed = False
+    
+    # Check payment status if Stripe is enabled
+    if STRIPE_ENABLED and check_payment_status():
+        st.session_state.payment_completed = True
+    
+    return st.session_state.authenticated or st.session_state.payment_completed
 
 def render_login_page():
     """Render login/payment page"""
@@ -55,18 +71,23 @@ def render_login_page():
                 st.error("❌ Invalid access code")
     
     with col2:
-        st.markdown("### 🔐 Access Information")
-        st.markdown("**Free access is available via code only**")
+        st.markdown("### 💳 Premium Access")
+        st.markdown(f"**Get instant access for £{PAYMENT_AMOUNT}**")
         
         st.markdown("""
-        **Benefits:**
+        **What you get:**
         - Full campaign optimization
         - Personalized recommendations
         - Real-time analytics
-        - No payment required
+        - Instant access
         """)
         
-        st.info("👤 **Contact administrator for access code**")
+        if STRIPE_ENABLED:
+            render_stripe_payment_button(PAYMENT_AMOUNT, "BritMetrics Premium Access")
+        else:
+            st.warning("⚠️ Stripe not configured. Contact admin for access code.")
+            if st.button("🔑 Get Access Code", type="secondary"):
+                st.info(f"💡 Access code: **{ACCESS_CODE}**")
     
     st.markdown("---")
     st.markdown("""
@@ -155,6 +176,7 @@ def main():
     with col3:
         if st.button("🚪 Logout", type="secondary"):
             st.session_state.authenticated = False
+            st.session_state.payment_completed = False
             st.rerun()
     
     # Render personalized header with logo
