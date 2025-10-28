@@ -593,29 +593,18 @@ class UIComponents:
             
             if submitted:
                 if name and email and message:
-                    # Import email service
-                    try:
-                        from backend.email_service import send_contact_email, send_auto_reply
-                        
-                        # Send message to vamvak@outlook.com
-                        success, result_msg = send_contact_email(name, email, message)
-                        
-                        if success:
-                            st.success("✅ Thank you for your message! We'll get back to you soon.")
-                            
-                            # Send auto-reply
-                            try:
-                                send_auto_reply(name, email)
-                                st.info("📧 Check your email for a confirmation message!")
-                            except:
-                                pass
-                        else:
-                            st.error(f"❌ {result_msg}")
-                            st.info("📧 Please contact us directly at: **vamvak@outlook.com**")
-                            
-                    except ImportError:
-                        st.success("✅ Thank you for your message! We'll get back to you soon.")
-                        st.info("📧 Or reach us directly at: **vamvak@outlook.com**")
+                    # Show the contact information instead of trying to send email
+                    st.success("✅ Thank you for contacting BritMetrics!")
+                    st.info(f"""
+📧 **To reach the team, email:** vamvak@outlook.com
+
+**Your message details:**
+- Name: {name}
+- Email: {email}
+- Message: {message}
+
+*Please copy your message above and send it to vamvak@outlook.com*
+                    """)
                 else:
                     st.error("❌ Please fill in all fields")
         

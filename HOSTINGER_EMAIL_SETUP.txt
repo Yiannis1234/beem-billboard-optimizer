@@ -1,0 +1,25 @@
+# ON HOSTINGER SERVER:
+
+# 1. Connect to Hostinger
+ssh your-username@your-hostinger-ip
+
+# 2. Go to project directory
+cd /var/www/britmetrics
+
+# 3. Create .env file with Outlook password
+nano .env
+
+# Add these two lines (REPLACE 'your-app-password' with the 16-char password you generated):
+SENDER_EMAIL=vamvak@outlook.com
+SENDER_PASSWORD=your-app-password
+
+# Save: Ctrl+X, then Y, then Enter
+
+# 4. Pull latest code and restart
+source venv/bin/activate
+git pull origin main
+sudo pkill -9 -f streamlit
+sleep 3
+nohup streamlit run app.py --server.port 8503 --server.address localhost --server.headless true > /var/log/britmetrics.log 2>&1 &
+sleep 5
+tail -20 /var/log/britmetrics.log
