@@ -30,7 +30,7 @@ except ImportError:
     save_access_to_cookie = lambda x: None
 
 # Authentication system
-ACCESS_CODE = "tatakas101"
+ACCESS_CODE = "9797"
 PAYMENT_AMOUNT = 5.00
 
 def check_authentication():
