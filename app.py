@@ -66,9 +66,22 @@ def render_login_page():
     st.markdown("""
     <div style='text-align: center; padding: 3rem;'>
         <h1 style='color: #0078FF; font-size: 3rem; margin-bottom: 1rem;'>🔒 BritMetrics</h1>
-        <h2 style='color: #333; font-size: 2rem; margin-bottom: 2rem;'>Premium Access Required</h2>
+        <h2 style='color: #333; font-size: 2rem; margin-bottom: 2rem;'>Access Required</h2>
     </div>
     """, unsafe_allow_html=True)
+    
+    # Free temporary access button
+    col0 = st.columns(1)[0]
+    with col0:
+        st.markdown("### 🎁 Try Free (Limited Time)")
+        st.markdown("Get temporary free access to explore BritMetrics:")
+        
+        if st.button("🚀 Start Free Trial", type="primary", use_container_width=True):
+            st.session_state.authenticated = True
+            st.success("✅ Free access granted! Enjoy...")
+            st.rerun()
+    
+    st.markdown("---")
     
     col1, col2 = st.columns(2)
     
