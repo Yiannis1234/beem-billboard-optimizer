@@ -575,7 +575,9 @@ class UIComponents:
             <div style='margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ddd;'>
                 <p style='font-size: 0.9rem; opacity: 0.7;'>Created by Ioannis Vamvakas</p>
                 <p style='font-size: 0.85rem; margin-top: 0.3rem;'>
-                    📧 <a href='mailto:vamvak@outlook.com' style='color: #0078FF; text-decoration: none;'>vamvak@outlook.com</a> | 
+                    📧 vamvak@outlook.com
+                </p>
+                <p style='font-size: 0.85rem; margin-top: 0.3rem;'>
                     🔗 <a href='https://www.linkedin.com/in/ioannisvamvakas/' target='_blank' style='color: #0078FF; text-decoration: none;'>LinkedIn</a>
                 </p>
             </div>
