@@ -592,8 +592,32 @@ class UIComponents:
             submitted = st.form_submit_button("🚀 Send Message", type="primary", use_container_width=True)
             
             if submitted:
-                st.success("✅ Thank you for your message! We'll get back to you soon.")
-                st.info("📧 Or reach us directly at: **vamvak@outlook.com**")
+                if name and email and message:
+                    # Import email service
+                    try:
+                        from backend.email_service import send_contact_email, send_auto_reply
+                        
+                        # Send message to vamvak@outlook.com
+                        success, result_msg = send_contact_email(name, email, message)
+                        
+                        if success:
+                            st.success("✅ Thank you for your message! We'll get back to you soon.")
+                            
+                            # Send auto-reply
+                            try:
+                                send_auto_reply(name, email)
+                                st.info("📧 Check your email for a confirmation message!")
+                            except:
+                                pass
+                        else:
+                            st.error(f"❌ {result_msg}")
+                            st.info("📧 Please contact us directly at: **vamvak@outlook.com**")
+                            
+                    except ImportError:
+                        st.success("✅ Thank you for your message! We'll get back to you soon.")
+                        st.info("📧 Or reach us directly at: **vamvak@outlook.com**")
+                else:
+                    st.error("❌ Please fill in all fields")
         
         st.markdown("""
         <div style='text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ddd;'>
