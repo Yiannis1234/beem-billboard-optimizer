@@ -82,28 +82,26 @@ def verify_payment(session_id: str):
 
 def render_stripe_payment_button(amount: float, description: str):
     """
-    Render a Stripe payment button that redirects to Stripe checkout
+    Render a Stripe payment button that directly redirects to Stripe checkout
     
     Args:
         amount: Amount in pounds
         description: Product description
     """
-    if st.button(f"💳 Pay £{amount} for Access", type="secondary", use_container_width=True):
-        # Create Stripe checkout session
-        session_id, checkout_url = create_payment_session(amount, description)
-        
-        if checkout_url:
-            st.markdown(f"""
-            <div style='text-align: center; padding: 1rem; background: #f0f8ff; border-radius: 10px; margin: 1rem 0;'>
-                <h4 style='color: #0078FF; margin-bottom: 1rem;'>🔒 Secure Payment</h4>
-                <p style='margin-bottom: 1rem;'>Click the button below to complete your payment:</p>
-                <a href="{checkout_url}" target="_blank" style='display: inline-block; background: #0078FF; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;'>
-                    💳 Complete Payment - £{amount}
-                </a>
-            </div>
-            """, unsafe_allow_html=True)
-        else:
-            st.error("Failed to create payment session. Please try again.")
+    # Create Stripe checkout session immediately
+    session_id, checkout_url = create_payment_session(amount, description)
+    
+    if checkout_url:
+        # Direct redirect button - no intermediate steps
+        st.markdown(f"""
+        <div style='text-align: center; margin: 1rem 0;'>
+            <a href="{checkout_url}" target="_blank" style='display: inline-block; background: #00d4aa; color: white; padding: 15px 30px; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);'>
+                💳 Pay £{amount} for Access
+            </a>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.error("Payment system unavailable. Please contact support.")
 
 
 def check_payment_status():
