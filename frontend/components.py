@@ -593,18 +593,22 @@ class UIComponents:
             
             if submitted:
                 if name and email and message:
-                    # Show the contact information instead of trying to send email
-                    st.success("✅ Thank you for contacting BritMetrics!")
-                    st.info(f"""
-📧 **To reach the team, email:** vamvak@outlook.com
-
-**Your message details:**
-- Name: {name}
-- Email: {email}
-- Message: {message}
-
-*Please copy your message above and send it to vamvak@outlook.com*
-                    """)
+                    # Save message to file
+                    try:
+                        from backend.contact_storage import save_contact_message
+                        
+                        success, result_msg = save_contact_message(name, email, message)
+                        
+                        if success:
+                            st.success("✅ Thank you for your message! We've saved it and will get back to you soon.")
+                            st.info("📧 You can also reach us directly at: **vamvak@outlook.com**")
+                        else:
+                            st.error(f"❌ {result_msg}")
+                            st.info("📧 Please contact us directly at: **vamvak@outlook.com**")
+                            
+                    except ImportError:
+                        st.success("✅ Thank you for your message! We'll get back to you soon.")
+                        st.info("📧 Please contact us directly at: **vamvak@outlook.com**")
                 else:
                     st.error("❌ Please fill in all fields")
         
