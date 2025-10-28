@@ -1,0 +1,13 @@
+# DEPLOY TO HOSTINGER - RUN THESE COMMANDS
+
+cd /var/www/britmetrics
+source venv/bin/activate
+git pull origin main
+sudo pkill -9 -f streamlit
+sleep 3
+nohup streamlit run app.py --server.port 8503 --server.address 0.0.0.0 --server.headless true > /var/log/britmetrics.log 2>&1 &
+sleep 5
+tail -30 /var/log/britmetrics.log
+ps aux | grep streamlit
+curl http://localhost:8503
+
