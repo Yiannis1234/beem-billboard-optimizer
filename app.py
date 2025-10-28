@@ -6,6 +6,8 @@ Uses the organized backend and frontend structure.
 import streamlit as st
 import pandas as pd
 from datetime import datetime
+import hashlib
+import time
 
 # Import our organized modules
 try:
@@ -17,6 +19,74 @@ try:
 except ImportError as e:
     st.error(f"Import error: {e}")
     st.stop()
+
+# Authentication system
+ACCESS_CODE = "tatakas101"
+PAYMENT_AMOUNT = 5.00  # £5
+PAYMENT_DESCRIPTION = "BritMetrics Premium Access"
+
+def check_authentication():
+    """Check if user is authenticated"""
+    if 'authenticated' not in st.session_state:
+        st.session_state.authenticated = False
+    if 'payment_completed' not in st.session_state:
+        st.session_state.payment_completed = False
+    return st.session_state.authenticated or st.session_state.payment_completed
+
+def render_login_page():
+    """Render login/payment page"""
+    st.markdown(UNIVERSAL_CSS, unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div style='text-align: center; padding: 3rem;'>
+        <h1 style='color: #0078FF; font-size: 3rem; margin-bottom: 1rem;'>🔒 BritMetrics</h1>
+        <h2 style='color: #333; font-size: 2rem; margin-bottom: 2rem;'>Premium Access Required</h2>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("### 🔑 Access Code")
+        st.markdown("Enter the access code to unlock BritMetrics:")
+        
+        access_code = st.text_input("Access Code", type="password", placeholder="Enter code...")
+        
+        if st.button("🔓 Unlock with Code", type="primary", use_container_width=True):
+            if access_code == ACCESS_CODE:
+                st.session_state.authenticated = True
+                st.success("✅ Access granted! Redirecting...")
+                st.rerun()
+            else:
+                st.error("❌ Invalid access code")
+    
+    with col2:
+        st.markdown("### 💳 Premium Access")
+        st.markdown(f"**Get instant access for £{PAYMENT_AMOUNT}**")
+        
+        st.markdown("""
+        **What you get:**
+        - Full campaign optimization
+        - Personalized recommendations
+        - Real-time analytics
+        - Priority support
+        """)
+        
+        if st.button(f"💳 Pay £{PAYMENT_AMOUNT} for Access", type="secondary", use_container_width=True):
+            # Simulate payment processing
+            with st.spinner("Processing payment..."):
+                time.sleep(2)
+                st.session_state.payment_completed = True
+                st.success("✅ Payment successful! Redirecting...")
+                st.rerun()
+    
+    st.markdown("---")
+    st.markdown("""
+    <div style='text-align: center; color: #666; padding: 2rem;'>
+        <p>🔐 Your data is secure and encrypted</p>
+        <p>💡 Need help? Contact support</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 class AdSuccessPredictor:
@@ -78,6 +148,11 @@ def main():
         initial_sidebar_state="collapsed"
     )
     
+    # Check authentication first
+    if not check_authentication():
+        render_login_page()
+        return
+    
     # Apply universal CSS
     st.markdown(UNIVERSAL_CSS, unsafe_allow_html=True)
     
@@ -86,6 +161,14 @@ def main():
         st.session_state.predictor = AdSuccessPredictor()
     
     predictor = st.session_state.predictor
+    
+    # Add logout button in top right
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col3:
+        if st.button("🚪 Logout", type="secondary"):
+            st.session_state.authenticated = False
+            st.session_state.payment_completed = False
+            st.rerun()
     
     # Render personalized header with logo
     UIComponents.render_personalized_header()
