@@ -51,8 +51,8 @@ def create_payment_session(amount: float, description: str, currency: str = "gbp
                 'quantity': 1,
             }],
             mode='payment',
-            success_url=st.session_state.get('current_url', 'https://britmetrics.com/success') + '?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url=st.session_state.get('current_url', 'https://britmetrics.com/cancel'),
+            success_url='https://britmetrics.com?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url='https://britmetrics.com',
         )
         
         return checkout_session.id, checkout_session.url
