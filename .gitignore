@@ -35,4 +35,9 @@ ENV/
 
 # OS
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Server-specific files
+paid_customers.json
+contact_messages/
+.env 

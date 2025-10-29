@@ -1,0 +1,28 @@
+# RUN THESE COMMANDS ON HOSTINGER TO FIX GIT PULL:
+
+cd /var/www/britmetrics
+source venv/bin/activate
+
+# Backup paid_customers.json (we need it!)
+cp paid_customers.json paid_customers.json.backup
+
+# Remove it temporarily so git pull works
+rm paid_customers.json
+
+# Now pull the latest code
+git pull origin main
+
+# Restore your paid customers
+mv paid_customers.json.backup paid_customers.json
+
+# Now test
+python3 test_streamlit.py
+
+# If test passes, start Streamlit
+sudo pkill -9 -f streamlit
+nohup streamlit run app.py --server.port 8504 --server.address 0.0.0.0 --server.headless true > /var/log/britmetrics.log 2>&1 &
+
+sleep 5
+tail -30 /var/log/britmetrics.log
+curl http://localhost:8504
+
