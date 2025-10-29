@@ -1,0 +1,45 @@
+# EMERGENCY FIX - Run these commands on Hostinger:
+
+# 1. Connect to Hostinger
+ssh your-username@your-hostinger-ip
+
+# 2. Go to project directory
+cd /var/www/britmetrics
+
+# 3. Activate virtual environment
+source venv/bin/activate
+
+# 4. Pull latest changes
+git pull origin main
+
+# 5. Kill ALL processes
+sudo pkill -9 -f streamlit
+sudo pkill -9 -f python3
+sudo pkill -9 -f python
+
+# 6. Check what's using ports
+sudo lsof -i :8501
+sudo lsof -i :8502
+sudo lsof -i :8503
+sudo lsof -i :8504
+
+# 7. Start Streamlit on port 8504
+nohup streamlit run app.py --server.port 8504 --server.address 0.0.0.0 --server.headless true > /var/log/britmetrics.log 2>&1 &
+
+# 8. Wait and check
+sleep 5
+ps aux | grep streamlit
+tail -20 /var/log/britmetrics.log
+
+# 9. Test locally
+curl http://localhost:8504
+
+# 10. Update Nginx config
+sudo nano /etc/nginx/sites-available/britmetrics
+# Change proxy_pass to: proxy_pass http://localhost:8504;
+
+# 11. Restart Nginx
+sudo systemctl restart nginx
+
+# 12. Check Nginx status
+sudo systemctl status nginx
