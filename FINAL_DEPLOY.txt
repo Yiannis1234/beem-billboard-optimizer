@@ -1,0 +1,15 @@
+# FINAL DEPLOYMENT - Run ALL these commands on Hostinger:
+
+cd /var/www/britmetrics
+source venv/bin/activate
+git pull origin main
+sudo pkill -9 -f streamlit
+sudo pkill -9 -f python3
+sleep 5
+nohup streamlit run app.py --server.port 8504 --server.address 0.0.0.0 --server.headless true > /var/log/britmetrics.log 2>&1 &
+sleep 5
+tail -30 /var/log/britmetrics.log
+ps aux | grep streamlit
+curl http://localhost:8504
+sudo systemctl restart nginx
+
