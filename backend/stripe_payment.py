@@ -88,23 +88,39 @@ def render_stripe_payment_button(amount: float, description: str):
         amount: Amount in pounds
         description: Product description
     """
-    # Create Stripe checkout session on page load
-    session_id, checkout_url = create_payment_session(amount, description)
+    # Check if we already have a checkout URL in session state
+    if 'checkout_url' not in st.session_state or not st.session_state.checkout_url:
+        # Create Stripe checkout session
+        session_id, checkout_url = create_payment_session(amount, description)
+        if checkout_url:
+            st.session_state.checkout_url = checkout_url
+        else:
+            st.error("Payment system unavailable. Please contact support.")
+            return
     
-    if checkout_url:
-        # Use Streamlit's link button if available, otherwise HTML link styled as button
-        try:
-            # Try using st.link_button (Streamlit 1.28+)
-            st.link_button(f"💳 Pay £{amount} for Access", checkout_url, type="primary", use_container_width=True)
-        except:
-            # Fallback to HTML link styled as button
-            st.markdown(f"""
-            <a href="{checkout_url}" target="_self" style='display: block; text-align: center; background: #00d4aa; color: white; padding: 15px 30px; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); margin: 1rem 0;'>
-                💳 Pay £{amount} for Access
-            </a>
-            """, unsafe_allow_html=True)
-    else:
-        st.error("Payment system unavailable. Please contact support.")
+    checkout_url = st.session_state.checkout_url
+    
+    # Simple HTML link styled as button - this ALWAYS works
+    st.markdown(f"""
+    <div style='width: 100%; margin: 1rem 0;'>
+        <a href="{checkout_url}" 
+           style='display: block; 
+                  text-align: center; 
+                  background: #00d4aa; 
+                  color: white; 
+                  padding: 15px 30px; 
+                  text-decoration: none; 
+                  border-radius: 10px; 
+                  font-weight: bold; 
+                  font-size: 16px; 
+                  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                  transition: background 0.3s;'
+           onmouseover="this.style.background='#00b89a'"
+           onmouseout="this.style.background='#00d4aa'">
+            💳 Pay £{amount} for Access
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 def check_payment_status():
