@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 const COLORS = ['#0078FF', '#00C853', '#FF6B6B', '#FFA500', '#9C27B0', '#00BCD4']
@@ -35,13 +34,7 @@ export default function Analytics() {
         {/* Header */}
         <div className="flex items-center justify-between rounded-3xl bg-gradient-to-r from-purple-600 to-pink-600 p-8 shadow-xl">
           <div>
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 rounded-xl bg-white/20 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/30"
-            >
-              ← Back to Campaign Planner
-            </Link>
-            <h1 className="mt-4 text-4xl font-black text-white">Analytics Dashboard</h1>
+            <h1 className="text-4xl font-black text-white">Analytics Dashboard</h1>
             <p className="mt-2 text-lg text-purple-100">Deep insights into your campaign performance and audience reach</p>
           </div>
           <div className="hidden lg:block">
@@ -108,8 +101,8 @@ export default function Analytics() {
                     data={demographicData}
                     cx="50%"
                     cy="50%"
-                    labelLine={false}
-                    label={(entry) => `${entry.demographic}: ${entry.percentage}%`}
+                    labelLine={true}
+                    label={({ demographic, percentage }) => `${demographic}: ${percentage}%`}
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="percentage"
@@ -118,9 +111,29 @@ export default function Analytics() {
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <Tooltip 
+                    formatter={(value) => `${value}%`}
+                    contentStyle={{ backgroundColor: 'white', border: '1px solid #e0e7ff', borderRadius: '8px', color: '#1e293b' }}
+                  />
+                  <Legend 
+                    wrapperStyle={{ color: '#1e293b', fontSize: '12px' }}
+                    formatter={(value) => <span style={{ color: '#1e293b' }}>{value}</span>}
+                  />
                 </PieChart>
               </ResponsiveContainer>
+            </div>
+            {/* Legend below chart for better visibility */}
+            <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
+              {demographicData.map((entry, index) => (
+                <div key={entry.demographic} className="flex items-center gap-2">
+                  <div 
+                    className="h-3 w-3 rounded-full" 
+                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                  />
+                  <span className="font-medium text-slate-700">{entry.demographic}</span>
+                  <span className="text-slate-500">{entry.percentage}%</span>
+                </div>
+              ))}
             </div>
           </div>
 
