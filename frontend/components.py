@@ -341,34 +341,34 @@ class UIComponents:
         st.markdown("""
         <div style='background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;'>
             <div style='display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;'>
-                <svg width="60" height="60" viewBox="0 0 100 100" style='flex-shrink: 0; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));'>
+                <svg width="60" height="60" viewBox="0 0 100 100" style='flex-shrink: 0; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.25));'>
                     <defs>
                         <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" style="stop-color: #0078FF;" />
-                            <stop offset="100%" style="stop-color: #00C853;" />
+                            <stop offset="100%" style="stop-color: #0056CC;" />
                         </linearGradient>
                         <filter id="shadow">
-                            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+                            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.4"/>
                         </filter>
                     </defs>
-                    <!-- Circular arrow with stronger visibility -->
-                    <circle cx="50" cy="50" r="45" fill="url(#grad1)" stroke="#0056CC" stroke-width="3" filter="url(#shadow)"/>
-                    <!-- Arrow with thicker stroke and better contrast -->
+                    <!-- Circular background with darker blue for better contrast -->
+                    <circle cx="50" cy="50" r="45" fill="url(#grad1)" stroke="#003D99" stroke-width="4" filter="url(#shadow)"/>
+                    <!-- Arrow with WHITE color and dark outline for MAXIMUM visibility -->
                     <path d="M 30 50 L 50 30 L 50 40 L 70 40 L 70 60 L 50 60 L 50 70 Z" 
-                          fill="white" 
-                          stroke="#0056CC" 
-                          stroke-width="2.5" 
+                          fill="#FFFFFF" 
+                          stroke="#003D99" 
+                          stroke-width="4" 
                           stroke-linejoin="round" 
                           stroke-linecap="round"
-                          style="filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));"/>
-                    <!-- Line graph - more visible -->
-                    <line x1="15" y1="65" x2="25" y2="55" stroke="white" stroke-width="4" stroke-linecap="round"/>
-                    <line x1="25" y1="55" x2="35" y2="60" stroke="white" stroke-width="4" stroke-linecap="round"/>
-                    <line x1="35" y1="60" x2="45" y2="50" stroke="white" stroke-width="4" stroke-linecap="round"/>
-                    <!-- Bar chart - more visible -->
-                    <rect x="60" y="70" width="10" height="15" fill="white" stroke="#0056CC" stroke-width="1.5"/>
-                    <rect x="72" y="65" width="10" height="20" fill="white" stroke="#0056CC" stroke-width="1.5"/>
-                    <rect x="84" y="75" width="10" height="10" fill="white" stroke="#0056CC" stroke-width="1.5"/>
+                          style="filter: drop-shadow(0 3px 5px rgba(0,0,0,0.5));"/>
+                    <!-- Line graph - white for maximum contrast -->
+                    <line x1="15" y1="65" x2="25" y2="55" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="25" y1="55" x2="35" y2="60" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="35" y1="60" x2="45" y2="50" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <!-- Bar chart - white with dark outline for visibility -->
+                    <rect x="60" y="70" width="10" height="15" fill="#FFFFFF" stroke="#003D99" stroke-width="2.5"/>
+                    <rect x="72" y="65" width="10" height="20" fill="#FFFFFF" stroke="#003D99" stroke-width="2.5"/>
+                    <rect x="84" y="75" width="10" height="10" fill="#FFFFFF" stroke="#003D99" stroke-width="2.5"/>
                 </svg>
                 <h1 style='color: #333333; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin: 0; font-family: "Arial", sans-serif;'>
                     BritMetrics
