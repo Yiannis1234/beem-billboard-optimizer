@@ -368,27 +368,25 @@ class UIComponents:
         st.markdown(f"""
         <div style='background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;'>
             <div style='display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;'>
-                <div onclick="{click_function}" style="text-decoration: none; display: inline-block; cursor: pointer; transition: transform 0.2s; background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%); border-radius: 50%; padding: 8px; box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);" 
-                   onmouseover="this.style.transform='scale(1.15)'; this.style.boxShadow='0 6px 20px rgba(255, 107, 53, 0.6)'" 
-                   onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(255, 107, 53, 0.4)'"
+                <div onclick="{click_function}" style="text-decoration: none; display: inline-block; cursor: pointer; transition: all 0.3s ease; background: linear-gradient(135deg, #0078FF 0%, #0056CC 100%); border-radius: 50%; padding: 12px; box-shadow: 0 6px 20px rgba(0, 120, 255, 0.5), inset 0 2px 5px rgba(255, 255, 255, 0.3); border: 3px solid #FFFFFF;" 
+                   onmouseover="this.style.transform='scale(1.2)'; this.style.boxShadow='0 8px 25px rgba(0, 120, 255, 0.7), inset 0 2px 5px rgba(255, 255, 255, 0.4)'; this.style.background='linear-gradient(135deg, #0088FF 0%, #0066DD 100%)'" 
+                   onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 6px 20px rgba(0, 120, 255, 0.5), inset 0 2px 5px rgba(255, 255, 255, 0.3)'; this.style.background='linear-gradient(135deg, #0078FF 0%, #0056CC 100%)'"
                    title="Click to go to {target_page}">
-                    <svg width="70" height="70" viewBox="0 0 100 100" style='flex-shrink: 0; cursor: pointer;'>
-                        <!-- Simple, CLEAR arrow - BIG and BOLD -->
-                        <path d="M 35 50 L 65 50 M 50 35 L 65 50 L 50 65" 
+                    <svg width="80" height="80" viewBox="0 0 100 100" style='flex-shrink: 0; cursor: pointer;'>
+                        <!-- BIG, BOLD white arrow pointing right -->
+                        <path d="M 25 50 L 75 50 M 50 25 L 75 50 L 50 75" 
                               fill="none"
                               stroke="#FFFFFF" 
-                              stroke-width="8" 
+                              stroke-width="10" 
                               stroke-linejoin="round" 
                               stroke-linecap="round"/>
-                        <!-- Small circle for emphasis -->
-                        <circle cx="50" cy="50" r="30" fill="none" stroke="#FFFFFF" stroke-width="3" opacity="0.3"/>
                     </svg>
                 </div>
                 <h1 style='color: #333333; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin: 0; font-family: "Arial", sans-serif;'>
                     BritMetrics
                 </h1>
             </div>
-            <p style='color: #333333; font-size: clamp(1.1rem, 2.5vw, 1.5rem); margin-top: 0.5rem; font-weight: 600; margin-left: 88px;'>Billboard Intelligence Platform</p>
+            <p style='color: #333333; font-size: clamp(1.1rem, 2.5vw, 1.5rem); margin-top: 0.5rem; font-weight: 600; margin-left: 104px;'>Billboard Intelligence Platform</p>
         </div>
         """, unsafe_allow_html=True)
     
