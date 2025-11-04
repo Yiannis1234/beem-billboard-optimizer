@@ -60,7 +60,7 @@ class AdSuccessCalculator:
         adjusted_impressions_per_hour = int(base_impressions_per_hour * (1 + (impression_pct_delta / 100.0)))
         
         # NEW: Campaign-specific personalization
-        audience_match_score = 0
+        audience_match_score = None  # None = no campaign selected
         personalized_tips = []
         creative_recommendations = []
         target_audience_size = adjusted_impressions_per_hour
@@ -90,8 +90,9 @@ class AdSuccessCalculator:
             
             final_success_score = int(min(98, max(25, base_success_score + campaign_boost)))
             
-            # Adjust target audience size based on match
+            # Adjust target audience size based on match (only if campaign selected)
             target_audience_size = int(adjusted_impressions_per_hour * match_multiplier)
+        # If no campaign, use full impressions as target audience
             
             # Generate personalized tips
             personalized_tips = AdSuccessCalculator._generate_personalized_tips(
