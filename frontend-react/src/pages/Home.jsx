@@ -99,13 +99,11 @@ export default function Home() {
   }
 
   const audienceMatch = prediction?.audienceMatch ?? null
-  const events = prediction?.events ?? []
   const keyReasons = prediction?.keyReasons ?? []
   const tactics = prediction?.personalizedTips ?? []
   const weather = prediction?.weather ?? null
   const traffic = prediction?.traffic ?? null
   const places = prediction?.places ?? null
-  const lastUpdated = prediction?.refreshedAt ? new Date(prediction.refreshedAt) : null
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 pb-16">
@@ -273,7 +271,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-6 grid gap-6 lg:grid-cols-2">
+          <div className="grid gap-6 lg:grid-cols-2">
             <div className="rounded-2xl border border-sky-200 bg-gradient-to-br from-sky-50 to-blue-50 p-6 text-sky-900 shadow-sm">
               <h3 className="text-lg font-semibold">🌤️ Weather & Movement</h3>
               {weather ? (
@@ -299,30 +297,25 @@ export default function Home() {
                 <p className="mt-3 text-sm text-sky-700">No weather data available</p>
               )}
             </div>
-            <div className="rounded-2xl border border-rose-200 bg-gradient-to-br from-rose-50 to-pink-50 p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-rose-900">🎪 Upcoming Events</h3>
-              {events.length === 0 ? (
-                <p className="mt-3 text-sm text-slate-600">No upcoming events in this area</p>
+            <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-emerald-900">📍 Places Popularity</h3>
+              {places ? (
+                <dl className="mt-4 grid gap-3 text-sm text-emerald-900">
+                  <div className="flex justify-between border-b border-emerald-100 pb-2">
+                    <dt className="font-medium">Top Place</dt>
+                    <dd>{places.placeName}</dd>
+                  </div>
+                  <div className="flex justify-between border-b border-emerald-100 pb-2">
+                    <dt className="font-medium">Rating</dt>
+                    <dd>⭐ {places.rating} ({places.userRatingsTotal} reviews)</dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="font-medium">Popularity Score</dt>
+                    <dd>{places.popularityScore}/100</dd>
+                  </div>
+                </dl>
               ) : (
-                <ul className="mt-4 space-y-4 text-sm text-slate-600">
-                  {events.map((ev) => (
-                    <li key={ev.id} className="rounded-xl border border-rose-200 bg-white p-4">
-                      <p className="font-semibold text-slate-900">{ev.name}</p>
-                      <p className="mt-1 text-xs uppercase tracking-wide text-slate-500">{ev.start}</p>
-                      <p className="mt-2 text-sm">{ev.venue}</p>
-                      {ev.url ? (
-                        <a
-                          href={ev.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="mt-2 inline-flex items-center text-xs font-semibold text-rose-600 hover:text-rose-700"
-                        >
-                          View event →
-                        </a>
-                      ) : null}
-                    </li>
-                  ))}
-                </ul>
+                <p className="mt-3 text-sm text-emerald-700">No place data available</p>
               )}
             </div>
           </div>

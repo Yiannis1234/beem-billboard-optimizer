@@ -330,10 +330,8 @@ def predict_success(payload: PredictRequest):
     except Exception as exc:  # noqa: BLE001
         logger.warning("Places API failed: %s", exc)
 
-    try:
-        events_data = _events_service.get_events_near_location(area_name, area_data.center.lat, area_data.center.lon)
-    except Exception as exc:  # noqa: BLE001
-        logger.warning("Events API failed: %s", exc)
+    # Eventbrite removed - not relevant for most users
+    events_data = None
 
     result = AdSuccessCalculator.calculate_ad_success_score(
         area_name,

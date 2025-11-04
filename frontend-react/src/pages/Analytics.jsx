@@ -145,35 +145,6 @@ export default function Analytics() {
           </div>
         </div>
 
-        {/* ROI Calculator */}
-        <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-white to-blue-50 p-8 shadow-lg">
-          <h2 className="text-2xl font-bold text-slate-900">💰 ROI Calculator</h2>
-          <p className="mt-2 text-slate-600">Estimate your campaign return on investment</p>
-          <div className="mt-6 grid gap-6 lg:grid-cols-3">
-            <div className="rounded-2xl bg-white p-6 shadow-sm">
-              <label className="text-sm font-semibold text-slate-700">Campaign Budget (£)</label>
-              <input
-                type="number"
-                defaultValue={5000}
-                className="mt-2 w-full rounded-xl border-2 border-blue-200 px-4 py-3 text-lg font-bold text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100"
-              />
-            </div>
-            <div className="rounded-2xl bg-white p-6 shadow-sm">
-              <label className="text-sm font-semibold text-slate-700">Expected Impressions</label>
-              <input
-                type="number"
-                defaultValue={680000}
-                className="mt-2 w-full rounded-xl border-2 border-emerald-200 px-4 py-3 text-lg font-bold text-slate-900 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-100"
-              />
-            </div>
-            <div className="rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 p-6 text-white shadow-lg">
-              <div className="text-sm font-semibold uppercase tracking-wide text-purple-100">Estimated ROI</div>
-              <div className="mt-2 text-4xl font-black">345%</div>
-              <div className="mt-2 text-sm text-purple-100">£17,250 return</div>
-            </div>
-          </div>
-        </div>
-
         {/* Platform Info */}
         <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-8 shadow-lg">
           <h2 className="text-2xl font-bold text-slate-900">🚀 About BritMetrics</h2>
