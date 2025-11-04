@@ -9,15 +9,16 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 border-b border-blue-200 bg-gradient-to-r from-blue-600 to-cyan-600 shadow-lg">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 lg:px-6">
-        <Link to="/" className="inline-flex items-center gap-4 transition hover:opacity-90">
-          <svg className="h-12 w-12" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="48" height="48" rx="10" fill="white" fillOpacity="0.2"/>
-            <path d="M24 12L32 18V30L24 36L16 30V18L24 12Z" fill="white"/>
-            <path d="M24 18L28 21V27L24 30L20 27V21L24 18Z" fill="#0078FF"/>
-          </svg>
+        <Link to="/" className="inline-flex items-center gap-3 transition hover:opacity-90">
+          <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white shadow-lg">
+            <svg className="h-10 w-10" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 10L28 16V26L20 32L12 26V16L20 10Z" fill="#0078FF"/>
+              <path d="M20 15L24 18V24L20 27L16 24V18L20 15Z" fill="white"/>
+            </svg>
+          </div>
           <div>
-            <div className="text-2xl font-black tracking-tight text-white">BritMetrics</div>
-            <div className="text-xs font-semibold text-blue-100">Billboard Intelligence Platform</div>
+            <div className="text-3xl font-black tracking-tight text-white">BritMetrics</div>
+            <div className="text-xs font-semibold text-blue-100">Billboard Intelligence</div>
           </div>
         </Link>
         

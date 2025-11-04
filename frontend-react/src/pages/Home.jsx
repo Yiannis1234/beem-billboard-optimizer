@@ -25,77 +25,41 @@ const Hero = ({
   isLoading,
   disabled,
 }) => (
-  <div className="rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-8 shadow-xl lg:p-12">
-    <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-      <div className="space-y-5 text-white">
-        <div className="inline-flex items-center gap-3 rounded-full bg-white/15 px-4 py-2 text-sm font-semibold backdrop-blur">
-          <span className="text-lg">📊</span>
-          <span>BritMetrics · Real-Time Campaign Intelligence</span>
+  <div className="rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-8 shadow-xl lg:p-10">
+    <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex-1 space-y-4 text-white">
+        <h1 className="text-2xl font-black tracking-tight sm:text-3xl lg:text-4xl">
+          Plan Outdoor Campaigns With Confidence
+        </h1>
+        <div className="flex flex-wrap items-center gap-4 text-sm">
+          <span className="rounded-full bg-white/20 px-3 py-1">
+            {selectedArea && cityName ? `${selectedArea.name}, ${cityName}` : 'Select location'}
+          </span>
+          <span className="rounded-full bg-white/20 px-3 py-1">
+            {successScore ?? 0}/100 · {audienceMatch && audienceMatch !== '--' ? `${audienceMatch}%` : 'N/A'} match
+          </span>
         </div>
-        <div>
-          <h1 className="text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
-            Plan Outdoor Campaigns With Confidence
-          </h1>
-          <p className="mt-3 max-w-2xl text-base text-blue-100 sm:text-lg">
-            Instantly match your brand to the strongest locations, factor-in footfall, weather, and
-            contextual signals, and present client-ready insights in seconds.
-          </p>
-        </div>
-        <div className="grid gap-4 text-sm sm:grid-cols-3">
-          <div className="rounded-2xl border border-white/20 bg-white/10 p-4 shadow-inner">
-            <p className="text-blue-100">Campaign Focus</p>
-            <p className="mt-1 text-lg font-semibold">
-              {selectedCampaign?.name ?? 'Generic Analysis'}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-white/20 bg-white/10 p-4 shadow-inner">
-            <p className="text-blue-100">Location</p>
-            <p className="mt-1 text-lg font-semibold">
-              {selectedArea && cityName ? `${selectedArea.name}, ${cityName}` : 'Select a location'}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-white/20 bg-white/10 p-4 shadow-inner">
-            <p className="text-blue-100">Success Index</p>
-            <p className="mt-1 text-lg font-semibold">{successScore ?? 0}/100 · {audienceMatch && audienceMatch !== '--' ? `${audienceMatch}%` : 'N/A'} match</p>
-          </div>
-        </div>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <button
-            type="button"
-            onClick={onRunAnalysis}
-            disabled={disabled || isLoading}
-            className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-blue-700 shadow-lg shadow-blue-900/20 transition hover:-translate-y-0.5 hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-70"
-          >
-            {isLoading ? 'Analysing…' : 'Run New Analysis'}
-          </button>
-          <p className="text-sm text-blue-100">
-            Target audience available per hour: <span className="font-semibold text-white">{targetAudience}</span>
-          </p>
-        </div>
+        <button
+          type="button"
+          onClick={onRunAnalysis}
+          disabled={disabled || isLoading}
+          className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-semibold text-blue-700 shadow-lg transition hover:-translate-y-0.5 hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          {isLoading ? 'Analysing…' : '🚀 Run Analysis'}
+        </button>
       </div>
-      <div className="w-full max-w-md rounded-3xl border border-white/20 bg-white/10 p-6 text-white shadow-2xl">
-        <p className="text-sm text-blue-100">Live Projection</p>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          <div>
-            <p className="text-xs uppercase tracking-wide text-blue-100">Success Score</p>
-            <p className="mt-1 text-3xl font-black">{successScore}</p>
-            <p className="text-xs text-blue-100">Optimised for current conditions</p>
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-wide text-blue-100">Audience Match</p>
-            <p className="mt-1 text-3xl font-black">{audienceMatch && audienceMatch !== '--' ? `${audienceMatch}%` : 'N/A'}</p>
-            <p className="text-xs text-blue-100">Demographic alignment estimate</p>
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-wide text-blue-100">Target Reach / hr</p>
-            <p className="mt-1 text-3xl font-black">{targetAudience && targetAudience !== '--' ? targetAudience : 'N/A'}</p>
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-wide text-blue-100">Campaign Focus</p>
-            <p className="mt-1 text-lg font-semibold leading-tight">
-              {selectedCampaign?.summary ?? 'Balanced, mixed-demographic outlook'}
-            </p>
-          </div>
+      <div className="flex gap-6 rounded-2xl border border-white/20 bg-white/10 p-6 text-white lg:min-w-[280px]">
+        <div className="text-center">
+          <p className="text-xs uppercase tracking-wide text-blue-100">Success</p>
+          <p className="mt-1 text-4xl font-black">{successScore ?? 0}</p>
+        </div>
+        <div className="text-center">
+          <p className="text-xs uppercase tracking-wide text-blue-100">Match</p>
+          <p className="mt-1 text-4xl font-black">{audienceMatch && audienceMatch !== '--' ? `${audienceMatch}%` : 'N/A'}</p>
+        </div>
+        <div className="text-center">
+          <p className="text-xs uppercase tracking-wide text-blue-100">Reach/hr</p>
+          <p className="mt-1 text-4xl font-black">{targetAudience && targetAudience !== '--' ? targetAudience : 'N/A'}</p>
         </div>
       </div>
     </div>
