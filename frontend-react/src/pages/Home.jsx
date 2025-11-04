@@ -253,15 +253,40 @@ export default function Home() {
       ]
 
   const trendData = useMemo(() => {
-    const base = selectedArea?.footfallDaily ?? 120000
-    const baseline = Math.round((base / 24) * 0.55)
+    // Use actual prediction data if available, otherwise show empty state
+    if (!prediction || !baseImpressions) {
+      return []
+    }
+
+    // Get actual values from prediction
+    const currentImpressions = baseImpressions
+    const currentTargetAudience = effectiveTargetAudience ?? currentImpressions
+    const currentScore = successScore
+
+    // Calculate realistic trend based on actual data
+    // Week 1: Start slightly below current (ramp-up period)
+    const week1Impressions = Math.round(currentImpressions * 0.85)
+    const week1Score = Math.max(50, Math.round(currentScore * 0.88))
+
+    // Week 2: Approaching current performance
+    const week2Impressions = Math.round(currentImpressions * 0.95)
+    const week2Score = Math.max(55, Math.round(currentScore * 0.94))
+
+    // Week 3: Near current performance
+    const week3Impressions = Math.round(currentImpressions * 0.98)
+    const week3Score = Math.max(60, Math.round(currentScore * 0.97))
+
+    // Week 4: Current/optimized performance (use actual target audience if available)
+    const week4Impressions = currentTargetAudience > 0 ? currentTargetAudience : currentImpressions
+    const week4Score = currentScore
+
     return [
-      { period: 'Week 1', impressions: Math.round(baseline * 0.9), score: Math.round(successScore * 0.92) },
-      { period: 'Week 2', impressions: Math.round(baseline * 1.02), score: Math.round(successScore * 0.97) },
-      { period: 'Week 3', impressions: Math.round(baseline * 1.08), score: Math.round(successScore * 1.01) },
-      { period: 'Week 4', impressions: effectiveTargetAudience ?? Math.round(baseline * 1.12), score: successScore },
+      { period: 'Week 1', impressions: week1Impressions, score: week1Score },
+      { period: 'Week 2', impressions: week2Impressions, score: week2Score },
+      { period: 'Week 3', impressions: week3Impressions, score: week3Score },
+      { period: 'Week 4', impressions: week4Impressions, score: week4Score },
     ]
-  }, [selectedArea?.footfallDaily, successScore, effectiveTargetAudience])
+  }, [prediction, baseImpressions, effectiveTargetAudience, successScore])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 pb-12 sm:pb-16">
@@ -407,7 +432,7 @@ export default function Home() {
             />
           </div>
 
-          {trendData && trendData.length > 0 && (
+          {trendData && trendData.length > 0 ? (
             <div className="mt-6 rounded-xl border border-blue-100 bg-white/70 p-3 shadow-sm sm:mt-8 sm:rounded-2xl sm:p-4">
               <h3 className="text-xs font-semibold text-slate-700 sm:text-sm">Projected Performance (Next 4 Weeks)</h3>
               <p className="mt-1 text-xs text-slate-500">Smoothed forecast combining footfall, success score and current pacing.</p>
@@ -418,7 +443,7 @@ export default function Home() {
                       <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
                       <XAxis dataKey="period" stroke="#64748b" fontSize={12} />
                       <YAxis yAxisId="left" stroke="#64748b" fontSize={12} tickFormatter={(value) => `${formatNumber(value / 1000)}k`} />
-                      <YAxis yAxisId="right" orientation="right" stroke="#64748b" fontSize={12} />
+                      <YAxis yAxisId="right" orientation="right" stroke="#64748b" fontSize={12} domain={[0, 100]} />
                       <Tooltip formatter={(value, name) => (name === 'score' ? [`${value}/100`, 'Success Score'] : [formatNumber(value), 'Impressions / hr'])} />
                       <Line yAxisId="left" type="monotone" dataKey="impressions" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4 }} />
                       <Line yAxisId="right" type="monotone" dataKey="score" stroke="#22c55e" strokeWidth={3} strokeDasharray="6 3" dot={{ r: 4 }} />
@@ -430,6 +455,10 @@ export default function Home() {
                   </div>
                 )}
               </div>
+            </div>
+          ) : (
+            <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4 text-center text-sm text-slate-500 sm:mt-8 sm:rounded-2xl">
+              <p>Run the analysis to view projected performance forecast.</p>
             </div>
           )}
         </SectionCard>
