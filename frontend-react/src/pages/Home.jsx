@@ -245,7 +245,7 @@ export default function Home() {
   }
 
   const weatherDisplay = weatherFallbackByCity[selectedCityId] ?? weatherFallbackByCity.manchester
-  const weatherMetrics = weather ?? weatherDisplay
+  const weatherMetrics = weather && weather.condition ? weather : weatherDisplay
 
   const placesFallbackByArea = {
     'albert-square': {
@@ -427,23 +427,25 @@ export default function Home() {
             />
           </div>
 
-          <div className="mt-8 rounded-2xl border border-blue-100 bg-white/70 p-4 shadow-sm">
-            <h3 className="text-sm font-semibold text-slate-700">Projected Performance (Next 4 Weeks)</h3>
-            <p className="text-xs text-slate-500">Smoothed forecast combining footfall, success score and current pacing.</p>
-            <div className="mt-4 h-60">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={trendData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
-                  <XAxis dataKey="period" stroke="#64748b" fontSize={12} />
-                  <YAxis yAxisId="left" stroke="#64748b" fontSize={12} tickFormatter={(value) => `${formatNumber(value / 1000)}k`} />
-                  <YAxis yAxisId="right" orientation="right" stroke="#64748b" fontSize={12} />
-                  <Tooltip formatter={(value, name) => (name === 'score' ? [`${value}/100`, 'Success Score'] : [formatNumber(value), 'Impressions / hr'])} />
-                  <Line yAxisId="left" type="monotone" dataKey="impressions" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4 }} />
-                  <Line yAxisId="right" type="monotone" dataKey="score" stroke="#22c55e" strokeWidth={3} strokeDasharray="6 3" dot={{ r: 4 }} />
-                </LineChart>
-              </ResponsiveContainer>
+          {trendData && trendData.length > 0 && (
+            <div className="mt-8 rounded-2xl border border-blue-100 bg-white/70 p-4 shadow-sm">
+              <h3 className="text-sm font-semibold text-slate-700">Projected Performance (Next 4 Weeks)</h3>
+              <p className="text-xs text-slate-500">Smoothed forecast combining footfall, success score and current pacing.</p>
+              <div className="mt-4 h-60">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={trendData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
+                    <XAxis dataKey="period" stroke="#64748b" fontSize={12} />
+                    <YAxis yAxisId="left" stroke="#64748b" fontSize={12} tickFormatter={(value) => `${formatNumber(value / 1000)}k`} />
+                    <YAxis yAxisId="right" orientation="right" stroke="#64748b" fontSize={12} />
+                    <Tooltip formatter={(value, name) => (name === 'score' ? [`${value}/100`, 'Success Score'] : [formatNumber(value), 'Impressions / hr'])} />
+                    <Line yAxisId="left" type="monotone" dataKey="impressions" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4 }} />
+                    <Line yAxisId="right" type="monotone" dataKey="score" stroke="#22c55e" strokeWidth={3} strokeDasharray="6 3" dot={{ r: 4 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
             </div>
-          </div>
+          )}
         </SectionCard>
 
         <SectionCard
@@ -481,19 +483,19 @@ export default function Home() {
               <dl className="mt-4 grid gap-3 text-sm">
                 <div className="flex justify-between border-b border-sky-100 pb-2">
                   <dt className="font-medium">Conditions</dt>
-                  <dd>{weatherMetrics.condition}</dd>
+                  <dd>{weatherMetrics?.condition ?? 'Clear'}</dd>
                 </div>
                 <div className="flex justify-between border-b border-sky-100 pb-2">
                   <dt className="font-medium">Temperature</dt>
-                  <dd>{weatherMetrics.temperatureC}°C</dd>
+                  <dd>{weatherMetrics?.temperatureC ?? 15}°C</dd>
                 </div>
                 <div className="flex justify-between border-b border-sky-100 pb-2">
                   <dt className="font-medium">Visibility</dt>
-                  <dd>{weatherMetrics.visibilityKm} km</dd>
+                  <dd>{weatherMetrics?.visibilityKm ?? 10} km</dd>
                 </div>
                 <div className="flex justify-between">
                   <dt className="font-medium">Wind</dt>
-                  <dd>{weatherMetrics.windKph} kph</dd>
+                  <dd>{weatherMetrics?.windKph ?? 15} kph</dd>
                 </div>
               </dl>
             </div>
@@ -502,15 +504,15 @@ export default function Home() {
               <dl className="mt-4 grid gap-3 text-sm text-emerald-900">
                 <div className="flex justify-between border-b border-emerald-100 pb-2">
                   <dt className="font-medium">Top Place</dt>
-                  <dd>{placesDisplay.placeName}</dd>
+                  <dd>{placesDisplay?.placeName ?? 'Downtown Hotspot'}</dd>
                 </div>
                 <div className="flex justify-between border-b border-emerald-100 pb-2">
                   <dt className="font-medium">Rating</dt>
-                  <dd>⭐ {formatNumber(placesDisplay.rating, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} ({formatNumber(placesDisplay.userRatingsTotal)} reviews)</dd>
+                  <dd>⭐ {formatNumber(placesDisplay?.rating ?? 4.3, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} ({formatNumber(placesDisplay?.userRatingsTotal ?? 980)} reviews)</dd>
                 </div>
                 <div className="flex justify-between">
                   <dt className="font-medium">Popularity Score</dt>
-                  <dd>{placesDisplay.popularityScore}/100</dd>
+                  <dd>{placesDisplay?.popularityScore ?? 75}/100</dd>
                 </div>
               </dl>
             </div>
