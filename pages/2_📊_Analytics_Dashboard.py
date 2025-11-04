@@ -57,33 +57,8 @@ def main():
     # Apply CSS
     st.markdown(UNIVERSAL_CSS, unsafe_allow_html=True)
     
-    # Hide Streamlit's default "app" label and sidebar
-    st.markdown("""
-    <style>
-    /* Hide Streamlit's default sidebar page label */
-    [data-testid="stSidebarNav"] {
-        display: none !important;
-    }
-    .css-1d391kg {
-        display: none !important;
-    }
-    /* Hide the "app" text that appears above content */
-    header[data-testid="stHeader"] {
-        display: none !important;
-    }
-    /* Hide Streamlit's default header */
-    .stApp > header {
-        display: none !important;
-    }
-    /* Hide any navigation that shows "app" */
-    section[data-testid="stSidebar"] {
-        display: none !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
-    # Header - pass True to indicate this is Analytics Dashboard page
-    UIComponents.render_personalized_header(is_analytics_page=True)
+    # Header
+    UIComponents.render_personalized_header()
     
     st.markdown("""
     <div style='text-align: center; padding: 1rem 0;'>

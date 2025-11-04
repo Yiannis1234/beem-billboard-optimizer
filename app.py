@@ -228,39 +228,14 @@ def main():
     # Apply universal CSS
     st.markdown(UNIVERSAL_CSS, unsafe_allow_html=True)
     
-    # Hide Streamlit's default "app" label and sidebar
-    st.markdown("""
-    <style>
-    /* Hide Streamlit's default sidebar page label */
-    [data-testid="stSidebarNav"] {
-        display: none !important;
-    }
-    .css-1d391kg {
-        display: none !important;
-    }
-    /* Hide the "app" text that appears above content */
-    header[data-testid="stHeader"] {
-        display: none !important;
-    }
-    /* Hide Streamlit's default header */
-    .stApp > header {
-        display: none !important;
-    }
-    /* Hide any navigation that shows "app" */
-    section[data-testid="stSidebar"] {
-        display: none !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
     # Initialize predictor
     if 'predictor' not in st.session_state:
         st.session_state.predictor = AdSuccessPredictor()
     
     predictor = st.session_state.predictor
     
-    # Render personalized header with logo (Analytics page)
-    UIComponents.render_personalized_header(is_analytics_page=False)
+    # Render personalized header
+    UIComponents.render_personalized_header()
     
     # Campaign selection at the top
     st.markdown("### 🎨 Step 1: Select Your Campaign Type")
