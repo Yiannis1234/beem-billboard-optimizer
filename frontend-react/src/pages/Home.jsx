@@ -427,22 +427,28 @@ export default function Home() {
             />
           </div>
 
-          {trendData && trendData.length > 0 && ResponsiveContainer && (
+          {trendData && trendData.length > 0 && (
             <div className="mt-8 rounded-2xl border border-blue-100 bg-white/70 p-4 shadow-sm">
               <h3 className="text-sm font-semibold text-slate-700">Projected Performance (Next 4 Weeks)</h3>
               <p className="text-xs text-slate-500">Smoothed forecast combining footfall, success score and current pacing.</p>
               <div className="mt-4 h-60">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={trendData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
-                    <XAxis dataKey="period" stroke="#64748b" fontSize={12} />
-                    <YAxis yAxisId="left" stroke="#64748b" fontSize={12} tickFormatter={(value) => `${formatNumber(value / 1000)}k`} />
-                    <YAxis yAxisId="right" orientation="right" stroke="#64748b" fontSize={12} />
-                    <Tooltip formatter={(value, name) => (name === 'score' ? [`${value}/100`, 'Success Score'] : [formatNumber(value), 'Impressions / hr'])} />
-                    <Line yAxisId="left" type="monotone" dataKey="impressions" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4 }} />
-                    <Line yAxisId="right" type="monotone" dataKey="score" stroke="#22c55e" strokeWidth={3} strokeDasharray="6 3" dot={{ r: 4 }} />
-                  </LineChart>
-                </ResponsiveContainer>
+                {typeof ResponsiveContainer !== 'undefined' ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={trendData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
+                      <XAxis dataKey="period" stroke="#64748b" fontSize={12} />
+                      <YAxis yAxisId="left" stroke="#64748b" fontSize={12} tickFormatter={(value) => `${formatNumber(value / 1000)}k`} />
+                      <YAxis yAxisId="right" orientation="right" stroke="#64748b" fontSize={12} />
+                      <Tooltip formatter={(value, name) => (name === 'score' ? [`${value}/100`, 'Success Score'] : [formatNumber(value), 'Impressions / hr'])} />
+                      <Line yAxisId="left" type="monotone" dataKey="impressions" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4 }} />
+                      <Line yAxisId="right" type="monotone" dataKey="score" stroke="#22c55e" strokeWidth={3} strokeDasharray="6 3" dot={{ r: 4 }} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="flex h-full items-center justify-center text-slate-400">
+                    <p>Chart loading...</p>
+                  </div>
+                )}
               </div>
             </div>
           )}
