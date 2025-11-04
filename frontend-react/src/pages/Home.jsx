@@ -51,12 +51,12 @@ const Hero = ({
           <div className="rounded-2xl border border-white/20 bg-white/10 p-4 shadow-inner">
             <p className="text-blue-100">Location</p>
             <p className="mt-1 text-lg font-semibold">
-              {selectedArea ? `${selectedArea.name}, ${cityName}` : 'Select a location'}
+              {selectedArea && cityName ? `${selectedArea.name}, ${cityName}` : 'Select a location'}
             </p>
           </div>
           <div className="rounded-2xl border border-white/20 bg-white/10 p-4 shadow-inner">
             <p className="text-blue-100">Success Index</p>
-            <p className="mt-1 text-lg font-semibold">{successScore}/100 · {audienceMatch}% match</p>
+            <p className="mt-1 text-lg font-semibold">{successScore ?? 0}/100 · {audienceMatch && audienceMatch !== '--' ? `${audienceMatch}%` : 'N/A'} match</p>
           </div>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -83,12 +83,12 @@ const Hero = ({
           </div>
           <div>
             <p className="text-xs uppercase tracking-wide text-blue-100">Audience Match</p>
-            <p className="mt-1 text-3xl font-black">{audienceMatch}%</p>
+            <p className="mt-1 text-3xl font-black">{audienceMatch && audienceMatch !== '--' ? `${audienceMatch}%` : 'N/A'}</p>
             <p className="text-xs text-blue-100">Demographic alignment estimate</p>
           </div>
           <div>
             <p className="text-xs uppercase tracking-wide text-blue-100">Target Reach / hr</p>
-            <p className="mt-1 text-3xl font-black">{targetAudience}</p>
+            <p className="mt-1 text-3xl font-black">{targetAudience && targetAudience !== '--' ? targetAudience : 'N/A'}</p>
           </div>
           <div>
             <p className="text-xs uppercase tracking-wide text-blue-100">Campaign Focus</p>
