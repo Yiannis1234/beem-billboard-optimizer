@@ -6,3 +6,6 @@ requests
 matplotlib
 stripe>=6.0.0
 python-dotenv
+fastapi>=0.110.0
+uvicorn[standard]>=0.30.0
+pydantic>=1.10.0
