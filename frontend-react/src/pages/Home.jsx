@@ -427,7 +427,7 @@ export default function Home() {
             />
           </div>
 
-          {trendData && trendData.length > 0 && (
+          {trendData && trendData.length > 0 && ResponsiveContainer && (
             <div className="mt-8 rounded-2xl border border-blue-100 bg-white/70 p-4 shadow-sm">
               <h3 className="text-sm font-semibold text-slate-700">Projected Performance (Next 4 Weeks)</h3>
               <p className="text-xs text-slate-500">Smoothed forecast combining footfall, success score and current pacing.</p>
