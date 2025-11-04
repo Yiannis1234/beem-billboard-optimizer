@@ -1,5 +1,7 @@
-const DEFAULT_API_URL = 'http://localhost:8000'
-const API_BASE_URL = (import.meta.env.VITE_API_URL || DEFAULT_API_URL).replace(/\/$/, '')
+// In production, use empty string for relative URLs (same domain as the site)
+// In dev, use localhost:8000
+const DEFAULT_API_URL = import.meta.env.DEV ? 'http://localhost:8000' : ''
+const API_BASE_URL = (import.meta.env.VITE_API_URL !== undefined ? import.meta.env.VITE_API_URL : DEFAULT_API_URL).replace(/\/$/, '')
 
 const defaultHeaders = {
   'Content-Type': 'application/json',
