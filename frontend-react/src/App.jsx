@@ -5,22 +5,28 @@ import SectionCard from './components/SectionCard'
 import api from './lib/api'
 
 const Hero = () => (
-  <header className="space-y-6 rounded-3xl bg-white p-8 shadow-sm lg:p-12">
+  <header className="space-y-6 rounded-3xl bg-gradient-to-br from-blue-600 to-blue-700 p-8 shadow-xl lg:p-12">
     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
       <div className="space-y-4">
-        <div className="inline-flex items-center gap-3 rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-600">
-          <span className="text-lg">📊</span>
-          <span>BritMetrics — Billboard Intelligence</span>
+        <div className="inline-flex items-center gap-4 rounded-2xl bg-white/10 px-6 py-3 backdrop-blur-sm">
+          <svg className="h-10 w-10" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="40" height="40" rx="8" fill="white" fillOpacity="0.2"/>
+            <path d="M20 10L28 16V26L20 32L12 26V16L20 10Z" fill="white"/>
+            <path d="M20 15L24 18V24L20 27L16 24V18L20 15Z" fill="#0078FF"/>
+          </svg>
+          <span className="text-2xl font-black tracking-tight text-white">
+            BritMetrics
+          </span>
         </div>
-        <h1 className="text-3xl font-black text-slate-900 sm:text-4xl lg:text-5xl">
+        <h1 className="text-3xl font-black text-white sm:text-4xl lg:text-5xl">
           Smarter Outdoor Campaign Planning
         </h1>
-        <p className="max-w-2xl text-base text-slate-600 sm:text-lg">
+        <p className="max-w-2xl text-base text-blue-100 sm:text-lg">
           Compare UK cities, match real audiences to your brand, and get creative, weather-aware recommendations before you book your next billboard.
         </p>
       </div>
-      <div className="rounded-2xl border border-blue-100 bg-blue-50/80 p-6 shadow-inner">
-        <ul className="space-y-3 text-sm font-medium text-blue-900">
+      <div className="rounded-2xl border border-white/20 bg-white/10 p-6 shadow-inner backdrop-blur-sm">
+        <ul className="space-y-3 text-sm font-medium text-white">
           <li>✅ Audience match scoring for 10+ campaign types</li>
           <li>✅ Live weather & traffic context for each area</li>
           <li>✅ ROI calculator + tactical recommendations</li>

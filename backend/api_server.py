@@ -256,7 +256,7 @@ def _serialize_result(
     return {
         "successScore": result.success_score,
         "successLevel": result.success_level,
-        "audienceMatch": result.audience_match_score if result.audience_match_score else None,
+        "audienceMatch": result.audience_match_score if result.audience_match_score is not None else None,
         "impressionsPerHour": result.impressions_per_hour,
         "targetAudienceSize": result.target_audience_size,
         "baseImpressionsPerHour": result.base_impressions_per_hour,
