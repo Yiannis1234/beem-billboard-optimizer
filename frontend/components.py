@@ -368,38 +368,20 @@ class UIComponents:
         st.markdown(f"""
         <div style='background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;'>
             <div style='display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;'>
-                <div onclick="{click_function}" style="text-decoration: none; display: inline-block; cursor: pointer; transition: transform 0.2s;" 
-                   onmouseover="this.style.transform='scale(1.1)'" 
-                   onmouseout="this.style.transform='scale(1)'"
+                <div onclick="{click_function}" style="text-decoration: none; display: inline-block; cursor: pointer; transition: transform 0.2s; background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%); border-radius: 50%; padding: 8px; box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);" 
+                   onmouseover="this.style.transform='scale(1.15)'; this.style.boxShadow='0 6px 20px rgba(255, 107, 53, 0.6)'" 
+                   onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(255, 107, 53, 0.4)'"
                    title="Click to go to {target_page}">
-                    <svg width="80" height="80" viewBox="0 0 100 100" style='flex-shrink: 0; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); cursor: pointer;'>
-                        <defs>
-                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color: #0078FF;" />
-                                <stop offset="100%" style="stop-color: #0056CC;" />
-                            </linearGradient>
-                            <filter id="shadow">
-                                <feDropShadow dx="0" dy="3" stdDeviation="5" flood-opacity="0.5"/>
-                            </filter>
-                        </defs>
-                        <!-- Circular background -->
-                        <circle cx="50" cy="50" r="45" fill="url(#grad1)" stroke="#003D99" stroke-width="5" filter="url(#shadow)"/>
-                        <!-- Arrow - BRIGHT YELLOW/ORANGE for MAXIMUM VISIBILITY -->
-                        <path d="M 30 50 L 50 30 L 50 40 L 70 40 L 70 60 L 50 60 L 50 70 Z" 
-                              fill="#FFD700" 
-                              stroke="#FF8C00" 
-                              stroke-width="5" 
+                    <svg width="70" height="70" viewBox="0 0 100 100" style='flex-shrink: 0; cursor: pointer;'>
+                        <!-- Simple, CLEAR arrow - BIG and BOLD -->
+                        <path d="M 35 50 L 65 50 M 50 35 L 65 50 L 50 65" 
+                              fill="none"
+                              stroke="#FFFFFF" 
+                              stroke-width="8" 
                               stroke-linejoin="round" 
-                              stroke-linecap="round"
-                              style="filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));"/>
-                        <!-- Line graph - bright yellow -->
-                        <line x1="15" y1="65" x2="25" y2="55" stroke="#FFD700" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="25" y1="55" x2="35" y2="60" stroke="#FFD700" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="35" y1="60" x2="45" y2="50" stroke="#FFD700" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-                        <!-- Bar chart - bright yellow -->
-                        <rect x="60" y="70" width="10" height="15" fill="#FFD700" stroke="#FF8C00" stroke-width="3"/>
-                        <rect x="72" y="65" width="10" height="20" fill="#FFD700" stroke="#FF8C00" stroke-width="3"/>
-                        <rect x="84" y="75" width="10" height="10" fill="#FFD700" stroke="#FF8C00" stroke-width="3"/>
+                              stroke-linecap="round"/>
+                        <!-- Small circle for emphasis -->
+                        <circle cx="50" cy="50" r="30" fill="none" stroke="#FFFFFF" stroke-width="3" opacity="0.3"/>
                     </svg>
                 </div>
                 <h1 style='color: #333333; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin: 0; font-family: "Arial", sans-serif;'>
