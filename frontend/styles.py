@@ -115,20 +115,59 @@ UNIVERSAL_CSS = """
     }
 
     /* Selectbox styling */
-    .stSelectbox label, 
-    .stSelectbox div { 
-        color: var(--text-primary) !important; 
+    .stSelectbox label {
+        color: var(--text-primary) !important;
+        font-weight: 600 !important;
+        margin-bottom: 0.35rem !important;
     }
-    .stSelectbox > div > div { 
-        background-color: var(--bg-primary) !important; 
-        color: var(--text-primary) !important; 
-        border: 2px solid var(--primary-color) !important; 
-        border-radius: 8px !important; 
+    .stSelectbox div {
+        color: var(--text-primary) !important;
     }
-    .stSelectbox > div > div > div, 
-    .stSelectbox > div > div > div > div { 
-        background-color: var(--bg-primary) !important; 
-        color: var(--text-primary) !important; 
+    .stSelectbox > div > div {
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+    div[data-baseweb="select"] > div {
+        background-color: var(--bg-primary) !important;
+        border: 2px solid #0078FF !important;
+        border-radius: 10px !important;
+        min-height: 48px !important;
+        padding: 6px 12px !important;
+        box-shadow: 0 4px 10px rgba(0, 120, 255, 0.12) !important;
+        transition: all 0.2s ease-in-out !important;
+    }
+    div[data-baseweb="select"]:hover > div {
+        border-color: #00d4aa !important;
+        box-shadow: 0 6px 14px rgba(0, 212, 170, 0.18) !important;
+    }
+    div[data-baseweb="select"]:focus-within > div {
+        border-color: #00d4aa !important;
+        box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.25) !important;
+    }
+    div[data-baseweb="select"] span {
+        color: var(--text-primary) !important;
+        font-weight: 600 !important;
+    }
+    div[data-baseweb="select"] svg {
+        color: #0078FF !important;
+        width: 22px !important;
+        height: 22px !important;
+    }
+    div[role="listbox"] {
+        background-color: var(--bg-primary) !important;
+        border: 2px solid #0078FF !important;
+        border-radius: 10px !important;
+        box-shadow: 0 10px 30px rgba(0, 120, 255, 0.2) !important;
+        padding: 4px !important;
+    }
+    div[role="option"] {
+        color: var(--text-primary) !important;
+        border-radius: 6px !important;
+        padding: 10px !important;
+    }
+    div[role="option"]:hover {
+        background: rgba(0, 120, 255, 0.12) !important;
     }
 
     /* Button styling */
