@@ -57,8 +57,8 @@ def main():
     # Apply CSS
     st.markdown(UNIVERSAL_CSS, unsafe_allow_html=True)
     
-    # Header
-    UIComponents.render_personalized_header()
+    # Header - pass True to indicate this is Analytics Dashboard page
+    UIComponents.render_personalized_header(is_analytics_page=True)
     
     st.markdown("""
     <div style='text-align: center; padding: 1rem 0;'>

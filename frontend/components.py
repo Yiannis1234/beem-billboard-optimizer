@@ -336,45 +336,77 @@ class UIComponents:
     # NEW PERSONALIZED CAMPAIGN UI METHODS
     
     @staticmethod
-    def render_personalized_header():
-        """Render personalized campaign header"""
-        st.markdown("""
+    def render_personalized_header(is_analytics_page=False):
+        """Render personalized campaign header with clickable navigation"""
+        # Use Streamlit navigation
+        if is_analytics_page:
+            # On Analytics Dashboard page, show link to Analytics (home)
+            navigation_script = """
+            <script>
+            function goToAnalytics() {
+                window.location.href = '/';
+            }
+            </script>
+            """
+            target_page = "Analytics"
+        else:
+            # On Analytics page, show link to Analytics Dashboard
+            navigation_script = """
+            <script>
+            function goToDashboard() {
+                window.location.href = '/Analytics_Dashboard';
+            }
+            </script>
+            """
+            target_page = "Analytics Dashboard"
+        
+        # Determine click function
+        click_function = "goToAnalytics()" if is_analytics_page else "goToDashboard()"
+        
+        st.markdown(navigation_script, unsafe_allow_html=True)
+        
+        st.markdown(f"""
         <div style='background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;'>
             <div style='display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;'>
-                <svg width="60" height="60" viewBox="0 0 100 100" style='flex-shrink: 0; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.25));'>
-                    <defs>
-                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color: #0078FF;" />
-                            <stop offset="100%" style="stop-color: #0056CC;" />
-                        </linearGradient>
-                        <filter id="shadow">
-                            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.4"/>
-                        </filter>
-                    </defs>
-                    <!-- Circular background with darker blue for better contrast -->
-                    <circle cx="50" cy="50" r="45" fill="url(#grad1)" stroke="#003D99" stroke-width="4" filter="url(#shadow)"/>
-                    <!-- Arrow with WHITE color and dark outline for MAXIMUM visibility -->
-                    <path d="M 30 50 L 50 30 L 50 40 L 70 40 L 70 60 L 50 60 L 50 70 Z" 
-                          fill="#FFFFFF" 
-                          stroke="#003D99" 
-                          stroke-width="4" 
-                          stroke-linejoin="round" 
-                          stroke-linecap="round"
-                          style="filter: drop-shadow(0 3px 5px rgba(0,0,0,0.5));"/>
-                    <!-- Line graph - white for maximum contrast -->
-                    <line x1="15" y1="65" x2="25" y2="55" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                    <line x1="25" y1="55" x2="35" y2="60" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                    <line x1="35" y1="60" x2="45" y2="50" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                    <!-- Bar chart - white with dark outline for visibility -->
-                    <rect x="60" y="70" width="10" height="15" fill="#FFFFFF" stroke="#003D99" stroke-width="2.5"/>
-                    <rect x="72" y="65" width="10" height="20" fill="#FFFFFF" stroke="#003D99" stroke-width="2.5"/>
-                    <rect x="84" y="75" width="10" height="10" fill="#FFFFFF" stroke="#003D99" stroke-width="2.5"/>
-                </svg>
+                <div onclick="{click_function}" style="text-decoration: none; display: inline-block; cursor: pointer; transition: transform 0.2s;" 
+                   onmouseover="this.style.transform='scale(1.1)'" 
+                   onmouseout="this.style.transform='scale(1)'"
+                   title="Click to go to {target_page}">
+                    <svg width="80" height="80" viewBox="0 0 100 100" style='flex-shrink: 0; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); cursor: pointer;'>
+                        <defs>
+                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color: #0078FF;" />
+                                <stop offset="100%" style="stop-color: #0056CC;" />
+                            </linearGradient>
+                            <filter id="shadow">
+                                <feDropShadow dx="0" dy="3" stdDeviation="5" flood-opacity="0.5"/>
+                            </filter>
+                        </defs>
+                        <!-- Circular background -->
+                        <circle cx="50" cy="50" r="45" fill="url(#grad1)" stroke="#003D99" stroke-width="5" filter="url(#shadow)"/>
+                        <!-- Arrow - BRIGHT YELLOW/ORANGE for MAXIMUM VISIBILITY -->
+                        <path d="M 30 50 L 50 30 L 50 40 L 70 40 L 70 60 L 50 60 L 50 70 Z" 
+                              fill="#FFD700" 
+                              stroke="#FF8C00" 
+                              stroke-width="5" 
+                              stroke-linejoin="round" 
+                              stroke-linecap="round"
+                              style="filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));"/>
+                        <!-- Line graph - bright yellow -->
+                        <line x1="15" y1="65" x2="25" y2="55" stroke="#FFD700" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line x1="25" y1="55" x2="35" y2="60" stroke="#FFD700" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line x1="35" y1="60" x2="45" y2="50" stroke="#FFD700" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                        <!-- Bar chart - bright yellow -->
+                        <rect x="60" y="70" width="10" height="15" fill="#FFD700" stroke="#FF8C00" stroke-width="3"/>
+                        <rect x="72" y="65" width="10" height="20" fill="#FFD700" stroke="#FF8C00" stroke-width="3"/>
+                        <rect x="84" y="75" width="10" height="10" fill="#FFD700" stroke="#FF8C00" stroke-width="3"/>
+                    </svg>
+                </div>
                 <h1 style='color: #333333; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin: 0; font-family: "Arial", sans-serif;'>
                     BritMetrics
                 </h1>
             </div>
-            <p style='color: #333333; font-size: clamp(1.1rem, 2.5vw, 1.5rem); margin-top: 0.5rem; font-weight: 600; margin-left: 68px;'>Billboard Intelligence Platform</p>
+            <p style='color: #333333; font-size: clamp(1.1rem, 2.5vw, 1.5rem); margin-top: 0.5rem; font-weight: 600; margin-left: 88px;'>Billboard Intelligence Platform</p>
         </div>
         """, unsafe_allow_html=True)
     

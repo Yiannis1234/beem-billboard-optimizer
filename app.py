@@ -4,6 +4,7 @@ Uses the organized backend and frontend structure.
 """
 
 import streamlit as st
+
 import pandas as pd
 from datetime import datetime
 import os
@@ -211,9 +212,9 @@ class AdSuccessPredictor:
 
 def main():
     """Main application function"""
-    # Configure Streamlit
+    # Configure Streamlit - renamed to "Analytics"
     st.set_page_config(
-        page_title="BritMetrics - Billboard Intelligence Platform",
+        page_title="Analytics - BritMetrics",
         page_icon="📊",
         layout="wide",
         initial_sidebar_state="collapsed"
@@ -233,8 +234,8 @@ def main():
     
     predictor = st.session_state.predictor
     
-    # Render personalized header with logo
-    UIComponents.render_personalized_header()
+    # Render personalized header with logo (Analytics page)
+    UIComponents.render_personalized_header(is_analytics_page=False)
     
     # Campaign selection at the top
     st.markdown("### 🎨 Step 1: Select Your Campaign Type")

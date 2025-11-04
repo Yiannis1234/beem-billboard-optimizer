@@ -1,0 +1,57 @@
+===========================================
+FIX 502 BAD GATEWAY - Run on Hostinger
+===========================================
+
+Copy and paste these commands one by one:
+
+1. Navigate to project:
+   cd /var/www/britmetrics
+
+2. Pull latest code:
+   git pull origin main
+
+3. Kill all Streamlit processes:
+   sudo fuser -k 8504/tcp 2>/dev/null || true
+   pkill -f streamlit 2>/dev/null || true
+
+4. Stop Supervisor:
+   sudo supervisorctl stop britmetrics
+
+5. Check Supervisor logs for errors:
+   sudo tail -30 /var/log/supervisor/britmetrics-stderr.log
+
+6. Start Supervisor:
+   sudo supervisorctl start britmetrics
+
+7. Wait a few seconds, then check status:
+   sleep 5
+   sudo supervisorctl status britmetrics
+
+8. Check if Streamlit is running:
+   ps aux | grep streamlit
+
+9. Test local connection:
+   curl http://localhost:8504
+
+10. If curl works but site doesn't, restart Nginx:
+    sudo nginx -t
+    sudo systemctl restart nginx
+
+===========================================
+ALL-IN-ONE FIX (copy/paste all):
+===========================================
+
+cd /var/www/britmetrics && git pull origin main && sudo fuser -k 8504/tcp 2>/dev/null || true && pkill -f streamlit 2>/dev/null || true && sudo supervisorctl stop britmetrics && sleep 2 && sudo supervisorctl start britmetrics && sleep 5 && sudo supervisorctl status britmetrics && ps aux | grep streamlit && curl http://localhost:8504
+
+===========================================
+If still 502, check Supervisor config:
+===========================================
+
+sudo cat /etc/supervisor/conf.d/britmetrics.conf
+
+Make sure it has:
+- command=streamlit run app.py --server.port 8504
+- directory=/var/www/britmetrics
+
+===========================================
+

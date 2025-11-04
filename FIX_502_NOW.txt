@@ -1,0 +1,44 @@
+===========================================
+FIX 502 BAD GATEWAY - Run on Hostinger
+===========================================
+
+Run these commands on your Hostinger server:
+
+1. Check if Streamlit is running:
+   ps aux | grep streamlit
+
+2. Check what's using port 8504:
+   sudo lsof -i :8504
+
+3. Check Supervisor status:
+   sudo supervisorctl status britmetrics
+
+4. Check Nginx config:
+   sudo nginx -t
+
+5. Check Supervisor logs:
+   sudo tail -50 /var/log/supervisor/britmetrics-stderr.log
+
+6. Kill everything and restart:
+   sudo fuser -k 8504/tcp 2>/dev/null || true
+   pkill -f streamlit 2>/dev/null || true
+   sudo supervisorctl stop britmetrics
+   sleep 2
+   sudo supervisorctl start britmetrics
+   sleep 3
+   sudo supervisorctl status britmetrics
+
+7. Test locally:
+   curl http://localhost:8504
+
+8. If still not working, check Supervisor config:
+   sudo cat /etc/supervisor/conf.d/britmetrics.conf
+
+===========================================
+QUICK FIX ONE-LINER:
+===========================================
+
+cd /var/www/britmetrics && sudo fuser -k 8504/tcp 2>/dev/null || true && pkill -f streamlit 2>/dev/null || true && sudo supervisorctl stop britmetrics && sleep 2 && sudo supervisorctl start britmetrics && sleep 3 && sudo supervisorctl status britmetrics && curl http://localhost:8504
+
+===========================================
+

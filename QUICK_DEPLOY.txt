@@ -1,0 +1,29 @@
+===========================================
+QUICK DEPLOY COMMANDS - Copy & Paste
+===========================================
+
+Run these commands one by one in your Hostinger terminal:
+
+1. cd /var/www/britmetrics
+
+2. git pull origin main
+
+3. pip3 install -r requirements.txt
+
+4. sudo fuser -k 8504/tcp 2>/dev/null || true
+
+5. sudo supervisorctl restart britmetrics
+
+6. sudo supervisorctl status britmetrics
+
+7. Check if it's working:
+   curl http://localhost:8504
+
+===========================================
+ONE-LINER (if you prefer):
+===========================================
+
+cd /var/www/britmetrics && git pull origin main && pip3 install -r requirements.txt && sudo fuser -k 8504/tcp 2>/dev/null || true && sudo supervisorctl restart britmetrics && sudo supervisorctl status britmetrics
+
+===========================================
+
