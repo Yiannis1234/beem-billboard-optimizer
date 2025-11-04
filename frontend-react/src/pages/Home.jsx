@@ -234,9 +234,6 @@ export default function Home() {
               accent="orange"
             />
           </div>
-          {lastUpdated ? (
-            <p className="text-right text-xs text-slate-500">Last refreshed {lastUpdated.toLocaleString()}</p>
-          ) : null}
         </SectionCard>
 
         <SectionCard
@@ -299,17 +296,13 @@ export default function Home() {
                   </div>
                 </dl>
               ) : (
-                <p className="mt-3 text-sm text-sky-700">Weather API data not available – check credentials.</p>
+                <p className="mt-3 text-sm text-sky-700">No weather data available</p>
               )}
             </div>
             <div className="rounded-2xl border border-rose-200 bg-gradient-to-br from-rose-50 to-pink-50 p-6 shadow-sm">
               <h3 className="text-lg font-semibold text-rose-900">🎪 Upcoming Events</h3>
               {events.length === 0 ? (
-                <p className="mt-3 text-sm text-slate-600">
-                  {places?.apiStatus === 'Live Data' 
-                    ? 'No upcoming events found in this area. Check back later!' 
-                    : 'Link Eventbrite to surface relevant footfall spikes.'}
-                </p>
+                <p className="mt-3 text-sm text-slate-600">No upcoming events in this area</p>
               ) : (
                 <ul className="mt-4 space-y-4 text-sm text-slate-600">
                   {events.map((ev) => (

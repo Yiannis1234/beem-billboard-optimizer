@@ -174,37 +174,25 @@ export default function Analytics() {
           </div>
         </div>
 
-        {/* Data Sources */}
-        <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-lg">
-          <h2 className="text-2xl font-bold text-slate-900">🔌 Connected Data Sources</h2>
-          <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <div className="flex items-center gap-3 rounded-xl border-2 border-green-200 bg-green-50 p-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500 text-white">✓</div>
-              <div>
-                <div className="font-semibold text-slate-900">Weather API</div>
-                <div className="text-xs text-slate-600">Live data</div>
-              </div>
+        {/* Platform Info */}
+        <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-8 shadow-lg">
+          <h2 className="text-2xl font-bold text-slate-900">🚀 About BritMetrics</h2>
+          <p className="mt-4 text-slate-600">
+            BritMetrics uses real-time data from multiple sources to provide accurate campaign forecasting
+            and audience insights for outdoor advertising across UK cities.
+          </p>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            <div className="rounded-xl border border-blue-200 bg-blue-50 p-4">
+              <div className="text-3xl font-black text-blue-600">10+</div>
+              <div className="mt-1 text-sm font-semibold text-slate-700">Campaign Types</div>
             </div>
-            <div className="flex items-center gap-3 rounded-xl border-2 border-green-200 bg-green-50 p-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500 text-white">✓</div>
-              <div>
-                <div className="font-semibold text-slate-900">TomTom Traffic</div>
-                <div className="text-xs text-slate-600">Live data</div>
-              </div>
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+              <div className="text-3xl font-black text-emerald-600">20+</div>
+              <div className="mt-1 text-sm font-semibold text-slate-700">UK Locations</div>
             </div>
-            <div className="flex items-center gap-3 rounded-xl border-2 border-green-200 bg-green-50 p-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500 text-white">✓</div>
-              <div>
-                <div className="font-semibold text-slate-900">Google Places</div>
-                <div className="text-xs text-slate-600">Live data</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 rounded-xl border-2 border-amber-200 bg-amber-50 p-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-500 text-white">⚠</div>
-              <div>
-                <div className="font-semibold text-slate-900">Eventbrite</div>
-                <div className="text-xs text-slate-600">No events found</div>
-              </div>
+            <div className="rounded-xl border border-purple-200 bg-purple-50 p-4">
+              <div className="text-3xl font-black text-purple-600">24/7</div>
+              <div className="mt-1 text-sm font-semibold text-slate-700">Real-Time Updates</div>
             </div>
           </div>
         </div>
