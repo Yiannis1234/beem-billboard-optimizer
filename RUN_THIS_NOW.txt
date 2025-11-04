@@ -1,0 +1,23 @@
+# RUN THESE COMMANDS ON HOSTINGER - ONE BY ONE:
+
+cd /var/www/britmetrics
+source venv/bin/activate
+git pull origin main
+
+# Check if files exist
+ls -la DIAGNOSE_AND_FIX.sh test_streamlit.py
+
+# Test imports first
+python3 test_streamlit.py
+
+# Kill everything
+sudo pkill -9 -f streamlit
+sudo pkill -9 -f python3
+sleep 3
+
+# Check dependencies
+pip install -r requirements.txt
+
+# Start collecting errors
+streamlit run app.py --server.port 8504 --server.address 0.0.0.0 2>&1 | head -100
+

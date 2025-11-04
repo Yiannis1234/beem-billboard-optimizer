@@ -11,7 +11,7 @@ import os
 # Import our organized modules
 try:
     from backend.models import AreaDatabase, CampaignDatabase
-    from backend.api_services import WeatherAPIService, TrafficAPIService
+    from backend.api_services import WeatherAPIService, TrafficAPIService, GooglePlacesService, EventbriteService
     from backend.business_logic import AdSuccessCalculator
     from frontend.styles import UNIVERSAL_CSS
     from frontend.components import UIComponents
@@ -152,6 +152,8 @@ class AdSuccessPredictor:
     def __init__(self):
         self.weather_service = WeatherAPIService()
         self.traffic_service = TrafficAPIService()
+        self.places_service = GooglePlacesService()
+        self.events_service = EventbriteService()
         self.manchester_areas = AreaDatabase.MANCHESTER_AREAS
         self.london_areas = AreaDatabase.LONDON_AREAS
     
@@ -171,15 +173,27 @@ class AdSuccessPredictor:
             area_data.center.lat, area_data.center.lon
         )
         
+        # Get Google Places data (footfall/popularity indicators)
+        places_data = self.places_service.get_places_data(
+            area_name, area_data.center.lat, area_data.center.lon
+        )
+        
+        # Get Eventbrite events data (upcoming events in the area)
+        events_data = self.events_service.get_events_near_location(
+            area_name, area_data.center.lat, area_data.center.lon
+        )
+        
         # Calculate success with campaign personalization
         result = AdSuccessCalculator.calculate_ad_success_score(
-            area_name, area_data, weather_data, traffic_data, campaign=campaign_type
+            area_name, area_data, weather_data, traffic_data, campaign=campaign_type, places_data=places_data
         )
         
         return {
             'result': result,
             'weather_data': weather_data,
             'traffic_data': traffic_data,
+            'places_data': places_data,
+            'events_data': events_data,
             'area_data': area_data
         }
     
@@ -281,7 +295,8 @@ def main():
             UIComponents.render_success_card(result, selected_area)
             UIComponents.render_metrics(result)
         
-        UIComponents.render_weather_traffic_data(weather_data, traffic_data, result)
+        UIComponents.render_weather_traffic_data(weather_data, traffic_data, result, prediction.get('places_data'))
+        UIComponents.render_events_data(prediction.get('events_data'))
         UIComponents.render_success_reasons(result)
         
         # Comparison table with campaign context

@@ -4,7 +4,7 @@ Contains the core prediction algorithms and calculations.
 """
 
 from typing import List, Tuple, Optional
-from .models import AreaData, WeatherData, TrafficData, AdSuccessResult, SuccessFactors, CampaignType
+from .models import AreaData, WeatherData, TrafficData, AdSuccessResult, SuccessFactors, CampaignType, PlacesData
 
 
 class AdSuccessCalculator:
@@ -13,11 +13,29 @@ class AdSuccessCalculator:
     @staticmethod
     def calculate_ad_success_score(area_name: str, area_data: AreaData, 
                                  weather_data: WeatherData, traffic_data: TrafficData,
-                                 campaign: Optional[CampaignType] = None) -> AdSuccessResult:
+                                 campaign: Optional[CampaignType] = None,
+                                 places_data: Optional[PlacesData] = None) -> AdSuccessResult:
         """Calculate realistic ad success score (0-100) with personalized campaign matching"""
         
-        # Base score from footfall
-        base_score = min(60, (area_data.footfall_daily / 10000))  # Max 60 from footfall
+        # Base score from footfall - improved scaling
+        # Use logarithmic-like scaling: footfall matters more, but with diminishing returns
+        # 100k footfall = 40 points, 400k footfall = 60 points (max)
+        if area_data.footfall_daily >= 400000:
+            base_score = 60
+        elif area_data.footfall_daily >= 200000:
+            # 200k-400k: linear scale from 50 to 60
+            base_score = 50 + ((area_data.footfall_daily - 200000) / 200000) * 10
+        elif area_data.footfall_daily >= 100000:
+            # 100k-200k: linear scale from 40 to 50
+            base_score = 40 + ((area_data.footfall_daily - 100000) / 100000) * 10
+        elif area_data.footfall_daily >= 50000:
+            # 50k-100k: linear scale from 30 to 40
+            base_score = 30 + ((area_data.footfall_daily - 50000) / 50000) * 10
+        else:
+            # Below 50k: scale from 0 to 30
+            base_score = (area_data.footfall_daily / 50000) * 30
+        
+        base_score = int(min(60, max(0, base_score)))
         
         # Factor boost from area characteristics
         factor_boost = AdSuccessCalculator._calculate_factor_boost(area_data.success_factors)
@@ -28,12 +46,17 @@ class AdSuccessCalculator:
         # Traffic boost
         traffic_boost = AdSuccessCalculator._calculate_traffic_boost(traffic_data)
         
+        # Google Places boost (popularity/footfall indicator)
+        places_boost = AdSuccessCalculator._calculate_places_boost(places_data) if places_data else 0
+        
         # Calculate base success score (without campaign matching)
-        raw_score = base_score + factor_boost + weather_score_delta + traffic_boost
+        raw_score = base_score + factor_boost + weather_score_delta + traffic_boost + places_boost
         base_success_score = int(min(95, max(0, raw_score)))
         
-        # Calculate impressions
-        base_impressions_per_hour = int((area_data.footfall_daily / 24) * 0.15)
+        # Calculate impressions - more realistic view rate
+        # Industry standard: 5-10% of pedestrians see billboard
+        # Using 10% as base (more realistic than 15%)
+        base_impressions_per_hour = int((area_data.footfall_daily / 24) * 0.10)
         adjusted_impressions_per_hour = int(base_impressions_per_hour * (1 + (impression_pct_delta / 100.0)))
         
         # NEW: Campaign-specific personalization
@@ -118,6 +141,34 @@ class AdSuccessCalculator:
         elif traffic_data.congestion_level == 'Moderate':
             return 5
         return 0
+    
+    @staticmethod
+    def _calculate_places_boost(places_data: PlacesData) -> int:
+        """Calculate boost from Google Places popularity data"""
+        if not places_data or places_data.api_status == 'Fallback (API unavailable)':
+            return 0
+        
+        # Use popularity score (0-100) to add boost (0-10 points)
+        # High popularity places get more boost
+        popularity_boost = int((places_data.popularity_score / 100.0) * 10)
+        
+        # Additional boost from rating (if highly rated, more trustworthy/popular)
+        rating_boost = 0
+        if places_data.rating >= 4.5:
+            rating_boost = 3
+        elif places_data.rating >= 4.0:
+            rating_boost = 2
+        elif places_data.rating >= 3.5:
+            rating_boost = 1
+        
+        # Review count boost (more reviews = more established/popular)
+        review_boost = 0
+        if places_data.user_ratings_total >= 1000:
+            review_boost = 2
+        elif places_data.user_ratings_total >= 100:
+            review_boost = 1
+        
+        return min(15, popularity_boost + rating_boost + review_boost)
     
     @staticmethod
     def _weather_adjustments(weather: WeatherData) -> Tuple[int, float, List[str]]:

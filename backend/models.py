@@ -79,6 +79,55 @@ class TrafficData:
 
 
 @dataclass
+class PlacesData:
+    """Google Places API data structure"""
+    place_id: str
+    place_name: str
+    rating: float = 0.0
+    user_ratings_total: int = 0
+    formatted_address: str = ""
+    types: List[str] = None
+    popularity_score: float = 0.0  # Relative popularity (0-100)
+    api_status: str = "Unknown"
+    
+    def __post_init__(self):
+        if self.types is None:
+            self.types = []
+
+
+@dataclass
+class EventData:
+    """Eventbrite event data structure"""
+    event_id: str
+    event_name: str
+    start_date: str = ""
+    end_date: str = ""
+    venue_name: str = ""
+    venue_address: str = ""
+    event_url: str = ""
+    category: str = ""
+    status: str = ""
+    api_status: str = "Unknown"
+    
+    def __post_init__(self):
+        pass
+
+
+@dataclass
+class EventsData:
+    """Collection of events data for a location"""
+    location_name: str
+    events: List[EventData] = None
+    total_events: int = 0
+    upcoming_events: int = 0
+    api_status: str = "Unknown"
+    
+    def __post_init__(self):
+        if self.events is None:
+            self.events = []
+
+
+@dataclass
 class CampaignType:
     """Campaign type and targeting information"""
     name: str

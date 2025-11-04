@@ -113,9 +113,9 @@ class UIComponents:
             st.metric("Success Level", result.success_level, help="Overall success rating")
     
     @staticmethod
-    def render_weather_traffic_data(weather_data: WeatherData, traffic_data: TrafficData, result: AdSuccessResult):
-        """Render weather and traffic impact section"""
-        st.subheader("🌦️ Weather & 🚦 Traffic Impact")
+    def render_weather_traffic_data(weather_data: WeatherData, traffic_data: TrafficData, result: AdSuccessResult, places_data=None):
+        """Render weather, traffic, and places impact section"""
+        st.subheader("🌦️ Weather & 🚦 Traffic & 📍 Places Data")
         
         # Weather metrics
         wcol1, wcol2, wcol3, wcol4 = st.columns(4)
@@ -128,8 +128,12 @@ class UIComponents:
         with wcol4:
             st.metric("Wind (kph)", f"{weather_data.wind_kph:.0f}")
         
-        # Weather and traffic effects
-        tcol1, tcol2 = st.columns(2)
+        # Weather, traffic, and places effects
+        if places_data:
+            tcol1, tcol2, tcol3 = st.columns(3)
+        else:
+            tcol1, tcol2 = st.columns(2)
+        
         with tcol1:
             w_delta = f"{result.weather_score_delta:+d} pts on score"
             st.info("**Weather effect**\n\n" + "\n".join([f"- {n}" for n in result.weather_notes[:3]]) + f"\n\n**Net:** {w_delta}")
@@ -142,6 +146,51 @@ class UIComponents:
                     f"- Traffic density: {traffic_data.traffic_density}%\n"
                     f"- Data source: {traffic_data.api_status}\n"
                     f"- Updated: {traffic_data.last_updated}")
+        
+        if places_data:
+            with tcol3:
+                places_status = "✅ Live Data" if places_data.api_status == "Live Data" else "⚠️ Limited"
+                st.info(f"**📍 Google Places Data:** {places_status}\n\n"
+                        f"- Place: {places_data.place_name}\n"
+                        f"- Rating: {places_data.rating:.1f}/5.0 ⭐\n"
+                        f"- Reviews: {places_data.user_ratings_total:,}\n"
+                        f"- Popularity: {places_data.popularity_score:.0f}/100\n"
+                        f"- Status: {places_data.api_status}")
+    
+    @staticmethod
+    def render_events_data(events_data):
+        """Render Eventbrite events data"""
+        if not events_data:
+            return
+        
+        st.markdown("---")
+        st.subheader("🎉 Upcoming Events in This Area")
+        
+        if events_data.total_events > 0:
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric("Total Events", events_data.total_events)
+            with col2:
+                st.metric("Upcoming Events", events_data.upcoming_events)
+            
+            # Display events
+            if events_data.events:
+                for event in events_data.events[:5]:  # Show top 5
+                    with st.expander(f"🎪 {event.event_name}", expanded=False):
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            st.write(f"**Venue:** {event.venue_name if event.venue_name else 'TBA'}")
+                            st.write(f"**Address:** {event.venue_address if event.venue_address else 'TBA'}")
+                        with col2:
+                            st.write(f"**Start:** {event.start_date if event.start_date else 'TBA'}")
+                            st.write(f"**Status:** {event.status}")
+                        if event.event_url:
+                            st.markdown(f"[🔗 View Event on Eventbrite]({event.event_url})")
+        else:
+            st.info(f"**No events found** in this area via Eventbrite.\n\n"
+                   f"Status: {events_data.api_status}\n\n"
+                   f"*Note: Events are pulled from your Eventbrite organizations. "
+                   f"To see more events, create events in your Eventbrite account.*")
     
     @staticmethod
     def render_success_reasons(result: AdSuccessResult):
@@ -292,30 +341,40 @@ class UIComponents:
         st.markdown("""
         <div style='background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;'>
             <div style='display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;'>
-                <svg width="50" height="50" viewBox="0 0 100 100" style='flex-shrink: 0;'>
+                <svg width="60" height="60" viewBox="0 0 100 100" style='flex-shrink: 0; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));'>
                     <defs>
                         <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" style="stop-color: #0078FF;" />
                             <stop offset="100%" style="stop-color: #00C853;" />
                         </linearGradient>
+                        <filter id="shadow">
+                            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+                        </filter>
                     </defs>
-                    <!-- Circular arrow -->
-                    <circle cx="50" cy="50" r="45" fill="url(#grad1)" stroke="#0078FF" stroke-width="2"/>
-                    <path d="M 30 50 L 50 30 L 50 40 L 70 40 L 70 60 L 50 60 L 50 70 Z" fill="white"/>
-                    <!-- Line graph -->
-                    <line x1="15" y1="65" x2="25" y2="55" stroke="white" stroke-width="3" stroke-linecap="round"/>
-                    <line x1="25" y1="55" x2="35" y2="60" stroke="white" stroke-width="3" stroke-linecap="round"/>
-                    <line x1="35" y1="60" x2="45" y2="50" stroke="white" stroke-width="3" stroke-linecap="round"/>
-                    <!-- Bar chart -->
-                    <rect x="60" y="70" width="8" height="15" fill="white"/>
-                    <rect x="72" y="65" width="8" height="20" fill="white"/>
-                    <rect x="84" y="75" width="8" height="10" fill="white"/>
+                    <!-- Circular arrow with stronger visibility -->
+                    <circle cx="50" cy="50" r="45" fill="url(#grad1)" stroke="#0056CC" stroke-width="3" filter="url(#shadow)"/>
+                    <!-- Arrow with thicker stroke and better contrast -->
+                    <path d="M 30 50 L 50 30 L 50 40 L 70 40 L 70 60 L 50 60 L 50 70 Z" 
+                          fill="white" 
+                          stroke="#0056CC" 
+                          stroke-width="2.5" 
+                          stroke-linejoin="round" 
+                          stroke-linecap="round"
+                          style="filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));"/>
+                    <!-- Line graph - more visible -->
+                    <line x1="15" y1="65" x2="25" y2="55" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                    <line x1="25" y1="55" x2="35" y2="60" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                    <line x1="35" y1="60" x2="45" y2="50" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                    <!-- Bar chart - more visible -->
+                    <rect x="60" y="70" width="10" height="15" fill="white" stroke="#0056CC" stroke-width="1.5"/>
+                    <rect x="72" y="65" width="10" height="20" fill="white" stroke="#0056CC" stroke-width="1.5"/>
+                    <rect x="84" y="75" width="10" height="10" fill="white" stroke="#0056CC" stroke-width="1.5"/>
                 </svg>
                 <h1 style='color: #333333; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; margin: 0; font-family: "Arial", sans-serif;'>
                     BritMetrics
                 </h1>
             </div>
-            <p style='color: #333333; font-size: clamp(1.1rem, 2.5vw, 1.5rem); margin-top: 0.5rem; font-weight: 600; margin-left: 58px;'>Billboard Intelligence Platform</p>
+            <p style='color: #333333; font-size: clamp(1.1rem, 2.5vw, 1.5rem); margin-top: 0.5rem; font-weight: 600; margin-left: 68px;'>Billboard Intelligence Platform</p>
         </div>
         """, unsafe_allow_html=True)
     
