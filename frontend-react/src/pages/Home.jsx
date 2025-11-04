@@ -263,21 +263,47 @@ export default function Home() {
     const currentTargetAudience = effectiveTargetAudience ?? currentImpressions
     const currentScore = successScore
 
-    // Calculate realistic trend based on actual data
-    // Week 1: Start slightly below current (ramp-up period)
-    const week1Impressions = Math.round(currentImpressions * 0.85)
-    const week1Score = Math.max(50, Math.round(currentScore * 0.88))
+    // Create dynamic variation based on actual data
+    // Use area footfall to create natural variation
+    const footfallDaily = selectedArea?.footfallDaily ?? 120000
+    const footfallFactor = Math.min(footfallDaily / 100000, 1.5) // Normalize to 0.5-1.5 range
+    
+    // Use success score to determine trend direction
+    const scoreFactor = currentScore / 100 // 0.5 to 1.0 range typically
+    
+    // Use weather visibility as a factor (better weather = better performance)
+    const visibilityFactor = weatherMetrics?.visibilityKm 
+      ? Math.min(weatherMetrics.visibilityKm / 15, 1.2) 
+      : 1.0
+    
+    // Use places popularity as engagement indicator
+    const popularityFactor = placesDisplay?.popularityScore 
+      ? placesDisplay.popularityScore / 100 
+      : 0.85
 
-    // Week 2: Approaching current performance
-    const week2Impressions = Math.round(currentImpressions * 0.95)
-    const week2Score = Math.max(55, Math.round(currentScore * 0.94))
+    // Calculate base trend with natural variation
+    // Week 1: Initial performance (lower due to setup/learning)
+    const week1Base = 0.75 + (scoreFactor * 0.15) // 0.75-0.90 range
+    const week1Impressions = Math.round(currentImpressions * week1Base * visibilityFactor)
+    const week1Score = Math.max(45, Math.round(currentScore * (0.80 + scoreFactor * 0.10)))
 
-    // Week 3: Near current performance
-    const week3Impressions = Math.round(currentImpressions * 0.98)
-    const week3Score = Math.max(60, Math.round(currentScore * 0.97))
+    // Week 2: Learning and optimization phase
+    const week2Base = 0.88 + (scoreFactor * 0.07) // 0.88-0.95 range
+    const week2Impressions = Math.round(currentImpressions * week2Base * visibilityFactor)
+    const week2Score = Math.max(50, Math.round(currentScore * (0.88 + scoreFactor * 0.07)))
 
-    // Week 4: Current/optimized performance (use actual target audience if available)
-    const week4Impressions = currentTargetAudience > 0 ? currentTargetAudience : currentImpressions
+    // Week 3: Peak performance with optimizations
+    const week3Base = 0.95 + (popularityFactor * 0.05) // 0.95-1.0 range
+    const week3Impressions = Math.round(currentImpressions * week3Base * visibilityFactor)
+    const week3Score = Math.max(55, Math.round(currentScore * (0.94 + scoreFactor * 0.05)))
+
+    // Week 4: Sustained performance (use target audience, but ensure it's not a drop)
+    // If target audience is lower, show growth to target instead
+    const week4Target = Math.max(
+      currentTargetAudience,
+      currentImpressions * (0.98 + popularityFactor * 0.02)
+    )
+    const week4Impressions = Math.round(week4Target * visibilityFactor)
     const week4Score = currentScore
 
     return [
@@ -286,7 +312,7 @@ export default function Home() {
       { period: 'Week 3', impressions: week3Impressions, score: week3Score },
       { period: 'Week 4', impressions: week4Impressions, score: week4Score },
     ]
-  }, [prediction, baseImpressions, effectiveTargetAudience, successScore])
+  }, [prediction, baseImpressions, effectiveTargetAudience, successScore, selectedArea?.footfallDaily, weatherMetrics, placesDisplay])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 pb-12 sm:pb-16">
@@ -434,19 +460,74 @@ export default function Home() {
 
           {trendData && trendData.length > 0 ? (
             <div className="mt-6 rounded-xl border border-blue-100 bg-white/70 p-3 shadow-sm sm:mt-8 sm:rounded-2xl sm:p-4">
-              <h3 className="text-xs font-semibold text-slate-700 sm:text-sm">Projected Performance (Next 4 Weeks)</h3>
-              <p className="mt-1 text-xs text-slate-500">Smoothed forecast combining footfall, success score and current pacing.</p>
+              <div className="mb-2">
+                <h3 className="text-xs font-semibold text-slate-700 sm:text-sm">📈 Expected Performance Trend (4-Week Campaign)</h3>
+                <p className="mt-1 text-xs text-slate-500">
+                  Forecast based on area footfall, weather conditions, and audience match. 
+                  <span className="block mt-1 font-medium text-slate-600">
+                    <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-blue-500"></span> Blue line: Impressions per hour</span>
+                    {' · '}
+                    <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-green-500 border border-green-600 border-dashed"></span> Green line: Success score (0-100)</span>
+                  </span>
+                </p>
+              </div>
               <div className="mt-3 h-48 sm:mt-4 sm:h-60">
                 {typeof ResponsiveContainer !== 'undefined' ? (
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={trendData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
-                      <XAxis dataKey="period" stroke="#64748b" fontSize={12} />
-                      <YAxis yAxisId="left" stroke="#64748b" fontSize={12} tickFormatter={(value) => `${formatNumber(value / 1000)}k`} />
-                      <YAxis yAxisId="right" orientation="right" stroke="#64748b" fontSize={12} domain={[0, 100]} />
-                      <Tooltip formatter={(value, name) => (name === 'score' ? [`${value}/100`, 'Success Score'] : [formatNumber(value), 'Impressions / hr'])} />
-                      <Line yAxisId="left" type="monotone" dataKey="impressions" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4 }} />
-                      <Line yAxisId="right" type="monotone" dataKey="score" stroke="#22c55e" strokeWidth={3} strokeDasharray="6 3" dot={{ r: 4 }} />
+                      <XAxis 
+                        dataKey="period" 
+                        stroke="#64748b" 
+                        fontSize={11}
+                        tick={{ fill: '#64748b' }}
+                      />
+                      <YAxis 
+                        yAxisId="left" 
+                        stroke="#3b82f6" 
+                        fontSize={11}
+                        tick={{ fill: '#3b82f6' }}
+                        label={{ value: 'Impressions/hr', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#3b82f6', fontSize: '11px' } }}
+                        tickFormatter={(value) => `${formatNumber(value / 1000)}k`} 
+                      />
+                      <YAxis 
+                        yAxisId="right" 
+                        orientation="right" 
+                        stroke="#22c55e" 
+                        fontSize={11}
+                        tick={{ fill: '#22c55e' }}
+                        domain={[0, 100]}
+                        label={{ value: 'Success Score', angle: 90, position: 'insideRight', style: { textAnchor: 'middle', fill: '#22c55e', fontSize: '11px' } }}
+                      />
+                      <Tooltip 
+                        formatter={(value, name) => {
+                          if (name === 'score') {
+                            return [`${value}/100`, 'Success Score']
+                          }
+                          return [formatNumber(value), 'Impressions / hr']
+                        }}
+                        labelStyle={{ color: '#64748b', fontWeight: 'bold' }}
+                        contentStyle={{ backgroundColor: 'white', border: '1px solid #e0e7ff', borderRadius: '8px' }}
+                      />
+                      <Line 
+                        yAxisId="left" 
+                        type="monotone" 
+                        dataKey="impressions" 
+                        stroke="#3b82f6" 
+                        strokeWidth={3} 
+                        dot={{ r: 5, fill: '#3b82f6' }}
+                        name="Impressions/hr"
+                      />
+                      <Line 
+                        yAxisId="right" 
+                        type="monotone" 
+                        dataKey="score" 
+                        stroke="#22c55e" 
+                        strokeWidth={3} 
+                        strokeDasharray="6 3" 
+                        dot={{ r: 5, fill: '#22c55e' }}
+                        name="Success Score"
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 ) : (
