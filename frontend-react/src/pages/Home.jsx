@@ -229,6 +229,9 @@ export default function Home() {
 
   const successScore = prediction?.successScore ?? 68
 
+  const weather = prediction?.weather ?? null
+  const places = prediction?.places ?? null
+
   const weatherFallbackByCity = {
     manchester: {
       condition: 'Light rain',
