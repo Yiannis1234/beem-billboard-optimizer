@@ -15,12 +15,12 @@ const formatNumber = (value, options = {}) => {
 }
 
 const Hero = () => (
-  <div className="rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-10 shadow-2xl lg:p-16">
+  <div className="rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-6 shadow-2xl sm:p-8 md:p-10 lg:p-16">
     <div className="mx-auto max-w-4xl text-center">
       {/* Logo */}
-      <div className="mb-6 flex justify-center">
-        <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white shadow-2xl">
-          <svg className="h-14 w-14" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <div className="mb-4 flex justify-center sm:mb-6">
+        <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-white shadow-2xl sm:h-20 sm:w-20 sm:rounded-2xl">
+          <svg className="h-11 w-11 sm:h-14 sm:w-14" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M24 12L32 18V30L24 36L16 30V18L24 12Z" fill="#0078FF"/>
             <path d="M24 18L28 21V27L24 30L20 27V21L24 18Z" fill="white"/>
           </svg>
@@ -28,16 +28,16 @@ const Hero = () => (
       </div>
       
       {/* Brand Name */}
-      <h1 className="mb-4 text-5xl font-black tracking-tight text-white sm:text-6xl lg:text-7xl">
+      <h1 className="mb-3 text-3xl font-black tracking-tight text-white sm:mb-4 sm:text-5xl lg:text-6xl xl:text-7xl">
         BritMetrics
       </h1>
       
       {/* Tagline */}
-      <p className="mb-8 text-xl font-semibold text-blue-100 sm:text-2xl">
+      <p className="mb-4 text-lg font-semibold text-blue-100 sm:mb-6 sm:text-xl md:mb-8 md:text-2xl">
         Plan Outdoor Campaigns With Confidence
       </p>
       
-      <p className="text-sm text-blue-100">
+      <p className="text-xs text-blue-100 sm:text-sm">
         Select your campaign type and location below to begin
       </p>
     </div>
@@ -264,8 +264,8 @@ export default function Home() {
   }, [selectedArea?.footfallDaily, successScore, effectiveTargetAudience])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 pb-16">
-      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-8 lg:py-12">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 pb-12 sm:pb-16">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-3 py-6 sm:gap-8 sm:px-4 sm:py-8 lg:gap-10 lg:py-12">
         {error ? (
           <div className="rounded-3xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 shadow-sm">{error}</div>
         ) : null}
@@ -276,7 +276,7 @@ export default function Home() {
           title="Step 1 · Select Your Campaign"
           description="Choose a campaign type to tailor the insights and recommendations to your audience."
         >
-          <div className="grid gap-6 lg:grid-cols-[2fr,3fr] lg:items-start">
+          <div className="grid gap-4 sm:gap-6 lg:grid-cols-[2fr,3fr] lg:items-start">
             <SelectField
               label="Campaign Type"
               value={selectedCampaignId}
@@ -285,12 +285,12 @@ export default function Home() {
               helperText="Personalised recommendations will adapt to this audience."
               disabled={isBootstrapping}
             />
-            <div className="rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-cyan-50 p-5">
-              <h3 className="text-lg font-semibold text-slate-900">Audience Highlights</h3>
-              <p className="mt-2 text-sm text-slate-600">
+            <div className="rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-cyan-50 p-4 sm:rounded-2xl sm:p-5">
+              <h3 className="text-base font-semibold text-slate-900 sm:text-lg">Audience Highlights</h3>
+              <p className="mt-2 text-xs text-slate-600 sm:text-sm">
                 {selectedCampaign?.summary ?? 'Select a campaign to view tailored highlights.'}
               </p>
-              <ul className="mt-4 grid gap-2 text-sm text-slate-700 sm:grid-cols-2">
+              <ul className="mt-3 grid gap-2 text-xs text-slate-700 sm:mt-4 sm:text-sm sm:grid-cols-2">
                 {(selectedCampaign?.highlights ?? []).map((h) => (
                   <li key={h} className="flex items-start gap-2">
                     <span className="mt-1 h-2 w-2 rounded-full bg-blue-500"></span>
@@ -311,7 +311,7 @@ export default function Home() {
           title="Step 2 · Choose Your Location"
           description="Compare Manchester and London zones to discover where your campaign resonates best."
         >
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
             <SelectField
               label="City"
               value={selectedCityId}
@@ -329,10 +329,10 @@ export default function Home() {
               disabled={isBootstrapping || areas.length === 0}
               placeholder={isBootstrapping ? 'Loading areas…' : 'Select an area'}
             />
-            <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 p-4 text-sm text-slate-600 shadow-sm">
+            <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 p-3 text-xs text-slate-600 shadow-sm sm:rounded-2xl sm:p-4 sm:text-sm">
               <p className="font-semibold text-slate-900">📍 Area Snapshot</p>
               {selectedArea ? (
-                <ul className="mt-2 space-y-1 text-sm">
+                <ul className="mt-2 space-y-1 text-xs sm:text-sm">
                   <li>👥 Footfall: {formatNumber(selectedArea.footfallDaily)}/day</li>
                   <li>🏙️ Population: {formatNumber(selectedArea.population)}</li>
                   <li className="text-xs text-slate-500">{selectedArea.meta}</li>
@@ -344,21 +344,21 @@ export default function Home() {
           </div>
         </SectionCard>
 
-        <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+        <div className="flex w-full flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center">
           <button
             type="button"
             onClick={runAnalysis}
             disabled={!selectedCityId || !selectedAreaId || isLoadingPrediction || isBootstrapping}
-            className="inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-600 px-8 py-4 text-base font-bold text-white shadow-2xl transition hover:-translate-y-1 hover:from-blue-700 hover:to-cyan-700 hover:shadow-blue-500/50 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 px-6 py-3.5 text-sm font-bold text-white shadow-2xl transition hover:-translate-y-0.5 hover:from-blue-700 hover:to-cyan-700 hover:shadow-blue-500/50 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:gap-3 sm:rounded-2xl sm:px-8 sm:py-4 sm:text-base"
           >
             {isLoadingPrediction ? (
               <>
-                <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent sm:h-5 sm:w-5"></span>
                 <span>Analysing…</span>
               </>
             ) : (
               <>
-                <span className="text-2xl">🚀</span>
+                <span className="text-xl sm:text-2xl">🚀</span>
                 <span>Start Your Campaign Analysis</span>
               </>
             )}
@@ -367,7 +367,7 @@ export default function Home() {
             type="button"
             onClick={handleClear}
             disabled={isBootstrapping || isLoadingPrediction}
-            className="inline-flex items-center gap-2 rounded-2xl border-2 border-slate-300 bg-white px-6 py-4 text-base font-semibold text-slate-700 shadow-lg transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-300 bg-white px-5 py-3.5 text-sm font-semibold text-slate-700 shadow-lg transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:gap-2 sm:rounded-2xl sm:px-6 sm:py-4 sm:text-base"
           >
             <span>🗑️</span>
             <span>Clear Selections</span>
@@ -378,7 +378,7 @@ export default function Home() {
           title="📊 Campaign Forecast"
           description="Key performance signals based on historical footfall, audience fit, and current conditions."
         >
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
             <MetricCard
               label="Success Score"
               value={successScore}
@@ -408,10 +408,10 @@ export default function Home() {
           </div>
 
           {trendData && trendData.length > 0 && (
-            <div className="mt-8 rounded-2xl border border-blue-100 bg-white/70 p-4 shadow-sm">
-              <h3 className="text-sm font-semibold text-slate-700">Projected Performance (Next 4 Weeks)</h3>
-              <p className="text-xs text-slate-500">Smoothed forecast combining footfall, success score and current pacing.</p>
-              <div className="mt-4 h-60">
+            <div className="mt-6 rounded-xl border border-blue-100 bg-white/70 p-3 shadow-sm sm:mt-8 sm:rounded-2xl sm:p-4">
+              <h3 className="text-xs font-semibold text-slate-700 sm:text-sm">Projected Performance (Next 4 Weeks)</h3>
+              <p className="mt-1 text-xs text-slate-500">Smoothed forecast combining footfall, success score and current pacing.</p>
+              <div className="mt-3 h-48 sm:mt-4 sm:h-60">
                 {typeof ResponsiveContainer !== 'undefined' ? (
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={trendData}>
@@ -438,9 +438,9 @@ export default function Home() {
           title="💡 Context & Recommendations"
           description="Real-world signals and tactical guidance to maximise ROI."
         >
-          <div className="grid gap-6 lg:grid-cols-2">
-            <div className="rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50 p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-amber-900">✨ Key Reasons This Area Works</h3>
+          <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
+            <div className="rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50 p-4 shadow-sm sm:rounded-2xl sm:p-6">
+              <h3 className="text-base font-semibold text-amber-900 sm:text-lg">✨ Key Reasons This Area Works</h3>
               <ul className="mt-4 space-y-3 text-sm text-slate-700">
                 {keyReasons.map((r) => (
                   <li key={r} className="flex items-start gap-3">
@@ -450,8 +450,8 @@ export default function Home() {
                 ))}
               </ul>
             </div>
-            <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-purple-50 p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-violet-900">🎯 Tactical Recommendations</h3>
+            <div className="rounded-xl border border-violet-200 bg-gradient-to-br from-violet-50 to-purple-50 p-4 shadow-sm sm:rounded-2xl sm:p-6">
+              <h3 className="text-base font-semibold text-violet-900 sm:text-lg">🎯 Tactical Recommendations</h3>
               <ul className="mt-4 space-y-3 text-sm text-slate-700">
                 {tactics.map((t) => (
                   <li key={t} className="flex items-start gap-3">
@@ -463,9 +463,9 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-2">
-            <div className="rounded-2xl border border-sky-200 bg-gradient-to-br from-sky-50 to-blue-50 p-6 text-sky-900 shadow-sm">
-              <h3 className="text-lg font-semibold">🌤️ Weather & Movement</h3>
+          <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
+            <div className="rounded-xl border border-sky-200 bg-gradient-to-br from-sky-50 to-blue-50 p-4 text-sky-900 shadow-sm sm:rounded-2xl sm:p-6">
+              <h3 className="text-base font-semibold sm:text-lg">🌤️ Weather & Movement</h3>
               <dl className="mt-4 grid gap-3 text-sm">
                 <div className="flex justify-between border-b border-sky-100 pb-2">
                   <dt className="font-medium">Conditions</dt>
@@ -485,8 +485,8 @@ export default function Home() {
                 </div>
               </dl>
             </div>
-            <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-emerald-900">📍 Places Popularity</h3>
+            <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 p-4 shadow-sm sm:rounded-2xl sm:p-6">
+              <h3 className="text-base font-semibold text-emerald-900 sm:text-lg">📍 Places Popularity</h3>
               <dl className="mt-4 grid gap-3 text-sm text-emerald-900">
                 <div className="flex justify-between border-b border-emerald-100 pb-2">
                   <dt className="font-medium">Top Place</dt>
@@ -508,7 +508,7 @@ export default function Home() {
         <div className="flex items-center justify-center gap-4">
           <Link
             to="/analytics"
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-500/30 transition hover:from-purple-700 hover:to-pink-700"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-5 py-3 text-xs font-semibold text-white shadow-lg shadow-purple-500/30 transition hover:from-purple-700 hover:to-pink-700 sm:w-auto sm:px-6 sm:text-sm"
           >
             📈 View Analytics Dashboard
           </Link>

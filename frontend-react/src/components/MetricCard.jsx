@@ -11,13 +11,13 @@ const MetricCard = ({ label, value, suffix, helper, accent = 'blue' }) => {
   const accentClass = accentStyles[accent] ?? accentStyles.blue
 
   return (
-    <div className={`flex h-full flex-col justify-between rounded-2xl border bg-gradient-to-br ${accentClass} p-5 shadow-sm`}>
-      <span className="text-sm font-semibold uppercase tracking-wide text-slate-500">{label}</span>
+    <div className={`flex h-full flex-col justify-between rounded-xl border bg-gradient-to-br ${accentClass} p-4 shadow-sm sm:rounded-2xl sm:p-5`}>
+      <span className="text-xs font-semibold uppercase tracking-wide text-slate-500 sm:text-sm">{label}</span>
       <div className="mt-2 flex items-end gap-2">
-        <span className="text-4xl font-black text-slate-900">{value}</span>
-        {suffix ? <span className="pb-1 text-sm font-semibold text-slate-500">{suffix}</span> : null}
+        <span className="text-2xl font-black text-slate-900 sm:text-3xl md:text-4xl">{value}</span>
+        {suffix ? <span className="pb-0.5 text-xs font-semibold text-slate-500 sm:pb-1 sm:text-sm">{suffix}</span> : null}
       </div>
-      {helper ? <p className="mt-3 text-sm text-slate-600">{helper}</p> : null}
+      {helper ? <p className="mt-2 text-xs text-slate-600 sm:mt-3 sm:text-sm">{helper}</p> : null}
     </div>
   )
 }
