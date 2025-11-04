@@ -14,11 +14,7 @@ const formatNumber = (value, options = {}) => {
   return new Intl.NumberFormat('en-GB', options).format(value)
 }
 
-const Hero = ({
-  onRunAnalysis,
-  isLoading,
-  disabled,
-}) => (
+const Hero = () => (
   <div className="rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-10 shadow-2xl lg:p-16">
     <div className="mx-auto max-w-4xl text-center">
       {/* Logo */}
@@ -41,30 +37,9 @@ const Hero = ({
         Plan Outdoor Campaigns With Confidence
       </p>
       
-      {/* CTA */}
-      <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-        <button
-          type="button"
-          onClick={onRunAnalysis}
-          disabled={disabled || isLoading}
-          className="inline-flex items-center gap-3 rounded-2xl bg-white px-8 py-4 text-base font-bold text-blue-700 shadow-2xl transition hover:-translate-y-1 hover:bg-blue-50 hover:shadow-blue-500/50 disabled:cursor-not-allowed disabled:opacity-70"
-        >
-          {isLoading ? (
-            <>
-              <span className="h-5 w-5 animate-spin rounded-full border-2 border-blue-700 border-t-transparent"></span>
-              <span>Analysing…</span>
-            </>
-          ) : (
-            <>
-              <span className="text-2xl">🚀</span>
-              <span>Start Your Campaign Analysis</span>
-            </>
-          )}
-        </button>
-        <p className="text-sm text-blue-100">
-          Select your campaign type and location below to begin
-        </p>
-      </div>
+      <p className="text-sm text-blue-100">
+        Select your campaign type and location below to begin
+      </p>
     </div>
   </div>
 )
@@ -126,6 +101,21 @@ export default function Home() {
     setSelectedCityId(cityId)
     const firstArea = cities.find((c) => c.id === cityId)?.areas?.[0]?.id ?? ''
     setSelectedAreaId(firstArea)
+  }
+
+  const handleClear = () => {
+    if (campaigns.length > 0) {
+      const defaultCampaignId = campaigns[0]?.id ?? ''
+      setSelectedCampaignId(defaultCampaignId)
+    }
+    if (cities.length > 0) {
+      const defaultCityId = cities[0]?.id ?? ''
+      setSelectedCityId(defaultCityId)
+      const firstArea = cities[0]?.areas?.[0]?.id ?? ''
+      setSelectedAreaId(firstArea)
+    }
+    setPrediction(null)
+    setError(null)
   }
 
   const runAnalysis = async () => {
@@ -280,11 +270,7 @@ export default function Home() {
           <div className="rounded-3xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 shadow-sm">{error}</div>
         ) : null}
 
-        <Hero
-          onRunAnalysis={runAnalysis}
-          isLoading={isLoadingPrediction}
-          disabled={isBootstrapping}
-        />
+        <Hero />
 
         <SectionCard
           title="Step 1 · Select Your Campaign"
@@ -357,6 +343,36 @@ export default function Home() {
             </div>
           </div>
         </SectionCard>
+
+        <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <button
+            type="button"
+            onClick={runAnalysis}
+            disabled={!selectedCityId || !selectedAreaId || isLoadingPrediction || isBootstrapping}
+            className="inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-600 px-8 py-4 text-base font-bold text-white shadow-2xl transition hover:-translate-y-1 hover:from-blue-700 hover:to-cyan-700 hover:shadow-blue-500/50 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isLoadingPrediction ? (
+              <>
+                <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                <span>Analysing…</span>
+              </>
+            ) : (
+              <>
+                <span className="text-2xl">🚀</span>
+                <span>Start Your Campaign Analysis</span>
+              </>
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={handleClear}
+            disabled={isBootstrapping || isLoadingPrediction}
+            className="inline-flex items-center gap-2 rounded-2xl border-2 border-slate-300 bg-white px-6 py-4 text-base font-semibold text-slate-700 shadow-lg transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <span>🗑️</span>
+            <span>Clear Selections</span>
+          </button>
+        </div>
 
         <SectionCard
           title="📊 Campaign Forecast"
