@@ -15,52 +15,55 @@ const formatNumber = (value, options = {}) => {
 }
 
 const Hero = ({
-  selectedCampaign,
-  selectedArea,
-  cityName,
-  successScore,
-  audienceMatch,
-  targetAudience,
   onRunAnalysis,
   isLoading,
   disabled,
 }) => (
-  <div className="rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-8 shadow-xl lg:p-10">
-    <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-      <div className="flex-1 space-y-4 text-white">
-        <h1 className="text-2xl font-black tracking-tight sm:text-3xl lg:text-4xl">
-          Plan Outdoor Campaigns With Confidence
-        </h1>
-        <div className="flex flex-wrap items-center gap-4 text-sm">
-          <span className="rounded-full bg-white/20 px-3 py-1">
-            {selectedArea && cityName ? `${selectedArea.name}, ${cityName}` : 'Select location'}
-          </span>
-          <span className="rounded-full bg-white/20 px-3 py-1">
-            {successScore ?? 0}/100 · {audienceMatch && audienceMatch !== '--' ? `${audienceMatch}%` : 'N/A'} match
-          </span>
+  <div className="rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-10 shadow-2xl lg:p-16">
+    <div className="mx-auto max-w-4xl text-center">
+      {/* Logo */}
+      <div className="mb-6 flex justify-center">
+        <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white shadow-2xl">
+          <svg className="h-14 w-14" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 12L32 18V30L24 36L16 30V18L24 12Z" fill="#0078FF"/>
+            <path d="M24 18L28 21V27L24 30L20 27V21L24 18Z" fill="white"/>
+          </svg>
         </div>
+      </div>
+      
+      {/* Brand Name */}
+      <h1 className="mb-4 text-5xl font-black tracking-tight text-white sm:text-6xl lg:text-7xl">
+        BritMetrics
+      </h1>
+      
+      {/* Tagline */}
+      <p className="mb-8 text-xl font-semibold text-blue-100 sm:text-2xl">
+        Plan Outdoor Campaigns With Confidence
+      </p>
+      
+      {/* CTA */}
+      <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
         <button
           type="button"
           onClick={onRunAnalysis}
           disabled={disabled || isLoading}
-          className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-semibold text-blue-700 shadow-lg transition hover:-translate-y-0.5 hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-70"
+          className="inline-flex items-center gap-3 rounded-2xl bg-white px-8 py-4 text-base font-bold text-blue-700 shadow-2xl transition hover:-translate-y-1 hover:bg-blue-50 hover:shadow-blue-500/50 disabled:cursor-not-allowed disabled:opacity-70"
         >
-          {isLoading ? 'Analysing…' : '🚀 Run Analysis'}
+          {isLoading ? (
+            <>
+              <span className="h-5 w-5 animate-spin rounded-full border-2 border-blue-700 border-t-transparent"></span>
+              <span>Analysing…</span>
+            </>
+          ) : (
+            <>
+              <span className="text-2xl">🚀</span>
+              <span>Start Your Campaign Analysis</span>
+            </>
+          )}
         </button>
-      </div>
-      <div className="flex gap-6 rounded-2xl border border-white/20 bg-white/10 p-6 text-white lg:min-w-[280px]">
-        <div className="text-center">
-          <p className="text-xs uppercase tracking-wide text-blue-100">Success</p>
-          <p className="mt-1 text-4xl font-black">{successScore ?? 0}</p>
-        </div>
-        <div className="text-center">
-          <p className="text-xs uppercase tracking-wide text-blue-100">Match</p>
-          <p className="mt-1 text-4xl font-black">{audienceMatch && audienceMatch !== '--' ? `${audienceMatch}%` : 'N/A'}</p>
-        </div>
-        <div className="text-center">
-          <p className="text-xs uppercase tracking-wide text-blue-100">Reach/hr</p>
-          <p className="mt-1 text-4xl font-black">{targetAudience && targetAudience !== '--' ? targetAudience : 'N/A'}</p>
-        </div>
+        <p className="text-sm text-blue-100">
+          Select your campaign type and location below to begin
+        </p>
       </div>
     </div>
   </div>
@@ -278,12 +281,6 @@ export default function Home() {
         ) : null}
 
         <Hero
-          selectedCampaign={selectedCampaign}
-          selectedArea={selectedArea}
-          cityName={cityName}
-          successScore={successScore}
-          audienceMatch={displayAudienceMatch}
-          targetAudience={displayTargetAudience}
           onRunAnalysis={runAnalysis}
           isLoading={isLoadingPrediction}
           disabled={isBootstrapping}
