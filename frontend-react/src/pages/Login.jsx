@@ -26,13 +26,13 @@ export default function Login() {
       setLoading(true)
       setError(null)
       
-      // Create free trial account
+      // Create free trial account (or login if exists)
       const response = await api.createAccount({ email, trial: true })
       
-      // Store auth token
+      // Store auth token and account info
       localStorage.setItem('britmetrics_auth', response.token)
-      localStorage.setItem('britmetrics_email', email)
-      localStorage.setItem('britmetrics_trial', 'true')
+      localStorage.setItem('britmetrics_email', response.email)
+      localStorage.setItem('britmetrics_trial', response.trial ? 'true' : 'false')
       
       // Redirect to home
       navigate('/')
@@ -52,6 +52,13 @@ export default function Login() {
     try {
       setLoading(true)
       setError(null)
+      
+      // Create or get account first (so we can track the email)
+      try {
+        await api.createAccount({ email, trial: false })
+      } catch {
+        // Account might already exist, that's fine
+      }
       
       // Create Stripe checkout session
       const response = await api.createCheckoutSession({ email })

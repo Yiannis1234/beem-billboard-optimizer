@@ -38,6 +38,7 @@ from backend.models import (
     TrafficData,
     WeatherData,
 )
+from backend.user_storage import create_user, get_user, update_user, verify_token
 
 logger = logging.getLogger("britmetrics.api")
 logging.basicConfig(level=logging.INFO)
@@ -299,18 +300,36 @@ _registry = Registry()
 # Store latest analysis per location+campaign combination (updates when run again)
 _latest_analyses: Dict[str, Dict] = {}
 
-# Store user accounts (in-memory, simple storage)
-_user_accounts: Dict[str, Dict] = {}
-
 # Stripe configuration
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
 if STRIPE_AVAILABLE and STRIPE_SECRET_KEY:
     stripe.api_key = STRIPE_SECRET_KEY
+else:
+    logger.warning("Stripe API key not configured. Payment features will be unavailable.")
 
 
 @app.get("/api/health")
 def health_check():
     return {"status": "ok", "timestamp": datetime.utcnow().isoformat() + "Z"}
+
+
+@app.get("/api/auth/check")
+def check_auth(token: Optional[str] = None):
+    """Check if user is authenticated and return account status."""
+    # Get token from query parameter
+    if not token:
+        raise HTTPException(status_code=401, detail="No authorization token provided")
+    
+    user = verify_token(token)
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    
+    return {
+        "email": user["email"],
+        "trial": user.get("trial", False),
+        "paid": user.get("paid", False),
+        "authenticated": True,
+    }
 
 
 @app.post("/api/auth/create-account")
@@ -321,17 +340,23 @@ def create_account(payload: CreateAccountRequest):
     if not email or "@" not in email:
         raise HTTPException(status_code=400, detail="Invalid email address")
     
+    # Check if user already exists
+    existing_user = get_user(email)
+    if existing_user:
+        # User exists, return existing token
+        return {
+            "token": existing_user["token"],
+            "email": email,
+            "trial": existing_user.get("trial", False),
+            "paid": existing_user.get("paid", False),
+            "message": "Account already exists. Logging in...",
+        }
+    
     # Generate auth token
     token = secrets.token_urlsafe(32)
     
-    # Store account
-    _user_accounts[email] = {
-        "email": email,
-        "trial": payload.trial,
-        "paid": False,
-        "token": token,
-        "createdAt": datetime.utcnow().isoformat() + "Z",
-    }
+    # Store account persistently
+    user_data = create_user(email, token, trial=payload.trial, paid=False)
     
     return {
         "token": token,
@@ -397,25 +422,24 @@ def verify_session(session_id: str):
         if session.payment_status != 'paid':
             raise HTTPException(status_code=400, detail="Payment not completed")
         
-        email = session.customer_email or session.customer_details.email if session.customer_details else None
+        email = session.customer_email or (session.customer_details.email if session.customer_details else None)
         
         if not email:
             raise HTTPException(status_code=400, detail="Email not found in session")
         
         email = email.lower().strip()
         
-        # Generate auth token
-        token = secrets.token_urlsafe(32)
+        # Check if user already exists
+        existing_user = get_user(email)
         
-        # Store/update account
-        _user_accounts[email] = {
-            "email": email,
-            "trial": False,
-            "paid": True,
-            "token": token,
-            "stripeSessionId": session_id,
-            "createdAt": datetime.utcnow().isoformat() + "Z",
-        }
+        if existing_user:
+            # Update existing account to paid
+            token = existing_user.get("token") or secrets.token_urlsafe(32)
+            update_user(email, paid=True, trial=False, stripeSessionId=session_id, token=token)
+        else:
+            # Create new paid account
+            token = secrets.token_urlsafe(32)
+            create_user(email, token, trial=False, paid=True, stripe_session_id=session_id)
         
         return {
             "token": token,

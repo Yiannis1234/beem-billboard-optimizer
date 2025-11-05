@@ -73,6 +73,9 @@ export const api = {
   async verifySession(sessionId) {
     return request(`/api/auth/verify-session?session_id=${sessionId}`)
   },
+  async checkAuth(token) {
+    return request(`/api/auth/check?token=${encodeURIComponent(token)}`)
+  },
 }
 
 export default api
