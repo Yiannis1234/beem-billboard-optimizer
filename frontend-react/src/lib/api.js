@@ -53,6 +53,11 @@ export const api = {
   async fetchAnalytics() {
     return request('/api/analytics')
   },
+  async clearAnalytics() {
+    return request('/api/analytics', {
+      method: 'DELETE',
+    })
+  },
 }
 
 export default api

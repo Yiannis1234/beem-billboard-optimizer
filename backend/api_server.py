@@ -378,6 +378,13 @@ def predict_success(payload: PredictRequest):
     return serialized
 
 
+@app.delete("/api/analytics")
+def clear_analytics():
+    """Clear all stored analyses."""
+    _latest_analyses.clear()
+    return {"status": "cleared", "message": "All analyses have been reset"}
+
+
 @app.get("/api/analytics")
 def get_analytics():
     """Return aggregated analytics from latest analyses (one per location+campaign)."""

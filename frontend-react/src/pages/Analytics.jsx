@@ -15,20 +15,38 @@ export default function Analytics() {
   const [analytics, setAnalytics] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [resetting, setResetting] = useState(false)
+
+  const fetchAnalytics = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      const data = await api.fetchAnalytics()
+      setAnalytics(data)
+    } catch (err) {
+      setError(err.message || 'Failed to load analytics')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleReset = async () => {
+    if (!window.confirm('Are you sure you want to reset all analyses? This cannot be undone.')) {
+      return
+    }
+    
+    try {
+      setResetting(true)
+      await api.clearAnalytics()
+      await fetchAnalytics() // Refresh after clearing
+    } catch (err) {
+      setError(err.message || 'Failed to reset analytics')
+    } finally {
+      setResetting(false)
+    }
+  }
 
   useEffect(() => {
-    const fetchAnalytics = async () => {
-      try {
-        setLoading(true)
-        setError(null)
-        const data = await api.fetchAnalytics()
-        setAnalytics(data)
-      } catch (err) {
-        setError(err.message || 'Failed to load analytics')
-      } finally {
-        setLoading(false)
-      }
-    }
     fetchAnalytics()
     // Refresh every 30 seconds
     const interval = setInterval(fetchAnalytics, 30000)
@@ -67,11 +85,30 @@ export default function Analytics() {
             <h1 className="text-2xl font-black text-white sm:text-3xl lg:text-4xl">Analytics Dashboard</h1>
             <p className="mt-2 text-sm text-purple-100 sm:text-base lg:text-lg">Deep insights into your campaign performance and audience reach</p>
           </div>
-          <div className="hidden lg:block">
-            <svg className="h-24 w-24" viewBox="0 0 100 100" fill="none">
-              <circle cx="50" cy="50" r="45" fill="white" fillOpacity="0.2" />
-              <path d="M30 70L40 50L50 60L60 40L70 55L80 30" stroke="white" strokeWidth="4" strokeLinecap="round" />
-            </svg>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleReset}
+              disabled={resetting || !analytics || analytics.totalAnalyses === 0}
+              className="inline-flex items-center gap-2 rounded-xl bg-white/20 px-4 py-2 text-xs font-semibold text-white backdrop-blur-sm transition hover:bg-white/30 disabled:cursor-not-allowed disabled:opacity-50 sm:px-5 sm:py-2.5 sm:text-sm"
+            >
+              {resetting ? (
+                <>
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                  <span>Resetting...</span>
+                </>
+              ) : (
+                <>
+                  <span>🗑️</span>
+                  <span>Reset All</span>
+                </>
+              )}
+            </button>
+            <div className="hidden lg:block">
+              <svg className="h-24 w-24" viewBox="0 0 100 100" fill="none">
+                <circle cx="50" cy="50" r="45" fill="white" fillOpacity="0.2" />
+                <path d="M30 70L40 50L50 60L60 40L70 55L80 30" stroke="white" strokeWidth="4" strokeLinecap="round" />
+              </svg>
+            </div>
           </div>
         </div>
 
