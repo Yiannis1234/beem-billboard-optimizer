@@ -207,36 +207,8 @@ export default function Home() {
   const weatherDisplay = weatherFallbackByCity[selectedCityId] ?? weatherFallbackByCity.manchester
   const weatherMetrics = weather && weather.condition ? weather : weatherDisplay
 
-  const placesFallbackByArea = {
-    'albert-square': {
-      placeName: 'Albert Square Market',
-      rating: 4.6,
-      userRatingsTotal: 1860,
-      popularityScore: 82,
-    },
-    'oxford-circus': {
-      placeName: 'Oxford Circus Underground',
-      rating: 4.5,
-      userRatingsTotal: 2240,
-      popularityScore: 88,
-    },
-    piccadilly: {
-      placeName: 'Piccadilly Gardens',
-      rating: 4.2,
-      userRatingsTotal: 3010,
-      popularityScore: 80,
-    },
-    default: {
-      placeName: 'Downtown Hotspot',
-      rating: 4.3,
-      userRatingsTotal: 980,
-      popularityScore: 75,
-    },
-  }
-
-  const placesDisplay = places && places.popularityScore > 0
-    ? places
-    : placesFallbackByArea[selectedAreaId] ?? placesFallbackByArea.default
+  // Only use real API data - no fallbacks
+  const placesDisplay = places && places.popularityScore > 0 ? places : null
 
   const keyReasons = prediction?.keyReasons?.length ? prediction.keyReasons : [
     'High footfall corridor ensures broad visibility',
@@ -276,10 +248,10 @@ export default function Home() {
       ? Math.min(weatherMetrics.visibilityKm / 15, 1.2) 
       : 1.0
     
-    // Use places popularity as engagement indicator
+    // Use places popularity as engagement indicator (only if real data exists)
     const popularityFactor = placesDisplay?.popularityScore 
       ? placesDisplay.popularityScore / 100 
-      : 0.85
+      : 0.90 // Default to neutral if no data
 
     // Calculate base trend with natural variation
     // Week 1: Initial performance (lower due to setup/learning)
@@ -597,20 +569,26 @@ export default function Home() {
             </div>
             <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 p-4 shadow-sm sm:rounded-2xl sm:p-6">
               <h3 className="text-base font-semibold text-emerald-900 sm:text-lg">📍 Places Popularity</h3>
-              <dl className="mt-4 grid gap-3 text-sm text-emerald-900">
-                <div className="flex justify-between border-b border-emerald-100 pb-2">
-                  <dt className="font-medium">Top Place</dt>
-                  <dd>{placesDisplay?.placeName ?? 'Downtown Hotspot'}</dd>
-                </div>
-                <div className="flex justify-between border-b border-emerald-100 pb-2">
-                  <dt className="font-medium">Rating</dt>
-                  <dd>⭐ {formatNumber(placesDisplay?.rating ?? 4.3, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} ({formatNumber(placesDisplay?.userRatingsTotal ?? 980)} reviews)</dd>
-                </div>
-                <div className="flex justify-between">
-                  <dt className="font-medium">Popularity Score</dt>
-                  <dd>{placesDisplay?.popularityScore ?? 75}/100</dd>
-                </div>
-              </dl>
+              {placesDisplay ? (
+                <dl className="mt-4 grid gap-3 text-sm text-emerald-900">
+                  <div className="flex justify-between border-b border-emerald-100 pb-2">
+                    <dt className="font-medium">Top Place</dt>
+                    <dd>{placesDisplay.placeName}</dd>
+                  </div>
+                  {placesDisplay.rating ? (
+                    <div className="flex justify-between border-b border-emerald-100 pb-2">
+                      <dt className="font-medium">Rating</dt>
+                      <dd>⭐ {formatNumber(placesDisplay.rating, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} {placesDisplay.userRatingsTotal ? `(${formatNumber(placesDisplay.userRatingsTotal)} reviews)` : ''}</dd>
+                    </div>
+                  ) : null}
+                  <div className="flex justify-between">
+                    <dt className="font-medium">Popularity Score</dt>
+                    <dd>{placesDisplay.popularityScore}/100</dd>
+                  </div>
+                </dl>
+              ) : (
+                <p className="mt-4 text-sm text-emerald-800">Google Places API data not available. Connect API to view local venue popularity.</p>
+              )}
             </div>
           </div>
         </SectionCard>
