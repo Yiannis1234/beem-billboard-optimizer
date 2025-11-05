@@ -302,10 +302,13 @@ _latest_analyses: Dict[str, Dict] = {}
 
 # Stripe configuration
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "pk_test_51SQ4hnBoIqMUQLys40me9RfJxojooBK8LBGkDDgfCrwcflo78YDQ2DebdCunXRPGCNA0P4bL1HBznhcepuz3Nnf000kHrOsGa0")
+
 if STRIPE_AVAILABLE and STRIPE_SECRET_KEY:
     stripe.api_key = STRIPE_SECRET_KEY
+    logger.info("Stripe secret key configured")
 else:
-    logger.warning("Stripe API key not configured. Payment features will be unavailable.")
+    logger.warning(f"Stripe secret key not configured. Payment features will be unavailable. Publishable key: {STRIPE_PUBLISHABLE_KEY[:20]}...")
 
 
 @app.get("/api/health")

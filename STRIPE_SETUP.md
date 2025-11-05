@@ -1,12 +1,15 @@
 # Stripe API Key Setup
 
-## Required Environment Variable
+## Required Environment Variables
 
-To enable payment functionality, you need to set the Stripe Secret Key:
+To enable payment functionality, you need to set BOTH Stripe keys:
 
 ```bash
-export STRIPE_SECRET_KEY="sk_live_..."  # or sk_test_... for testing
+export STRIPE_PUBLISHABLE_KEY="pk_test_51SQ4hnBoIqMUQLys40me9RfJxojooBK8LBGkDDgfCrwcflo78YDQ2DebdCunXRPGCNA0P4bL1HBznhcepuz3Nnf000kHrOsGa0"
+export STRIPE_SECRET_KEY="sk_test_..."  # Get this from Stripe dashboard
 ```
+
+**Note:** You have the publishable key. You still need the **secret key** (starts with `sk_test_...` or `sk_live_...`) from your Stripe dashboard.
 
 ## How to Get Your Stripe API Key
 
