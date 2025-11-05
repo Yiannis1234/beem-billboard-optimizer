@@ -6,10 +6,14 @@ To enable payment functionality, you need to set BOTH Stripe keys:
 
 ```bash
 export STRIPE_PUBLISHABLE_KEY="pk_test_51SQ4hnBoIqMUQLys40me9RfJxojooBK8LBGkDDgfCrwcflo78YDQ2DebdCunXRPGCNA0P4bL1HBznhcepuz3Nnf000kHrOsGa0"
-export STRIPE_SECRET_KEY="sk_test_..."  # Get this from Stripe dashboard
+export STRIPE_SECRET_KEY="sk_test_YOUR_SECRET_KEY_HERE"
 ```
 
-**Note:** You have the publishable key. You still need the **secret key** (starts with `sk_test_...` or `sk_live_...`) from your Stripe dashboard.
+**⚠️ SECURITY:** 
+- The publishable key is configured in code (safe to expose)
+- The secret key must be set as an environment variable on your server
+- Never commit secret keys to git!
+- Get your secret key from: https://dashboard.stripe.com/apikeys
 
 ## How to Get Your Stripe API Key
 

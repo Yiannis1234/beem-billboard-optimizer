@@ -301,14 +301,16 @@ _registry = Registry()
 _latest_analyses: Dict[str, Dict] = {}
 
 # Stripe configuration
+# IMPORTANT: Set these as environment variables on your server
+# Never commit secret keys to git!
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
 STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "pk_test_51SQ4hnBoIqMUQLys40me9RfJxojooBK8LBGkDDgfCrwcflo78YDQ2DebdCunXRPGCNA0P4bL1HBznhcepuz3Nnf000kHrOsGa0")
 
 if STRIPE_AVAILABLE and STRIPE_SECRET_KEY:
     stripe.api_key = STRIPE_SECRET_KEY
-    logger.info("Stripe secret key configured")
+    logger.info("Stripe configured successfully")
 else:
-    logger.warning(f"Stripe secret key not configured. Payment features will be unavailable. Publishable key: {STRIPE_PUBLISHABLE_KEY[:20]}...")
+    logger.warning("Stripe secret key not configured. Payment features will be unavailable.")
 
 
 @app.get("/api/health")
