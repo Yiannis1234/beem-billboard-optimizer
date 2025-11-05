@@ -123,34 +123,45 @@ const Footer = () => (
   </footer>
 )
 
+const AppContent = () => {
+  const location = useLocation()
+  const showFooter = location.pathname !== '/login'
+
+  return (
+    <>
+      <main className="flex-1">
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/analytics"
+            element={
+              <ProtectedRoute>
+                <Analytics />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </main>
+      {showFooter && <Footer />}
+    </>
+  )
+}
+
 function App() {
   return (
     <BrowserRouter>
       <div className="flex min-h-screen flex-col">
         <Header />
-        <main className="flex-1">
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/analytics"
-              element={
-                <ProtectedRoute>
-                  <Analytics />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<Navigate to="/login" replace />} />
-          </Routes>
-        </main>
-        <Footer />
+        <AppContent />
       </div>
     </BrowserRouter>
   )
