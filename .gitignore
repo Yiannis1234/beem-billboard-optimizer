@@ -41,5 +41,6 @@ Thumbs.db
 
 # Server-specific files
 paid_customers.json
+user_accounts.json
 contact_messages/
 .env 
