@@ -1,8 +1,10 @@
+import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate, Navigate } from 'react-router-dom'
 import Home from './pages/Home'
 import Analytics from './pages/Analytics'
 import Login from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
+import api from './lib/api'
 
 const Header = () => {
   const location = useLocation()
@@ -123,12 +125,39 @@ const Footer = () => (
   </footer>
 )
 
+const StripeReturnHandler = () => {
+  const location = useLocation()
+  
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search)
+    const sessionId = searchParams.get('session_id')
+    
+    if (sessionId && !localStorage.getItem('britmetrics_auth')) {
+      // Verify payment and create account
+      api.verifySession(sessionId)
+        .then((response) => {
+          localStorage.setItem('britmetrics_auth', response.token)
+          localStorage.setItem('britmetrics_email', response.email)
+          localStorage.setItem('britmetrics_trial', 'false')
+          // Redirect to home
+          window.location.href = '/'
+        })
+        .catch((err) => {
+          console.error('Payment verification failed:', err)
+        })
+    }
+  }, [location.search])
+  
+  return null
+}
+
 const AppContent = () => {
   const location = useLocation()
   const showFooter = location.pathname !== '/login'
 
   return (
     <>
+      <StripeReturnHandler />
       <main className="flex-1">
         <Routes>
           <Route path="/login" element={<Login />} />

@@ -57,22 +57,12 @@ export default function Home() {
   const [isLoadingPrediction, setIsLoadingPrediction] = useState(false)
   const [error, setError] = useState(null)
 
-  // Check for Stripe payment return
+  // Check for Stripe payment return (already handled in App.jsx, just clean URL)
   useEffect(() => {
     const sessionId = searchParams.get('session_id')
     if (sessionId) {
-      // Verify payment and update account
-      api.verifySession(sessionId)
-        .then((response) => {
-          localStorage.setItem('britmetrics_auth', response.token)
-          localStorage.setItem('britmetrics_email', response.email)
-          localStorage.setItem('britmetrics_trial', 'false')
-          // Remove session_id from URL
-          window.history.replaceState({}, '', '/')
-        })
-        .catch((err) => {
-          console.error('Payment verification failed:', err)
-        })
+      // Remove session_id from URL (payment already verified in App.jsx)
+      window.history.replaceState({}, '', '/')
     }
   }, [searchParams])
 
