@@ -1,10 +1,27 @@
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom'
 import Home from './pages/Home'
 import Analytics from './pages/Analytics'
+import Login from './pages/Login'
+import ProtectedRoute from './components/ProtectedRoute'
 
 const Header = () => {
   const location = useLocation()
+  const navigate = useNavigate()
   const isHome = location.pathname === '/'
+  const isLogin = location.pathname === '/login'
+  const email = localStorage.getItem('britmetrics_email')
+  const isTrial = localStorage.getItem('britmetrics_trial') === 'true'
+
+  const handleLogout = () => {
+    localStorage.removeItem('britmetrics_auth')
+    localStorage.removeItem('britmetrics_email')
+    localStorage.removeItem('britmetrics_trial')
+    navigate('/login')
+  }
+
+  if (isLogin) {
+    return null // No header on login page
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-blue-200 bg-gradient-to-r from-blue-600 to-cyan-600 shadow-lg">
@@ -45,6 +62,19 @@ const Header = () => {
             <span className="hidden sm:inline">📊 Analytics</span>
             <span className="sm:hidden">📊</span>
           </Link>
+          {email && (
+            <>
+              <span className="hidden rounded-lg bg-white/20 px-2 py-1.5 text-xs font-semibold text-white sm:block sm:px-3">
+                {isTrial ? '✨ Free Trial' : '💳 Premium'}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="rounded-lg bg-white/20 px-2 py-1.5 text-xs font-semibold text-white transition hover:bg-white/30 sm:px-3"
+              >
+                Logout
+              </button>
+            </>
+          )}
         </nav>
       </div>
     </header>
@@ -100,8 +130,23 @@ function App() {
         <Header />
         <main className="flex-1">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/analytics"
+              element={
+                <ProtectedRoute>
+                  <Analytics />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </main>
         <Footer />

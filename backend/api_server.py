@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import logging
+import os
 import re
+import secrets
 from dataclasses import asdict
 from datetime import datetime
 from typing import Dict, List, Optional
@@ -11,6 +13,13 @@ from typing import Dict, List, Optional
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+
+try:
+    import stripe
+    STRIPE_AVAILABLE = True
+except ImportError:
+    STRIPE_AVAILABLE = False
+    stripe = None
 
 from backend.api_services import (
     EventbriteService,
@@ -59,6 +68,15 @@ class PredictRequest(BaseModel):
     cityId: str
     areaId: str
     campaignId: Optional[str] = None
+
+
+class CreateAccountRequest(BaseModel):
+    email: str
+    trial: bool = True
+
+
+class CreateCheckoutRequest(BaseModel):
+    email: str
 
 
 _weather_service = WeatherAPIService()
@@ -281,10 +299,137 @@ _registry = Registry()
 # Store latest analysis per location+campaign combination (updates when run again)
 _latest_analyses: Dict[str, Dict] = {}
 
+# Store user accounts (in-memory, simple storage)
+_user_accounts: Dict[str, Dict] = {}
+
+# Stripe configuration
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
+if STRIPE_AVAILABLE and STRIPE_SECRET_KEY:
+    stripe.api_key = STRIPE_SECRET_KEY
+
 
 @app.get("/api/health")
 def health_check():
     return {"status": "ok", "timestamp": datetime.utcnow().isoformat() + "Z"}
+
+
+@app.post("/api/auth/create-account")
+def create_account(payload: CreateAccountRequest):
+    """Create a new account (free trial or paid)."""
+    email = payload.email.lower().strip()
+    
+    if not email or "@" not in email:
+        raise HTTPException(status_code=400, detail="Invalid email address")
+    
+    # Generate auth token
+    token = secrets.token_urlsafe(32)
+    
+    # Store account
+    _user_accounts[email] = {
+        "email": email,
+        "trial": payload.trial,
+        "paid": False,
+        "token": token,
+        "createdAt": datetime.utcnow().isoformat() + "Z",
+    }
+    
+    return {
+        "token": token,
+        "email": email,
+        "trial": payload.trial,
+        "message": "Account created successfully" if payload.trial else "Account created. Please complete payment.",
+    }
+
+
+@app.post("/api/auth/create-checkout")
+def create_checkout(payload: CreateCheckoutRequest):
+    """Create a Stripe checkout session for payment."""
+    if not STRIPE_AVAILABLE or not STRIPE_SECRET_KEY:
+        raise HTTPException(status_code=503, detail="Payment system unavailable. Please contact support.")
+    
+    email = payload.email.lower().strip()
+    
+    if not email or "@" not in email:
+        raise HTTPException(status_code=400, detail="Invalid email address")
+    
+    try:
+        # Create Stripe checkout session (£29.99/month)
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                    'currency': 'gbp',
+                    'product_data': {
+                        'name': 'BritMetrics Premium Access',
+                        'description': 'Monthly subscription to BritMetrics Billboard Intelligence Platform',
+                    },
+                    'unit_amount': 2999,  # £29.99 in pence
+                    'recurring': {
+                        'interval': 'month',
+                    },
+                },
+                'quantity': 1,
+            }],
+            mode='subscription',
+            customer_email=email,
+            success_url='https://britmetrics.com?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url='https://britmetrics.com/login',
+        )
+        
+        return {
+            "checkoutUrl": checkout_session.url,
+            "sessionId": checkout_session.id,
+        }
+    except Exception as e:
+        logger.error(f"Stripe checkout error: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to create checkout session: {str(e)}")
+
+
+@app.get("/api/auth/verify-session")
+def verify_session(session_id: str):
+    """Verify a Stripe payment session and activate account."""
+    if not STRIPE_AVAILABLE or not STRIPE_SECRET_KEY:
+        raise HTTPException(status_code=503, detail="Payment system unavailable")
+    
+    try:
+        session = stripe.checkout.Session.retrieve(session_id)
+        
+        if session.payment_status != 'paid':
+            raise HTTPException(status_code=400, detail="Payment not completed")
+        
+        email = session.customer_email or session.customer_details.email if session.customer_details else None
+        
+        if not email:
+            raise HTTPException(status_code=400, detail="Email not found in session")
+        
+        email = email.lower().strip()
+        
+        # Generate auth token
+        token = secrets.token_urlsafe(32)
+        
+        # Store/update account
+        _user_accounts[email] = {
+            "email": email,
+            "trial": False,
+            "paid": True,
+            "token": token,
+            "stripeSessionId": session_id,
+            "createdAt": datetime.utcnow().isoformat() + "Z",
+        }
+        
+        return {
+            "token": token,
+            "email": email,
+            "paid": True,
+            "message": "Payment verified successfully",
+        }
+    except Exception as e:
+        error_type = type(e).__name__
+        if STRIPE_AVAILABLE and hasattr(stripe, 'error') and isinstance(e, stripe.error.StripeError):
+            logger.error(f"Stripe verification error: {e}")
+            raise HTTPException(status_code=400, detail=f"Payment verification failed: {str(e)}")
+        logger.error(f"Verification error: {e}")
+        raise HTTPException(status_code=500, detail=f"Verification error: {str(e)}")
 
 
 @app.get("/api/campaigns")

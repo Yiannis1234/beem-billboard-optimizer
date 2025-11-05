@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
 
 import SelectField from '../components/SelectField'
@@ -45,6 +45,7 @@ const Hero = () => (
 )
 
 export default function Home() {
+  const [searchParams] = useSearchParams()
   const [campaigns, setCampaigns] = useState([])
   const [cities, setCities] = useState([])
   const [selectedCampaignId, setSelectedCampaignId] = useState('')
@@ -55,6 +56,25 @@ export default function Home() {
   const [isBootstrapping, setIsBootstrapping] = useState(true)
   const [isLoadingPrediction, setIsLoadingPrediction] = useState(false)
   const [error, setError] = useState(null)
+
+  // Check for Stripe payment return
+  useEffect(() => {
+    const sessionId = searchParams.get('session_id')
+    if (sessionId) {
+      // Verify payment and update account
+      api.verifySession(sessionId)
+        .then((response) => {
+          localStorage.setItem('britmetrics_auth', response.token)
+          localStorage.setItem('britmetrics_email', response.email)
+          localStorage.setItem('britmetrics_trial', 'false')
+          // Remove session_id from URL
+          window.history.replaceState({}, '', '/')
+        })
+        .catch((err) => {
+          console.error('Payment verification failed:', err)
+        })
+    }
+  }, [searchParams])
 
   const areas = useMemo(() => cities.find((c) => c.id === selectedCityId)?.areas ?? [], [cities, selectedCityId])
 

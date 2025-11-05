@@ -58,6 +58,21 @@ export const api = {
       method: 'DELETE',
     })
   },
+  async createAccount({ email, trial }) {
+    return request('/api/auth/create-account', {
+      method: 'POST',
+      body: JSON.stringify({ email, trial }),
+    })
+  },
+  async createCheckoutSession({ email }) {
+    return request('/api/auth/create-checkout', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    })
+  },
+  async verifySession(sessionId) {
+    return request(`/api/auth/verify-session?session_id=${sessionId}`)
+  },
 }
 
 export default api
