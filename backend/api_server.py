@@ -408,18 +408,25 @@ def get_analytics():
                 "cityName": analysis["cityName"],
                 "areaName": analysis["areaName"],
                 "footfall": analysis["footfallDaily"],
-                "successScore": analysis["successScore"],
-                "audienceMatch": analysis["audienceMatch"],
+                "successScore": 0,
+                "audienceMatch": None,
                 "count": 0,
+                "audienceMatchSum": 0,
+                "audienceMatchCount": 0,
             }
         location_perf[key]["count"] += 1
-        # Average scores
-        location_perf[key]["successScore"] = (location_perf[key]["successScore"] + analysis["successScore"]) / 2
+        location_perf[key]["successScore"] += analysis["successScore"]
         if analysis["audienceMatch"]:
-            if location_perf[key]["audienceMatch"] is None:
-                location_perf[key]["audienceMatch"] = analysis["audienceMatch"]
-            else:
-                location_perf[key]["audienceMatch"] = (location_perf[key]["audienceMatch"] + analysis["audienceMatch"]) / 2
+            location_perf[key]["audienceMatchSum"] += analysis["audienceMatch"]
+            location_perf[key]["audienceMatchCount"] += 1
+    
+    # Calculate averages
+    for key in location_perf:
+        location_perf[key]["successScore"] = round(location_perf[key]["successScore"] / location_perf[key]["count"], 1)
+        if location_perf[key]["audienceMatchCount"] > 0:
+            location_perf[key]["audienceMatch"] = round(location_perf[key]["audienceMatchSum"] / location_perf[key]["audienceMatchCount"], 1)
+        del location_perf[key]["audienceMatchSum"]
+        del location_perf[key]["audienceMatchCount"]
     
     # Campaign performance
     campaign_perf = {}
@@ -428,17 +435,25 @@ def get_analytics():
         if campaign_name not in campaign_perf:
             campaign_perf[campaign_name] = {
                 "campaign": campaign_name,
-                "successScore": analysis["successScore"],
-                "audienceMatch": analysis["audienceMatch"],
+                "successScore": 0,
+                "audienceMatch": None,
                 "count": 0,
+                "audienceMatchSum": 0,
+                "audienceMatchCount": 0,
             }
         campaign_perf[campaign_name]["count"] += 1
-        campaign_perf[campaign_name]["successScore"] = (campaign_perf[campaign_name]["successScore"] + analysis["successScore"]) / 2
+        campaign_perf[campaign_name]["successScore"] += analysis["successScore"]
         if analysis["audienceMatch"]:
-            if campaign_perf[campaign_name]["audienceMatch"] is None:
-                campaign_perf[campaign_name]["audienceMatch"] = analysis["audienceMatch"]
-            else:
-                campaign_perf[campaign_name]["audienceMatch"] = (campaign_perf[campaign_name]["audienceMatch"] + analysis["audienceMatch"]) / 2
+            campaign_perf[campaign_name]["audienceMatchSum"] += analysis["audienceMatch"]
+            campaign_perf[campaign_name]["audienceMatchCount"] += 1
+    
+    # Calculate averages
+    for campaign_name in campaign_perf:
+        campaign_perf[campaign_name]["successScore"] = round(campaign_perf[campaign_name]["successScore"] / campaign_perf[campaign_name]["count"], 1)
+        if campaign_perf[campaign_name]["audienceMatchCount"] > 0:
+            campaign_perf[campaign_name]["audienceMatch"] = round(campaign_perf[campaign_name]["audienceMatchSum"] / campaign_perf[campaign_name]["audienceMatchCount"], 1)
+        del campaign_perf[campaign_name]["audienceMatchSum"]
+        del campaign_perf[campaign_name]["audienceMatchCount"]
     
     return {
         "totalAnalyses": total_analyses,
