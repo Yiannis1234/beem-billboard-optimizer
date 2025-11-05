@@ -50,6 +50,9 @@ export const api = {
       body: JSON.stringify({ cityId, areaId, campaignId }),
     })
   },
+  async fetchAnalytics() {
+    return request('/api/analytics')
+  },
 }
 
 export default api

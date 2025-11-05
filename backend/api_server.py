@@ -7,6 +7,7 @@ import re
 from dataclasses import asdict
 from datetime import datetime
 from typing import Dict, List, Optional
+from collections import deque
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -278,6 +279,9 @@ def _serialize_result(
 
 _registry = Registry()
 
+# Store recent analyses for analytics (in-memory, last 100 analyses)
+_recent_analyses: deque = deque(maxlen=100)
+
 
 @app.get("/api/health")
 def health_check():
@@ -353,7 +357,97 @@ def predict_success(payload: PredictRequest):
         places_data=places_data,
     )
 
-    return _serialize_result(result, weather_data, traffic_data, places_data, events_data, area_data)
+    serialized = _serialize_result(result, weather_data, traffic_data, places_data, events_data, area_data)
+    
+    # Store analysis for analytics
+    _recent_analyses.append({
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "cityId": payload.cityId,
+        "cityName": city_name,
+        "areaId": payload.areaId,
+        "areaName": area_name,
+        "campaignId": payload.campaignId,
+        "campaignName": campaign.name if campaign else "Generic",
+        "successScore": result.success_score,
+        "audienceMatch": result.audience_match_score if result.audience_match_score is not None else None,
+        "impressionsPerHour": result.impressions_per_hour,
+        "targetAudienceSize": result.target_audience_size,
+        "footfallDaily": area_data.footfall_daily,
+    })
+    
+    return serialized
+
+
+@app.get("/api/analytics")
+def get_analytics():
+    """Return aggregated analytics from recent analyses."""
+    if not _recent_analyses:
+        return {
+            "totalAnalyses": 0,
+            "averageSuccessScore": 0,
+            "totalImpressions": 0,
+            "locationPerformance": [],
+            "campaignPerformance": [],
+            "recentAnalyses": [],
+        }
+    
+    analyses = list(_recent_analyses)
+    
+    # Calculate aggregates
+    total_analyses = len(analyses)
+    avg_success_score = sum(a["successScore"] for a in analyses) / total_analyses if total_analyses > 0 else 0
+    total_impressions = sum(a["impressionsPerHour"] for a in analyses)
+    
+    # Location performance (group by city + area)
+    location_perf = {}
+    for analysis in analyses:
+        key = f"{analysis['cityName']} - {analysis['areaName']}"
+        if key not in location_perf:
+            location_perf[key] = {
+                "location": key,
+                "cityName": analysis["cityName"],
+                "areaName": analysis["areaName"],
+                "footfall": analysis["footfallDaily"],
+                "successScore": analysis["successScore"],
+                "audienceMatch": analysis["audienceMatch"],
+                "count": 0,
+            }
+        location_perf[key]["count"] += 1
+        # Average scores
+        location_perf[key]["successScore"] = (location_perf[key]["successScore"] + analysis["successScore"]) / 2
+        if analysis["audienceMatch"]:
+            if location_perf[key]["audienceMatch"] is None:
+                location_perf[key]["audienceMatch"] = analysis["audienceMatch"]
+            else:
+                location_perf[key]["audienceMatch"] = (location_perf[key]["audienceMatch"] + analysis["audienceMatch"]) / 2
+    
+    # Campaign performance
+    campaign_perf = {}
+    for analysis in analyses:
+        campaign_name = analysis["campaignName"]
+        if campaign_name not in campaign_perf:
+            campaign_perf[campaign_name] = {
+                "campaign": campaign_name,
+                "successScore": analysis["successScore"],
+                "audienceMatch": analysis["audienceMatch"],
+                "count": 0,
+            }
+        campaign_perf[campaign_name]["count"] += 1
+        campaign_perf[campaign_name]["successScore"] = (campaign_perf[campaign_name]["successScore"] + analysis["successScore"]) / 2
+        if analysis["audienceMatch"]:
+            if campaign_perf[campaign_name]["audienceMatch"] is None:
+                campaign_perf[campaign_name]["audienceMatch"] = analysis["audienceMatch"]
+            else:
+                campaign_perf[campaign_name]["audienceMatch"] = (campaign_perf[campaign_name]["audienceMatch"] + analysis["audienceMatch"]) / 2
+    
+    return {
+        "totalAnalyses": total_analyses,
+        "averageSuccessScore": round(avg_success_score, 1),
+        "totalImpressions": int(total_impressions),
+        "locationPerformance": list(location_perf.values()),
+        "campaignPerformance": list(campaign_perf.values()),
+        "recentAnalyses": analyses[-10:],  # Last 10 analyses
+    }
 
 
 @app.get("/")
@@ -363,4 +457,5 @@ def root():
         "campaignsEndpoint": "/api/campaigns",
         "citiesEndpoint": "/api/cities",
         "predictionEndpoint": "/api/predict",
+        "analyticsEndpoint": "/api/analytics",
     }
