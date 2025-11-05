@@ -7,7 +7,6 @@ import re
 from dataclasses import asdict
 from datetime import datetime
 from typing import Dict, List, Optional
-from collections import deque
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -279,8 +278,8 @@ def _serialize_result(
 
 _registry = Registry()
 
-# Store recent analyses for analytics (in-memory, last 100 analyses)
-_recent_analyses: deque = deque(maxlen=100)
+# Store latest analysis per location+campaign combination (updates when run again)
+_latest_analyses: Dict[str, Dict] = {}
 
 
 @app.get("/api/health")
@@ -359,8 +358,9 @@ def predict_success(payload: PredictRequest):
 
     serialized = _serialize_result(result, weather_data, traffic_data, places_data, events_data, area_data)
     
-    # Store analysis for analytics
-    _recent_analyses.append({
+    # Store latest analysis per location+campaign combination (updates when run again)
+    analysis_key = f"{payload.cityId}:{payload.areaId}:{payload.campaignId or 'generic'}"
+    _latest_analyses[analysis_key] = {
         "timestamp": datetime.utcnow().isoformat() + "Z",
         "cityId": payload.cityId,
         "cityName": city_name,
@@ -373,15 +373,15 @@ def predict_success(payload: PredictRequest):
         "impressionsPerHour": result.impressions_per_hour,
         "targetAudienceSize": result.target_audience_size,
         "footfallDaily": area_data.footfall_daily,
-    })
+    }
     
     return serialized
 
 
 @app.get("/api/analytics")
 def get_analytics():
-    """Return aggregated analytics from recent analyses."""
-    if not _recent_analyses:
+    """Return aggregated analytics from latest analyses (one per location+campaign)."""
+    if not _latest_analyses:
         return {
             "totalAnalyses": 0,
             "averageSuccessScore": 0,
@@ -391,7 +391,7 @@ def get_analytics():
             "recentAnalyses": [],
         }
     
-    analyses = list(_recent_analyses)
+    analyses = list(_latest_analyses.values())
     
     # Calculate aggregates
     total_analyses = len(analyses)
@@ -461,7 +461,7 @@ def get_analytics():
         "totalImpressions": int(total_impressions),
         "locationPerformance": list(location_perf.values()),
         "campaignPerformance": list(campaign_perf.values()),
-        "recentAnalyses": analyses[-10:],  # Last 10 analyses
+        "recentAnalyses": analyses,  # All latest analyses (one per location+campaign)
     }
 
 

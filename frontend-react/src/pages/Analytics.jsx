@@ -120,48 +120,92 @@ export default function Analytics() {
 
             {/* Charts Section */}
             <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
-              {/* Location Performance */}
+              {/* Location Performance - Pie Chart */}
               {analytics.locationPerformance.length > 0 && (
                 <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-lg sm:rounded-3xl sm:p-6">
-                  <h2 className="text-lg font-bold text-slate-900 sm:text-xl">📊 Location Performance</h2>
-                  <p className="mt-1 text-xs text-slate-600 sm:text-sm">Success scores by area</p>
-                  <div className="mt-4" style={{ height: 300 }}>
+                  <h2 className="text-lg font-bold text-slate-900 sm:text-xl">📍 Location Distribution</h2>
+                  <p className="mt-1 text-xs text-slate-600 sm:text-sm">Footfall share across locations</p>
+                  <div className="mt-4" style={{ height: 350 }}>
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={analytics.locationPerformance}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="areaName" fontSize={11} angle={-45} textAnchor="end" height={80} />
-                        <YAxis fontSize={11} />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="successScore" fill="#0078FF" name="Success Score" />
-                        {analytics.locationPerformance.some(l => l.audienceMatch) && (
-                          <Bar dataKey="audienceMatch" fill="#00C853" name="Audience Match %" />
-                        )}
-                      </BarChart>
+                      <PieChart>
+                        <Pie
+                          data={analytics.locationPerformance}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={({ areaName, footfall }) => `${areaName}: ${formatNumber(footfall)}`}
+                          outerRadius={100}
+                          fill="#8884d8"
+                          dataKey="footfall"
+                        >
+                          {analytics.locationPerformance.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip 
+                          formatter={(value) => formatNumber(value)}
+                          contentStyle={{ backgroundColor: 'white', border: '1px solid #e0e7ff', borderRadius: '8px', color: '#1e293b' }}
+                        />
+                      </PieChart>
                     </ResponsiveContainer>
+                  </div>
+                  {/* Legend below chart */}
+                  <div className="mt-4 grid grid-cols-1 gap-2 text-xs sm:grid-cols-2">
+                    {analytics.locationPerformance.map((entry, index) => (
+                      <div key={entry.areaName} className="flex items-center gap-2">
+                        <div 
+                          className="h-3 w-3 rounded-full flex-shrink-0" 
+                          style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                        />
+                        <span className="font-medium text-slate-700 truncate">{entry.areaName}</span>
+                        <span className="text-slate-500 ml-auto">{entry.successScore}/100</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
 
-              {/* Campaign Performance */}
+              {/* Campaign Performance - Pie Chart */}
               {analytics.campaignPerformance.length > 0 && (
                 <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-lg sm:rounded-3xl sm:p-6">
-                  <h2 className="text-lg font-bold text-slate-900 sm:text-xl">🎯 Campaign Performance</h2>
-                  <p className="mt-1 text-xs text-slate-600 sm:text-sm">Success by campaign type</p>
-                  <div className="mt-4" style={{ height: 300 }}>
+                  <h2 className="text-lg font-bold text-slate-900 sm:text-xl">🎯 Campaign Distribution</h2>
+                  <p className="mt-1 text-xs text-slate-600 sm:text-sm">Analysis distribution by campaign type</p>
+                  <div className="mt-4" style={{ height: 350 }}>
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={analytics.campaignPerformance}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="campaign" fontSize={11} angle={-45} textAnchor="end" height={80} />
-                        <YAxis fontSize={11} />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="successScore" fill="#0078FF" name="Success Score" />
-                        {analytics.campaignPerformance.some(c => c.audienceMatch) && (
-                          <Bar dataKey="audienceMatch" fill="#00C853" name="Audience Match %" />
-                        )}
-                      </BarChart>
+                      <PieChart>
+                        <Pie
+                          data={analytics.campaignPerformance}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={({ campaign, successScore }) => `${campaign}: ${successScore}/100`}
+                          outerRadius={100}
+                          fill="#8884d8"
+                          dataKey="count"
+                        >
+                          {analytics.campaignPerformance.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip 
+                          formatter={(value) => `${value} analysis${value !== 1 ? 'es' : ''}`}
+                          contentStyle={{ backgroundColor: 'white', border: '1px solid #e0e7ff', borderRadius: '8px', color: '#1e293b' }}
+                        />
+                      </PieChart>
                     </ResponsiveContainer>
+                  </div>
+                  {/* Legend below chart */}
+                  <div className="mt-4 grid grid-cols-1 gap-2 text-xs sm:grid-cols-2">
+                    {analytics.campaignPerformance.map((entry, index) => (
+                      <div key={entry.campaign} className="flex items-center gap-2">
+                        <div 
+                          className="h-3 w-3 rounded-full flex-shrink-0" 
+                          style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                        />
+                        <span className="font-medium text-slate-700 truncate">{entry.campaign}</span>
+                        <span className="text-slate-500 ml-auto">{entry.successScore}/100</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
