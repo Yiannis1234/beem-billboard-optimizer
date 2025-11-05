@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate, Navigate } from 'react-router-dom'
 import Home from './pages/Home'
 import Analytics from './pages/Analytics'
 import Login from './pages/Login'
@@ -147,6 +147,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </main>
         <Footer />

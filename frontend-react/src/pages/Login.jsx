@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../lib/api'
 
@@ -7,6 +7,14 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const navigate = useNavigate()
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('britmetrics_auth') !== null
+    if (isAuthenticated) {
+      navigate('/', { replace: true })
+    }
+  }, [navigate])
 
   const handleFreeTrial = async () => {
     if (!email || !email.includes('@')) {
