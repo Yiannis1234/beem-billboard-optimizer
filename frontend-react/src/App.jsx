@@ -110,7 +110,7 @@ const Footer = () => (
           📬 Contact BritMetrics
         </a>
         <a
-          href="https://linkedin.com"
+          href="https://www.linkedin.com/in/ioannisvamvakas/"
           target="_blank"
           rel="noreferrer"
           className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-white/20 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-white/10 sm:w-auto sm:rounded-xl sm:px-5 sm:py-3 sm:text-sm"
