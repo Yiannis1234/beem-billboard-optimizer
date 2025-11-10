@@ -145,7 +145,7 @@ export default function Home() {
       })
       setPrediction(predictionResponse)
     } catch (err) {
-      setError(err.message || 'Failed to fetch prediction. Check the API server logs.')
+    setError(err.message || 'We couldn’t fetch the latest analysis. Please try again.')
     } finally {
       setIsLoadingPrediction(false)
     }
@@ -597,7 +597,7 @@ export default function Home() {
                   </div>
                 </dl>
               ) : (
-                <p className="mt-4 text-sm text-emerald-800">Google Places API data not available. Connect API to view local venue popularity.</p>
+                <p className="mt-4 text-sm text-emerald-800">Venue popularity insights will appear here once verified data is available for this area.</p>
               )}
             </div>
           </div>

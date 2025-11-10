@@ -399,8 +399,10 @@ class AdSuccessCalculator:
         
         match_score = int((total_matches / total_possible) * 100)
         
-        # Allow full range 0-100 for better differentiation
-        return max(0, min(100, match_score))
+        # Normalise into 20-100 range to avoid unrealistic zero matches while preserving spread
+        normalized = max(0, min(100, match_score))
+        adjusted = min(100, int(round(20 + (normalized * 0.8))))
+        return adjusted
     
     @staticmethod
     def _generate_personalized_tips(campaign: CampaignType, area_data: AreaData, 

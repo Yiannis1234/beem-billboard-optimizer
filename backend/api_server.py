@@ -597,7 +597,7 @@ def get_analytics():
             }
         location_perf[key]["count"] += 1
         location_perf[key]["successScore"] += analysis["successScore"]
-        if analysis["audienceMatch"]:
+        if analysis["audienceMatch"] is not None:
             location_perf[key]["audienceMatchSum"] += analysis["audienceMatch"]
             location_perf[key]["audienceMatchCount"] += 1
     
@@ -624,7 +624,7 @@ def get_analytics():
             }
         campaign_perf[campaign_name]["count"] += 1
         campaign_perf[campaign_name]["successScore"] += analysis["successScore"]
-        if analysis["audienceMatch"]:
+        if analysis["audienceMatch"] is not None:
             campaign_perf[campaign_name]["audienceMatchSum"] += analysis["audienceMatch"]
             campaign_perf[campaign_name]["audienceMatchCount"] += 1
     

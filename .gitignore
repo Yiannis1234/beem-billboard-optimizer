@@ -43,4 +43,5 @@ Thumbs.db
 paid_customers.json
 user_accounts.json
 contact_messages/
-.env 
+.env
+STRIPE_SECRET_KEY.txt
