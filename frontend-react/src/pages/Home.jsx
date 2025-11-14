@@ -296,6 +296,85 @@ export default function Home() {
     ]
   }, [prediction, baseImpressions, effectiveTargetAudience, successScore, selectedArea?.footfallDaily, weatherMetrics, placesDisplay])
 
+  const activationInsights = useMemo(() => {
+    const areaLabel = selectedArea?.name ?? cityName ?? 'this location'
+    const campaignLabel = selectedCampaign?.name ?? 'your campaign'
+    const dailyFootfall = selectedArea?.footfallDaily ?? 0
+    const condition = (weatherMetrics?.condition ?? '').toLowerCase()
+
+    const items = []
+
+    if (dailyFootfall >= 250000) {
+      items.push({
+        icon: '🚇',
+        title: 'Own the commute window',
+        detail: `Heavy weekday flow (~${formatNumber(dailyFootfall)} people/day) — book digital rail & roadside panels between 7:30-10:00 and 16:30-19:30.`,
+      })
+    } else if (dailyFootfall >= 150000) {
+      items.push({
+        icon: '🚶‍♀️',
+        title: 'Lean into lunchtime footfall',
+        detail: `Noticeable pedestrian peaks — activate pop-up sampling or refreshed creatives from 11:30-14:30 to convert dwell time.`,
+      })
+    } else if (dailyFootfall > 0) {
+      items.push({
+        icon: '🗓️',
+        title: 'Weekend takeover opportunity',
+        detail: `Footfall is steadier — plan weekend bursts and cross-promote via QR-led offers to build frequency.`,
+      })
+    }
+
+    if (condition.includes('rain') || condition.includes('drizzle')) {
+      items.push({
+        icon: '🌧️',
+        title: 'Weather-reactive creative',
+        detail: 'Call out comfort, convenience, or delivery benefits. Prioritise illuminated or shelter placements for maximum recall.',
+      })
+    } else if (condition.includes('sun') || condition.includes('clear')) {
+      items.push({
+        icon: '🌞',
+        title: 'Bright-day dominance',
+        detail: 'Use high-contrast colours and dynamic copy while visibility is strong; add UV or sunshine-triggered messaging for extra cut-through.',
+      })
+    }
+
+    if (placesDisplay?.placeName) {
+      items.push({
+        icon: '📍',
+        title: `Anchor near ${placesDisplay.placeName}`,
+        detail: 'Piggyback the existing footfall with geo-specific copy and a “two-minute walk” CTA to stay hyper-relevant.',
+      })
+    } else if (selectedArea?.meta) {
+      items.push({
+        icon: '🧭',
+        title: 'Localise storytelling',
+        detail: selectedArea.meta,
+      })
+    }
+
+    if (items.length < 3) {
+      items.push({
+        icon: '📊',
+        title: 'Test & learn sprint',
+        detail: 'Launch two creative variants, monitor uplift in the analytics dashboard, and lock the winner within 7 days.',
+      })
+    }
+
+    const confidenceCue =
+      successScore >= 82
+        ? 'Confidence is high — scale budget or extend the flight while momentum builds.'
+        : successScore >= 70
+          ? 'Good fit detected — deploy budget incrementally and optimise using weekly insight reviews.'
+          : 'Momentum is emerging — keep messaging sharp, measure daily, and iterate quickly on formats.'
+
+    return {
+      heading: `Momentum moves for ${areaLabel}`,
+      caption: `Give ${campaignLabel} an instant lift with focused actions.`,
+      items: items.slice(0, 3),
+      cta: confidenceCue,
+    }
+  }, [selectedArea, cityName, selectedCampaign, weatherMetrics, placesDisplay, successScore])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 pb-12 sm:pb-16">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-3 py-6 sm:gap-8 sm:px-4 sm:py-8 lg:gap-10 lg:py-12">
@@ -578,27 +657,22 @@ export default function Home() {
               </dl>
             </div>
             <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 p-4 shadow-sm sm:rounded-2xl sm:p-6">
-              <h3 className="text-base font-semibold text-emerald-900 sm:text-lg">📍 Places Popularity</h3>
-              {placesDisplay ? (
-                <dl className="mt-4 grid gap-3 text-sm text-emerald-900">
-                  <div className="flex justify-between border-b border-emerald-100 pb-2">
-                    <dt className="font-medium">Top Place</dt>
-                    <dd>{placesDisplay.placeName}</dd>
-                  </div>
-                  {placesDisplay.rating ? (
-                    <div className="flex justify-between border-b border-emerald-100 pb-2">
-                      <dt className="font-medium">Rating</dt>
-                      <dd>⭐ {formatNumber(placesDisplay.rating, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} {placesDisplay.userRatingsTotal ? `(${formatNumber(placesDisplay.userRatingsTotal)} reviews)` : ''}</dd>
+              <h3 className="text-base font-semibold text-emerald-900 sm:text-lg">⚡ Activation Momentum</h3>
+              <p className="mt-2 text-xs font-medium text-emerald-800 sm:text-sm">{activationInsights.caption}</p>
+              <ul className="mt-4 space-y-4 text-sm text-emerald-900 sm:space-y-5">
+                {activationInsights.items.map((item) => (
+                  <li key={item.title} className="flex gap-3">
+                    <span className="mt-1 text-lg">{item.icon}</span>
+                    <div>
+                      <p className="font-semibold">{item.title}</p>
+                      <p className="mt-1 text-sm text-emerald-800">{item.detail}</p>
                     </div>
-                  ) : null}
-                  <div className="flex justify-between">
-                    <dt className="font-medium">Popularity Score</dt>
-                    <dd>{placesDisplay.popularityScore}/100</dd>
-                  </div>
-                </dl>
-              ) : (
-                <p className="mt-4 text-sm text-emerald-800">Venue popularity insights will appear here once verified data is available for this area.</p>
-              )}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-5 rounded-xl border border-emerald-100 bg-white/60 px-4 py-3 text-sm font-semibold text-emerald-900 shadow-inner">
+                {activationInsights.cta}
+              </div>
             </div>
           </div>
         </SectionCard>
