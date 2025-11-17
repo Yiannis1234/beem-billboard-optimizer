@@ -22,6 +22,41 @@ const formatNumber = (value) => {
   return new Intl.NumberFormat('en-GB').format(value)
 }
 
+const LocationTooltip = ({ active, payload }) => {
+  if (!active || !payload?.length) return null
+  const entry = payload[0]?.payload
+  if (!entry) return null
+
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-700 shadow-xl">
+      <p className="text-sm font-semibold text-slate-900">{entry.areaName}</p>
+      <p className="text-[11px] text-slate-500">{entry.cityName}</p>
+      <p className="mt-1 font-semibold text-slate-900">{formatNumber(entry.footfall)} daily footfall</p>
+      <p className="text-slate-600">{entry.successScore}/100 success</p>
+      {entry.audienceMatch ? (
+        <p className="text-[11px] text-slate-500">Audience {entry.audienceMatch}%</p>
+      ) : null}
+    </div>
+  )
+}
+
+const CampaignTooltip = ({ active, payload }) => {
+  if (!active || !payload?.length) return null
+  const entry = payload[0]?.payload
+  if (!entry) return null
+
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-700 shadow-xl">
+      <p className="text-sm font-semibold text-slate-900">{entry.campaign}</p>
+      <p className="text-slate-600">{entry.count} analysis{entry.count !== 1 ? 'es' : ''}</p>
+      <p className="mt-1 font-semibold text-slate-900">{entry.successScore}/100 success</p>
+      {entry.audienceMatch ? (
+        <p className="text-[11px] text-slate-500">Audience {entry.audienceMatch}%</p>
+      ) : null}
+    </div>
+  )
+}
+
 export default function Analytics() {
   const [analytics, setAnalytics] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -218,6 +253,7 @@ export default function Analytics() {
                           innerRadius={50}
                           fill="#8884d8"
                           dataKey="footfall"
+                          nameKey="areaName"
                           onMouseEnter={(_, index) => setActiveLocationIndex(index)}
                           activeIndex={activeLocationIndex}
                         >
@@ -241,10 +277,7 @@ export default function Analytics() {
                             style={{ fill: '#475569', fontSize: 11 }}
                           />
                         </Pie>
-                        <Tooltip 
-                          formatter={(value) => formatNumber(value)}
-                          contentStyle={{ backgroundColor: 'white', border: '1px solid #e0e7ff', borderRadius: '8px', color: '#1e293b' }}
-                        />
+                        <Tooltip content={<LocationTooltip />} />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
@@ -296,15 +329,13 @@ export default function Analytics() {
                           outerRadius={100}
                           fill="#8884d8"
                           dataKey="count"
+                          nameKey="campaign"
                         >
                           {analytics.campaignPerformance.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                           ))}
                         </Pie>
-                        <Tooltip 
-                          formatter={(value) => `${value} analysis${value !== 1 ? 'es' : ''}`}
-                          contentStyle={{ backgroundColor: 'white', border: '1px solid #e0e7ff', borderRadius: '8px', color: '#1e293b' }}
-                        />
+                        <Tooltip content={<CampaignTooltip />} />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
