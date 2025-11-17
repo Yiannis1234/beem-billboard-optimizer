@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Label } from 'recharts'
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
 import api from '../lib/api'
 
 const COLORS = [
@@ -260,22 +260,6 @@ export default function Analytics() {
                           {analytics.locationPerformance.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                           ))}
-                          <Label
-                            value={activeLocation ? activeLocation.areaName : ''}
-                            position="center"
-                            dy={-6}
-                            style={{ fill: '#0f172a', fontSize: 12, fontWeight: 600 }}
-                          />
-                          <Label
-                            value={
-                              activeLocation
-                                ? `${activeLocation.cityName} · ${formatNumber(activeLocation.footfall)}`
-                                : ''
-                            }
-                            position="center"
-                            dy={14}
-                            style={{ fill: '#475569', fontSize: 11 }}
-                          />
                         </Pie>
                         <Tooltip content={<LocationTooltip />} />
                       </PieChart>
