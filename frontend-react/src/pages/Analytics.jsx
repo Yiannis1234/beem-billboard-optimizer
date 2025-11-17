@@ -1,8 +1,19 @@
 import { useEffect, useState } from 'react'
-import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Label } from 'recharts'
 import api from '../lib/api'
 
-const COLORS = ['#0078FF', '#00C853', '#FF6B6B', '#FFA500', '#9C27B0', '#00BCD4']
+const COLORS = [
+  '#0078FF',
+  '#00C853',
+  '#FF6B6B',
+  '#FFA500',
+  '#9C27B0',
+  '#00BCD4',
+  '#FFB300',
+  '#43A047',
+  '#F06292',
+  '#5C6BC0',
+]
 
 const formatNumber = (value) => {
   if (value === null || value === undefined || Number.isNaN(value)) {
@@ -16,6 +27,7 @@ export default function Analytics() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [resetting, setResetting] = useState(false)
+  const [activeLocationIndex, setActiveLocationIndex] = useState(0)
 
   const fetchAnalytics = async () => {
     try {
@@ -52,6 +64,16 @@ export default function Analytics() {
     const interval = setInterval(fetchAnalytics, 30000)
     return () => clearInterval(interval)
   }, [])
+
+  useEffect(() => {
+    if (analytics?.locationPerformance?.length) {
+      setActiveLocationIndex((current) =>
+        current < analytics.locationPerformance.length ? current : 0,
+      )
+    } else {
+      setActiveLocationIndex(0)
+    }
+  }, [analytics?.locationPerformance?.length])
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
@@ -75,6 +97,28 @@ export default function Analytics() {
   }
 
   const hasData = analytics && analytics.totalAnalyses > 0
+  const activeLocation =
+    hasData && analytics.locationPerformance.length
+      ? analytics.locationPerformance[activeLocationIndex] ?? analytics.locationPerformance[0]
+      : null
+  const locationLeader =
+    hasData && analytics.locationPerformance.length
+      ? analytics.locationPerformance.reduce((best, entry) => {
+          if (!best) return entry
+          return entry.successScore > best.successScore ? entry : best
+        }, null)
+      : null
+  const campaignLeader =
+    hasData && analytics.campaignPerformance.length
+      ? analytics.campaignPerformance.reduce((best, entry) => {
+          if (!best) return entry
+          return entry.successScore > best.successScore ? entry : best
+        }, null)
+      : null
+  const latestAnalysis =
+    hasData && analytics.recentAnalyses?.length
+      ? analytics.recentAnalyses[analytics.recentAnalyses.length - 1]
+      : null
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 pb-12 sm:pb-16">
@@ -170,14 +214,32 @@ export default function Analytics() {
                           cx="50%"
                           cy="50%"
                           labelLine={false}
-                          label={({ areaName, footfall }) => `${areaName}: ${formatNumber(footfall)}`}
-                          outerRadius={100}
+                          outerRadius={110}
+                          innerRadius={50}
                           fill="#8884d8"
                           dataKey="footfall"
+                          onMouseEnter={(_, index) => setActiveLocationIndex(index)}
+                          activeIndex={activeLocationIndex}
                         >
                           {analytics.locationPerformance.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                           ))}
+                          <Label
+                            value={activeLocation ? activeLocation.areaName : ''}
+                            position="center"
+                            dy={-6}
+                            style={{ fill: '#0f172a', fontSize: 12, fontWeight: 600 }}
+                          />
+                          <Label
+                            value={
+                              activeLocation
+                                ? `${activeLocation.cityName} · ${formatNumber(activeLocation.footfall)}`
+                                : ''
+                            }
+                            position="center"
+                            dy={14}
+                            style={{ fill: '#475569', fontSize: 11 }}
+                          />
                         </Pie>
                         <Tooltip 
                           formatter={(value) => formatNumber(value)}
@@ -199,6 +261,21 @@ export default function Analytics() {
                       </div>
                     ))}
                   </div>
+                  {activeLocation && (
+                    <div className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50/70 p-4 text-xs text-emerald-900">
+                      <p className="text-sm font-semibold text-emerald-900">
+                        {activeLocation.cityName} · {activeLocation.areaName}
+                      </p>
+                      <p className="mt-1 text-emerald-800">
+                        {formatNumber(activeLocation.footfall)} daily footfall · {activeLocation.successScore}/100 success score
+                      </p>
+                      {activeLocation.audienceMatch ? (
+                        <p className="mt-1 text-emerald-700">
+                          Audience match {activeLocation.audienceMatch}%
+                        </p>
+                      ) : null}
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -244,6 +321,44 @@ export default function Analytics() {
                       </div>
                     ))}
                   </div>
+                </div>
+              )}
+            </div>
+
+            <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
+              {locationLeader && (
+                <div className="rounded-2xl border border-blue-200 bg-blue-50 p-4">
+                  <p className="text-xs font-semibold text-blue-600 uppercase tracking-wide">Top Location</p>
+                  <p className="mt-1 text-lg font-bold text-blue-900">{locationLeader.areaName}</p>
+                  <p className="text-sm text-blue-800">{locationLeader.cityName}</p>
+                  <p className="mt-2 text-xs text-blue-700">
+                    {formatNumber(locationLeader.footfall)} footfall · {locationLeader.successScore}/100 success
+                  </p>
+                </div>
+              )}
+              {campaignLeader && (
+                <div className="rounded-2xl border border-purple-200 bg-purple-50 p-4">
+                  <p className="text-xs font-semibold text-purple-600 uppercase tracking-wide">Top Campaign Fit</p>
+                  <p className="mt-1 text-lg font-bold text-purple-900">{campaignLeader.campaign}</p>
+                  <p className="mt-2 text-xs text-purple-700">
+                    Avg success {campaignLeader.successScore}/100
+                    {campaignLeader.audienceMatch ? ` · Audience ${campaignLeader.audienceMatch}%` : ''}
+                  </p>
+                  <p className="text-xs text-purple-600">{campaignLeader.count} analyses logged</p>
+                </div>
+              )}
+              {latestAnalysis && (
+                <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+                  <p className="text-xs font-semibold text-emerald-600 uppercase tracking-wide">Most Recent Run</p>
+                  <p className="mt-1 text-lg font-bold text-emerald-900">
+                    {latestAnalysis.cityName} · {latestAnalysis.areaName}
+                  </p>
+                  <p className="text-xs text-emerald-700">
+                    {latestAnalysis.campaignName} • {new Date(latestAnalysis.timestamp).toLocaleString()}
+                  </p>
+                  <p className="mt-2 text-xs text-emerald-700">
+                    {latestAnalysis.successScore}/100 success · {formatNumber(latestAnalysis.impressionsPerHour)} impressions/hr
+                  </p>
                 </div>
               )}
             </div>

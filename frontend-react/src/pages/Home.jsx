@@ -170,6 +170,12 @@ export default function Home() {
       'health-fitness': 70,
       'eco-friendly-sustainable': 73,
       'nightlife-hospitality': 84,
+      'automotive-launch': 75,
+      'telecom-and-connectivity': 77,
+      'travel-and-tourism': 80,
+      'retail-and-e-commerce-pop-up': 71,
+      'gaming-and-esports': 76,
+      'public-sector-community': 64,
     }
 
     const fallback = fallbackByCampaign[selectedCampaignId]
@@ -295,6 +301,81 @@ export default function Home() {
       { period: 'Week 4', impressions: week4Impressions, score: week4Score },
     ]
   }, [prediction, baseImpressions, effectiveTargetAudience, successScore, selectedArea?.footfallDaily, weatherMetrics, placesDisplay])
+
+  const activationSignals = useMemo(() => {
+    const signals = []
+    const footfall = selectedArea?.footfallDaily ?? null
+    const matchScore = campaignFallbackMatch ?? null
+    const vis = weatherMetrics?.visibilityKm ?? null
+    const condition = (weatherMetrics?.condition ?? '').toLowerCase()
+
+    if (footfall) {
+      let descriptor = 'steady stream'
+      if (footfall > 250000) descriptor = 'city-shaping flow'
+      else if (footfall > 150000) descriptor = 'peak commuter surge'
+
+      signals.push({
+        label: 'Daily Reach Window',
+        value: `${formatNumber(footfall)} ppl`,
+        helper: `Expect a ${descriptor} each day.`,
+      })
+    }
+
+    if (matchScore) {
+      const tone =
+        matchScore >= 82
+          ? 'Prime-fit audience—scale boldly.'
+          : matchScore >= 70
+            ? 'Strong fit—pace budget weekly.'
+            : 'Emerging fit—test fast and refine.'
+
+      signals.push({
+        label: 'Match Quality',
+        value: `${matchScore}%`,
+        helper: tone,
+      })
+    }
+
+    if (vis) {
+      signals.push({
+        label: 'Visibility Advantage',
+        value: `${vis} km`,
+        helper: vis >= 10 ? 'Great clarity for bold creative.' : 'Lean on high-contrast assets.',
+      })
+    } else if (weatherMetrics?.condition) {
+      signals.push({
+        label: 'Weather Cue',
+        value: weatherMetrics.condition,
+        helper: condition.includes('rain') ? 'Trigger comfort copy or delivery CTA.' : 'Keep motion + vibrant colours on.',
+      })
+    }
+
+    const fallbackPool = [
+      {
+        label: 'Momentum Watch',
+        value: `${successScore}/100`,
+        helper: 'Use analytics to lock gains every 7 days.',
+      },
+      {
+        label: 'Audience Pulse',
+        value: displayTargetAudience !== '--' ? `${displayTargetAudience} ppl/hr` : 'Run forecast',
+        helper: 'Projected core audience you can influence each hour.',
+      },
+      {
+        label: 'Campaign Focus',
+        value: selectedCampaign?.name ?? 'Generic',
+        helper: `Lean into ${selectedCampaign?.idealFactors?.[0] ?? 'local context'} cues.`,
+      },
+    ]
+
+    fallbackPool.forEach((fallback) => {
+      if (signals.length < 3) {
+        signals.push(fallback)
+      }
+    })
+
+    return signals.slice(0, 3)
+  }, [selectedArea, campaignFallbackMatch, weatherMetrics, successScore, displayTargetAudience, selectedCampaign])
 
   const activationInsights = useMemo(() => {
     const areaLabel = selectedArea?.name ?? cityName ?? 'this location'
@@ -658,6 +739,15 @@ export default function Home() {
             </div>
             <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 p-4 shadow-sm sm:rounded-2xl sm:p-6">
               <h3 className="text-base font-semibold text-emerald-900 sm:text-lg">⚡ Activation Momentum</h3>
+              <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                {activationSignals.map((signal) => (
+                  <div key={signal.label} className="rounded-lg border border-emerald-100 bg-white/70 p-3 shadow-inner">
+                    <p className="text-xs font-semibold text-emerald-600">{signal.label}</p>
+                    <p className="text-lg font-bold text-emerald-900">{signal.value}</p>
+                    <p className="text-xs text-emerald-700">{signal.helper}</p>
+                  </div>
+                ))}
+              </div>
               <p className="mt-2 text-xs font-medium text-emerald-800 sm:text-sm">{activationInsights.caption}</p>
               <ul className="mt-4 space-y-4 text-sm text-emerald-900 sm:space-y-5">
                 {activationInsights.items.map((item) => (

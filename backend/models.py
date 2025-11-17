@@ -491,5 +491,41 @@ class CampaignDatabase:
             target_demographics=["young adults", "tourists", "social groups"],
             ideal_factors=["nightlife", "creative_area", "tourist_area", "trendy_audience"],
             creative_style="Energetic, social proof, time-sensitive promotions"
+        ),
+        "Automotive Launch": CampaignType(
+            name="Automotive Launch",
+            target_demographics=["affluent families", "commuters", "car enthusiasts"],
+            ideal_factors=["affluent_suburb", "transport_hub", "shopping_area", "leisure_time"],
+            creative_style="High-impact formats, motion-focused, metallic finishes"
+        ),
+        "Telecom & Connectivity": CampaignType(
+            name="Telecom & Connectivity",
+            target_demographics=["commuters", "tech-savvy professionals", "students"],
+            ideal_factors=["transport_hub", "business_district", "student_area", "high_traffic"],
+            creative_style="Bold gradients, signal motifs, speed-focused copy"
+        ),
+        "Travel & Tourism": CampaignType(
+            name="Travel & Tourism",
+            target_demographics=["tourists", "families", "experience seekers"],
+            ideal_factors=["tourist_area", "leisure_time", "shopping_area", "nightlife"],
+            creative_style="Immersive imagery, itinerary hooks, seasonal urgency"
+        ),
+        "Retail & E-commerce Pop-Up": CampaignType(
+            name="Retail & E-commerce Pop-Up",
+            target_demographics=["urban shoppers", "deal seekers", "trend-conscious audience"],
+            ideal_factors=["shopping_area", "creative_area", "high_traffic", "nightlife"],
+            creative_style="Offer-led, QR-to-shop journeys, bold typography"
+        ),
+        "Gaming & Esports": CampaignType(
+            name="Gaming & Esports",
+            target_demographics=["students", "young adults", "digital natives"],
+            ideal_factors=["student_area", "young_audience", "nightlife", "creative_area"],
+            creative_style="Neon palettes, glitch motifs, leaderboard framing"
+        ),
+        "Public Sector / Community": CampaignType(
+            name="Public Sector / Community",
+            target_demographics=["local residents", "families", "commuters"],
+            ideal_factors=["local_community", "family_area", "local_businesses", "transport_hub"],
+            creative_style="Clear typography, inclusive imagery, action-first messaging"
         )
     }
